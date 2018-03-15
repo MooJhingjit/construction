@@ -1,23 +1,38 @@
+
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+  <div class="wrapper">
+    <div class="opa"></div>
+    <div class="content">
+      <div class="menu-bar">
+        <menu-bar></menu-bar>
+      </div>
+      <div class="page">
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import MenuBar from '@Components/MenuBar'
 export default {
-  name: 'App'
+  components: {
+    MenuBar
+  },
+  name: 'app'
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss">
+@import './Assets/Style/app.scss';
+.fade-enter-active, .fade-leave-active {
+  transition-property: opacity;
+  transition-duration: .15s;
+}
+.fade-enter-active {
+  transition-delay: .15s;
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
 }
 </style>
