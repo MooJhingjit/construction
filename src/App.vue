@@ -6,7 +6,14 @@
       <div class="menu-bar">
         <menu-bar></menu-bar>
       </div>
-      <div class="page">
+      
+      <!-- <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li><a href="#">Bulma</a></li>
+          <li class="is-active"><a href="#" aria-current="page">Breadcrumb</a></li>
+        </ul>
+      </nav> -->
+      <div class="page-content">
         <router-view></router-view>
       </div>
     </div>

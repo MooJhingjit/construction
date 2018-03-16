@@ -1,3 +1,10 @@
+$mobileBreakpoint            : 320px;
+$tabletBreakpoint            : 425px;
+$computerBreakpoint          : 768px;
+$largeMonitorBreakpoint      : 1024px;
+
+@import url('../node_modules/font-awesome/css/font-awesome.min.css');
+$widescreenMonitorBreakpoint : 1440px;
 html { 
     background: url('Assets/Images/bg.jpg') no-repeat center center fixed; 
     -webkit-background-size: cover;
@@ -13,26 +20,88 @@ html {
                 width: 100%;
                 background: rgba(0,0,0, 0.1);
             }
-            .content{
+            &>.content{
                 position: relative;
+                padding: 10px;
             }
             position: relative;
             font-size: 1rem;
             .menu-bar{
-                font-size: 1.1em;
-                padding: 10px 0;
+                // padding: 15px 0;
                 color: white;
-                .column{
+                .level .heading{
+                    font-size: 1.1em;
+                    position: relative;
                     cursor: pointer;
-                    text-align: center;
+                    &:hover{
+                        top: 1px;
+                    }
+                }
+                .setting-panel{
+                    flex: 1;
+                    justify-content: flex-end;
+                    position: relative;
+                    .block{
+
+                        margin-bottom: 0;
+                        // margin-left: 20px;
+                    }
+                    i{
+                        color: #cccccc;
+                        font-size: 2.8em;
+                    }
+                    figure{
+                        margin: 0;
+                        margin-left: 20px;
+                        img{
+                            width: 35px;
+                        }
+                    }
                 }
             }
-            .page{
-                padding: 20px;
-                .home-page.card{
-                    background-color: rgba(10, 10, 10, 0.1) !important;
-                    color: white !important;
+            .page-content{
+                padding: 10px;
+                &>section{
+                    background-color: rgba(10, 10, 10, 0.1);
+                    min-height: 100px;
+                    padding: 10px;
+                    .title{
+                        color: #f3f3f3  !important;
+                        font-size: 1.2em;
+                    }
+                    .subtitle{
+                        color: #f3f3f3 !important;
+                        margin-top: 0;
+                        font-size: 1em;
+                    }
                 }
+                // start page
+                .home-page{
+                    .tile{
+                        article{
+                            .title{
+                                color: #000 !important;
+                            }
+                            ul{
+                                li{
+                                    cursor: pointer;
+                                    margin-bottom: 0.8em;
+                                    color: #757070 !important;
+                                    &:hover{
+                                        color: #000000 !important;
+                                    }
+                                }
+                            }
+                            .subtitle{
+                                color: #757070 !important;
+                            }
+                        }
+                    }
+                    
+                    // background-color: rgba(10, 10, 10, 0.1) !important;
+                    // color: white !important;
+                }
+                
             }
         }
     }
