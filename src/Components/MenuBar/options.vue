@@ -1,29 +1,25 @@
 <template>
     <div :class="{'sub-menu-panel box-shadow-panel options-block': true, 'active': (isActive && !isDisableMenu) }">
         <div class="container-block">
-            <div class="block container-block">
+            <div class="block container-block" @click="goToPage('xxxxxx')">
                 <div class="icon"><i class="fa fa-home" aria-hidden="true"></i></div>
                 <div class="desc">แบบบ้าน</div>
             </div>
-            <div class="block container-block">
-                <div class="icon"><i class="fa fa-archive" aria-hidden="true"></i></div>
+            <div class="block container-block" @click="goToPage('xxxxxx')">
+                <div class="icon"><i class="fa fa-tasks" aria-hidden="true"></i></div>
+                <div class="desc">ลำดับการทำงาน</div>
+            </div>
+            <div class="block container-block" @click="goToPage('xxxxxx')">
+                <div class="icon"><i class="fa fa-th-large" aria-hidden="true"></i></div>
                 <div class="desc">วัสดุ</div>
             </div>
-                <div class="block container-block">
+                <div class="block container-block" @click="goToPage('xxxxxx')">
                 <div class="icon"><i class="fa fa-check-square-o" aria-hidden="true"></i></div>
                 <div class="desc">สิทธิ์การใช้งาน</div>
             </div>
-            <div class="block container-block">
+            <div class="block container-block" @click="goToPage('User', 'all')">
                 <div class="icon"><i class="fa fa-address-book-o" aria-hidden="true"></i></div>
                 <div class="desc">ผู้ใช้งาน</div>
-            </div>
-            <div class="block container-block">
-                <div class="icon"><i class="fa fa-address-book-o" aria-hidden="true"></i></div>
-                <div class="desc">xxxxx</div>
-            </div>
-            <div class="block container-block">
-                <div class="icon"><i class="fa fa-address-book-o" aria-hidden="true"></i></div>
-                <div class="desc">xxxxx</div>
             </div>
         </div>
     </div>
@@ -75,6 +71,9 @@ export default {
     // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
   },
   methods: {
+    goToPage (route, key = '') {
+      this.GOTOPAGE(route, key)
+    }
     //   getClass (defaultClass) {
     //   return [
     //     defaultClass,
