@@ -3,7 +3,6 @@ import App from './App'
 import router from './router'
 import 'bulma/bulma.sass'
 
-
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

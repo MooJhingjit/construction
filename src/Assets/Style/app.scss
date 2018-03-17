@@ -3,6 +3,20 @@ $tabletBreakpoint            : 425px;
 $computerBreakpoint          : 768px;
 $largeMonitorBreakpoint      : 1024px;
 
+$frist-text-black-color : #000;
+$second-text-black-color : #4a4a4a;
+$third-text-black-color : #757070;
+$fourth-text-black-color : #d4d4d4;
+
+$frist-text-white-color : #fff;
+$second-text-white-color : #cccccc;
+
+$frist-text-red-color : red;
+$frist-text-green-color : green;
+$frist-text-blue-color : blue;
+// $third-text-white-color : #757070;
+// $fourth-text-white-color : #d4d4d4;
+
 @import url('../node_modules/font-awesome/css/font-awesome.min.css');
 $widescreenMonitorBreakpoint : 1440px;
 html { 
@@ -13,6 +27,15 @@ html {
     background-size: cover;
     font-size: 14px !important;
     body{
+        .container-block{
+            display: flex;
+        }
+        .box-shadow-panel{
+            box-shadow: 0 2px 10px rgba(0,0,0,.2);
+        }
+        .block{
+            flex: 1;
+        }
         .wrapper{
             .opa{
                 position: absolute;
@@ -22,46 +45,162 @@ html {
             }
             &>.content{
                 position: relative;
-                padding: 10px;
+                // padding: 10px;
             }
             position: relative;
             font-size: 1rem;
             .menu-bar{
-                // padding: 15px 0;
-                color: white;
+                padding-top: 15px;
+                z-index: 9999;
+                position: relative;
+                
                 .level .heading{
                     font-size: 1.1em;
                     position: relative;
                     cursor: pointer;
-                    &:hover{
-                        top: 1px;
+                    a{
+                      color: $second-text-white-color;
+                      &:hover{
+                          top: 1px;
+                          color: $frist-text-white-color;
+                      }
                     }
+                    
                 }
-                .setting-panel{
-                    flex: 1;
+                .options-panel{
+                    flex: 0 !important;
+                    min-width: 100px;
                     justify-content: flex-end;
                     position: relative;
-                    .block{
-
+                    color: $second-text-white-color;
+                    &>.block{
+                        flex: initial;
+                        position: relative;
                         margin-bottom: 0;
                         // margin-left: 20px;
+                        .icon-menu{
+                            cursor: pointer;
+                            i{
+                                
+                                font-size: 2em;
+                            }
+                        }
+                        figure{
+                            margin: 0;
+                            margin-left: 30px;
+                            img{
+                                width: 35px;
+                            }
+                        }
+                        &:hover{
+                            color: $frist-text-white-color;
+                        }
                     }
-                    i{
-                        color: #cccccc;
-                        font-size: 2.8em;
+                    .sub-menu-panel{
+                        display: none;
+                        position: absolute;
+                        width: 240px;
+                        // min-height: px;
+                        height: auto;
+                        background: white;
+                        color: black;
                     }
-                    figure{
-                        margin: 0;
-                        margin-left: 20px;
-                        img{
-                            width: 35px;
+                    .sub-menu-panel.active{
+                        display: flex;
+                    }
+                    .options-block{
+                        position: absolute;
+                        right: 0;
+                        top: 46px;
+                        &>.container-block{
+                            -webkit-flex-wrap: wrap;
+                            flex-wrap: wrap;
+                        }
+                        .block{
+                            margin-bottom: 0;
+                            min-width: 80px;
+                            width: 80px;
+                            height: 80px;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            color: $second-text-black-color;
+                            cursor: pointer;
+                            .icon{
+                                font-size: 2em;
+                            }
+                            .desc{
+                                font-size: 0.85em;
+                                margin-top: 15px;
+                            }
+                            &:hover{
+                              color: $frist-text-black-color;
+                            }
+                        }
+                    }
+                    .profile-block{
+                        position: absolute;
+                        right: 0;
+                        top: 46px;
+                        flex: 1;
+                        &>.container-block{
+                            flex: 1;
+                        }
+                        .profile-head{
+                            align-items: center;
+                            justify-content: center;
+                            .prifile-img{
+                                margin: 0 5px;
+                            }
+                            img{
+                                width: 80px;
+                                border-radius: 50%;
+                            }
+                        }
+                        .profile-body{
+                            flex: 1;
+                            flex-direction: column;
+                            // padding: 5px;
+                            .name{
+                                flex: 2;
+                                font-size: 1em;
+                                font-weight: 600;
+                                margin: 2px 3px;
+                            }
+                            .options{
+                                flex: 8;
+                                flex-direction: column;
+                                &>.block{
+                                    flex: 1;
+                                    margin: 5px 0;
+                                    font-size: 0.9em;
+                                    cursor: pointer;
+                                    color: $second-text-black-color;
+                                    i{
+                                        font-size: 1em;
+                                    }
+                                    i:not(.fa-power-off){
+                                        
+                                    }
+                                    i.fa-power-off{
+                                        color: $frist-text-red-color;
+                                    }
+                                    &:hover{
+                                        color: $frist-text-black-color;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
             .page-content{
-                padding: 10px;
+                z-index: 9998;
+                
+                position: relative;
+                // padding: 10px;
                 &>section{
+                    margin: 15px;
                     background-color: rgba(10, 10, 10, 0.1);
                     min-height: 100px;
                     padding: 10px;
@@ -79,27 +218,85 @@ html {
                 .home-page{
                     .tile{
                         article{
+                          background: rgba(255, 255, 255, 0.85) !important;
                             .title{
-                                color: #000 !important;
+                                color: $frist-text-black-color  !important;
                             }
                             ul{
                                 li{
                                     cursor: pointer;
                                     margin-bottom: 0.8em;
-                                    color: #757070 !important;
+                                    color: $third-text-black-color !important;
                                     &:hover{
-                                        color: #000000 !important;
+                                        color: $frist-text-black-color  !important;
                                     }
                                 }
                             }
                             .subtitle{
-                                color: #757070 !important;
+                                color: $third-text-black-color !important;
+                                .tags{
+                                  .tag:not(.is-transparent){
+                                    cursor: pointer;
+                                  }
+                                  .is-transparent{
+                                    background: transparent;
+                                  }
+                                }
+                            }
+                            .data-loss{
+                              flex-direction: column;
+                              &>.block{
+                              }
                             }
                         }
                     }
                     
                     // background-color: rgba(10, 10, 10, 0.1) !important;
                     // color: white !important;
+                }
+                .login-page{
+                  margin: 0;
+                  background-color: rgba(10, 10, 10, 0.3);
+                  // background: transparent;
+                  height: 100vh;
+                  &>.container-block{
+                    
+                    flex-basis: 100%;
+                    flex-direction: column;
+                    height: 100%;
+                    justify-content: center;
+                    align-items: center;
+                    &>.container-block{
+                      min-width: 250px;
+                      flex-direction: column;
+                      // border: 1px solid #ff0000;
+                      max-height: 300px;
+                      .header{
+                        flex: 1;
+                        text-align: center;
+                      }
+                      .login-form{
+                        flex: 6;
+                        flex-direction: column;
+                        &>.block{
+                          margin-bottom: 0;
+                        }
+                        .control{
+                          margin-bottom: 25px;
+                        }        
+                        input{
+                          // background-color: rgba(10, 10, 10, 0.3);
+                          border-color: transparent;
+                        }         
+                      }
+                      .options{
+                        text-align: center;
+                      }
+                      .submit{
+                        text-align: center;
+                      }
+                    }
+                  }
                 }
                 
             }

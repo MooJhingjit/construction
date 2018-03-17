@@ -1,20 +1,21 @@
 
 <template>
   <div class="wrapper">
-    <div class="opa"></div>
+    <!-- <div class="opa"></div> -->
     <div class="content">
       <div class="menu-bar">
-        <menu-bar></menu-bar>
+        <menu-bar :isDisableMenu="local.isDisableMenu" @setMenuStatus="pageClick"></menu-bar>
       </div>
-      
       <!-- <nav class="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li><a href="#">Bulma</a></li>
           <li class="is-active"><a href="#" aria-current="page">Breadcrumb</a></li>
         </ul>
       </nav> -->
-      <div class="page-content">
-        <router-view></router-view>
+      <div class="page-content" @click="pageClick()">
+        <transition name="fade">
+          <router-view></router-view>
+        </transition>
       </div>
     </div>
   </div>
@@ -26,7 +27,27 @@ export default {
   components: {
     MenuBar
   },
-  name: 'app'
+  name: 'app',
+  data () {
+    return {
+      local: {
+        isDisableMenu: false
+      }
+    }
+  },
+  updated () {
+    // console.log('updated')
+  },
+  methods: {
+    pageClick (tf = true) {
+      this.local.isDisableMenu = tf
+    }
+  },
+  watch: {
+    $route (to, from) {
+      this.pageClick()
+    }
+  }
 }
 </script>
 
