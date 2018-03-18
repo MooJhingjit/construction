@@ -13,7 +13,7 @@
                 <div class="icon"><i class="fa fa-th-large" aria-hidden="true"></i></div>
                 <div class="desc">วัสดุ</div>
             </div>
-                <div class="block container-block" @click="goToPage('xxxxxx')">
+                <div class="block container-block" @click="goToPage('Authority', 'all')">
                 <div class="icon"><i class="fa fa-check-square-o" aria-hidden="true"></i></div>
                 <div class="desc">สิทธิ์การใช้งาน</div>
             </div>
@@ -71,7 +71,7 @@ export default {
     // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
   },
   methods: {
-    goToPage (route, key = '') {
+    goToPage (route, key = {}) {
       this.GOTOPAGE(route, key)
     }
     //   getClass (defaultClass) {

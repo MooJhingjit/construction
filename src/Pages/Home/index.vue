@@ -3,7 +3,7 @@
       <div class="container">
         <h1 class="title">หน้าหลัก</h1>
         <div class="tile is-ancestor">
-          <div class="tile is-vertical is-9">
+          <div class="tile is-vertical is-12">
             <div class="tile">
               <div class="tile is-parent is-vertical">
                 <article class="tile is-child notification">
@@ -98,7 +98,7 @@
               </article>
             </div>
           </div>
-          <div class="tile is-parent">
+          <!-- <div class="tile is-parent">
             <article class="tile is-child notification">
               <div class="content">
                 <p class="title">xxxxxxxx</p>
@@ -108,7 +108,7 @@
                 </div>
               </div>
             </article>
-          </div>
+          </div> -->
         </div>
       </div>
     </section>

@@ -4,6 +4,7 @@ const Home = () => import('@Pages/Home')
 const Login = () => import('@Pages/Login')
 const Ordering = () => import('@Pages/Ordering')
 const User = () => import('@Pages/User')
+const Authority = () => import('@Pages/Authority')
 
 Vue.use(VueRouter)
 
@@ -29,6 +30,11 @@ export default new VueRouter({
       path: '/user/:key',
       name: 'User',
       component: User
+    },
+    {
+      path: '/authority/:key',
+      name: 'Authority',
+      component: Authority
     }
   ]
 })

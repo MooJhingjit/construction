@@ -360,6 +360,44 @@ html {
                     }
                   }
                 }
+                .authority-page{
+                  .options-panel{
+
+                  }
+                  .detail-panel{
+                    .detail-block{
+                      justify-content: space-between;
+                      flex-direction: row !important;
+                      flex-wrap: wrap;
+                      &>.block{
+                        border: 1px solid #dedede;
+                        max-width: 190px;
+                        min-width: 190px;
+                        min-height: 190px;
+                        margin: 10px;
+                        flex-direction: column !important;
+                        background: white;
+                        .name{
+                          text-align: center;
+                          flex: 0;
+                          margin: 5px;
+                          font-weight: bold;
+                          font-size: 1.1em;
+                        }
+                        .task{
+                          flex: 1;
+                          padding: 10px;
+                          ul {
+                            list-style: none;
+                            margin: 0;
+                          }
+                        }
+
+                      }
+                    }
+                  }
+                }
+
                 .container-block{
                   .options-panel{
                     flex: 3;
@@ -378,7 +416,36 @@ html {
                       flex-direction: column;
                       padding: 5px;
                     }
+                    .empty-panel{
+                      align-items: center;
+                      justify-content: center;
+                      &>.block{
+                        max-width: 400px;
+                        flex-direction: column;
+                        text-align: center;
+                        // &>.block{
+                        // }
+                        .no-data{
+                          font-size: 1.4em;
+                          color: red;
+                        }
+                        .select-data{
+                          color: $third-text-black-color;
+                        }
+                        .or{
+                          text-align: center;
+                          color: $third-text-black-color;
+                          font-size: 1.1em;
+                        }
+                        .add-data{
+                          text-align: center;
+                        }
+                      }
+                    }
                     .footer-panel{
+                      button{
+                        max-width: 90px;
+                      }
                       padding: 15px !important;;
                       background: rgba(234, 234, 234, 0.85) !important;
                     }

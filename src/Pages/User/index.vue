@@ -1,63 +1,61 @@
 <template>
-  <section class="section user-page">
-    <div class="container">
-        <h1 class="title">ข้อมูลผู้ใช้</h1>
-    </div>
-    <div class="container-block">
-      <div class="options-panel">
-        <div class="container-block">
-          <div class="control has-icons-left">
-            <input class="input" type="text" placeholder="ค้นหา">
-            <span class="icon is-small is-left">
-              <i class="fa fa-search" aria-hidden="true"></i>
-            </span>
-          </div>
-          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-            <thead>
-              <tr>
-                <th>ชื่อ</th>
-                <th>ตำแหน่ง</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Three</td>
-                <td>Four</td>
-              </tr>
-              <tr>
-                <td>Five</td>
-                <td>Six</td>
-              </tr>
-              <tr>
-                <td>Seven</td>
-                <td>Eight</td>
-              </tr>
-              <tr>
-                <td>Nine</td>
-                <td>Ten</td>
-              </tr>
-              <tr>
-                <td>Eleven</td>
-                <td>Twelve</td>
-              </tr>
-              <tr>
-                <td>Eleven</td>
-                <td>Twelve</td>
-              </tr>
-              <tr>
-                <td>Eleven</td>
-                <td>Twelve</td>
-              </tr>
-              <tr>
-                <td>Eleven</td>
-                <td>Twelve</td>
-              </tr>
-            </tbody>
-          </table>
+  <option-detail-template :templateObj="local.template">
+    <template slot="title">ข้อมูลผู้ใช้</template>
+    <template slot="options">
+      <div class="container-block">
+        <div class="control has-icons-left">
+          <input class="input" type="text" placeholder="ค้นหา">
+          <span class="icon is-small is-left">
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </span>
         </div>
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+          <thead>
+            <tr>
+              <th>ชื่อ</th>
+              <th>ตำแหน่ง</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Three</td>
+              <td>Four</td>
+            </tr>
+            <tr>
+              <td>Five</td>
+              <td>Six</td>
+            </tr>
+            <tr>
+              <td>Seven</td>
+              <td>Eight</td>
+            </tr>
+            <tr>
+              <td>Nine</td>
+              <td>Ten</td>
+            </tr>
+            <tr>
+              <td>Eleven</td>
+              <td>Twelve</td>
+            </tr>
+            <tr>
+              <td>Eleven</td>
+              <td>Twelve</td>
+            </tr>
+            <tr>
+              <td>Eleven</td>
+              <td>Twelve</td>
+            </tr>
+            <tr>
+              <td>Eleven</td>
+              <td>Twelve</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="detail-panel">
-        <div class="container-block">
+    </template>
+    <template v-if="true">
+      <template slot="detail">
+        <div class="container-block  detail-block">
           <div class="profile-img container-block">
             <div class="block">
               <div class="img">
@@ -96,14 +94,36 @@
           </div>
         </div>
         <div class="container-block footer-panel">
-            <button class="button">บันทึกข้อมูล</button>
+          <button class="button">บันทึกข้อมูล</button>
         </div>
-      </div>
-    </div>
-  </section>
+      </template>
+    </template>
+    <template v-else>
+      <template slot="detail">
+        <div class="container-block empty-panel">
+          <div class="block container-block">
+            <div class="block no-data">
+                ไม่พบข้อมูลที่ต้องการ
+            </div>
+            <div class="block select-data">
+              <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+              <span>เลือกข้อมูลทางซ้ายมือเพื่อแสดง</span>
+            </div>
+            <div class="block or">
+              หรือ
+            </div>
+            <div class="block add-data">
+              <button class="button">เพิ่มข้อมูลใหม่</button>
+            </div>
+          </div>
+        </div>
+      </template>
+    </template>
+  </option-detail-template>
 </template>
 
 <script>
+import optionDetailTemplate from '@Components/Template/option-detail'
 export default {
   props: {
     // templateName: {
@@ -112,11 +132,16 @@ export default {
     // }
   },
   components: {
+    optionDetailTemplate
   },
   name: 'UserPage',
   data () {
     return {
-      property: 'Blank'
+      local: {
+        template: {
+          class: 'user-page'
+        }
+      }
     }
   },
   computed: {
