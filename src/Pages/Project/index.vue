@@ -1,6 +1,6 @@
 <template>
   <option-detail-template :templateObj="local.template">
-    <template slot="title">ข้อมูลผู้ใช้</template>
+    <template slot="title">ข้อมูลโปรเจค</template>
     <template slot="options">
       <div class="container-block">
         <div class="control has-icons-left">
@@ -12,40 +12,49 @@
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
           <thead>
             <tr>
-              <th>ชื่อ</th>
-              <th>ตำแหน่ง</th>
+              <th>รหัส</th>
+              <th>ชื่อโปรเจค</th>
+              <th>วันที่สร้าง</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>Three</td>
+              <td>Three</td>
               <td>Four</td>
             </tr>
             <tr>
+              <td>Three</td>
               <td>Five</td>
               <td>Six</td>
             </tr>
             <tr>
+              <td>Three</td>
               <td>Seven</td>
               <td>Eight</td>
             </tr>
             <tr>
+              <td>Three</td>
               <td>Nine</td>
               <td>Ten</td>
             </tr>
             <tr>
+              <td>Three</td>
               <td>Eleven</td>
               <td>Twelve</td>
             </tr>
             <tr>
+              <td>Three</td>
               <td>Eleven</td>
               <td>Twelve</td>
             </tr>
             <tr>
+              <td>Three</td>
               <td>Eleven</td>
               <td>Twelve</td>
             </tr>
             <tr>
+              <td>Three</td>
               <td>Eleven</td>
               <td>Twelve</td>
             </tr>
@@ -56,40 +65,19 @@
     <template v-if="true">
       <template slot="detail">
         <div class="container-block  detail-block">
-          <div class="profile-img container-block">
-            <div class="block">
-              <div class="img">
-                <img src="https://lh3.googleusercontent.com/-vI_vuMTGLhY/AAAAAAAAAAI/AAAAAAAAAAA/AGi4gfyN1ZDACBSjk7nyMF0Dbw9C3mRMHQ/s192-c-mo/photo.jpg" alt="" />
-                <span class="upload"><i class="fa fa-camera" aria-hidden="true"></i> เปลี่ยนรูปภาพ</span>
+          <div class="form-detail">
+            <div class="name">LH-011  นันทวัน-ศรีนครินทร์</div> 
+            <div class="container-block">
+              <div class="text-title">รหัสปรเจค</div> 
+              <div class="value">
+                <input type="text" value="LH-011" placeholder="Primary input" class="input">
               </div>
-              <div class="options"></div>
-            </div>
-          </div>
-          <div class="profile-detail">
-            <div class="name">Pokkrong Jhingjit</div>
-            <div class="container-block">
-              <div class="text-title">ชื่อ-นามสกุล</div>
-              <div class="value"><input class="input" type="text" value="Pokkrong Jhingjit" placeholder="Primary input"></div>
             </div>
             <div class="container-block">
-              <div class="text-title">ชื่อผู้ใช้</div>
-              <div class="value"><input class="input" type="text" placeholder="Primary input"></div>
-            </div>
-            <div class="container-block">
-              <div class="text-title">รหัสผ่าน</div>
-              <div class="value"><input class="input" type="text" placeholder="Primary input"></div>
-            </div>
-            <div class="container-block">
-              <div class="text-title">อีเมล์</div>
-              <div class="value"><input class="input" type="text" placeholder="Primary input"></div>
-            </div>
-            <div class="container-block">
-              <div class="text-title">เบอร์โทรศัพท์</div>
-              <div class="value"><input class="input" type="text" placeholder="Primary input"></div>
-            </div>
-            <div class="container-block">
-              <div class="text-title">ที่อยู่</div>
-              <div class="value"><textarea class="textarea" id="" cols="30" rows="4"></textarea></div>
+              <div class="text-title">ชื่อโปรเจค</div> 
+              <div class="value">
+                <input type="text" value="นันทวัน-ศรีนครินทร์" placeholder="Primary input" class="input">
+              </div>
             </div>
           </div>
         </div>
@@ -139,7 +127,7 @@ export default {
     return {
       local: {
         template: {
-          class: 'user-page'
+          class: 'project-page'
         }
       }
     }

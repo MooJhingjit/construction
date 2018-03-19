@@ -5,25 +5,56 @@
         <div class="tile is-ancestor">
           <div class="tile is-vertical is-12">
             <div class="tile">
-              <div class="tile is-parent is-vertical">
+              <div class="tile is-parent is-vertical is-4">
                 <article class="tile is-child notification">
-                  <p class="title">โปรเจค</p>
-                  <div class="subtitle">
-                    <div class="tags">
-                      <span class="tag is-transparent">จากข้อมูลโปรเจค </span>
-                      <span class="tag is-success">ทั้งหมด 20 </span>
-                      <span class="tag is-warning">รออนุมัติ 2</span>
+                  <div class="container-block stat">
+                    <div class="block value container-block">
+                      <div class="block">
+                        <div class="num">44</div>
+                        <div class="name">โปรเจค</div>
+                      </div>
                     </div>
-                  </div>
-                  <div class="content">
-                    <ul>
-                      <li class="item">สร้างโปรเจคใหม่</li>
-                      <li class="item">รายการโปรเจค</li>
-                    </ul>
+                    <div class="block detail container-block">
+                      <router-link to="/project/test"><button class="button">เพิ่มโปรเจค</button></router-link>
+                      
+                      <button class="button">รายละเอียด</button>
+                    </div>
                   </div>
                 </article>
                 <article class="tile is-child notification">
-                  <p class="title">สัญญา</p>
+                  <div class="container-block stat">
+                    <div class="block value container-block">
+                      <div class="block">
+                        <div class="num">70</div>
+                        <div class="name">สัญญา</div>
+                      </div>
+                    </div>
+                    <div class="block detail container-block">
+                      <button class="button">เพิ่มสัญญา</button>
+                      <button class="button">รายละเอียด</button>
+                    </div>
+                  </div>
+                  <div class="container-block alert">
+                    <span class="tag is-warning">รออนุมัติ 5</span>
+                    <span class="tag is-info">ดำเนินงาน 10</span>
+                    <span class="tag is-success">เสร็จสิ้น 60</span>
+                  </div>
+                </article>
+               <article class="tile is-child notification">
+                  <div class="container-block stat">
+                    <div class="block value container-block">
+                      <div class="block">
+                        <div class="num">4</div>
+                        <div class="name">ดำเนินงาน</div>
+                      </div>
+                    </div>
+                    <div class="block detail container-block">
+                      <button class="button">เพิ่มข้อมูล</button>
+                      <button class="button">รายละเอียด</button>
+                    </div>
+                  </div>
+                </article>
+                  <!-- <p class="title">สัญญา</p>
                   <div class="subtitle">
                     <div class="tags">
                       <span class="tag is-transparent">จากข้อมูลสัญญา </span>
@@ -36,8 +67,7 @@
                       <li class="item">เปิดสัญญาใหม่</li>
                       <li class="item">รายการสัญญา</li>
                     </ul>
-                  </div>
-                </article>
+                  </div> -->
               </div>
               <div class="tile is-parent">
                 <article class="tile is-child notification">
@@ -45,10 +75,10 @@
                   <!-- <div class="subtitle">With even more content</div> -->
                   <div class="content data-loss container-block">
                     <div class="order block">
-                      <bar-chart :height="200"></bar-chart>
+                      <bar-chart  :height="150"></bar-chart>
                     </div>
                     <div class="stipend block">
-                      <bar-chart :height="200"></bar-chart>
+                      <bar-chart :height="150"></bar-chart>
                     </div>
                   </div>
                 </article>

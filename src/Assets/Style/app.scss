@@ -225,6 +225,43 @@ html {
                             .title{
                                 color: $frist-text-black-color  !important;
                             }
+                            .stat{
+                              .detail{
+                                margin-bottom: 0;
+                                flex: 2;
+                                justify-content: space-around;
+                                align-items: center;
+                                color: $second-text-black-color;
+                                text-align: center;
+                                flex-direction: column;
+                                button{
+                                  width: 100%;
+                                }
+                              }
+                              .value{
+                                flex: 2;
+                                color: $frist-text-black-color;
+                                justify-content: center;
+                                align-items: center;
+                                .block{
+                                  text-align: center;
+                                  .num{
+                                    font-size: 3em;
+                                  }
+                                  .name{
+                                    font-size: 1.3em;
+                                  }
+                                }
+                              }
+                            }
+                            .alert{
+                              justify-content: space-around;
+                              align-items: center;
+                              span{
+                                flex: 1;
+                                margin: 0 3px;
+                              }
+                            }
                             ul{
                                 li{
                                     cursor: pointer;
@@ -288,28 +325,6 @@ html {
                           }
                           .options{
   
-                          }
-                        }
-                      }
-                      .profile-detail{
-                        flex: 5;
-                        padding: 5px 15px;
-                        .name{
-                          font-size: 1.1em;
-                          color: $frist-text-black-color;
-                          font-weight: bold;
-                          margin-bottom: 8px;
-                        }
-                        &>.container-block{
-                          margin-bottom: 8px;
-                          flex-direction: row;
-                          .text-title{
-                            min-width: 100px;
-                            flex: 0;
-                            color: $second-text-black-color !important;
-                          }
-                          .value{
-                            flex: 5;
                           }
                         }
                       }
@@ -397,7 +412,7 @@ html {
                     }
                   }
                 }
-
+                // common template
                 .container-block{
                   .options-panel{
                     flex: 3;
@@ -415,6 +430,29 @@ html {
                       background: rgba(255, 255, 255, 0.85);
                       flex-direction: column;
                       padding: 5px;
+
+                      .form-detail{
+                        flex: 5;
+                        padding: 5px 15px;
+                        .name{
+                          font-size: 1.1em;
+                          color: $frist-text-black-color;
+                          font-weight: bold;
+                          margin-bottom: 8px;
+                        }
+                        &>.container-block{
+                          margin-bottom: 8px;
+                          flex-direction: row;
+                          .text-title{
+                            min-width: 100px;
+                            flex: 0;
+                            color: $second-text-black-color !important;
+                          }
+                          .value{
+                            flex: 5;
+                          }
+                        }
+                      }
                     }
                     .empty-panel{
                       align-items: center;

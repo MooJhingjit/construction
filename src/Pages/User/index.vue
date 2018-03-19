@@ -65,7 +65,7 @@
               <div class="options"></div>
             </div>
           </div>
-          <div class="profile-detail">
+          <div class="form-detail">
             <div class="name">Pokkrong Jhingjit</div>
             <div class="container-block">
               <div class="text-title">ชื่อ-นามสกุล</div>
