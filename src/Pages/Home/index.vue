@@ -1,151 +1,131 @@
 <template>
   <section class="section home-page">
-      <div class="container">
-        <h1 class="title">หน้าหลัก</h1>
-        <div class="tile is-ancestor">
-          <div class="tile is-vertical is-12">
-            <div class="tile">
-              <div class="tile is-parent is-vertical is-4">
-                <article class="tile is-child notification">
-                  <div class="container-block stat">
-                    <div class="block value container-block">
-                      <div class="block">
-                        <div class="num">44</div>
-                        <div class="name">โปรเจค</div>
-                      </div>
+    <breadcrumb-bar :dataObj="local"></breadcrumb-bar>
+    <div class="container-block">
+      <div class="tile is-ancestor">
+        <div class="tile is-vertical is-12">
+          <div class="tile">
+            <div class="tile is-parent is-vertical is-4">
+              <article class="tile is-child notification">
+                <div class="container-block stat">
+                  <div class="block chart container-block">
+                    <spark-line :config="config" :data="item1"></spark-line>
+                    <div class="value">
+                      <span class="num">4</span>
+                      <span class="text">โปรเจค</span>
                     </div>
-                    <div class="block detail container-block">
-                      <router-link to="/project/test"><button class="button">เพิ่มโปรเจค</button></router-link>
-                      
+                  </div>
+                  <div class="block detail container-block">
+                    <div class="block">
                       <button class="button">รายละเอียด</button>
                     </div>
                   </div>
-                </article>
-                <article class="tile is-child notification">
-                  <div class="container-block stat">
-                    <div class="block value container-block">
-                      <div class="block">
-                        <div class="num">70</div>
-                        <div class="name">สัญญา</div>
-                      </div>
+                </div>
+              </article>
+              <article class="tile is-child notification">
+                 <div class="container-block stat">
+                  <div class="block chart container-block">
+                    <spark-line :config="config" :data="item2"></spark-line>
+                    <div class="value">
+                      <span class="num">26</span>
+                      <span class="text">สัญญา</span>
                     </div>
-                    <div class="block detail container-block">
-                      <button class="button">เพิ่มสัญญา</button>
+                  </div>
+                  <div class="block detail container-block">
+                    <div class="block">
+                      <button class="button">รายละเอียด</button>
+                    </div>
+                    <div class="block alert">
+                      <span class="tag is-warning">รออนุมัติ 5</span>
+                      <span class="tag is-info">ดำเนินงาน 10</span>
+                    </div>
+                  </div>
+                </div>
+              </article>
+              <article class="tile is-child notification">
+                <div class="container-block stat">
+                  <div class="block chart container-block">
+                    <spark-line :config="config" :data="item3"></spark-line>
+                    <div class="value">
+                      <span class="num">42</span>
+                      <span class="text">เสร็จสิ้น</span>
+                    </div>
+                  </div>
+                  <div class="block detail container-block">
+                    <div class="block">
                       <button class="button">รายละเอียด</button>
                     </div>
                   </div>
-                  <div class="container-block alert">
-                    <span class="tag is-warning">รออนุมัติ 5</span>
-                    <span class="tag is-info">ดำเนินงาน 10</span>
-                    <span class="tag is-success">เสร็จสิ้น 60</span>
-                  </div>
-                </article>
-               <article class="tile is-child notification">
-                  <div class="container-block stat">
-                    <div class="block value container-block">
-                      <div class="block">
-                        <div class="num">4</div>
-                        <div class="name">ดำเนินงาน</div>
-                      </div>
-                    </div>
-                    <div class="block detail container-block">
-                      <button class="button">เพิ่มข้อมูล</button>
-                      <button class="button">รายละเอียด</button>
-                    </div>
-                  </div>
-                </article>
-                  <!-- <p class="title">สัญญา</p>
-                  <div class="subtitle">
-                    <div class="tags">
-                      <span class="tag is-transparent">จากข้อมูลสัญญา </span>
-                      <span class="tag is-success">ทั้งหมด 120 </span>
-                      <span class="tag is-warning">รออนุมัติ 20</span>
-                    </div>
-                  </div>
-                  <div class="content">
-                    <ul>
-                      <li class="item">เปิดสัญญาใหม่</li>
-                      <li class="item">รายการสัญญา</li>
-                    </ul>
-                  </div> -->
-              </div>
-              <div class="tile is-parent">
-                <article class="tile is-child notification">
-                  <p class="title">ข้อมูลสูญเสีย</p>
-                  <!-- <div class="subtitle">With even more content</div> -->
-                  <div class="content data-loss container-block">
-                    <div class="order block">
-                      <bar-chart  :height="150"></bar-chart>
-                    </div>
-                    <div class="stipend block">
-                      <bar-chart :height="150"></bar-chart>
-                    </div>
-                  </div>
-                </article>
-              </div>
+                </div>
+              </article>
             </div>
             <div class="tile is-parent">
               <article class="tile is-child notification">
-                <p class="title">สถานะงานล่าสุด</p>
-                <div class="content">
-                  <table class="table is-bordered">
-                    <thead>
-                      <tr>
-                        <th>โครงการ</th>
-                        <th>เลขที่สัญญา</th>
-                        <th>สถานะงาน</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>xxxxxx</td>
-                        <td>xxxxxx</td>
-                        <td>xxxxxx</td>
-                      </tr>
-                      <tr>
-                        <td>xxxxxx</td>
-                        <td>xxxxxx</td>
-                        <td>xxxxxx</td>
-                      </tr>
-                      <tr>
-                        <td>xxxxxx</td>
-                        <td>xxxxxx</td>
-                        <td>xxxxxx</td>
-                      </tr>
-                      <tr>
-                        <td>xxxxxx</td>
-                        <td>xxxxxx</td>
-                        <td>xxxxxx</td>
-                      </tr>
-                      <tr>
-                        <td>xxxxxx</td>
-                        <td>xxxxxx</td>
-                        <td>xxxxxx</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <p class="title">ข้อมูลสูญเสีย</p>
+                <div class="content data-loss container-block">
+                  <div class="order block">
+                    <bar-chart :data="item4"  :height="150" ></bar-chart>
+                  </div>
+                  <div class="stipend block">
+                    <bar-chart :data="item5" :height="150"></bar-chart>
+                  </div>
                 </div>
               </article>
             </div>
           </div>
-          <!-- <div class="tile is-parent">
+          <div class="tile is-parent">
             <article class="tile is-child notification">
+              <p class="title">สถานะงานล่าสุด</p>
               <div class="content">
-                <p class="title">xxxxxxxx</p>
-                  <div class="subtitle">
-                  </div>
-                <div class="content">
-                </div>
+                <table class="table is-bordered">
+                  <thead>
+                    <tr>
+                      <th>โครงการ</th>
+                      <th>เลขที่สัญญา</th>
+                      <th>สถานะงาน</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>xxxxxx</td>
+                      <td>xxxxxx</td>
+                      <td>xxxxxx</td>
+                    </tr>
+                    <tr>
+                      <td>xxxxxx</td>
+                      <td>xxxxxx</td>
+                      <td>xxxxxx</td>
+                    </tr>
+                    <tr>
+                      <td>xxxxxx</td>
+                      <td>xxxxxx</td>
+                      <td>xxxxxx</td>
+                    </tr>
+                    <tr>
+                      <td>xxxxxx</td>
+                      <td>xxxxxx</td>
+                      <td>xxxxxx</td>
+                    </tr>
+                    <tr>
+                      <td>xxxxxx</td>
+                      <td>xxxxxx</td>
+                      <td>xxxxxx</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </article>
-          </div> -->
+          </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 </template>
 
 <script>
 import barChart from '@Components/Chart/bar'
+import sparkLine from '@Components/Chart/spark-line'
+import breadcrumbBar from '@Components/Breadcrumb'
 export default {
   props: {
     // templateName: {
@@ -154,12 +134,78 @@ export default {
     // }
   },
   components: {
-    barChart
+    barChart,
+    sparkLine,
+    breadcrumbBar
   },
   name: 'HomePage',
   data () {
     return {
-      property: 'Blank'
+      local: {
+        pageObj: [
+          {name: 'หน้าหลัก', route: 'Home', active: true, icon: 'fa fa-home'}
+        ]
+      },
+      config: {
+        type: 'bar',
+        height: '60',
+        barWidth: 6,
+        barSpacing: 5,
+        tooltipFormat: '<span style="color: {{color}}">&#9679;</span>{{offset:offset}} <br/>{{value:value}} รายการ'
+      },
+      item1: {
+        count: 120,
+        class: 'project',
+        name: 'Project',
+        detail: '',
+        dataSets: {
+          label: ['xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx'],
+          values: [1, 5, 6, 8, 7, 4, 5, 9, 2, 7, 2, 5]
+        },
+        barColor: '#4571BB'
+      },
+      item2: {
+        count: 120,
+        class: 'contract',
+        name: 'Contract',
+        detail: '',
+        dataSets: {
+          label: ['xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx'],
+          values: [4, 3, 3, 2, 5, 4, 2, 9, 2, 2, 1, 3]
+        },
+        barColor: '#fa6854'
+      },
+      item3: {
+        count: 120,
+        class: 'success',
+        name: 'Success',
+        detail: '',
+        dataSets: {
+          label: ['xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx'],
+          values: [2, 4, 2, 3, 2, 3, 2, 2, 3, 2, 1, 2]
+        },
+        barColor: '#7dbe4b'
+      },
+      item4: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        datasets: [
+          {
+            label: 'การสั่งซื้อ',
+            backgroundColor: '#ff903f',
+            data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+          }
+        ]
+      },
+      item5: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        datasets: [
+          {
+            label: 'การจ่ายค่างวด',
+            backgroundColor: '#FF6384',
+            data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
+          }
+        ]
+      }
     }
   },
   computed: {

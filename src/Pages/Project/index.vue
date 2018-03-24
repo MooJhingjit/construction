@@ -14,7 +14,7 @@
             <tr>
               <th>รหัส</th>
               <th>ชื่อโปรเจค</th>
-              <th>วันที่สร้าง</th>
+              <th>ประเภท</th>
             </tr>
           </thead>
           <tbody>
@@ -66,17 +66,28 @@
       <template slot="detail">
         <div class="container-block  detail-block">
           <div class="form-detail">
-            <div class="name">LH-011  นันทวัน-ศรีนครินทร์</div> 
+            <div class="name">LH-011  นันทวัน-ศรีนครินทร์</div>
             <div class="container-block">
-              <div class="text-title">รหัสปรเจค</div> 
+              <div class="text-title">รหัสปรเจค</div>
               <div class="value">
                 <input type="text" value="LH-011" placeholder="Primary input" class="input">
               </div>
             </div>
             <div class="container-block">
-              <div class="text-title">ชื่อโปรเจค</div> 
+              <div class="text-title">ชื่อโปรเจค</div>
               <div class="value">
                 <input type="text" value="นันทวัน-ศรีนครินทร์" placeholder="Primary input" class="input">
+              </div>
+            </div>
+            <div class="container-block">
+              <div class="text-title">ประเภท</div>
+              <div class="value">
+                <div class="select">
+                  <select>
+                    <option>นันทวัน</option>
+                    <option>มัณฑนา</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>

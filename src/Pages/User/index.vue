@@ -1,7 +1,62 @@
 <template>
   <option-detail-template :templateObj="local.template">
     <template slot="title">ข้อมูลผู้ใช้</template>
-    <template slot="options">
+    <template slot="search-status"></template>
+    <template slot="search-input">
+      <input class="input" type="text" placeholder="ค้นหา">
+      <span class="icon is-small is-left">
+        <i class="fa fa-search" aria-hidden="true"></i>
+      </span>
+    </template>
+    <template slot="search-results">
+      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th>ชื่อ</th>
+            <th>ตำแหน่ง</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Three</td>
+            <td>Four</td>
+          </tr>
+          <tr>
+            <td>Five</td>
+            <td>Six</td>
+          </tr>
+          <tr>
+            <td>Seven</td>
+            <td>Eight</td>
+          </tr>
+          <tr>
+            <td>Nine</td>
+            <td>Ten</td>
+          </tr>
+          <tr>
+            <td>Eleven</td>
+            <td>Twelve</td>
+          </tr>
+          <tr>
+            <td>Eleven</td>
+            <td>Twelve</td>
+          </tr>
+          <tr>
+            <td>Eleven</td>
+            <td>Twelve</td>
+          </tr>
+          <tr>
+            <td>Eleven</td>
+            <td>Twelve</td>
+          </tr>
+        </tbody>
+      </table>
+      <nav class="pagination" role="navigation" aria-label="pagination">
+        <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
+        <button class="pagination-next">หน้าถัดไป</button>
+      </nav>
+    </template>
+    <!-- <template slot="options">
       <div class="container-block">
         <div class="control has-icons-left">
           <input class="input" type="text" placeholder="ค้นหา">
@@ -52,7 +107,7 @@
           </tbody>
         </table>
       </div>
-    </template>
+    </template> -->
     <template v-if="true">
       <template slot="detail">
         <div class="container-block  detail-block">

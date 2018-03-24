@@ -1,11 +1,19 @@
 <template>
     <section :class="['section', this.templateObj.class]">
-    <div class="container">
-        <h1 class="title"><slot name="title"></slot></h1>
-    </div>
-    <div class="container-block">
-      <div class="options-panel">
-        <slot name="options"></slot>
+      <slot name="title"></slot>
+      <div class="container-block">
+        <div class="options-panel">
+          <div class="container-block">
+          <div class="search-status">
+            <slot name="search-status"></slot>
+          </div>
+          <div class="search-input control has-icons-left">
+            <slot name="search-input"></slot>
+          </div>
+          <div class="search-results">
+            <slot name="search-results"></slot>
+          </div>
+        </div>
       </div>
       <div class="detail-panel">
         <slot name="detail"></slot>

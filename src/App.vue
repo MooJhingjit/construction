@@ -18,14 +18,17 @@
         </transition>
       </div>
     </div>
+    <model-panel></model-panel>
   </div>
 </template>
 
 <script>
 import MenuBar from '@Components/MenuBar'
+import ModelPanel from '@Components/Model'
 export default {
   components: {
-    MenuBar
+    MenuBar,
+    ModelPanel
   },
   name: 'app',
   data () {

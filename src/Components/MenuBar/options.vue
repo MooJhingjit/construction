@@ -1,25 +1,41 @@
 <template>
     <div :class="{'sub-menu-panel box-shadow-panel options-block': true, 'active': (isActive && !isDisableMenu) }">
         <div class="container-block">
-            <div class="block container-block" @click="goToPage('xxxxxx')">
-                <div class="icon"><i class="fa fa-home" aria-hidden="true"></i></div>
-                <div class="desc">แบบบ้าน</div>
+           <div class="block container-block is-mobile-only" @click="goToPage('Home')">
+              <div class="icon"><i class="fa fa-home" aria-hidden="true"></i></div>
+              <div class="desc">หน้าหลัก</div>
+            </div>
+            <div class="block container-block is-mobile-only" @click="goToPage('Ordering')">
+              <div class="icon"><i class="fa fa-tasks" aria-hidden="true"></i></div>
+              <div class="desc">สั่งซื้อ</div>
+            </div>
+            <div class="block container-block is-mobile-only" @click="goToPage('xxxxxx')">
+              <div class="icon"><i class="fa fa-th-large" aria-hidden="true"></i></div>
+              <div class="desc">จ่ายค่างวด</div>
+            </div>
+              <div class="block container-block is-mobile-only" @click="goToPage('Authority', 'all')">
+              <div class="icon"><i class="fa fa-check-square-o" aria-hidden="true"></i></div>
+              <div class="desc">ข้อมูลสูญเสีย</div>
             </div>
             <div class="block container-block" @click="goToPage('xxxxxx')">
-                <div class="icon"><i class="fa fa-tasks" aria-hidden="true"></i></div>
-                <div class="desc">ลำดับการทำงาน</div>
+              <div class="icon"><i class="fa fa-home" aria-hidden="true"></i></div>
+              <div class="desc">แบบบ้าน</div>
             </div>
             <div class="block container-block" @click="goToPage('xxxxxx')">
-                <div class="icon"><i class="fa fa-th-large" aria-hidden="true"></i></div>
-                <div class="desc">วัสดุ</div>
+              <div class="icon"><i class="fa fa-tasks" aria-hidden="true"></i></div>
+              <div class="desc">ลำดับการทำงาน</div>
             </div>
-                <div class="block container-block" @click="goToPage('Authority', 'all')">
-                <div class="icon"><i class="fa fa-check-square-o" aria-hidden="true"></i></div>
-                <div class="desc">สิทธิ์การใช้งาน</div>
+            <div class="block container-block" @click="goToPage('xxxxxx')">
+              <div class="icon"><i class="fa fa-th-large" aria-hidden="true"></i></div>
+              <div class="desc">วัสดุ</div>
+            </div>
+              <div class="block container-block" @click="goToPage('Authority', 'all')">
+              <div class="icon"><i class="fa fa-check-square-o" aria-hidden="true"></i></div>
+              <div class="desc">สิทธิ์การใช้งาน</div>
             </div>
             <div class="block container-block" @click="goToPage('User', 'all')">
-                <div class="icon"><i class="fa fa-address-book-o" aria-hidden="true"></i></div>
-                <div class="desc">ผู้ใช้งาน</div>
+              <div class="icon"><i class="fa fa-address-book-o" aria-hidden="true"></i></div>
+              <div class="desc">ผู้ใช้งาน</div>
             </div>
         </div>
     </div>

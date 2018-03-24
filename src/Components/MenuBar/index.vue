@@ -2,9 +2,9 @@
   <nav class="level is-mobile">
     <div class="level-item has-text-centered">
       <div>
-      <p class="heading">
-        <router-link to="/">หน้าหลัก</router-link>
-      </p>
+        <p class="heading">
+          <router-link to="/">หน้าหลัก</router-link>
+        </p>
       <!-- <p class="title">3,456</p> -->
       </div>
     </div>
@@ -32,8 +32,14 @@
       <!-- <p class="title">789</p> -->
       </div>
     </div>
-
-    <div class="level-item has-text-centered options-panel">
+    <div class="level-item has-text-centered project-name on-mobile">
+      <div>
+        <p class="heading">
+          โชคชนายุทธ
+        </p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered options-panel on-mobile">
       <div class="block">
         <div class="icon-menu" @click="openSubMenu('options', 'profile')">
             <i class="fa fa-th" aria-hidden="true"></i>

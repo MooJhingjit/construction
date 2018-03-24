@@ -1,0 +1,8 @@
+.button.is-success {
+  background-color: $frist-text-green-color;
+  border-color: transparent;
+  color: #fff;
+  &:hover{
+    background-color: $second-text-green-color;
+  }
+}

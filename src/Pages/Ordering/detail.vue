@@ -1,7 +1,11 @@
 <template>
   <option-detail-template :templateObj="local.template">
-    <template slot="title">สิทธิ์การใช้งาน</template>
-    <template slot="search-status"></template>
+    <template slot="title"><breadcrumb-bar :dataObj="local"></breadcrumb-bar></template>
+    <template slot="search-status">
+      <div class="tags">
+        <span class="tag">รอสินค้า 5</span>
+      </div>
+    </template>
     <template slot="search-input">
       <input class="input" type="text" placeholder="ค้นหา">
       <span class="icon is-small is-left">
@@ -12,21 +16,36 @@
       <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
           <tr>
-            <th>ตำแหน่ง</th>
+            <th>รหัส</th>
+            <th>จำนวน</th>
+            <th>วันที่</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>Three</td>
+            <td>Four</td>
+            <td>Four</td>
           </tr>
           <tr>
             <td>Five</td>
+            <td>Six</td>
+            <td>Four</td>
           </tr>
           <tr>
             <td>Seven</td>
+            <td>Four</td>
+            <td>Eight</td>
           </tr>
           <tr>
             <td>Nine</td>
+            <td>Ten</td>
+            <td>Four</td>
+          </tr>
+          <tr>
+            <td>Eleven</td>
+            <td>Four</td>
+            <td>Twelve</td>
           </tr>
         </tbody>
       </table>
@@ -37,91 +56,75 @@
     </template>
     <template v-if="true">
       <template slot="detail">
-        <div class="container-block detail-block">
-          <div class="block container-block">
-            <div class="name">
-              ระบบสั่งซื้อ
-            </div>
-            <div class="task">
-              <ul>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemA
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemB
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemC
-                  </label>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="block container-block">
-            <div class="name">
-              ระบบสั่งซื้อ
-            </div>
-            <div class="task">
-              <ul>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemA
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemB
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemC
-                  </label>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="block container-block">
-            <div class="name">
-              ระบบสั่งซื้อ
-            </div>
-            <div class="task">
-              <ul>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemA
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemB
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemC
-                  </label>
-                </li>
-              </ul>
-            </div>
-          </div>
+        <div class="container-block  detail-block">
+          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>วัสดุ</th>
+                <th>จำนวน</th>
+                <th>ราคา</th>
+                <th>สถานะ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Four</td>
+                <td>Three</td>
+                <td>Four</td>
+                <td><span class="tag is-success">รับแล้ว</span></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Six</td>
+                <td>Four</td>
+                <td>Four</td>
+                <td><span class="tag is-warning">รอสินค้า</span></td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Eight</td>
+                <td>Four</td>
+                <td>Four</td>
+                <td><span class="tag is-success">รับแล้ว</span></td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>Ten</td>
+                <td>Four</td>
+                <td>Three</td>
+                <td><span class="tag is-success">รับแล้ว</span></td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>Four</td>
+                <td>Three</td>
+                <td>Three</td>
+                <td><span class="tag is-success">รับแล้ว</span></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="container-block footer-panel">
-            <button class="button">บันทึกข้อมูล</button>
+        <div class="c-footer container-block block">
+          <table class="transparent-table">
+            <tr>
+              <td>วันที่ 21 มีนาคม 2561</td>
+              <td>เลขที่สัญญา: xxxxxx</td>
+            </tr>
+            <tr>
+              <td>แบบบ้าน: xxxxxxxx</td>
+              <td>ขั้นตอนการตำเนินงาน: xxxxxx</td>
+            </tr>
+            <tr>
+              <td>ทั้งหมด: 5 รายการ</td>
+              <td>จำนวนเงินทั้งหมด 1,000 บาท</td>
+            </tr>
+            <tr>
+              <td>คงเหลือ: 1 รายการ</td>
+              <td>หนึ่งพันบาทถ้วน</td>
+            </tr>
+          </table>
         </div>
       </template>
     </template>
@@ -151,6 +154,7 @@
 
 <script>
 import optionDetailTemplate from '@Components/Template/option-detail'
+import breadcrumbBar from '@Components/Breadcrumb'
 export default {
   props: {
     // templateName: {
@@ -159,14 +163,19 @@ export default {
     // }
   },
   components: {
-    optionDetailTemplate
+    optionDetailTemplate,
+    breadcrumbBar
   },
-  name: 'AuthorityPage',
+  name: 'OrderingDetail',
   data () {
     return {
       local: {
+        pageObj: [
+          {name: 'การสั่งซื้อ', route: 'Ordering', active: false, icon: 'fa fa-object-group'},
+          {name: 'xxx', route: '', active: true, icon: ''}
+        ],
         template: {
-          class: 'authority-page'
+          class: 'user-page'
         }
       }
     }
