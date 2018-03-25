@@ -1,9 +1,9 @@
 <template>
   <nav class="breadcrumb" aria-label="breadcrumbs">
     <ul>
-      <li :class="{'active': page.active}" :key="key" v-for="(page, key) in dataObj.pageObj" >
+      <li :class="{'active': page.active}" :key="key" v-for="(page, key) in dataObj.items" >
         <i v-if="page.icon" aria-hidden="true" :class="page.icon"></i>
-        <a @click="goToPage(page.route)">{{page.name}}</a>
+        <a @click="goToPage(page.route, page.key)">{{page.name}}</a>
       </li>
     </ul>
   </nav>
@@ -33,9 +33,9 @@ export default {
     }
   },
   methods: {
-    goToPage (routeName) {
+    goToPage (routeName, key = '') {
       if (routeName === '') return
-      this.GOTOPAGE(routeName)
+      this.GOTOPAGE(routeName, key)
     }
   },
   watch: {

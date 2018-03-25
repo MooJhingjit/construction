@@ -1,6 +1,6 @@
 <template>
   <option-detail-template :templateObj="local.template">
-    <template slot="title">ข้อมูลสัญญา</template>
+    <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="search-status">
       <div class="tags">
         <span class="tag">รออนุมัติ 5</span>
@@ -19,40 +19,29 @@
           <tr>
             <th>ชื่อสัญญา</th>
             <th>วันที่</th>
+            <th>สถานะ</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>Three</td>
             <td>Three</td>
+            <td>Three</td>
           </tr>
           <tr>
             <td>Three</td>
             <td>Five</td>
+            <td>Three</td>
           </tr>
           <tr>
             <td>Three</td>
             <td>Seven</td>
+            <td>Three</td>
           </tr>
           <tr>
             <td>Three</td>
             <td>Nine</td>
-          </tr>
-          <tr>
             <td>Three</td>
-            <td>Eleven</td>
-          </tr>
-          <tr>
-            <td>Three</td>
-            <td>Eleven</td>
-          </tr>
-          <tr>
-            <td>Three</td>
-            <td>Eleven</td>
-          </tr>
-          <tr>
-            <td>Three</td>
-            <td>Eleven</td>
           </tr>
         </tbody>
       </table>
@@ -196,6 +185,7 @@
 </template>
 
 <script>
+import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
 export default {
   props: {
@@ -205,12 +195,18 @@ export default {
     // }
   },
   components: {
+    breadcrumbBar,
     optionDetailTemplate
   },
   name: 'ContractPage',
   data () {
     return {
       local: {
+        pageObj: {
+          items: [
+            {name: 'ข้อมูลสัญญา', route: 'Contract', key: '', active: true, icon: 'fa fa-file-text'}
+          ]
+        },
         template: {
           class: 'contract-page'
         }

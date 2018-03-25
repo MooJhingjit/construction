@@ -303,8 +303,14 @@ html {
                         }
                         .detail{
                           text-align: center;
-                          justify-content: center;
+                          justify-content: space-around !important;
                           align-items: center;
+                          button+button{
+                            margin-top: 5px;
+                            @media (min-width: $computerBreakpoint) {
+                              margin-top: 0px;
+                            }
+                          }
                           .block{
                             margin-bottom: 0;
                           }
@@ -415,6 +421,30 @@ html {
                       color: orange;
                     }
                   }
+                }
+                .ordering-detail-page{
+                  .detail-panel{
+                    .explain-order{
+                      margin-top: 0.75rem;
+                    }
+                    .detail-block{
+                      // margin-bottom: 15px;
+                      flex-direction: column;
+
+                      .function{
+                        justify-content: space-around;
+                        margin-bottom: 15px;
+                        .button{
+                          // display: none;
+                          margin: 10px;
+                          @media (min-width: $computerBreakpoint) {
+                            margin: 0px;
+                          }
+                        }
+                      }
+                    }
+                  }
+                  
                 }
                 .user-page{
                   .options-panel{
@@ -611,11 +641,15 @@ html {
                     }
                     .options-panel{
                       flex: 3;
-                      padding: 0.75rem;
+                      padding-bottom: 0.75rem;
+                      @media (min-width: $computerBreakpoint) {
+                        padding-right: 0.75rem;
+                        padding-bottom: 0rem;
+                      }
                       &>.container-block{
                         background: rgba(255, 255, 255, 0.85) !important;
                         flex-direction: column;
-                        padding: 7px;
+                        padding: 5px;
                         .search-status{
                           margin-bottom: 5px;
                           .tags{
@@ -642,13 +676,22 @@ html {
                             
                           }
                         }
-                        
+                      }
+                      .function{
+                        padding-top: 15px;
+                        button{
+                          margin-bottom: 5px;
+                        }
                       }
                     }
                     .detail-panel{
-                      padding: 0.75rem;
+                      // padding: 0.75rem;
                       flex: 7;
                       &>.container-block{
+                        // margin-bottom: 0.75rem;
+                        // @media (min-width: $computerBreakpoint) {
+                        //   margin-right: 0rem;
+                        // }
                         background: rgba(255, 255, 255, 0.85);
                         flex-direction: column;
                         padding: 5px;
@@ -705,8 +748,8 @@ html {
                       .footer-panel{
                         flex-direction: row;
                         button{
-                          max-width: 90px;
-                          flex: 1;
+                          // max-width: 90px;
+                          // flex: 1;
                         }
                         button+button{
                           margin-left: 10px;

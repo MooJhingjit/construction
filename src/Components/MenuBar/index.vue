@@ -11,7 +11,7 @@
     <div class="level-item has-text-centered">
       <div>
         <p class="heading">
-          <router-link to="/ordering">สั่งซื้อ</router-link>
+          <router-link to="/ordering">การสั่งซื้อ</router-link>
         </p>
       <!-- <p class="title">123</p> -->
       </div>

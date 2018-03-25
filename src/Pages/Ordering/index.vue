@@ -1,6 +1,6 @@
 <template>
   <section class="section ordering-page">
-    <breadcrumb-bar :dataObj="local"></breadcrumb-bar>
+    <breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar>
     <div class="container-block">
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-12">
@@ -18,7 +18,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr @dblclick="doSomething()" >
+                    <tr @dblclick="goToDetail()" >
                       <td>Three</td>
                       <td>Four</td>
                       <td>Three</td>
@@ -132,9 +132,11 @@ export default {
   data () {
     return {
       local: {
-        pageObj: [
-          {name: 'การสั่งซื้อ', route: 'Ordering', active: true, icon: 'fa fa-object-group'}
-        ]
+        pageObj: {
+          items: [
+            {name: 'การสั่งซื้อ', route: 'Ordering', key: '', active: true, icon: 'fa fa-object-group'}
+          ]
+        }
       },
       config: {
         type: 'bar',
@@ -196,8 +198,8 @@ export default {
     // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
   },
   methods: {
-    doSomething () {
-      alert('click 2')
+    goToDetail () {
+      this.GOTOPAGE('OrderingDetail', 'xxxx')
     }
   }
 }

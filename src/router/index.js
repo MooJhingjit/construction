@@ -44,12 +44,12 @@ export default new VueRouter({
       component: Authority
     },
     {
-      path: '/project/:key',
+      path: '/project',
       name: 'Project',
       component: Project
     },
     {
-      path: '/contract/:key',
+      path: '/contract',
       name: 'Contract',
       component: Contract
     }

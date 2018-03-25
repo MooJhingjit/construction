@@ -1,6 +1,6 @@
 <template>
   <section class="section home-page">
-    <breadcrumb-bar :dataObj="local"></breadcrumb-bar>
+    <breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar>
     <div class="container-block">
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-12">
@@ -16,9 +16,8 @@
                     </div>
                   </div>
                   <div class="block detail container-block">
-                    <div class="block">
-                      <button class="button">รายละเอียด</button>
-                    </div>
+                    <button class="button" @click="goToPage('Project')">สร้างโปรเจคใหม่</button>
+                      <button class="button" @click="goToPage('Project')">แสดงข้อมูล</button>
                   </div>
                 </div>
               </article>
@@ -32,13 +31,12 @@
                     </div>
                   </div>
                   <div class="block detail container-block">
-                    <div class="block">
-                      <button class="button">รายละเอียด</button>
-                    </div>
-                    <div class="block alert">
+                    <button class="button" @click="goToPage('Contract')">สร้างสัญญาใหม่</button>
+                    <button class="button" @click="goToPage('Contract')">แสดงข้อมูล</button>
+                    <!-- <div class="block alert">
                       <span class="tag is-warning">รออนุมัติ 5</span>
                       <span class="tag is-info">ดำเนินงาน 10</span>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </article>
@@ -52,9 +50,7 @@
                     </div>
                   </div>
                   <div class="block detail container-block">
-                    <div class="block">
-                      <button class="button">รายละเอียด</button>
-                    </div>
+                    <button class="button">แสดงข้อมูล</button>
                   </div>
                 </div>
               </article>
@@ -142,9 +138,11 @@ export default {
   data () {
     return {
       local: {
-        pageObj: [
-          {name: 'หน้าหลัก', route: 'Home', active: true, icon: 'fa fa-home'}
-        ]
+        pageObj: {
+          items: [
+            {name: 'หน้าหลัก', route: 'Home', key: '', active: true, icon: 'fa fa-home'}
+          ]
+        }
       },
       config: {
         type: 'bar',
@@ -249,6 +247,9 @@ export default {
     // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
   },
   methods: {
+    goToPage (routeName, key = '') {
+      this.GOTOPAGE(routeName, key)
+    }
   }
 }
 </script>

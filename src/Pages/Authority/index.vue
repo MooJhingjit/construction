@@ -1,6 +1,6 @@
 <template>
   <option-detail-template :templateObj="local.template">
-    <template slot="title">สิทธิ์การใช้งาน</template>
+    <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="search-status"></template>
     <template slot="search-input">
       <input class="input" type="text" placeholder="ค้นหา">
@@ -150,6 +150,7 @@
 </template>
 
 <script>
+import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
 export default {
   props: {
@@ -159,12 +160,18 @@ export default {
     // }
   },
   components: {
+    breadcrumbBar,
     optionDetailTemplate
   },
   name: 'AuthorityPage',
   data () {
     return {
       local: {
+        pageObj: {
+          items: [
+            {name: 'สิทธิ์การใช้งาน', route: 'Authority', key: '', active: true, icon: 'fa fa-check-square-o'}
+          ]
+        },
         template: {
           class: 'authority-page'
         }

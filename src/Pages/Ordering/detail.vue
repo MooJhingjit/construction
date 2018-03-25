@@ -1,6 +1,6 @@
 <template>
   <option-detail-template :templateObj="local.template">
-    <template slot="title"><breadcrumb-bar :dataObj="local"></breadcrumb-bar></template>
+    <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="search-status">
       <div class="tags">
         <span class="tag">รอสินค้า 5</span>
@@ -16,8 +16,8 @@
       <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
           <tr>
-            <th>รหัส</th>
-            <th>จำนวน</th>
+            <th>เลขที่สัญญา</th>
+            <th>จำนวนรายการ</th>
             <th>วันที่</th>
           </tr>
         </thead>
@@ -56,75 +56,111 @@
     </template>
     <template v-if="true">
       <template slot="detail">
-        <div class="container-block  detail-block">
-          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-            <thead>
+        <div class="container-block detail-block">
+          <div class="block">
+            <table class="transparent-table">
               <tr>
-                <th>#</th>
-                <th>วัสดุ</th>
-                <th>จำนวน</th>
-                <th>ราคา</th>
-                <th>สถานะ</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Four</td>
-                <td>Three</td>
-                <td>Four</td>
-                <td><span class="tag is-success">รับแล้ว</span></td>
+                <td>เลขที่สัญญา: xxxxxx</td>
+                <td>วันที่ 21 มีนาคม 2561</td>
               </tr>
               <tr>
-                <td>2</td>
-                <td>Six</td>
-                <td>Four</td>
-                <td>Four</td>
-                <td><span class="tag is-warning">รอสินค้า</span></td>
+                <td>แบบบ้าน: xxxxxxxx</td>
+                <td>ขั้นตอนการตำเนินงาน: xxxxxx</td>
               </tr>
               <tr>
-                <td>3</td>
-                <td>Eight</td>
-                <td>Four</td>
-                <td>Four</td>
-                <td><span class="tag is-success">รับแล้ว</span></td>
+                <td>ทั้งหมด: 5 รายการ</td>
+                <td>จำนวนเงินทั้งหมด 1,000 บาท</td>
               </tr>
               <tr>
-                <td>4</td>
-                <td>Ten</td>
-                <td>Four</td>
-                <td>Three</td>
-                <td><span class="tag is-success">รับแล้ว</span></td>
+                <td>คงเหลือ: 1 รายการ</td>
+                <td>หนึ่งพันบาทถ้วน</td>
               </tr>
-              <tr>
-                <td>5</td>
-                <td>Four</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td><span class="tag is-success">รับแล้ว</span></td>
-              </tr>
-            </tbody>
-          </table>
+            </table>
+          </div>
+          <div class="block">
+            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>วัสดุ</th>
+                  <th>จำนวน</th>
+                  <th>ราคา</th>
+                  <th>ร้านค้า</th>
+                  <th>สถานะ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><span class="tag is-success">รับแล้ว</span></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><span class="tag is-warning">รอสินค้า</span></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><span class="tag is-success">รับแล้ว</span></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><span class="tag is-success">รับแล้ว</span></td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td><span class="tag is-success">รับแล้ว</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div class="c-footer container-block block">
-          <table class="transparent-table">
-            <tr>
-              <td>วันที่ 21 มีนาคม 2561</td>
-              <td>เลขที่สัญญา: xxxxxx</td>
-            </tr>
-            <tr>
-              <td>แบบบ้าน: xxxxxxxx</td>
-              <td>ขั้นตอนการตำเนินงาน: xxxxxx</td>
-            </tr>
-            <tr>
-              <td>ทั้งหมด: 5 รายการ</td>
-              <td>จำนวนเงินทั้งหมด 1,000 บาท</td>
-            </tr>
-            <tr>
-              <td>คงเหลือ: 1 รายการ</td>
-              <td>หนึ่งพันบาทถ้วน</td>
-            </tr>
-          </table>
+        <div class="container-block explain-order detail-block">
+          <div class="block">
+            <table class="transparent-table">
+              <tr>
+                <td>วัสดุ: xxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>สถานะ: <span class="tag is-warning">รอสินค้า</span></td>
+              </tr>
+              <tr>
+                <td>จำนวน: xxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+              </tr>
+              <tr>
+                <td>ราคา: xxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+              </tr>
+            </table>
+          </div>
+          <div class="block function container-block">
+            <a class="button is-outlined">Function</a>
+            <a class="button is-primary is-outlined">Function</a>
+            <a class="button is-link is-outlined">Function</a>
+            <a class="button is-info is-outlined">Function</a>
+            <a class="button is-success is-outlined">Function</a>
+          </div>
         </div>
       </template>
     </template>
@@ -170,12 +206,14 @@ export default {
   data () {
     return {
       local: {
-        pageObj: [
-          {name: 'การสั่งซื้อ', route: 'Ordering', active: false, icon: 'fa fa-object-group'},
-          {name: 'xxx', route: '', active: true, icon: ''}
-        ],
+        pageObj: {
+          items: [
+            {name: 'การสั่งซื้อ', route: 'Ordering', key: '', active: false, icon: 'fa fa-object-group'},
+            {name: 'xxx', route: 'OrderingDetail', key: 'aaaa', active: true, icon: ''}
+          ]
+        },
         template: {
-          class: 'user-page'
+          class: 'ordering-detail-page'
         }
       }
     }

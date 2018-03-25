@@ -1,6 +1,6 @@
 <template>
   <option-detail-template :templateObj="local.template">
-    <template slot="title">ข้อมูลผู้ใช้</template>
+    <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="search-status"></template>
     <template slot="search-input">
       <input class="input" type="text" placeholder="ค้นหา">
@@ -56,58 +56,6 @@
         <button class="pagination-next">หน้าถัดไป</button>
       </nav>
     </template>
-    <!-- <template slot="options">
-      <div class="container-block">
-        <div class="control has-icons-left">
-          <input class="input" type="text" placeholder="ค้นหา">
-          <span class="icon is-small is-left">
-            <i class="fa fa-search" aria-hidden="true"></i>
-          </span>
-        </div>
-        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-          <thead>
-            <tr>
-              <th>ชื่อ</th>
-              <th>ตำแหน่ง</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Three</td>
-              <td>Four</td>
-            </tr>
-            <tr>
-              <td>Five</td>
-              <td>Six</td>
-            </tr>
-            <tr>
-              <td>Seven</td>
-              <td>Eight</td>
-            </tr>
-            <tr>
-              <td>Nine</td>
-              <td>Ten</td>
-            </tr>
-            <tr>
-              <td>Eleven</td>
-              <td>Twelve</td>
-            </tr>
-            <tr>
-              <td>Eleven</td>
-              <td>Twelve</td>
-            </tr>
-            <tr>
-              <td>Eleven</td>
-              <td>Twelve</td>
-            </tr>
-            <tr>
-              <td>Eleven</td>
-              <td>Twelve</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </template> -->
     <template v-if="true">
       <template slot="detail">
         <div class="container-block  detail-block">
@@ -178,6 +126,7 @@
 </template>
 
 <script>
+import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
 export default {
   props: {
@@ -187,12 +136,18 @@ export default {
     // }
   },
   components: {
+    breadcrumbBar,
     optionDetailTemplate
   },
   name: 'UserPage',
   data () {
     return {
       local: {
+        pageObj: {
+          items: [
+            {name: 'ข้อมูลผู้ใช้', route: 'User', key: '', active: true, icon: 'fa fa-address-book-o'}
+          ]
+        },
         template: {
           class: 'user-page'
         }
