@@ -3,7 +3,7 @@
 @import url('../node_modules/font-awesome/css/font-awesome.min.css');
 $widescreenMonitorBreakpoint : 1440px;
 html { 
-    background: url('Assets/Images/bg.jpg') no-repeat center center fixed; 
+    background: url('Assets/Images/bg2.jpg') no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -412,6 +412,83 @@ html {
                   }
                     
                 }
+                .front-site-page{
+                  article{
+                    margin-bottom: 15px !important;
+                    text-align: center;
+                    font-size: 1em;
+                    &>div{
+                      flex: 1;
+                      min-height: 40px;
+                    }
+                    .project-name{
+                      font-size: 1.3em;
+                      color: $frist-text-black-color;
+                    }
+                    .current-task{
+                      span{
+                        font-size: 1em;
+                      }
+                      color: $second-text-black-color;
+                    }
+                    .next-task{
+                      .name, .date{
+                        color: $frist-text-black-color;
+                        margin-bottom: 5px;
+                        text-align: left;
+                      }
+                    }
+                    .actions{
+                      button{
+                        background: #e0e0e0;
+                      }
+                    }
+
+                  }
+                }
+                .front-site-update-page{
+                  article{
+                    font-size: 1em;
+                    @media (min-width: $computerBreakpoint) {
+                      font-size: 1.2em;
+                    }
+                    .project-name{
+                      font-size: 1.2em;
+                      margin-bottom: 5px;
+                    }
+                    .todo-lists{
+                      table{
+                        font-size: 1em;
+                        tbody{
+                          tr td.list{
+                            .task{
+                              font-size: 0.95em;
+                              color: $frist-text-black-color;
+                            }
+                            .detail{
+                              font-size: 0.85em;
+                              color: $second-text-black-color;
+                            }
+                            .date{
+                              font-size: 0.8em;
+                              color: $second-text-black-color;
+                            }
+                          }
+                          tr td.status{
+                            padding: 0;
+                            margin: 0;
+                            vertical-align: middle;
+                            text-align: center;
+                            i{
+                              font-size: 1.2em;
+                              color: $second-text-green-color;
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
                 .ordering-page{
                   .container-block .tile{
                     p.title.alert{
@@ -582,6 +659,14 @@ html {
                   }
                 }
                 .contract-page{
+                  .detail-block{
+                    .contract-name{
+                      font-size: 1.2em;
+                      margin-bottom: 5px;
+                    }
+                  }
+                }
+                .create-contract-page{
                   .detail-block{
                     .c-header{
                       margin: 0;

@@ -1,7 +1,7 @@
 <template>
   <option-detail-template :templateObj="local.template">
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
-    <template slot="search-status">
+    <!-- <template slot="search-status">
       <div class="tags">
         <span class="tag">รออนุมัติ 5</span>
         <span class="tag">ดำเนินงาน 3</span>
@@ -24,7 +24,7 @@
         </thead>
         <tbody>
           <tr>
-            <td>00B01</td>
+            <td>Three</td>
             <td>Three</td>
             <td>Three</td>
           </tr>
@@ -49,59 +49,11 @@
         <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
         <button class="pagination-next">หน้าถัดไป</button>
       </nav>
-    </template>
+    </template> -->
     <template v-if="true">
       <template slot="detail">
         <div class="container-block  detail-block">
-          <div class="contract-name">00B01</div>
-          <table class="table is-hoverable">
-            <thead>
-              <tr>
-                <th>รายละเอียดงาน</th>
-                <th>วันที่ตามสัญญา</th>
-                <th>วันที่ประมาณใหม่</th>
-                <th>วันที่ทำจริง</th>
-                <th>สถานะ</th>
-                <th>งวด</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-              </tr>
-              <tr>
-                <td>Three</td>
-                <td>Five</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-              </tr>
-              <tr>
-                <td>Three</td>
-                <td>Seven</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-              </tr>
-              <tr>
-                <td>Three</td>
-                <td>Nine</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-          <!-- <div class="c-header container-block block">
+          <div class="c-header container-block block">
             <div class="block name">
               สัญญาว่าจ้างปลูกสร้างอาคาร
               <div class="date">วันที่ 21 มีนาคม 2561</div>
@@ -205,7 +157,7 @@
         <div class="container-block footer-panel">
           <button class="button is-warning">รออนุมัติ</button>
           <button class="button is-success">เริ่มดำเนินงาน</button>
-        </div> -->
+        </div>
       </template>
     </template>
     <template v-else>
@@ -246,17 +198,18 @@ export default {
     breadcrumbBar,
     optionDetailTemplate
   },
-  name: 'ContractPage',
+  name: 'CreateContractPage',
   data () {
     return {
       local: {
         pageObj: {
           items: [
-            {name: 'ข้อมูลสัญญาโปรเจค xxxx', route: 'Contract', key: 'test', active: true, icon: 'fa fa-file-text'}
+            {name: 'โปรเจค', route: 'Project', key: '', active: true, icon: 'fa fa-file-text'},
+            {name: 'สร้างสัญญาใหม่', route: 'CreateContract', key: 'project', active: true, icon: ''}
           ]
         },
         template: {
-          class: 'contract-page'
+          class: 'create-contract-page'
         }
       }
     }

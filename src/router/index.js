@@ -8,6 +8,9 @@ const User = () => import('@Pages/User')
 const Authority = () => import('@Pages/Authority')
 const Project = () => import('@Pages/Project')
 const Contract = () => import('@Pages/Contract')
+const CreateContract = () => import('@Pages/Contract/create')
+const FrontSite = () => import('@Pages/FrontSite')
+const FrontSiteUpdate = () => import('@Pages/FrontSite/update-status')
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -49,9 +52,24 @@ export default new VueRouter({
       component: Project
     },
     {
-      path: '/contract',
+      path: '/contract/:key',
       name: 'Contract',
       component: Contract
+    },
+    {
+      path: '/create-contract/:key',
+      name: 'CreateContract',
+      component: CreateContract
+    },
+    {
+      path: '/front-site',
+      name: 'FrontSite',
+      component: FrontSite
+    },
+    {
+      path: '/front-site/update/:key',
+      name: 'FrontSiteUpdate',
+      component: FrontSiteUpdate
     }
   ]
 })

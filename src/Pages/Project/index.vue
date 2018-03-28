@@ -99,7 +99,7 @@
         </div>
         <div class="container-block footer-panel">
           <button class="button">บันทึกข้อมูล</button>
-          <button class="button" @click="GOTOPAGE('Contract')">สร้างสัญญาใหม่</button>
+          <button class="button" @click="GOTOPAGE('CreateContract', 'project')">สร้างสัญญาใหม่</button>
           <button class="button" @click="GOTOPAGE('Contract')">สัญญาในโครงการนี้ทั้งหมด</button>
         </div>
       </template>
