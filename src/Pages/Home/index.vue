@@ -12,12 +12,12 @@
                     <spark-line :config="config" :data="item1"></spark-line>
                     <div class="value">
                       <span class="num">4</span>
-                      <span class="text">โปรเจค</span>
+                      <span class="text">โครงการ</span>
                     </div>
                   </div>
                   <div class="block detail container-block">
-                    <button class="button" @click="goToPage('Project')">สร้างโปรเจคใหม่</button>
-                      <button class="button" @click="goToPage('Project')">แสดงข้อมูล</button>
+                    <!-- <button class="button" @click="goToPage('Project')">สร้างโครงการใหม่</button> -->
+                      <button class="button" @click="GOTOPAGE('Project', 'all')">แสดงข้อมูล</button>
                   </div>
                 </div>
               </article>
@@ -31,8 +31,8 @@
                     </div>
                   </div>
                   <div class="block detail container-block">
-                    <button class="button" @click="goToPage('Contract')">สร้างสัญญาใหม่</button>
-                    <button class="button" @click="goToPage('Contract')">แสดงข้อมูล</button>
+                    <!-- <button class="button" @click="goToPage('Contract')">สร้างสัญญาใหม่</button> -->
+                    <button class="button" @click="GOTOPAGE('Contract', 'all')">แสดงข้อมูล</button>
                     <!-- <div class="block alert">
                       <span class="tag is-warning">รออนุมัติ 5</span>
                       <span class="tag is-info">ดำเนินงาน 10</span>
@@ -50,7 +50,7 @@
                     </div>
                   </div>
                   <div class="block detail container-block">
-                    <button class="button">แสดงข้อมูล</button>
+                    <button class="button" @click="GOTOPAGE('Contract', 'all-success')">แสดงข้อมูล</button>
                   </div>
                 </div>
               </article>
@@ -82,7 +82,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <tr @dblclick="GOTOPAGE('Contract', 'contract-id')">
                       <td>xxxxxx</td>
                       <td>xxxxxx</td>
                       <td>xxxxxx</td>
@@ -111,6 +111,23 @@
                 </table>
               </div>
             </article>
+          </div>
+          <div class="tile function">
+            <div class="tile is-parent is-vertical is-4">
+              <article class="tile is-child notification container-block">
+                <span class="block title"><i class="fa fa-print" aria-hidden="true"></i> ออกรายงาน</span>
+              </article>
+            </div>
+            <div class="tile is-parent is-vertical is-4">
+              <article class="tile is-child notification container-block">
+                <span class="block title"><i class="fa fa-print" aria-hidden="true"></i> ออกรายงาน</span>
+              </article>
+            </div>
+            <div class="tile is-parent is-vertical is-4">
+              <article class="tile is-child notification container-block">
+                <span class="block title"><i class="fa fa-print" aria-hidden="true"></i> ออกรายงาน</span>
+              </article>
+            </div>
           </div>
         </div>
       </div>
@@ -247,9 +264,9 @@ export default {
     // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
   },
   methods: {
-    goToPage (routeName, key = '') {
-      this.GOTOPAGE(routeName, key)
-    }
+    // goToPage (routeName, key = '') {
+    //   this.GOTOPAGE(routeName, key)
+    // }
   }
 }
 </script>

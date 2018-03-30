@@ -14,9 +14,9 @@
       <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
         <thead>
             <tr>
-              <th>รหัส</th>
-              <th>ชื่อโครงการ</th>
-              <th>ประเภท</th>
+              <th>รายการ</th>
+              <th>จำนวน</th>
+              <th>ราคารวม</th>
             </tr>
           </thead>
           <tbody>
@@ -67,42 +67,76 @@
         <button class="pagination-next">หน้าถัดไป</button>
       </nav>
     </template>
-    <template v-if="true">
-      <template slot="detail">
-        <div class="container-block  detail-block">
-          <div class="form-detail">
-            <div class="name">LH-011  นันทวัน-ศรีนครินทร์</div>
-            <div class="container-block">
-              <div class="text-title">รหัสโครงการ</div>
-              <div class="value">
-                <input type="text" value="LH-011" placeholder="Primary input" class="input">
-              </div>
-            </div>
-            <div class="container-block">
-              <div class="text-title">ชื่อโครงการ</div>
-              <div class="value">
-                <input type="text" value="นันทวัน-ศรีนครินทร์" placeholder="Primary input" class="input">
-              </div>
-            </div>
-            <div class="container-block">
-              <div class="text-title">ประเภท</div>
-              <div class="value">
-                <div class="select">
-                  <select>
-                    <option>นันทวัน</option>
-                    <option>มัณฑนา</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
+    <template v-if="true" slot="detail">
+      <div class="container-block  detail-block">
+        <div class="block">
+          <table class="transparent-table">
+            <tr>
+              <td colspan="2">วัสดุ: xxxxxx</td>
+            </tr>
+            <tr>
+              <td>จำนวน: xxxxxxxx</td>
+              <td>ราคารวม: xxxxxxxx</td>
+            </tr>
+          </table>
         </div>
-        <div class="container-block footer-panel">
-          <button class="button">บันทึกข้อมูล</button>
-          <button class="button" @click="GOTOPAGE('CreateContract', 'project')">สร้างสัญญาใหม่</button>
-          <button class="button" @click="GOTOPAGE('Contract', 'project-id')">สัญญาในโครงการนี้ทั้งหมด</button>
+        <div class="block">
+          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>โครงการ</th>
+                <th>แบบบ้าน</th>
+                <th>จำนวน</th>
+                <th>ราคารวม</th>
+                <th>หมายเหตุ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+                <td>xxxxxxxxxx</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </template>
+      </div>
     </template>
     <template v-else slot="detail">
       <no-result-template>
@@ -136,11 +170,12 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'โครงการ', route: 'Project', key: 'xxx', active: true, icon: 'fa fa-address-book-o'}
+            {name: 'ข้อมูลสูญเสีย', route: 'Losing', key: '', active: true, icon: 'fa fa-address-book-o'},
+            {name: 'การสั่งซื้อ', route: 'LosingOrdering', key: '', active: true, icon: 'f'}
           ]
         },
         template: {
-          class: 'project-page'
+          class: 'losing-ordering-page'
         }
       }
     }

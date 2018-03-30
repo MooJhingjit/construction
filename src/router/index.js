@@ -11,6 +11,8 @@ const Contract = () => import('@Pages/Contract')
 const CreateContract = () => import('@Pages/Contract/create')
 const FrontSite = () => import('@Pages/FrontSite')
 const FrontSiteUpdate = () => import('@Pages/FrontSite/update-status')
+const Losing = () => import('@Pages/Losing')
+const LosingOrdering = () => import('@Pages/Losing/ordering')
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -70,6 +72,16 @@ export default new VueRouter({
       path: '/front-site/update/:key',
       name: 'FrontSiteUpdate',
       component: FrontSiteUpdate
+    },
+    {
+      path: '/losing',
+      name: 'Losing',
+      component: Losing
+    },
+    {
+      path: '/losing/order',
+      name: 'LosingOrdering',
+      component: LosingOrdering
     }
   ]
 })

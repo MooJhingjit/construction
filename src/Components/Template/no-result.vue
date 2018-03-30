@@ -1,43 +1,30 @@
 <template>
-  <section :class="['section', this.templateObj.class]">
-    <slot name="title"></slot>
-    <div class="container-block">
-      <div class="options-panel">
-        <div class="container-block">
-          <div class="search-status">
-            <slot name="search-status"></slot>
-          </div>
-          <div>
-            <slot name="search-input"></slot>
-          </div>
-          <div class="search-results">
-            <slot name="search-results"></slot>
-          </div>
-        </div>
-        <div class="container-block function">
-          <!-- <button class="button is-link">เพิ่มข้อมูล</button> -->
-          <!-- <button class="button is-info">เพิ่มรายการสั่งซื้อใหม่</button> -->
-          <!-- <button class="button is-danger">เพิ่มข้อมูล</button> -->
-        </div>
+  <div class="container-block empty-panel">
+    <div class="block container-block">
+      <div class="block select-data">
+        <span>เลือกข้อมูลเพื่อแสดง</span>
       </div>
-      <div class="detail-panel">
-        <slot name="detail"></slot>
+      <div class="block or">
+        หรือ
+      </div>
+      <div class="block add-data">
+        <slot name="options"></slot>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
 export default {
-  props: {
-    templateObj: {
-      type: Object,
-      required: true
-    }
-  },
+  // props: {
+  //   templateObj: {
+  //     type: Object,
+  //     required: true
+  //   }
+  // },
   components: {
   },
-  name: 'optionsDetailTemplate',
+  name: 'noResultTemplate',
   data () {
     return {
       property: 'Blank'

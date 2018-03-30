@@ -2,16 +2,26 @@
   <option-detail-template :templateObj="local.template">
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="search-status">
-      <div class="tags">
+      <div class="tags">        
+        <span class="tag">เสร็จสิ้น 42</span>
         <span class="tag">รออนุมัติ 5</span>
         <span class="tag">ดำเนินงาน 3</span>
+        <span class="tag">ทั้งหมด</span>
       </div>
     </template>
     <template slot="search-input">
-      <input class="input" type="text" placeholder="ค้นหา">
-      <span class="icon is-small is-left">
-        <i class="fa fa-search" aria-hidden="true"></i>
-      </span>
+      <div class="search-input control has-icons-left">
+        <input class="input" type="text" placeholder="ค้นหาโครงการ">
+        <span class="icon is-small is-left">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+      </div>
+      <div class="search-input control has-icons-left">
+        <input class="input" type="text" placeholder="ค้นหาสัญญา">
+        <span class="icon is-small is-left">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+      </div>
     </template>
     <template slot="search-results">
       <table class="table is-hoverable">
@@ -53,53 +63,77 @@
     <template v-if="true">
       <template slot="detail">
         <div class="container-block  detail-block">
-          <div class="contract-name">00B01</div>
-          <table class="table is-hoverable">
-            <thead>
+          <div class="block">
+            <table class="transparent-table">
               <tr>
-                <th>รายละเอียดงาน</th>
-                <th>วันที่ตามสัญญา</th>
-                <th>วันที่ประมาณใหม่</th>
-                <th>วันที่ทำจริง</th>
-                <th>สถานะ</th>
-                <th>งวด</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
+                <td colspan="2">เลขที่สัญญา: xxxxxx</td>
               </tr>
               <tr>
-                <td>Three</td>
-                <td>Five</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
+                <td>แบบบ้าน: xxxxxxxx</td>
+                <td>แปลง: xxxxxxxx</td>
               </tr>
               <tr>
-                <td>Three</td>
-                <td>Seven</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
+                <td>วันที่งวด 9 ตามส/ญ: xxxxxxxx</td>
+                <td>วันที่งวด 9 ตามปมก.: xxxxxxxx</td>
               </tr>
               <tr>
-                <td>Three</td>
-                <td>Nine</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
-                <td>Three</td>
+                <td>วันที่ End Prod.ตามส/ญ: xxxxxxxx</td>
+                <td>วันที่ทำสัญญา: xxxxxxxx</td>
               </tr>
-            </tbody>
-          </table>
+              <tr>
+                <td colspan="2">งานล่าสุด: xxxxxxxx</td>
+              </tr>
+            </table>
+          </div>
+          <div class="block">
+            <table class="table is-hoverable">
+              <thead>
+                <tr>
+                  <th>รายละเอียดงาน</th>
+                  <th>วันที่ตามสัญญา</th>
+                  <th>วันที่ประมาณใหม่</th>
+                  <th>วันที่ทำจริง</th>
+                  <th>สถานะ</th>
+                  <th>งวด</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>10000 : *Confirm Lay-Out</td>
+                  <td>05/01/61</td>
+                  <td>05/01/61</td>
+                  <td>05/01/61</td>
+                  <td>เสร็จแล้ว</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td>11000 : ตอกเสาเข็ม</td>
+                  <td>11/01/61</td>
+                  <td>20/03/61</td>
+                  <td>20/03/61</td>
+                  <td>เสร็จแล้ว</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td>11825 : กำหนด_ติดตั้งทดสอบความสมบูรณ์เสาเข็ม	</td>
+                  <td>11/02/61</td>
+                  <td>30/03/61</td>
+                  <td>30/03/61</td>
+                  <td>ยังไม่เสร็จ</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td>12100 : *ทำสัญญาก่อสร้าง</td>
+                  <td>05/01/61</td>
+                  <td>28/02/61</td>
+                  <td>28/02/61</td>
+                  <td>เสร็จแล้ว</td>
+                  <td>19</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
         </div>
           <!-- <div class="c-header container-block block">
             <div class="block name">
@@ -252,7 +286,7 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'ข้อมูลสัญญาโปรเจค xxxx', route: 'Contract', key: 'test', active: true, icon: 'fa fa-file-text'}
+            {name: 'ข้อมูลสัญญา', route: 'Contract', key: 'test', active: true, icon: 'fa fa-file-text'}
           ]
         },
         template: {

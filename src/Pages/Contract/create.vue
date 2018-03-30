@@ -1,192 +1,144 @@
 <template>
-  <option-detail-template :templateObj="local.template">
-    <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
-    <!-- <template slot="search-status">
-      <div class="tags">
-        <span class="tag">รออนุมัติ 5</span>
-        <span class="tag">ดำเนินงาน 3</span>
-      </div>
-    </template>
-    <template slot="search-input">
-      <input class="input" type="text" placeholder="ค้นหา">
-      <span class="icon is-small is-left">
-        <i class="fa fa-search" aria-hidden="true"></i>
-      </span>
-    </template>
-    <template slot="search-results">
-      <table class="table is-hoverable">
-        <thead>
-          <tr>
-            <th>ชื่อสัญญา</th>
-            <th>วันที่</th>
-            <th>สถานะ</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Three</td>
-            <td>Three</td>
-            <td>Three</td>
-          </tr>
-          <tr>
-            <td>Three</td>
-            <td>Five</td>
-            <td>Three</td>
-          </tr>
-          <tr>
-            <td>Three</td>
-            <td>Seven</td>
-            <td>Three</td>
-          </tr>
-          <tr>
-            <td>Three</td>
-            <td>Nine</td>
-            <td>Three</td>
-          </tr>
-        </tbody>
-      </table>
-      <nav class="pagination" role="navigation" aria-label="pagination">
-        <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
-        <button class="pagination-next">หน้าถัดไป</button>
-      </nav>
-    </template> -->
-    <template v-if="true">
-      <template slot="detail">
-        <div class="container-block  detail-block">
-          <div class="c-header container-block block">
-            <div class="block name">
-              สัญญาว่าจ้างปลูกสร้างอาคาร
-              <div class="date">วันที่ 21 มีนาคม 2561</div>
+    <section :class="['section', local.template.class]">
+    <breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar>
+    <div class="container-block">
+      <div class="detail-panel">
+        <template v-if="true">
+          <div class="container-block  detail-block">
+            <div class="c-header container-block block">
+              <div class="block name">
+                สัญญาว่าจ้างปลูกสร้างอาคาร
+                <div class="date">วันที่ 21 มีนาคม 2561</div>
+              </div>
+              <div class="block info">
+                <table class="transparent-table">
+                  <tr>
+                    <td>เลขที่สัญญา:</td>
+                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td>ประเภทสัญญา:</td>
+                    <td><input class="input" type="text" placeholder="Text input"></td>
+                  </tr>
+                  <tr>
+                    <td>โครงการ:</td>
+                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td>แบบบ้าน:</td>
+                    <td><input class="input" type="text" placeholder="Text input"></td>
+                  </tr>
+                  <tr>
+                    <td>แปลง:</td>
+                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td>Quarter:</td>
+                    <td><input class="input" type="text" placeholder="Text input"></td>
+                  </tr>
+                  <tr>
+                    <td>ราคา:</td>
+                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td>เงินเบิกล่วงหน้า:</td>
+                    <td><input class="input" type="text" placeholder="Text input"></td>
+                  </tr>
+                  <tr>
+                    <td>วันที่ออกสัญญา:</td>
+                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </table>
+              </div>
             </div>
-            <div class="block info">
+            <div class="c-body">
+              <table class="table is-hoverable">
+                <thead>
+                  <tr>
+                    <th>งวดที่</th>
+                    <th>จำนวนเงิน</th>
+                    <th>วันกำหนดเสร็จ</th>
+                    <th>วัสดุนอกสัญญา ( * ยกเว้นค่าของ, ** ยกเว้นค่าของและค่าแรง )</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td width="70"><input type="text" class="input"></td>
+                    <td width="130"><input type="text" class="input"></td>
+                    <td width="130"><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                    <td><input type="text" class="input"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="table-options">
+                <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+              </div>
+            </div>
+            <div class="c-footer container-block block">
               <table class="transparent-table">
                 <tr>
-                  <td>เลขที่สัญญา:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td>ประเภทสัญญา:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
+                  <td>จำนวนงวด: 10 งวด</td>
+                  <td>จำนวนเงินทั้งหมด 1,000 บาท</td>
                 </tr>
                 <tr>
-                  <td>โครงการ:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td>แบบบ้าน:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                </tr>
-                <tr>
-                  <td>แปลง:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td>Quarter:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                </tr>
-                <tr>
-                  <td>ราคา:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td>เงินเบิกล่วงหน้า:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                </tr>
-                <tr>
-                  <td>วันที่ออกสัญญา:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td></td>
-                  <td></td>
+                  <td>วันที่ 21 มีนาคม 2561 ถึงวันที่ 10 ธันวาคม 2561</td>
+                  <td>หนึ่งพันบาทถ้วน</td>
                 </tr>
               </table>
             </div>
           </div>
-          <div class="c-body">
-            <table class="table is-hoverable">
-              <thead>
-                <tr>
-                  <th>งวดที่</th>
-                  <th>จำนวนเงิน</th>
-                  <th>วันกำหนดเสร็จ</th>
-                  <th>วัสดุนอกสัญญา ( * ยกเว้นค่าของ, ** ยกเว้นค่าของและค่าแรง )</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td width="70"><input type="text" class="input"></td>
-                  <td width="130"><input type="text" class="input"></td>
-                  <td width="130"><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                </tr>
-                <tr>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                </tr>
-                <tr>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                </tr>
-                <tr>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                </tr>
-                <tr>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="table-options">
-              <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
-              <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
-            </div>
+          <div class="container-block footer-panel">
+            <button class="button is-warning">รออนุมัติ</button>
+            <button class="button is-success">เริ่มดำเนินงาน</button>
           </div>
-          <div class="c-footer container-block block">
-            <table class="transparent-table">
-              <tr>
-                <td>จำนวนงวด: 10 งวด</td>
-                <td>จำนวนเงินทั้งหมด 1,000 บาท</td>
-              </tr>
-              <tr>
-                <td>วันที่ 21 มีนาคม 2561 ถึงวันที่ 10 ธันวาคม 2561</td>
-                <td>หนึ่งพันบาทถ้วน</td>
-              </tr>
-            </table>
-          </div>
-        </div>
-        <div class="container-block footer-panel">
-          <button class="button is-warning">รออนุมัติ</button>
-          <button class="button is-success">เริ่มดำเนินงาน</button>
-        </div>
-      </template>
-    </template>
-    <template v-else>
-      <template slot="detail">
-        <div class="container-block empty-panel">
-          <div class="block container-block">
-            <div class="block no-data">
-                ไม่พบข้อมูลที่ต้องการ
+        </template>
+        <template v-else>
+          <template slot="detail">
+            <div class="container-block empty-panel">
+              <div class="block container-block">
+                <div class="block no-data">
+                    ไม่พบข้อมูลที่ต้องการ
+                </div>
+                <div class="block select-data">
+                  <i class="fa fa-hand-o-left" aria-hidden="true"></i>
+                  <span>เลือกข้อมูลทางซ้ายมือเพื่อแสดง</span>
+                </div>
+                <div class="block or">
+                  หรือ
+                </div>
+                <div class="block add-data">
+                  <button class="button">เพิ่มข้อมูลใหม่</button>
+                </div>
+              </div>
             </div>
-            <div class="block select-data">
-              <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-              <span>เลือกข้อมูลทางซ้ายมือเพื่อแสดง</span>
-            </div>
-            <div class="block or">
-              หรือ
-            </div>
-            <div class="block add-data">
-              <button class="button">เพิ่มข้อมูลใหม่</button>
-            </div>
-          </div>
-        </div>
-      </template>
-    </template>
-  </option-detail-template>
+          </template>
+        </template>
+      </div>
+    </div>
+    </section>
 </template>
 
 <script>
 import breadcrumbBar from '@Components/Breadcrumb'
-import optionDetailTemplate from '@Components/Template/option-detail'
 export default {
   props: {
     // templateName: {
@@ -195,8 +147,7 @@ export default {
     // }
   },
   components: {
-    breadcrumbBar,
-    optionDetailTemplate
+    breadcrumbBar
   },
   name: 'CreateContractPage',
   data () {
@@ -204,7 +155,7 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'โปรเจค', route: 'Project', key: '', active: true, icon: 'fa fa-file-text'},
+            {name: 'โครงการ', route: 'Project', key: '', active: true, icon: 'fa fa-file-text'},
             {name: 'สร้างสัญญาใหม่', route: 'CreateContract', key: 'project', active: true, icon: ''}
           ]
         },

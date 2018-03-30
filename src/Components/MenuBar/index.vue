@@ -27,7 +27,7 @@
     <div class="level-item has-text-centered">
       <div>
         <p class="heading">
-          <router-link to="/foo">ข้อมูลสูญเสีย</router-link>
+          <router-link to="/losing">ข้อมูลสูญเสีย</router-link>
         </p>
       <!-- <p class="title">789</p> -->
       </div>

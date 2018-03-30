@@ -4,10 +4,12 @@
     <template slot="options">
       <div class="container-block">
         <div class="control has-icons-left">
-          <input class="input" type="text" placeholder="ค้นหา">
-          <span class="icon is-small is-left">
-            <i class="fa fa-search" aria-hidden="true"></i>
-          </span>
+          <div class="search-input control has-icons-left">
+            <input class="input" type="text" placeholder="ค้นหา">
+            <span class="icon is-small is-left">
+              <i class="fa fa-search" aria-hidden="true"></i>
+            </span>
+          </div>
         </div>
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
           <thead>

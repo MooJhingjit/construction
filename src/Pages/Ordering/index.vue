@@ -58,7 +58,7 @@
           </div>
           <div class="tile">
             <div class="tile is-parent is-vertical is-6">
-              <article class="tile is-child notification">
+              <!-- <article class="tile is-child notification">
                 <p class="title alert">สถานะการสั่งซื้อล่าสุด (ยังไม่ได้รับของ)</p>
                 <table class="table is-narrow">
                   <thead>
@@ -99,12 +99,33 @@
                 <div class="table-options container-block">
                   <button class="button">ดูข้อมูล</button>
                 </div>
+              </article> -->
+              <article class="tile is-child notification">
+                <p class="title">จำนวนการซื้อ</p>
+                <bar-chart :data="item5" :height="150" ></bar-chart>
               </article>
             </div>
             <div class="tile is-parent">
               <article class="tile is-child notification">
-                <p class="title">ประวัติการซื้อ</p>
+                <p class="title">จำนวนการซื้อ (พิเศษ)</p>
                 <bar-chart :data="item5" :height="150" ></bar-chart>
+              </article>
+            </div>
+          </div>
+           <div class="tile function">
+            <div class="tile is-parent is-vertical is-4">
+              <article class="tile is-child notification container-block">
+                <span class="block title"><i class="fa fa-print" aria-hidden="true"></i> ออกรายงาน</span>
+              </article>
+            </div>
+            <div class="tile is-parent is-vertical is-4">
+              <article class="tile is-child notification container-block">
+                <span class="block title"><i class="fa fa-print" aria-hidden="true"></i> ออกรายงาน</span>
+              </article>
+            </div>
+            <div class="tile is-parent is-vertical is-4">
+              <article class="tile is-child notification container-block">
+                <span class="block title"><i class="fa fa-plus-circle" aria-hidden="true"></i> สั่งซื้อพิเศษ</span>
               </article>
             </div>
           </div>
@@ -199,7 +220,7 @@ export default {
   },
   methods: {
     goToDetail () {
-      this.GOTOPAGE('OrderingDetail', 'xxxx')
+      this.GOTOPAGE('OrderingDetail', 'order-id')
     }
   }
 }
