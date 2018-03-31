@@ -12,6 +12,8 @@
                   <thead>
                     <tr>
                       <th>เลขที่สัญญา</th>
+                      <th>งานล่าสุด</th>
+                      <th>งานถัดไป</th>
                       <th>จำนวนรายการ</th>
                       <th>ราคารวม</th>
                       <th>วันที่</th>
@@ -23,11 +25,15 @@
                       <td>Four</td>
                       <td>Three</td>
                       <td>Four</td>
+                      <td>Four</td>
+                      <td>Four</td>
                     </tr>
                     <tr>
                       <td>Five</td>
                       <td>Six</td>
                       <td>Three</td>
+                      <td>Four</td>
+                      <td>Four</td>
                       <td>Four</td>
                     </tr>
                     <tr>
@@ -35,17 +41,22 @@
                       <td>Eight</td>
                       <td>Three</td>
                       <td>Four</td>
+                      <td>Four</td>
+                      <td>Four</td>
                     </tr>
                     <tr>
                       <td>Nine</td>
                       <td>Ten</td>
                       <td>Three</td>
                       <td>Four</td>
+                      <td>Four</td>
+                      <td>Four</td>
                     </tr>
                     <tr>
                       <td>Eleven</td>
                       <td>Twelve</td>
                       <td>Three</td>
+                      <td>Four</td>
                       <td>Four</td>
                     </tr>
                   </tbody>

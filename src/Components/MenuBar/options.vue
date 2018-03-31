@@ -25,9 +25,9 @@
               <div class="icon"><i class="fa fa-tasks" aria-hidden="true"></i></div>
               <div class="desc">ลำดับการทำงาน</div>
             </div>
-            <div class="block container-block" @click="goToPage('xxxxxx')">
+            <div class="block container-block" @click="GOTOPAGE('Store')">
               <div class="icon"><i class="fa fa-th-large" aria-hidden="true"></i></div>
-              <div class="desc">วัสดุ</div>
+              <div class="desc">ร้านค้า</div>
             </div>
               <div class="block container-block" @click="goToPage('Authority', 'all')">
               <div class="icon"><i class="fa fa-check-square-o" aria-hidden="true"></i></div>

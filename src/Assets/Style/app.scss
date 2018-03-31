@@ -676,7 +676,7 @@ html {
                     }
                   }
                 }
-                .create-contract-page{
+                .create-contract-page, .add-material-page{
                   .detail-block{
                     .c-header{
                       margin: 0;
@@ -722,6 +722,42 @@ html {
                       }
                     }
                   }
+                }
+                .add-material-page{
+                  .detail-block{
+                    .c-header{
+                      .tag{
+                        cursor: pointer;
+                        &:hover{
+                          background: #9a9a9a;
+                        }
+                      }
+                      .tag.active{
+                        background: #9a9a9a;
+                      }
+                    }
+                    .c-body{
+                      .table-template{
+                        margin-bottom: 20px;
+                        table{
+                          thead {
+                            tr{
+                              th{
+                                text-align: center;
+                                vertical-align: middle;
+        
+                              }
+                              &:hover{
+                                background-color: transparent;
+                              }
+                            }
+                          }
+                          
+                        }
+                      }
+                    }
+                  }
+                  
                 }
                 // common template
                 section{

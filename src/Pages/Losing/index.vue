@@ -9,7 +9,31 @@
               <article class="tile is-child notification">
                 <div class="tile">
                   <div class="tile is-parent is-vertical is-6">
-                    <div class="title">การสั่งซื้อ</div>
+                    <div class="title">การสั่งซื้อ (วันนี้)</div>
+                    <table class="table is-bordered">
+                      <thead>
+                        <tr>
+                          <th>โครงการ</th>
+                          <th>แบบบ้าน</th>
+                          <th>จำนวน</th>
+                          <th>ราคารวม</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>xxxxxxx</td>
+                          <td>xxxxxxx</td>
+                          <td>xxxxxxx</td>
+                          <td>xxxxxxx</td>
+                        </tr>
+                         <tr>
+                          <td>xxxxxxx</td>
+                          <td>xxxxxxx</td>
+                          <td>xxxxxxx</td>
+                          <td>xxxxxxx</td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                   <div class="tile is-parent is-vertical is-6">
                     <bar-chart :data="item4"  :height="150" ></bar-chart>

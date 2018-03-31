@@ -13,6 +13,9 @@ const FrontSite = () => import('@Pages/FrontSite')
 const FrontSiteUpdate = () => import('@Pages/FrontSite/update-status')
 const Losing = () => import('@Pages/Losing')
 const LosingOrdering = () => import('@Pages/Losing/ordering')
+const Material = () => import('@Pages/Material')
+const AddMaterial = () => import('@Pages/Material/add')
+const Store = () => import('@Pages/Store')
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -82,6 +85,21 @@ export default new VueRouter({
       path: '/losing/order',
       name: 'LosingOrdering',
       component: LosingOrdering
+    },
+    // {
+    //   path: '/material/:key',
+    //   name: 'Material',
+    //   component: Material
+    // },
+    {
+      path: '/material/add',
+      name: 'AddMaterial',
+      component: AddMaterial
+    },
+    {
+      path: '/store',
+      name: 'Store',
+      component: Store
     }
   ]
 })
