@@ -17,7 +17,7 @@
               <div class="icon"><i class="fa fa-check-square-o" aria-hidden="true"></i></div>
               <div class="desc">ข้อมูลสูญเสีย</div>
             </div>
-            <div class="block container-block" @click="goToPage('xxxxxx')">
+            <div class="block container-block" @click="GOTOPAGE('House')">
               <div class="icon"><i class="fa fa-home" aria-hidden="true"></i></div>
               <div class="desc">แบบบ้าน</div>
             </div>

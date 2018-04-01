@@ -14,31 +14,31 @@
                 <table class="transparent-table">
                   <tr>
                     <td>เลขที่สัญญา:</td>
-                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td><input class="input" type="text" placeholder="เลขที่สัญญา"></td>
                     <td>ประเภทสัญญา:</td>
-                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td><input class="input" type="text" placeholder="ประเภทสัญญา"></td>
                   </tr>
                   <tr>
                     <td>โครงการ:</td>
-                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td><input class="input" type="text" value="นันทวัน-ศรีนครินทร์" placeholder="โครงการ"></td>
                     <td>แบบบ้าน:</td>
-                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td><input class="input" type="text" placeholder="แบบบ้าน"></td>
                   </tr>
                   <tr>
                     <td>แปลง:</td>
-                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td><input class="input" type="text" placeholder="แปลง"></td>
                     <td>Quarter:</td>
-                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td><input class="input" type="text" placeholder="Quarter"></td>
                   </tr>
                   <tr>
                     <td>ราคา:</td>
-                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td><input class="input" type="text" placeholder="ราคา"></td>
                     <td>เงินเบิกล่วงหน้า:</td>
-                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td><input class="input" type="text" placeholder="เงินเบิกล่วงหน้า"></td>
                   </tr>
                   <tr>
                     <td>วันที่ออกสัญญา:</td>
-                    <td><input class="input" type="text" placeholder="Text input"></td>
+                    <td><input class="input" type="text" placeholder="วันที่ออกสัญญา"></td>
                     <td></td>
                     <td></td>
                   </tr>

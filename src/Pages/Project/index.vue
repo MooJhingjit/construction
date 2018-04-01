@@ -21,44 +21,34 @@
           </thead>
           <tbody>
             <tr>
-              <td>Three</td>
-              <td>Three</td>
-              <td>Four</td>
+              <td>LH011</td>
+              <td>นันทวัน-ศรีนครินทร์</td>
+              <td>นันทวัน</td>
             </tr>
             <tr>
-              <td>Three</td>
-              <td>Five</td>
-              <td>Six</td>
+              <td>LH120</td>
+              <td>รามอินทรา พหลโยธิน 50</td>
+              <td>นันทวัน</td>
             </tr>
             <tr>
-              <td>Three</td>
-              <td>Seven</td>
-              <td>Eight</td>
+              <td>LH171</td>
+              <td>วงแหวน เทพารักษ์</td>
+              <td>มัณฑนา</td>
             </tr>
             <tr>
-              <td>Three</td>
-              <td>Nine</td>
-              <td>Ten</td>
+              <td>LH179</td>
+              <td>อ่อนนุช วงแหวน 2</td>
+              <td>มัณฑนา</td>
             </tr>
             <tr>
-              <td>Three</td>
-              <td>Eleven</td>
-              <td>Twelve</td>
+              <td>LT007</td>
+              <td>รามคำแหง</td>
+              <td>นันทวัน</td>
             </tr>
             <tr>
-              <td>Three</td>
-              <td>Eleven</td>
-              <td>Twelve</td>
-            </tr>
-            <tr>
-              <td>Three</td>
-              <td>Eleven</td>
-              <td>Twelve</td>
-            </tr>
-            <tr>
-              <td>Three</td>
-              <td>Eleven</td>
-              <td>Twelve</td>
+              <td>LH322</td>
+              <td>ศรีนครินทร์-ร่มเกล้า</td>
+              <td>มัณฑนา</td>
             </tr>
           </tbody>
       </table>
@@ -69,13 +59,13 @@
     </template>
     <template v-if="true">
       <template slot="detail">
-        <div class="container-block  detail-block">
+        <div class="container-block detail-block">
           <div class="form-detail">
-            <div class="name">LH-011  นันทวัน-ศรีนครินทร์</div>
+            <div class="name">LH011  นันทวัน-ศรีนครินทร์</div>
             <div class="container-block">
               <div class="text-title">รหัสโครงการ</div>
               <div class="value">
-                <input type="text" value="LH-011" placeholder="Primary input" class="input">
+                <input type="text" value="LH011" placeholder="Primary input" class="input">
               </div>
             </div>
             <div class="container-block">
@@ -136,7 +126,7 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'โครงการ', route: 'Project', key: 'xxx', active: true, icon: 'fa fa-address-book-o'}
+            {name: 'โครงการ', route: 'Project', key: 'xxx', active: true, icon: 'fa fa-folder-open-o'}
           ]
         },
         template: {

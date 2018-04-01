@@ -9,7 +9,8 @@
           <table class="table is-bordered">
             <thead>
               <th>งาน</th>
-              <th>สถานะ</th>
+              <th>เตรียมวัสดุ</th>
+              <th>เสร็จสิ้น</th>
             </thead>
             <tbody>
               <tr>
@@ -19,6 +20,7 @@
                   <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div>
                 </td>
                 <td class="status" width="70"><i class="fa fa-check-square-o" aria-hidden="true"></i></td>
+                <td class="status" width="70"><i class="fa fa-check-square-o" aria-hidden="true"></i></td>
               </tr>
               <tr>
                 <td class="list">
@@ -27,6 +29,7 @@
                   <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div>
                 </td>
                 <td class="status"><i class="fa fa-check-square-o" aria-hidden="true"></i></td>
+                <td class="status" width="70"><i class="fa fa-check-square-o" aria-hidden="true"></i></td>
               </tr>
               <tr>
                 <td class="list">
@@ -35,6 +38,7 @@
                   <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
                 </td>
                 <td class="status"><button class="button  is-link is-outlined">อัพเดท</button></td>
+                <td class="status"><button class="button  is-success is-outlined">อัพเดท</button></td>
               </tr>
               <tr>
                 <td class="list">
@@ -42,6 +46,7 @@
                   <div class="detail">detail</div>
                   <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
                 </td>
+                <td class="status"><button class="button" disabled>อัพเดท</button></td>
                 <td class="status"><button class="button" disabled>อัพเดท</button></td>
               </tr>
               <tr>
@@ -51,13 +56,6 @@
                   <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
                 </td>
                 <td class="status"><button class="button" disabled>อัพเดท</button></td>
-              </tr>
-              <tr>
-                <td class="list">
-                  <div class="task">task</div>
-                  <div class="detail">detail</div>
-                  <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
-                </td>
                 <td class="status"><button class="button" disabled>อัพเดท</button></td>
               </tr>
               <tr>
@@ -67,13 +65,6 @@
                   <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
                 </td>
                 <td class="status"><button class="button" disabled>อัพเดท</button></td>
-              </tr>
-              <tr>
-                <td class="list">
-                  <div class="task">task</div>
-                  <div class="detail">detail</div>
-                  <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
-                </td>
                 <td class="status"><button class="button" disabled>อัพเดท</button></td>
               </tr>
               <tr>
@@ -83,13 +74,6 @@
                   <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
                 </td>
                 <td class="status"><button class="button" disabled>อัพเดท</button></td>
-              </tr>
-              <tr>
-                <td class="list">
-                  <div class="task">task</div>
-                  <div class="detail">detail</div>
-                  <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
-                </td>
                 <td class="status"><button class="button" disabled>อัพเดท</button></td>
               </tr>
               <tr>
@@ -99,6 +83,7 @@
                   <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
                 </td>
                 <td class="status"><button class="button" disabled>อัพเดท</button></td>
+                <td class="status"><button class="button" disabled>อัพเดท</button></td>
               </tr>
               <tr>
                 <td class="list">
@@ -106,6 +91,34 @@
                   <div class="detail">detail</div>
                   <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
                 </td>
+                <td class="status"><button class="button" disabled>อัพเดท</button></td>
+                <td class="status"><button class="button" disabled>อัพเดท</button></td>
+              </tr>
+              <tr>
+                <td class="list">
+                  <div class="task">task</div>
+                  <div class="detail">detail</div>
+                  <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
+                </td>
+                <td class="status"><button class="button" disabled>อัพเดท</button></td>
+                <td class="status"><button class="button" disabled>อัพเดท</button></td>
+              </tr>
+              <tr>
+                <td class="list">
+                  <div class="task">task</div>
+                  <div class="detail">detail</div>
+                  <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
+                </td>
+                <td class="status"><button class="button" disabled>อัพเดท</button></td>
+                <td class="status"><button class="button" disabled>อัพเดท</button></td>
+              </tr>
+              <tr>
+                <td class="list">
+                  <div class="task">task</div>
+                  <div class="detail">detail</div>
+                  <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
+                </td>
+                <td class="status"><button class="button" disabled>อัพเดท</button></td>
                 <td class="status"><button class="button" disabled>อัพเดท</button></td>
               </tr>
             </tbody>

@@ -16,6 +16,7 @@ const LosingOrdering = () => import('@Pages/Losing/ordering')
 const Material = () => import('@Pages/Material')
 const AddMaterial = () => import('@Pages/Material/add')
 const Store = () => import('@Pages/Store')
+const House = () => import('@Pages/House/template')
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -86,20 +87,25 @@ export default new VueRouter({
       name: 'LosingOrdering',
       component: LosingOrdering
     },
-    // {
-    //   path: '/material/:key',
-    //   name: 'Material',
-    //   component: Material
-    // },
     {
       path: '/material/add',
       name: 'AddMaterial',
       component: AddMaterial
     },
     {
+      path: '/material/:key',
+      name: 'Material',
+      component: Material
+    },
+    {
       path: '/store',
       name: 'Store',
       component: Store
+    },
+    {
+      path: '/house-template',
+      name: 'House',
+      component: House
     }
   ]
 })

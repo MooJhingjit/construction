@@ -13,17 +13,33 @@
     <template slot="search-results">
       <table class="table is-bordered rows-table">
         <thead>
-          <tr>
-            <th>ชื่อ</th>
-            <th>ตำแหน่ง</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Pokkrong Jhingjit</td>
-            <td>ผู้ดูแลระบบ</td>
-          </tr>
-        </tbody>
+            <tr>
+              <th>แปลน</th>
+              <th>แบบบ้าน</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>G03</td>
+              <td>098SW319I</td>
+            </tr>
+            <tr>
+              <td>G04</td>
+              <td>098SW319I</td>
+            </tr>
+            <tr>
+              <td>G05</td>
+              <td>098SW319I</td>
+            </tr>
+            <tr>
+              <td>G14</td>
+              <td>098SW319I</td>
+            </tr>
+            <tr>
+              <td>E01</td>
+              <td>198PWY32T</td>
+            </tr>
+          </tbody>
       </table>
       <nav class="pagination" role="navigation" aria-label="pagination">
         <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
@@ -33,40 +49,53 @@
     <template v-if="true">
       <template slot="detail">
         <div class="container-block  detail-block">
-          <div class="profile-img container-block">
-            <div class="block">
-              <div class="img">
-                <img src="https://lh3.googleusercontent.com/-vI_vuMTGLhY/AAAAAAAAAAI/AAAAAAAAAAA/AGi4gfyN1ZDACBSjk7nyMF0Dbw9C3mRMHQ/s192-c-mo/photo.jpg" alt="" />
-                <span class="upload"><i class="fa fa-camera" aria-hidden="true"></i> เปลี่ยนรูปภาพ</span>
-              </div>
-              <div class="options"></div>
-            </div>
-          </div>
           <div class="form-detail">
-            <div class="name">Pokkrong Jhingjit</div>
+            <div class="name">G03  098SW319I</div>
             <div class="container-block">
-              <div class="text-title">ชื่อ-นามสกุล</div>
-              <div class="value"><input class="input" type="text" value="Pokkrong Jhingjit" placeholder="ชื่อ-นามสกุล"></div>
+              <div class="text-title">แปลน</div>
+              <div class="value">
+                <input type="text" value="G03" placeholder="Primary input" class="input">
+              </div>
             </div>
             <div class="container-block">
-              <div class="text-title">ชื่อผู้ใช้</div>
-              <div class="value"><input class="input" type="text" placeholder="ชื่อผู้ใช้"></div>
+              <div class="text-title">แบบบ้าน</div>
+              <div class="value">
+                <input type="text" value="098SW319I" placeholder="Primary input" class="input">
+              </div>
             </div>
             <div class="container-block">
-              <div class="text-title">รหัสผ่าน</div>
-              <div class="value"><input class="input" type="text" placeholder="รหัสผ่าน"></div>
+              <div class="text-title">เมนูสี</div>
+              <div class="value">
+                <input type="text" value="B2-2" placeholder="Primary input" class="input">
+              </div>
             </div>
             <div class="container-block">
-              <div class="text-title">อีเมล์</div>
-              <div class="value"><input class="input" type="text" placeholder="อีเมล์"></div>
+              <div class="text-title">เมนูกระเบื้อง</div>
+              <div class="value">
+                <input type="text" value="098SW-8SR2" placeholder="Primary input" class="input">
+              </div>
             </div>
             <div class="container-block">
-              <div class="text-title">เบอร์โทรศัพท์</div>
-              <div class="value"><input class="input" type="text" placeholder="เบอร์โทรศัพท์"></div>
+              <div class="text-title">โรงจอดรถ</div>
+              <div class="value">
+                <div class="select">
+                  <select>
+                    <option>ขวา</option>
+                    <option>ซ้าย</option>
+                  </select>
+                </div>
+              </div>
             </div>
             <div class="container-block">
-              <div class="text-title">ที่อยู่</div>
-              <div class="value"><textarea class="textarea" id="" cols="30" rows="4"></textarea></div>
+              <div class="text-title">บันไดวน</div>
+              <div class="value">
+                <div class="select">
+                  <select>
+                    <option>ขวา</option>
+                    <option>ซ้าย</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -75,26 +104,12 @@
         </div>
       </template>
     </template>
-    <template v-else>
-      <template slot="detail">
-        <div class="container-block empty-panel">
-          <div class="block container-block">
-            <div class="block no-data">
-                ไม่พบข้อมูลที่ต้องการ
-            </div>
-            <div class="block select-data">
-              <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-              <span>เลือกข้อมูลทางซ้ายมือเพื่อแสดง</span>
-            </div>
-            <div class="block or">
-              หรือ
-            </div>
-            <div class="block add-data">
-              <button class="button">เพิ่มข้อมูลใหม่</button>
-            </div>
-          </div>
-        </div>
-      </template>
+    <template v-else slot="detail">
+      <no-result-template>
+        <template slot="options">
+          <button class="button">เพิ่มข้อมูลใหม่</button>
+        </template>
+      </no-result-template>
     </template>
   </option-detail-template>
 </template>
@@ -102,6 +117,7 @@
 <script>
 import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
+import noResultTemplate from '@Components/Template/no-result'
 export default {
   props: {
     // templateName: {
@@ -111,7 +127,8 @@ export default {
   },
   components: {
     breadcrumbBar,
-    optionDetailTemplate
+    optionDetailTemplate,
+    noResultTemplate
   },
   name: 'UserPage',
   data () {
@@ -119,11 +136,11 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'ข้อมูลผู้ใช้', route: 'User', key: '', active: true, icon: 'fa fa-address-book-o'}
+            {name: 'แบบบ้าน', route: 'Project', key: '', active: true, icon: 'fa fa-address-book-o'}
           ]
         },
         template: {
-          class: 'user-page'
+          class: 'house-template-page'
         }
       }
     }

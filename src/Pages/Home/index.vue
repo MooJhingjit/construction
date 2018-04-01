@@ -73,9 +73,10 @@
             <article class="tile is-child notification">
               <p class="title">สถานะงานล่าสุด</p>
               <div class="content">
-                <table class="table is-bordered">
+                <table class="table is-bordered rows-table">
                   <thead>
                     <tr>
+                      <th>แปลน</th>
                       <th>โครงการ</th>
                       <th>เลขที่สัญญา</th>
                       <th>สถานะงาน</th>
@@ -83,29 +84,16 @@
                   </thead>
                   <tbody>
                     <tr @dblclick="GOTOPAGE('Contract', 'contract-id')">
-                      <td>xxxxxx</td>
-                      <td>xxxxxx</td>
-                      <td>xxxxxx</td>
+                      <td>00B01</td>
+                      <td>นันทวัน-ศรีนครินทร์</td>
+                      <td>LH120610015</td>
+                      <td>ทำสัญญาก่อสร้าง</td>
                     </tr>
                     <tr>
-                      <td>xxxxxx</td>
-                      <td>xxxxxx</td>
-                      <td>xxxxxx</td>
-                    </tr>
-                    <tr>
-                      <td>xxxxxx</td>
-                      <td>xxxxxx</td>
-                      <td>xxxxxx</td>
-                    </tr>
-                    <tr>
-                      <td>xxxxxx</td>
-                      <td>xxxxxx</td>
-                      <td>xxxxxx</td>
-                    </tr>
-                    <tr>
-                      <td>xxxxxx</td>
-                      <td>xxxxxx</td>
-                      <td>xxxxxx</td>
+                      <td>00D03</td>
+                      <td>นันทวัน-ศรีนครินทร์</td>
+                      <td>199CA238C</td>
+                      <td>งานพื้นสำเร็จชั้นล่าง</td>
                     </tr>
                   </tbody>
                 </table>
@@ -206,7 +194,7 @@ export default {
         datasets: [
           {
             label: 'การสั่งซื้อ',
-            backgroundColor: '#ff903f',
+            backgroundColor: '#F7894E',
             data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
           }
         ]
@@ -216,7 +204,7 @@ export default {
         datasets: [
           {
             label: 'การจ่ายค่างวด',
-            backgroundColor: '#FF6384',
+            backgroundColor: '#F77979',
             data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
           }
         ]

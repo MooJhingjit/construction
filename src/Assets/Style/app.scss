@@ -504,13 +504,10 @@ html {
                 }
                 .ordering-detail-page{
                   .detail-panel{
-                    .explain-order{
-                      margin-top: 0.75rem;
-                    }
-                    .detail-block{
+                    .explain{
                       // margin-bottom: 15px;
                       flex-direction: column;
-
+  
                       .function{
                         justify-content: space-around;
                         margin-bottom: 15px;
@@ -771,6 +768,7 @@ html {
                       flex-direction: row;
                     }
                     .options-panel{
+                      font-size: 0.9em;
                       flex: 3;
                       padding-bottom: 0.75rem;
                       @media (min-width: $computerBreakpoint) {
@@ -787,6 +785,10 @@ html {
                             justify-content: flex-end;
                             .tag{
                               cursor: pointer;
+                              border: 1px solid transparent;
+                              &:hover{
+                                border: 1px solid #9a8f8f;
+                              }
                             }
                           }
                           
@@ -826,7 +828,14 @@ html {
                         background: rgba(255, 255, 255, 0.85);
                         flex-direction: column;
                         padding: 5px;
-  
+                        .transparent-table{
+                          tr td {
+                            color:  $third-text-black-color;
+                            span.value{
+                              color:  $frist-text-black-color;
+                            }
+                          }
+                        }
                         .form-detail{
                           flex: 5;
                           padding: 5px 15px;
@@ -878,15 +887,18 @@ html {
                       }
                       .footer-panel{
                         flex-direction: row;
+                        flex-wrap: wrap;
+                        justify-content: space-around;
                         button{
                           // max-width: 90px;
-                          // flex: 1;
+                          flex: 0;
                         }
                         button+button{
-                          margin-left: 10px;
+                          // margin-left: 10px;
                         }
-                        padding: 15px !important;;
-                        background: rgba(234, 234, 234, 0.85) !important;
+                        padding: 15px !important;
+                        border-top: 1px solid #c1c1c1;
+                        background: rgba(232, 232, 232, 0.85) !important;
                       }
                     }
                   }
@@ -912,6 +924,7 @@ html {
                 }
                 article{
                   padding: 10px;
+                  background: rgba(255, 255, 255, 0.85) !important;
                   @media (min-width: $computerBreakpoint) {
                     font-size: 1rem;
                   }
@@ -928,6 +941,16 @@ html {
                     button{
                       font-size: 0.8em;
                     }
+                  }
+                }
+                .rows-table{
+                  thead tr {
+                    &:hover{
+                      background: transparent;
+                    }
+                  }
+                  tr td{
+                    font-size: 0.9em;
                   }
                 }
                 

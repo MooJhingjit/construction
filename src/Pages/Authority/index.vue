@@ -11,7 +11,7 @@
       </div>
     </template>
     <template slot="search-results">
-      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+      <table class="table is-bordered rows-table">
         <thead>
           <tr>
             <th>ตำแหน่ง</th>
@@ -19,16 +19,16 @@
         </thead>
         <tbody>
           <tr>
-            <td>Three</td>
+            <td>ผู้ดูแลระบบ</td>
           </tr>
           <tr>
-            <td>Five</td>
+            <td>ผู้บริหาร</td>
           </tr>
           <tr>
-            <td>Seven</td>
+            <td>ฝ่ายบัญชี</td>
           </tr>
           <tr>
-            <td>Nine</td>
+            <td>หัวหน้างาน</td>
           </tr>
         </tbody>
       </table>

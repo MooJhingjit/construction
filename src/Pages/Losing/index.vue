@@ -10,7 +10,7 @@
                 <div class="tile">
                   <div class="tile is-parent is-vertical is-6">
                     <div class="title">การสั่งซื้อ (วันนี้)</div>
-                    <table class="table is-bordered">
+                    <table class="table is-bordered rows-table">
                       <thead>
                         <tr>
                           <th>โครงการ</th>
@@ -21,16 +21,16 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td>xxxxxxx</td>
-                          <td>xxxxxxx</td>
-                          <td>xxxxxxx</td>
-                          <td>xxxxxxx</td>
+                          <td>ศรีนครินทร์-ร่มเกล้า</td>
+                          <td>244CA248C</td>
+                          <td>7</td>
+                          <td>4,500</td>
                         </tr>
                          <tr>
-                          <td>xxxxxxx</td>
-                          <td>xxxxxxx</td>
-                          <td>xxxxxxx</td>
-                          <td>xxxxxxx</td>
+                          <td>อ่อนนุช-วงแหวน</td>
+                          <td>244CA248C</td>
+                          <td>9</td>
+                          <td>7,900</td>
                         </tr>
                       </tbody>
                     </table>
@@ -95,7 +95,7 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'ข้อมูลสูญเสีย', route: 'Losing', key: '', active: true, icon: 'fa fa-object-group'}
+            {name: 'ข้อมูลสูญเสีย', route: 'Losing', key: '', active: true, icon: 'fa fa-thumbs-o-down'}
           ]
         }
       },
@@ -121,7 +121,7 @@ export default {
         datasets: [
           {
             label: 'การจ่ายค่างวด',
-            backgroundColor: '#FF6384',
+            backgroundColor: '#E3E3E3',
             data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
           }
         ]

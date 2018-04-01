@@ -14,8 +14,8 @@
                 <table class="transparent-table">
                   <tr>
                     <td>
-                      <div>ร้านค้า: xxxxxxxx</div>
-                      <div>ประเภท: xxxxxxxx</div>
+                      <div>ร้านค้า: <span class="value">พาเรกซ์กรุ๊ป จำกัด</span></div>
+                      <div>ประเภท: <span class="value">Lango</span></div>
                     </td>
                     <td>
                       <span class="tag is-white active">098SW3</span>
@@ -117,9 +117,9 @@
               </table>
             </div> -->
           </div>
-          <div class="container-block footer-panel">
+          <!-- <div class="container-block footer-panel">
             <button class="button">บันทึกข้อมูล</button>
-          </div>
+          </div> -->
         </template>
         <template v-else>
           <template slot="detail">

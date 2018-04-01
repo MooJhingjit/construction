@@ -8,7 +8,7 @@
     </template>
     <template slot="search-input">
       <div class="search-input control has-icons-left">
-        <input class="input" type="text" placeholder="ค้นหา">
+        <input class="input" type="text" placeholder="ค้นหา" value="LH120610029">
         <span class="icon is-small is-left">
           <i class="fa fa-search" aria-hidden="true"></i>
         </span>
@@ -19,35 +19,13 @@
         <thead>
           <tr>
             <th>เลขที่สัญญา</th>
-            <th>จำนวนรายการ</th>
             <th>วันที่</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Three</td>
-            <td>Four</td>
-            <td>Four</td>
-          </tr>
-          <tr>
-            <td>Five</td>
-            <td>Six</td>
-            <td>Four</td>
-          </tr>
-          <tr>
-            <td>Seven</td>
-            <td>Four</td>
-            <td>Eight</td>
-          </tr>
-          <tr>
-            <td>Nine</td>
-            <td>Ten</td>
-            <td>Four</td>
-          </tr>
-          <tr>
-            <td>Eleven</td>
-            <td>Four</td>
-            <td>Twelve</td>
+            <td>LH120610029</td>
+            <td>10/02/2561</td>
           </tr>
         </tbody>
       </table>
@@ -62,106 +40,79 @@
           <div class="block">
             <table class="transparent-table">
               <tr>
-                <td>เลขที่สัญญา: xxxxxx</td>
-                <td>วันที่ 21 มีนาคม 2561</td>
+                <td>เลขที่สัญญา: 	<span class="value">LH120610029</span></td>
+                <td><span class="value">วันที่ 21 มีนาคม 2561</span></td>
               </tr>
               <tr>
-                <td>แบบบ้าน: xxxxxxxx</td>
-                <td>ขั้นตอนการตำเนินงาน: xxxxxx</td>
+                <td>แบบบ้าน: <span class="value">244CA248C</span></td>
+                <td>ขั้นตอนการตำเนินงาน: <span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
               </tr>
               <tr>
-                <td>ทั้งหมด: 5 รายการ</td>
-                <td>จำนวนเงินทั้งหมด 1,000 บาท</td>
+                <td>ทั้งหมด: <span class="value">5 รายการ</span></td>
+                <td>จำนวนเงินทั้งหมด <span class="value">1,000 บาท</span></td>
               </tr>
               <tr>
-                <td>คงเหลือ: 1 รายการ</td>
-                <td>หนึ่งพันบาทถ้วน</td>
+                <td>คงเหลือ: <span class="value">1 รายการ</span></td>
+                <td><span class="value">หนึ่งพันบาทถ้วน</span></td>
               </tr>
             </table>
           </div>
           <div class="block">
-            <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+            <table class="table is-bordered rows-table">
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>ร้านค้า</th>
                   <th>วัสดุ</th>
                   <th>จำนวน</th>
                   <th>ราคา</th>
-                  <th>ร้านค้า</th>
-                  <th>สถานะ</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>1</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><span class="tag is-success">รับแล้ว</span></td>
+                  <td width="100">xxxxxxx</td>
+                  <td>
+                    <input class="input" type="text" placeholder="Text input">
+                    <input class="input" type="text" placeholder="Text input">
+                  </td>
+                  <td width="20"><input class="input" type="text" placeholder="Text input"></td>
+                  <td width="100"><input class="input" type="text" placeholder="Text input"></td>
                 </tr>
                 <tr>
-                  <td>2</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><span class="tag is-warning">รอสินค้า</span></td>
+                  <td>xxxxxxx</td>
+                  <td>
+                    <input class="input" type="text" placeholder="Text input">
+                    <input class="input" type="text" placeholder="Text input">
+                  </td>
+                  <td width="20"><input class="input" type="text" placeholder="Text input"></td>
+                  <td width="100"><input class="input" type="text" placeholder="Text input"></td>
                 </tr>
                 <tr>
-                  <td>3</td>
+                  <td>xxxxxxx</td>
                   <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><span class="tag is-success">รับแล้ว</span></td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><span class="tag is-success">รับแล้ว</span></td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td><span class="tag is-success">รับแล้ว</span></td>
+                  <td width="20"><input class="input" type="text" placeholder="Text input"></td>
+                  <td width="100"><input class="input" type="text" placeholder="Text input"></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <div class="container-block explain-order detail-block">
+        <div class="container-block  explain">
           <div class="block">
             <table class="transparent-table">
               <tr>
-                <td>วัสดุ: xxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>สถานะ: <span class="tag is-warning">รอสินค้า</span></td>
-              </tr>
-              <tr>
-                <td>จำนวน: xxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
+                <td>ร้านค้า: xxxxxx</td>
+                <td>จำนวน: xxxxx รายการ</td>
+                <td>สถานะ: <span class="tag is-warning">รอการสั่งซื้อ</span></td>
               </tr>
               <tr>
                 <td>ราคา: xxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
               </tr>
             </table>
           </div>
           <div class="block function container-block">
-            <a class="button is-outlined">Function</a>
-            <a class="button is-primary is-outlined">Function</a>
-            <a class="button is-link is-outlined">Function</a>
-            <a class="button is-info is-outlined">Function</a>
-            <a class="button is-success is-outlined">Function</a>
+            <button class="button">ออกใบสั่งซื้อ</button>
+            <button class="button is-info">รับของ</button>
+            <button class="button is-warning">สั่งซื้อพิเศษ</button>
           </div>
         </div>
       </template>
@@ -211,7 +162,7 @@ export default {
         pageObj: {
           items: [
             {name: 'การสั่งซื้อ', route: 'Ordering', key: '', active: false, icon: 'fa fa-object-group'},
-            {name: 'xxx', route: 'OrderingDetail', key: 'aaaa', active: true, icon: ''}
+            {name: 'LH120610029', route: 'OrderingDetail', key: 'LH120610029', active: true, icon: ''}
           ]
         },
         template: {

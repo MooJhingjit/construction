@@ -9,8 +9,8 @@
             <div class="profile-body container-block block">
                 <div class="name">Pokkron Jhingjit</div>
                 <div class="options container-block">
-                    <div class="block"><i class="fa fa-user-circle-o" aria-hidden="true"></i> ข้อมูลผู้ใช้</div>
-                    <div class="block"><i class="fa fa-lock" aria-hidden="true"></i> เปลี่ยนรหัสผ่าน</div>
+                    <div class="block" @click="GOTOPAGE('User', 'xxxxx')"><i class="fa fa-user-circle-o" aria-hidden="true"></i> ข้อมูลผู้ใช้</div>
+                    <!-- <div class="block"><i class="fa fa-lock" aria-hidden="true"></i> เปลี่ยนรหัสผ่าน</div> -->
                     <div class="block"><router-link to="/login"><i class="fa fa-power-off" aria-hidden="true"></i> ออกจากระบบ</router-link></div>
                 </div>
             </div>

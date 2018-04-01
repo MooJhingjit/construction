@@ -8,7 +8,7 @@
             <div class="tile is-parent is-vertical is-12">
               <article class="tile is-child notification">
                 <p class="title warning">คำขอสั่งซื้อใหม่ 5 รายการ</p>
-                <table class="table is-narrow">
+                <table class="table is-narrow rows-table">
                   <thead>
                     <tr>
                       <th>เลขที่สัญญา</th>
@@ -25,37 +25,6 @@
                       <td>Four</td>
                       <td>Three</td>
                       <td>Four</td>
-                      <td>Four</td>
-                      <td>Four</td>
-                    </tr>
-                    <tr>
-                      <td>Five</td>
-                      <td>Six</td>
-                      <td>Three</td>
-                      <td>Four</td>
-                      <td>Four</td>
-                      <td>Four</td>
-                    </tr>
-                    <tr>
-                      <td>Seven</td>
-                      <td>Eight</td>
-                      <td>Three</td>
-                      <td>Four</td>
-                      <td>Four</td>
-                      <td>Four</td>
-                    </tr>
-                    <tr>
-                      <td>Nine</td>
-                      <td>Ten</td>
-                      <td>Three</td>
-                      <td>Four</td>
-                      <td>Four</td>
-                      <td>Four</td>
-                    </tr>
-                    <tr>
-                      <td>Eleven</td>
-                      <td>Twelve</td>
-                      <td>Three</td>
                       <td>Four</td>
                       <td>Four</td>
                     </tr>
@@ -119,7 +88,7 @@
             <div class="tile is-parent">
               <article class="tile is-child notification">
                 <p class="title">จำนวนการซื้อ (พิเศษ)</p>
-                <bar-chart :data="item5" :height="150" ></bar-chart>
+                <bar-chart :data="item6" :height="150" ></bar-chart>
               </article>
             </div>
           </div>
@@ -182,7 +151,17 @@ export default {
         datasets: [
           {
             label: 'การสั่งซื้อ',
-            backgroundColor: '#FF6384',
+            backgroundColor: '#F7894E',
+            data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
+          }
+        ]
+      },
+      item6: {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        datasets: [
+          {
+            label: 'การสั่งซื้อ (พิเศษ)',
+            backgroundColor: '#F05858',
             data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
           }
         ]

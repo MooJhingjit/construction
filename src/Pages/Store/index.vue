@@ -11,7 +11,7 @@
       </div>
     </template>
     <template slot="search-results">
-      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+      <table class="table is-bordered rows-table">
         <thead>
             <tr>
               <th>ชื่อร้านค้า</th>
@@ -20,28 +20,28 @@
           </thead>
           <tbody>
             <tr>
-              <td>Three</td>
-              <td>Three</td>
+              <td>พาเรกซ์กรุ๊ป จำกัด</td>
+              <td>Lango</td>
             </tr>
              <tr>
-              <td>Three</td>
-              <td>Three</td>
+              <td>SCG  แลนด์สเคป  จำกัด</td>
+              <td>PAVING BLOCK</td>
             </tr>
              <tr>
-              <td>Three</td>
-              <td>Three</td>
+              <td>กระเบื้องประดับ/หินเทียม</td>
+              <td>กิจศิริ</td>
             </tr>
              <tr>
-              <td>Three</td>
-              <td>Three</td>
+              <td>ตะแกรงระบายน้ำ(Modern Drain)</td>
+              <td>โมเดิร์น เอเวอร์นิว จำกัด</td>
             </tr>
              <tr>
-              <td>Three</td>
-              <td>Three</td>
+              <td>บ่อดักกลิ่น/บ่อไฟ</td>
+              <td>ฟายด์เวิร์คกรุ๊ป</td>
             </tr>
              <tr>
-              <td>Three</td>
-              <td>Three</td>
+              <td>บันได/ราวบันได(A-BLE)</td>
+              <td>A-BLE HOUSEWARES CO.,LTD.</td>
             </tr>
           </tbody>
       </table>
@@ -89,8 +89,8 @@
         </div>
         <div class="container-block footer-panel">
           <button class="button">บันทึกข้อมูล</button>
-          <button class="button" @click="GOTOPAGE('AddMaterial', 'store-id')">เพิ่มรายการสินค้า</button>
-          <button class="button" @click="GOTOPAGE('Material', 'store-id')">ดูรายการสินค้า</button>
+          <button class="button" @click="GOTOPAGE('AddMaterial', 'store-id')">รายการสินค้า</button>
+          <!-- <button class="button" @click="GOTOPAGE('Material', 'store-id')">ดูรายการสินค้า</button> -->
         </div>
       </template>
     </template>

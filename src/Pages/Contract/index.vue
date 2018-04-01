@@ -5,7 +5,7 @@
       <div class="tags">        
         <span class="tag">เสร็จสิ้น 42</span>
         <span class="tag">รออนุมัติ 5</span>
-        <span class="tag">ดำเนินงาน 3</span>
+        <span class="tag">ดำเนินการ 3</span>
         <span class="tag">ทั้งหมด</span>
       </div>
     </template>
@@ -34,24 +34,24 @@
         </thead>
         <tbody>
           <tr>
-            <td>00B01</td>
-            <td>Three</td>
-            <td>Three</td>
+            <td>LH120610015</td>
+            <td>21/09/60</td>
+            <td><span class="tag is-link">ดำเนินการ</span></td>
           </tr>
           <tr>
-            <td>Three</td>
-            <td>Five</td>
-            <td>Three</td>
+            <td>LH120243216</td>
+            <td>27/08/60</td>
+            <td><span class="tag is-warning">รออนุมัติ</span></td>
           </tr>
           <tr>
-            <td>Three</td>
-            <td>Seven</td>
-            <td>Three</td>
+            <td>LH122950016</td>
+            <td>27/08/60</td>
+            <td><span class="tag is-link">ดำเนินการ</span></td>
           </tr>
           <tr>
-            <td>Three</td>
-            <td>Nine</td>
-            <td>Three</td>
+            <td>LH120610397</td>
+            <td>26/09/60</td>
+            <td><span class="tag is-link">ดำเนินการ</span></td>
           </tr>
         </tbody>
       </table>
@@ -66,27 +66,27 @@
           <div class="block">
             <table class="transparent-table">
               <tr>
-                <td colspan="2">เลขที่สัญญา: xxxxxx</td>
+                <td colspan="2">เลขที่สัญญา: <span class="value">LH120610015</span></td>
               </tr>
               <tr>
-                <td>แบบบ้าน: xxxxxxxx</td>
-                <td>แปลง: xxxxxxxx</td>
+                <td>แบบบ้าน: <span class="value">199CA238C</span></td>
+                <td>แปลง: <span class="value">00C06</span></td>
               </tr>
               <tr>
-                <td>วันที่งวด 9 ตามส/ญ: xxxxxxxx</td>
-                <td>วันที่งวด 9 ตามปมก.: xxxxxxxx</td>
+                <td>วันที่งวด 9 ตามส/ญ: <span class="value">27/08/61</span></td>
+                <td>วันที่งวด 9 ตามปมก.: <span class="value">27/08/61</span></td>
               </tr>
               <tr>
-                <td>วันที่ End Prod.ตามส/ญ: xxxxxxxx</td>
-                <td>วันที่ทำสัญญา: xxxxxxxx</td>
+                <td>วันที่ End Prod.ตามส/ญ: <span class="value">16/09/61</span></td>
+                <td>วันที่ทำสัญญา: <span class="value">27/08/61</span></td>
               </tr>
               <tr>
-                <td colspan="2">งานล่าสุด: xxxxxxxx</td>
+                <td colspan="2">งานล่าสุด: <span class="value">ทำสัญญาก่อสร้าง</span></td>
               </tr>
             </table>
           </div>
           <div class="block">
-            <table class="table is-hoverable">
+            <table class="table rows-table is-hoverable">
               <thead>
                 <tr>
                   <th>รายละเอียดงาน</th>
@@ -133,113 +133,10 @@
               </tbody>
             </table>
           </div>
-          
-        </div>
-          <!-- <div class="c-header container-block block">
-            <div class="block name">
-              สัญญาว่าจ้างปลูกสร้างอาคาร
-              <div class="date">วันที่ 21 มีนาคม 2561</div>
-            </div>
-            <div class="block info">
-              <table class="transparent-table">
-                <tr>
-                  <td>เลขที่สัญญา:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td>ประเภทสัญญา:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                </tr>
-                <tr>
-                  <td>โครงการ:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td>แบบบ้าน:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                </tr>
-                <tr>
-                  <td>แปลง:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td>Quarter:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                </tr>
-                <tr>
-                  <td>ราคา:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td>เงินเบิกล่วงหน้า:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                </tr>
-                <tr>
-                  <td>วันที่ออกสัญญา:</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              </table>
-            </div>
-          </div>
-          <div class="c-body">
-            <table class="table is-hoverable">
-              <thead>
-                <tr>
-                  <th>งวดที่</th>
-                  <th>จำนวนเงิน</th>
-                  <th>วันกำหนดเสร็จ</th>
-                  <th>วัสดุนอกสัญญา ( * ยกเว้นค่าของ, ** ยกเว้นค่าของและค่าแรง )</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td width="70"><input type="text" class="input"></td>
-                  <td width="130"><input type="text" class="input"></td>
-                  <td width="130"><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                </tr>
-                <tr>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                </tr>
-                <tr>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                </tr>
-                <tr>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                </tr>
-                <tr>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                  <td><input type="text" class="input"></td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="table-options">
-              <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
-              <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
-            </div>
-          </div>
-          <div class="c-footer container-block block">
-            <table class="transparent-table">
-              <tr>
-                <td>จำนวนงวด: 10 งวด</td>
-                <td>จำนวนเงินทั้งหมด 1,000 บาท</td>
-              </tr>
-              <tr>
-                <td>วันที่ 21 มีนาคม 2561 ถึงวันที่ 10 ธันวาคม 2561</td>
-                <td>หนึ่งพันบาทถ้วน</td>
-              </tr>
-            </table>
-          </div>
         </div>
         <div class="container-block footer-panel">
-          <button class="button is-warning">รออนุมัติ</button>
           <button class="button is-success">เริ่มดำเนินงาน</button>
-        </div> -->
+        </div>
       </template>
     </template>
     <template v-else>
