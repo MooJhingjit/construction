@@ -13,7 +13,7 @@
                     <table class="table is-bordered rows-table">
                       <thead>
                         <tr>
-                          <th>โครงการ</th>
+                          <th>สัญญา</th>
                           <th>แบบบ้าน</th>
                           <th>จำนวน</th>
                           <th>ราคารวม</th>
@@ -21,19 +21,22 @@
                       </thead>
                       <tbody>
                         <tr>
-                          <td>ศรีนครินทร์-ร่มเกล้า</td>
+                          <td>LH120243216</td>
                           <td>244CA248C</td>
-                          <td>7</td>
-                          <td>4,500</td>
+                          <td>2</td>
+                          <td>400</td>
                         </tr>
                          <tr>
-                          <td>อ่อนนุช-วงแหวน</td>
                           <td>244CA248C</td>
-                          <td>9</td>
-                          <td>7,900</td>
+                          <td>244CA248C</td>
+                          <td>1</td>
+                          <td>900</td>
                         </tr>
                       </tbody>
                     </table>
+                    <div class="table-options">
+                      <span class="tag is-light" @click="GOTOPAGE('LosingMaterial', '')">ดูข้อมูลทั้งหมด</span>
+                    </div>
                   </div>
                   <div class="tile is-parent is-vertical is-6">
                     <bar-chart :data="item4"  :height="150" ></bar-chart>

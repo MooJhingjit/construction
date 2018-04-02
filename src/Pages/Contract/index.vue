@@ -66,11 +66,15 @@
           <div class="block">
             <table class="transparent-table">
               <tr>
-                <td colspan="2">เลขที่สัญญา: <span class="value">LH120610015</span></td>
+              <td>โครงการ: 	<span class="value">รามอินทรา พหลโยธิน 50</span></td>
               </tr>
               <tr>
-                <td>แบบบ้าน: <span class="value">199CA238C</span></td>
-                <td>แปลง: <span class="value">00C06</span></td>
+                <td>เลขที่สัญญา: 	<span class="value">LH120243216</span></td>
+                <td>แปลน: <span class="value">C01</span></td>
+              </tr>
+              <tr>
+                <td>แบบบ้าน: <span class="value">244CA248C</span></td>
+                <td>ขั้นตอนการตำเนินงาน: <span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
               </tr>
               <tr>
                 <td>วันที่งวด 9 ตามส/ญ: <span class="value">27/08/61</span></td>

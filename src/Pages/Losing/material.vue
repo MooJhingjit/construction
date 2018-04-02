@@ -11,54 +11,21 @@
       </div>
     </template>
     <template slot="search-results">
-      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+      <table class="table is-bordered rows-table">
         <thead>
             <tr>
-              <th>รายการ</th>
+              <th>สัญญา</th>
               <th>จำนวน</th>
-              <th>ราคารวม</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Three</td>
-              <td>Three</td>
-              <td>Four</td>
+              <td>LH120243216</td>
+              <td>1</td>
             </tr>
             <tr>
-              <td>Three</td>
-              <td>Five</td>
-              <td>Six</td>
-            </tr>
-            <tr>
-              <td>Three</td>
-              <td>Seven</td>
-              <td>Eight</td>
-            </tr>
-            <tr>
-              <td>Three</td>
-              <td>Nine</td>
-              <td>Ten</td>
-            </tr>
-            <tr>
-              <td>Three</td>
-              <td>Eleven</td>
-              <td>Twelve</td>
-            </tr>
-            <tr>
-              <td>Three</td>
-              <td>Eleven</td>
-              <td>Twelve</td>
-            </tr>
-            <tr>
-              <td>Three</td>
-              <td>Eleven</td>
-              <td>Twelve</td>
-            </tr>
-            <tr>
-              <td>Three</td>
-              <td>Eleven</td>
-              <td>Twelve</td>
+              <td>LH120610015</td>
+              <td>2</td>
             </tr>
           </tbody>
       </table>
@@ -72,21 +39,24 @@
         <div class="block">
           <table class="transparent-table">
             <tr>
-              <td colspan="2">วัสดุ: xxxxxx</td>
+              <td>โครงการ: 	<span class="value">รามอินทรา พหลโยธิน 50</span></td>
             </tr>
             <tr>
-              <td>จำนวน: xxxxxxxx</td>
-              <td>ราคารวม: xxxxxxxx</td>
+              <td>เลขที่สัญญา: 	<span class="value">LH120243216</span></td>
+              <td>แปลน: <span class="value">C01</span></td>
+            </tr>
+            <tr>
+              <td>แบบบ้าน: <span class="value">244CA248C</span></td>
+              <td>ขั้นตอนการตำเนินงาน: <span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
             </tr>
           </table>
         </div>
         <div class="block">
-          <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+          <table class="table is-bordered rows-table">
             <thead>
               <tr>
                 <th>#</th>
-                <th>โครงการ</th>
-                <th>แบบบ้าน</th>
+                <th>วัสดุ</th>
                 <th>จำนวน</th>
                 <th>ราคารวม</th>
                 <th>หมายเหตุ</th>
@@ -95,43 +65,17 @@
             <tbody>
               <tr>
                 <td>1</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
+                <td>วงกบประตู (UPVC)</td>
+                <td>1</td>
+                <td>100</td>
+                <td>-</td>
               </tr>
               <tr>
                 <td>2</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
-                <td>xxxxxxxxxx</td>
+                <td>เชิงชาย/ผนังไม้ประดับ/ไม้บัว</td>
+                <td>1</td>
+                <td>500</td>
+                <td>-</td>
               </tr>
             </tbody>
           </table>
@@ -171,11 +115,11 @@ export default {
         pageObj: {
           items: [
             {name: 'ข้อมูลสูญเสีย', route: 'Losing', key: '', active: true, icon: 'fa fa-address-book-o'},
-            {name: 'การสั่งซื้อ', route: 'LosingOrdering', key: '', active: true, icon: 'f'}
+            {name: 'วัสดุ', route: 'LosingMaterial', key: '', active: true, icon: 'f'}
           ]
         },
         template: {
-          class: 'losing-ordering-page'
+          class: 'losing-material-page'
         }
       }
     }

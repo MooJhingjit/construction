@@ -504,13 +504,32 @@ html {
                 }
                 .ordering-detail-page{
                   .detail-panel{
+                    .detail-block{
+                      position: relative;
+                      .order-type{
+                        position: absolute;
+                        top: 0px;
+                        right: 0px;
+                        border-radius: 0px;
+                      }
+                    }
+                    .rows-table{
+                      margin-bottom: 0;
+                      tbody tr td{
+                        input{
+                          margin-bottom: 3px;
+                        }
+                      }
+                    }
                     .explain{
-                      // margin-bottom: 15px;
-                      flex-direction: column;
-  
+                      background: rgba(232, 232, 232, 0.85) !important;
+                      flex-direction: row !important;
+                      .block{
+                        margin-bottom: 0 !important;
+                      }
                       .function{
                         justify-content: space-around;
-                        margin-bottom: 15px;
+                        align-items: center;
                         .button{
                           // display: none;
                           margin: 10px;
@@ -523,10 +542,44 @@ html {
                   }
                   
                 }
+                .ordering-extra-page{
+                  .detail-panel{
+                    .detail-block{
+                      .block{
+                        margin-bottom: 0;
+                        table{
+                          margin-bottom: 3px;
+                        }
+                        .table-options{
+                          text-align: right;
+                          justify-content: flex-end;
+                          button{
+                            font-size: 1em;
+                          }
+                        }
+                      }
+                    }
+                    
+                  }
+                }
                 .losing-page{
                   article{
                     .title{
-                      color: $frist-text-black-color  !important;
+                      color: $frist-text-black-color !important;
+                    }
+                    table{
+                      margin-bottom: 0;
+                    }
+                    .table-options{
+                      span{
+                        cursor: pointer;
+                      }
+                    }
+                    .tile{
+                      .is-parent{
+                        margin: 0 !important;
+                        padding: 0 !important;
+                      }
                     }
                   }
                 }
@@ -821,6 +874,9 @@ html {
                       // padding: 0.75rem;
                       flex: 7;
                       &>.container-block{
+                        &>.block{
+                          margin-bottom: 0 !important;
+                        }
                         // margin-bottom: 0.75rem;
                         // @media (min-width: $computerBreakpoint) {
                         //   margin-right: 0rem;
@@ -928,12 +984,23 @@ html {
                   @media (min-width: $computerBreakpoint) {
                     font-size: 1rem;
                   }
-                  p.title{
-                    color: $second-text-black-color;
-                    font-size: 1em;
+                  .title{
+                    color: $frist-text-black-color;
                   }
-                  table{
-
+                  .header-title{
+                    .title-left{
+                      flex:1;
+                      span{
+                        color: $frist-text-black-color;
+                        font-size: 1em;
+                        margin-bottom: 0;
+                      }
+                    }
+                    .title-right{
+                      flex: 0;
+                      margin-bottom: 5px;
+                      cursor: pointer;
+                    }
                   }
                   .table-options{
                     text-align: right;

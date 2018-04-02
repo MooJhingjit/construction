@@ -4,6 +4,7 @@ const Home = () => import('@Pages/Home')
 const Login = () => import('@Pages/Login')
 const Ordering = () => import('@Pages/Ordering')
 const OrderingDetail = () => import('@Pages/Ordering/detail')
+const OrderingExtra = () => import('@Pages/Ordering/extra')
 const User = () => import('@Pages/User')
 const Authority = () => import('@Pages/Authority')
 const Project = () => import('@Pages/Project')
@@ -12,7 +13,7 @@ const CreateContract = () => import('@Pages/Contract/create')
 const FrontSite = () => import('@Pages/FrontSite')
 const FrontSiteUpdate = () => import('@Pages/FrontSite/update-status')
 const Losing = () => import('@Pages/Losing')
-const LosingOrdering = () => import('@Pages/Losing/ordering')
+const LosingMaterial = () => import('@Pages/Losing/material')
 const Material = () => import('@Pages/Material')
 const AddMaterial = () => import('@Pages/Material/add')
 const Store = () => import('@Pages/Store')
@@ -36,6 +37,11 @@ export default new VueRouter({
       path: '/ordering',
       name: 'Ordering',
       component: Ordering
+    },
+    {
+      path: '/ordering/extra',
+      name: 'OrderingExtra',
+      component: OrderingExtra
     },
     {
       path: '/ordering/:key',
@@ -83,9 +89,9 @@ export default new VueRouter({
       component: Losing
     },
     {
-      path: '/losing/order',
-      name: 'LosingOrdering',
-      component: LosingOrdering
+      path: '/losing/material',
+      name: 'LosingMaterial',
+      component: LosingMaterial
     },
     {
       path: '/material/add',

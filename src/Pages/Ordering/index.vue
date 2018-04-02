@@ -5,38 +5,6 @@
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-12">
           <div class="tile">
-            <div class="tile is-parent is-vertical is-12">
-              <article class="tile is-child notification">
-                <p class="title warning">คำขอสั่งซื้อใหม่ 5 รายการ</p>
-                <table class="table is-narrow rows-table">
-                  <thead>
-                    <tr>
-                      <th>เลขที่สัญญา</th>
-                      <th>งานล่าสุด</th>
-                      <th>งานถัดไป</th>
-                      <th>จำนวนรายการ</th>
-                      <th>ราคารวม</th>
-                      <th>วันที่</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr @dblclick="goToDetail()" >
-                      <td>Three</td>
-                      <td>Four</td>
-                      <td>Three</td>
-                      <td>Four</td>
-                      <td>Four</td>
-                      <td>Four</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <!-- <div class="table-options container-block">
-                  <button class="button"></button>
-                </div> -->
-              </article>
-            </div>
-          </div>
-          <div class="tile">
             <div class="tile is-parent is-vertical is-6">
               <!-- <article class="tile is-child notification">
                 <p class="title alert">สถานะการสั่งซื้อล่าสุด (ยังไม่ได้รับของ)</p>
@@ -81,16 +49,58 @@
                 </div>
               </article> -->
               <article class="tile is-child notification">
-                <p class="title">จำนวนการซื้อ</p>
+                <div class="title">จำนวนการซื้อ</div>
                 <bar-chart :data="item5" :height="150" ></bar-chart>
               </article>
             </div>
             <div class="tile is-parent">
               <article class="tile is-child notification">
-                <p class="title">จำนวนการซื้อ (พิเศษ)</p>
+                <div class="title">จำนวนการซื้อ (พิเศษ)</div>
                 <bar-chart :data="item6" :height="150" ></bar-chart>
               </article>
             </div>
+          </div>
+           <div class="tile">
+            <div class="tile is-parent is-vertical is-ๅ/">
+              <article class="tile is-child notification">
+                <div class="header-title container-block">
+                  <div class="title-left">
+                    <div class="title">คำขอสั่งซื้อใหม่ 5 รายการ</div>
+                  </div>
+                  <div class="title-right">
+                    <span class="tag is-light" @click="GOTOPAGE('OrderingDetail', 'order-id')">ดูข้อมูล</span>
+                  </div>
+                </div>
+                
+                
+                <table class="table is-narrow rows-table">
+                  <thead>
+                    <tr>
+                      <th>เลขที่สัญญา</th>
+                      <th>จำนวนรายการ</th>
+                      <th>ราคารวม</th>
+                      <th>วันที่</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr @dblclick="GOTOPAGE('OrderingDetail', 'order-id')" >
+                      <td>LH120610029</td>
+                      <td>5</td>
+                      <td>1,000</td>
+                      <td>21/02/2561</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- <div class="table-options container-block">
+                  <button class="button"></button>
+                </div> -->
+              </article>
+            </div>
+            <!-- <div class="tile is-parent is-vertical is-4 function">
+              <article class="tile is-child notification container-block">
+                <span class="block title"><i class="fa fa-print" aria-hidden="true"></i> ออกรายงาน</span>
+              </article>
+            </div> -->
           </div>
            <div class="tile function">
             <div class="tile is-parent is-vertical is-4">
@@ -104,7 +114,7 @@
               </article>
             </div>
             <div class="tile is-parent is-vertical is-4">
-              <article class="tile is-child notification container-block">
+              <article class="tile is-child notification container-block"  @click="GOTOPAGE('OrderingExtra', '')">
                 <span class="block title"><i class="fa fa-plus-circle" aria-hidden="true"></i> สั่งซื้อพิเศษ</span>
               </article>
             </div>
@@ -209,9 +219,6 @@ export default {
     // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
   },
   methods: {
-    goToDetail () {
-      this.GOTOPAGE('OrderingDetail', 'order-id')
-    }
   }
 }
 </script>

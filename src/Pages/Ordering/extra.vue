@@ -2,9 +2,9 @@
   <option-detail-template :templateObj="local.template">
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="search-status">
-      <div class="tags">
+      <!-- <div class="tags">
         <span class="tag">รอสินค้า 5</span>
-      </div>
+      </div> -->
     </template>
     <template slot="search-input">
       <div class="search-input control has-icons-left">
@@ -19,20 +19,13 @@
         <thead>
           <tr>
             <th>เลขที่สัญญา</th>
-            <th>ประเภท</th>
-            <th>สถานะ</th>
+            <th>วันที่</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>LH120610029</td>
-            <td>ปกติ</td>
-            <td><span class="tag is-link">สั่งซื้อ</span></td>
-          </tr>
-          <tr>
-            <td>LH120610029</td>
-             <td>พิเศษ</td>
-             <td><span class="tag is-warning">รออนุมัติ</span></td>
+            <td>10/02/2561</td>
           </tr>
         </tbody>
       </table>
@@ -44,7 +37,6 @@
     <template v-if="true">
       <template slot="detail">
         <div class="container-block detail-block">
-          <span class="order-type tag is-dark">ปกติ</span>
           <div class="block">
             <table class="transparent-table">
               <tr>
@@ -58,13 +50,27 @@
                 <td>แบบบ้าน: <span class="value">244CA248C</span></td>
                 <td>ขั้นตอนการตำเนินงาน: <span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
               </tr>
+            </table>
+          </div>
+          <div class="block">
+            <table class="transparent-table">
               <tr>
-                <td>ทั้งหมด: <span class="value">5 รายการ</span></td>
-                <td>จำนวนเงินทั้งหมด <span class="value">1,000 บาท</span></td>
-              </tr>
-              <tr>
-                <td>คงเหลือ: <span class="value">1 รายการ</span></td>
-                <td><span class="value">หนึ่งพันบาทถ้วน</span></td>
+                <td>
+                  <div class="field">
+                    <p class="control has-icons-left">
+                      <span class="select">
+                        <select>
+                          <option selected>ร้านค้า</option>
+                          <option>Select dropdown</option>
+                          <option>With options</option>
+                        </select>
+                      </span>
+                      <span class="icon is-small is-left">
+                        <i class="fa fa-th-large"></i>
+                      </span>
+                    </p>
+                  </div>
+                </td>
               </tr>
             </table>
           </div>
@@ -72,7 +78,6 @@
             <table class="table is-bordered rows-table">
               <thead>
                 <tr>
-                  <th>ร้านค้า</th>
                   <th>วัสดุ</th>
                   <th>จำนวน</th>
                   <th>ราคา</th>
@@ -80,58 +85,23 @@
               </thead>
               <tbody>
                 <tr>
-                  <td width="100">xxxxxxx</td>
                   <td>
-                    <input class="input" type="text" placeholder="Text input">
-                    <input class="input" type="text" placeholder="Text input">
                     <input class="input" type="text" placeholder="Text input">
                   </td>
                   <td width="20"><input class="input" type="text" placeholder="Text input"></td>
-                  <td width="100"><input class="input" type="text" placeholder="Text input"></td>
-                </tr>
-                <tr>
-                  <td>xxxxxxx</td>
-                  <td>
-                    <input class="input" type="text" placeholder="Text input">
-                    <input class="input" type="text" placeholder="Text input">
-                  </td>
-                  <td width="20"><input class="input" type="text" placeholder="Text input"></td>
-                  <td width="100"><input class="input" type="text" placeholder="Text input"></td>
-                </tr>
-                <tr>
-                  <td>xxxxxxx</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td width="20"><input class="input" type="text" placeholder="Text input"></td>
-                  <td width="100"><input class="input" type="text" placeholder="Text input"></td>
+                  <td width="150"><input class="input" type="text" placeholder="Text input"></td>
                 </tr>
               </tbody>
             </table>
+            <div class="table-options">
+              <button class="button"><i aria-hidden="true" class="fa fa-minus"></i></button>
+              <button class="button"><i aria-hidden="true" class="fa fa-plus"></i></button>
+            </div>
           </div>
         </div>
-        <div class="container-block explain">
-          <div class="block">
-            <table class="transparent-table">
-              <tr>
-                <td>ร้านค้า: xxxxxx</td>
-              </tr>
-              <tr>
-                <td>จำนวน: xxxxx รายการ</td>
-              </tr>
-              <tr>
-                <td>สถานะ: <span class="tag is-warning">รออนุมัติ</span></td>
-              </tr>
-              <tr>
-                <td>ราคา: xxxxx</td>
-              </tr>
-            </table>
-          </div>
-          <div class="block function container-block">
-            <button class="button is-outlined">อนุมัติ</button>
-            <button class="button is-outlined">ออกใบสั่งซื้อ</button>
-            <button class="button is-outlined">รับของ</button>
-          </div>
+        <div class="container-block footer-panel">
+          <button class="button">สั่งซื้อ</button>
         </div>
-        
       </template>
     </template>
     <template v-else>
@@ -179,11 +149,11 @@ export default {
         pageObj: {
           items: [
             {name: 'การสั่งซื้อ', route: 'Ordering', key: '', active: false, icon: 'fa fa-object-group'},
-            {name: 'LH120610029', route: 'OrderingDetail', key: 'LH120610029', active: true, icon: ''}
+            {name: 'สั่งซื้อพิเศษ', route: 'OrderingExtra', key: '', active: true, icon: ''}
           ]
         },
         template: {
-          class: 'ordering-detail-page'
+          class: 'ordering-extra-page'
         }
       }
     }
