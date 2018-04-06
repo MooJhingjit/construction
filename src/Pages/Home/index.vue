@@ -190,7 +190,7 @@ export default {
         barColor: '#7dbe4b'
       },
       item4: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
         datasets: [
           {
             label: 'การสั่งซื้อ',
@@ -200,7 +200,7 @@ export default {
         ]
       },
       item5: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        labels: ['มกราคม', 'กุมภาพันธ์', 'March', 'เมษายน', 'พฤษภาคม', 'June', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
         datasets: [
           {
             label: 'การจ่ายค่างวด',

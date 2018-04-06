@@ -2,10 +2,10 @@
   <option-detail-template :templateObj="local.template">
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="search-status">
-      <div class="tags">        
-        <span class="tag">เสร็จสิ้น 42</span>
-        <span class="tag">รออนุมัติ 5</span>
-        <span class="tag">ดำเนินการ 3</span>
+      <div class="tags">
+        <span class="tag is-success">เสร็จสิ้น 42</span>
+        <span class="tag is-warning">รออนุมัติ 5</span>
+        <span class="tag is-link">ดำเนินการ 3</span>
         <span class="tag">ทั้งหมด</span>
       </div>
     </template>
@@ -63,33 +63,34 @@
     <template v-if="true">
       <template slot="detail">
         <div class="container-block  detail-block">
-          <div class="block">
+          <span class="type tag">ดำเนินงาน</span>
+          <div class="block c-header">
             <table class="transparent-table">
               <tr>
-              <td>โครงการ: 	<span class="value">รามอินทรา พหลโยธิน 50</span></td>
+              <td>โครงการ:<span class="value">รามอินทรา พหลโยธิน 50</span></td>
               </tr>
               <tr>
-                <td>เลขที่สัญญา: 	<span class="value">LH120243216</span></td>
+                <td>เลขที่สัญญา:<span class="value">LH120243216</span></td>
                 <td>แปลน: <span class="value">C01</span></td>
               </tr>
               <tr>
-                <td>แบบบ้าน: <span class="value">244CA248C</span></td>
+                <td>แบบบ้าน:<span class="value">244CA248C</span></td>
                 <td>ขั้นตอนการตำเนินงาน: <span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
               </tr>
               <tr>
-                <td>วันที่งวด 9 ตามส/ญ: <span class="value">27/08/61</span></td>
-                <td>วันที่งวด 9 ตามปมก.: <span class="value">27/08/61</span></td>
+                <td>วันที่งวด 9 ตามส/ญ:<span class="value">27/08/61</span></td>
+                <td>วันที่งวด 9 ตามปมก.:<span class="value">27/08/61</span></td>
               </tr>
               <tr>
-                <td>วันที่ End Prod.ตามส/ญ: <span class="value">16/09/61</span></td>
-                <td>วันที่ทำสัญญา: <span class="value">27/08/61</span></td>
+                <td>วันที่ End Prod.ตามส/ญ:<span class="value">16/09/61</span></td>
+                <td>วันที่ทำสัญญา:<span class="value">27/08/61</span></td>
               </tr>
               <tr>
-                <td colspan="2">งานล่าสุด: <span class="value">ทำสัญญาก่อสร้าง</span></td>
+                <td colspan="2">งานล่าสุด:<span class="value">ทำสัญญาก่อสร้าง</span></td>
               </tr>
             </table>
           </div>
-          <div class="block">
+          <div class="block c-body">
             <table class="table rows-table is-hoverable">
               <thead>
                 <tr>
@@ -119,7 +120,7 @@
                   <td>20</td>
                 </tr>
                 <tr>
-                  <td>11825 : กำหนด_ติดตั้งทดสอบความสมบูรณ์เสาเข็ม	</td>
+                  <td>11825 : กำหนด_ติดตั้งทดสอบความสมบูรณ์เสาเข็ม</td>
                   <td>11/02/61</td>
                   <td>30/03/61</td>
                   <td>30/03/61</td>
@@ -139,7 +140,7 @@
           </div>
         </div>
         <div class="container-block footer-panel">
-          <button class="button is-success">เริ่มดำเนินงาน</button>
+          <button class="button">เริ่มดำเนินงาน</button>
         </div>
       </template>
     </template>

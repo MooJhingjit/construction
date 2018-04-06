@@ -36,7 +36,7 @@
           <div class="profile-img container-block">
             <div class="block">
               <div class="img">
-                <img src="https://lh3.googleusercontent.com/-vI_vuMTGLhY/AAAAAAAAAAI/AAAAAAAAAAA/AGi4gfyN1ZDACBSjk7nyMF0Dbw9C3mRMHQ/s192-c-mo/photo.jpg" alt="" />
+                <img src="../../../static/img/avatar2.png">
                 <span class="upload"><i class="fa fa-camera" aria-hidden="true"></i> เปลี่ยนรูปภาพ</span>
               </div>
               <div class="options"></div>

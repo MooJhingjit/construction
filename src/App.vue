@@ -1,7 +1,14 @@
 
 <template>
   <div class="wrapper">
-    <!-- <div class="opa"></div> -->
+    <div class="background" style="
+  background: url('../static/img/bg2.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  position: fixed;
+  height: 100%;
+  width: 100%;`
+  background-size: cover;"></div>
     <div class="content">
       <div class="menu-bar">
         <menu-bar :isDisableMenu="local.isDisableMenu" @setMenuStatus="pageClick"></menu-bar>
@@ -55,7 +62,11 @@ export default {
 </script>
 
 <style lang="scss">
+$fa-font-path: "~font-awesome/fonts";
+@import '~font-awesome/scss/font-awesome.scss';
+@import './Assets/Style/mystyles.scss';
 @import './Assets/Style/app.scss';
+// @import './Assets/Style/mystyles.scss';
 .fade-enter-active, .fade-leave-active {
   transition-property: opacity;
   transition-duration: .15s;

@@ -40,87 +40,93 @@
     <template v-if="true">
       <template slot="detail">
         <div class="container-block detail-block">
-          <div class="block container-block">
-            <div class="name">
-              ระบบสั่งซื้อ
+          <div class="c-header">
+            <p class="name">ผู้ดูแลระบบ</p>
+          </div>
+          <div class="c-body container-block">
+            <div class="block container-block">
+              <div class="name">
+                การสั่งซื้อ
+              </div>
+              <div class="task">
+                <ul>
+                  <li>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      xxxxxx
+                    </label>
+                  </li>
+                  <li>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      xxxxxx
+                    </label>
+                  </li>
+                  <li>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      xxxxxx
+                    </label>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div class="task">
-              <ul>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemA
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemB
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemC
-                  </label>
-                </li>
-              </ul>
+            <div class="block container-block">
+              <div class="name">
+                ข้อมูลสูญเสีย
+              </div>
+              <div class="task">
+                <ul>
+                  <li>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      xxxxxx
+                    </label>
+                  </li>
+                  <li>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      xxxxxx
+                    </label>
+                  </li>
+                  <li>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      xxxxxx
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="block container-block">
+              <div class="name">
+                การจ่ายค่างวด
+              </div>
+              <div class="task">
+                <ul>
+                  <li>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      xxxxxx
+                    </label>
+                  </li>
+                  <li>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      xxxxxx
+                    </label>
+                  </li>
+                  <li>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      xxxxxx
+                    </label>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-          <div class="block container-block">
-            <div class="name">
-              ระบบสั่งซื้อ
-            </div>
-            <div class="task">
-              <ul>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemA
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemB
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemC
-                  </label>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="block container-block">
-            <div class="name">
-              ระบบสั่งซื้อ
-            </div>
-            <div class="task">
-              <ul>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemA
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemB
-                  </label>
-                </li>
-                <li>
-                  <label class="checkbox">
-                    <input type="checkbox">
-                    itemC
-                  </label>
-                </li>
-              </ul>
-            </div>
-          </div>
+          
         </div>
         <div class="container-block footer-panel">
             <button class="button">บันทึกข้อมูล</button>

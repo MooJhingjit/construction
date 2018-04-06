@@ -2,16 +2,19 @@
   <nav class="level is-mobile">
     <div class="level-item has-text-centered">
       <div>
-        <p class="heading">
-          <router-link to="/">หน้าหลัก</router-link>
+        <p class="heading" @click="GOTOPAGE('Home', '')">
+          <!-- <router-link to="./">หน้าหลัก</router-link> -->
+          หน้าหลัก
         </p>
       <!-- <p class="title">3,456</p> -->
       </div>
     </div>
     <div class="level-item has-text-centered">
       <div>
-        <p class="heading">
-          <router-link to="/ordering">การสั่งซื้อ</router-link>
+        <p class="heading" @click="GOTOPAGE('Ordering', '')">
+          <!-- <router-link to="./ordering">การสั่งซื้อ</router-link> -->
+          การสั่งซื้อ
+          <span class="tag is-danger is-rounded">1</span>
         </p>
       <!-- <p class="title">123</p> -->
       </div>
@@ -19,35 +22,38 @@
     <div class="level-item has-text-centered">
       <div>
         <p class="heading">
-          <router-link to="/foo">จ่ายค่างวด</router-link>
+          <!-- <router-link to="./foo">จ่ายค่างวด</router-link> -->
+          จ่ายค่างวด
         </p>
       <!-- <p class="title">456K</p> -->
       </div>
     </div>
     <div class="level-item has-text-centered">
       <div>
-        <p class="heading">
-          <router-link to="/losing">ข้อมูลสูญเสีย</router-link>
+        <p class="heading" @click="GOTOPAGE('Losing', '')">
+          <!-- <router-link to="./losing">ข้อมูลสูญเสีย</router-link> -->
+          ข้อมูลสูญเสีย
         </p>
       <!-- <p class="title">789</p> -->
       </div>
     </div>
     <div class="level-item has-text-centered project-name on-mobile">
       <div>
-        <p class="heading">
+        <p class="heading"  @click="GOTOPAGE('Home', '')">
           โชคชนายุทธ
         </p>
       </div>
     </div>
     <div class="level-item has-text-centered options-panel on-mobile">
-      <div class="block">
+      <div class="block alert">
+        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
         <div class="icon-menu" @click="openSubMenu('options', 'profile')">
             <i class="fa fa-th" aria-hidden="true"></i>
         </div>
       </div>
       <div class="block">
         <figure class="image icon-menu" @click="openSubMenu('profile', 'options')">
-          <img src="https://lh3.googleusercontent.com/-vI_vuMTGLhY/AAAAAAAAAAI/AAAAAAAAAAA/AGi4gfyN1ZDACBSjk7nyMF0Dbw9C3mRMHQ/s64-c-mo/photo.jpg">
+          <img src="../../../static/img/avatar2.png">
         </figure>
       </div>
       <template><!--  submenu    -->

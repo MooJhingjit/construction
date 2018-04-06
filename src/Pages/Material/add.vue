@@ -10,24 +10,20 @@
                 สัญญาว่าจ้างปลูกสร้างอาคาร
                 <div class="date">วันที่ 21 มีนาคม 2561</div>
               </div> -->
-              <div class="block info">
-                <table class="transparent-table">
-                  <tr>
-                    <td>
-                      <div>ร้านค้า: <span class="value">พาเรกซ์กรุ๊ป จำกัด</span></div>
-                      <div>ประเภท: <span class="value">Lango</span></div>
-                    </td>
-                    <td>
-                      <span class="tag is-white active">098SW3</span>
-                      <span class="tag is-white">105PWY</span>
-                      <span class="tag is-white active">119PWY</span>
-                      <span class="tag is-white">142PWY</span>
-                      <span class="tag is-white">169PWY</span>
-                      <span class="tag is-white">198PWY</span>
-                      <span class="tag is-white">237PWY</span>
-                    </td>
-                  </tr>
-                </table>
+              <div class="block info container-block">
+                <div class="block">
+                  <div>ร้านค้า: <span class="value">ควอลิตี้คอนสตรัคชั่นโปรดักส์  จำกัด (มหาชน)</span></div>
+                  <div>ประเภท: <span class="value">อิฐมวลเบา</span></div>
+                </div>
+                <div class="block">
+                  <span class="tag is-white active">098SW3</span>
+                  <span class="tag is-white">105PWY</span>
+                  <span class="tag is-white active">119PWY</span>
+                  <span class="tag is-white">142PWY</span>
+                  <span class="tag is-white">169PWY</span>
+                  <span class="tag is-white">198PWY</span>
+                  <span class="tag is-white">237PWY</span>
+                </div>
               </div>
             </div>
             <div class="c-body">
@@ -47,11 +43,11 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
+                      <td><input type="text" class="input" value="อิฐ Q-CON 7.5 Cm."></td>
+                      <td><input type="text" class="input" value="ก้อน"></td>
+                      <td><input type="text" class="input" value="13.00"></td>
+                      <td><input type="text" class="input" value="196.00"></td>
+                      <td><input type="text" class="input" value="196.00"></td>
                     </tr>
                   </tbody>
                 </table>
@@ -85,15 +81,15 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
-                      <td><input type="text" class="input"></td>
+                      <td><input type="text" class="input" value="แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า450kg/m²)  ขนาด 0.35 x 3.90 m."></td>
+                      <td width="90"><input type="text" class="input" value="แผ่น"></td>
+                      <td width="90"><input type="text" class="input" value="293.74"></td>
+                      <td width="90"><input type="text" class="input" value="18.00"></td>
+                      <td width="90"><input type="text" class="input" value="18.00"></td>
+                      <td width="90"><input type="text" class="input" value="18.00"></td>
+                      <td width="90"><input type="text" class="input" value="18.00"></td>
+                      <td width="90"><input type="text" class="input" value="18.00"></td>
+                      <td width="90"><input type="text" class="input" value="18.00"></td>
                     </tr>
                   </tbody>
                 </table>

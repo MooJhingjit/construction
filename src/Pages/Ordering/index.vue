@@ -61,7 +61,7 @@
             </div>
           </div>
            <div class="tile">
-            <div class="tile is-parent is-vertical is-ๅ/">
+            <div class="tile is-parent is-vertical is-6">
               <article class="tile is-child notification">
                 <div class="header-title container-block">
                   <div class="title-left">
@@ -71,8 +71,6 @@
                     <span class="tag is-light" @click="GOTOPAGE('OrderingDetail', 'order-id')">ดูข้อมูล</span>
                   </div>
                 </div>
-                
-                
                 <table class="table is-narrow rows-table">
                   <thead>
                     <tr>
@@ -87,6 +85,39 @@
                       <td>LH120610029</td>
                       <td>5</td>
                       <td>1,000</td>
+                      <td>21/02/2561</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <!-- <div class="table-options container-block">
+                  <button class="button"></button>
+                </div> -->
+              </article>
+            </div>
+             <div class="tile is-parent is-vertical is-6">
+              <article class="tile is-child notification">
+                <div class="header-title container-block">
+                  <div class="title-left">
+                    <div class="title extar">คำขอสั่งซื้อใหม่ (พิเศษ) 1 รายการ</div>
+                  </div>
+                  <div class="title-right">
+                    <span class="tag is-light" @click="GOTOPAGE('OrderingDetail', 'order-id')">ดูข้อมูล</span>
+                  </div>
+                </div>
+                <table class="table is-narrow rows-table">
+                  <thead>
+                    <tr>
+                      <th>เลขที่สัญญา</th>
+                      <th>จำนวนรายการ</th>
+                      <th>ราคารวม</th>
+                      <th>วันที่</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr @dblclick="GOTOPAGE('OrderingDetail', 'order-id')" >
+                      <td>LH120610029</td>
+                      <td>1</td>
+                      <td>500</td>
                       <td>21/02/2561</td>
                     </tr>
                   </tbody>
@@ -157,7 +188,7 @@ export default {
         tooltipFormat: '<span style="color: {{color}}">&#9679;</span>{{offset:offset}} <br/>{{value:value}} รายการ'
       },
       item5: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
         datasets: [
           {
             label: 'การสั่งซื้อ',
@@ -167,7 +198,7 @@ export default {
         ]
       },
       item6: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
         datasets: [
           {
             label: 'การสั่งซื้อ (พิเศษ)',

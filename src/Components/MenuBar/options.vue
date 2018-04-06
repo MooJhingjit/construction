@@ -6,8 +6,9 @@
               <div class="desc">หน้าหลัก</div>
             </div>
             <div class="block container-block is-mobile-only" @click="goToPage('Ordering')">
-              <div class="icon"><i class="fa fa-tasks" aria-hidden="true"></i></div>
+              <div class="icon"><i class="fa fa-object-group" aria-hidden="true"></i></div>
               <div class="desc">สั่งซื้อ</div>
+              <span class="tag is-danger is-rounded">1</span>
             </div>
             <div class="block container-block is-mobile-only" @click="goToPage('xxxxxx')">
               <div class="icon"><i class="fa fa-th-large" aria-hidden="true"></i></div>

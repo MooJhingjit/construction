@@ -2,7 +2,7 @@
   <option-detail-template :templateObj="local.template">
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="search-status">
-      <!-- <div class="tags">        
+      <!-- <div class="tags">
         <span class="tag">เสร็จสิ้น 42</span>
         <span class="tag">รออนุมัติ 5</span>
         <span class="tag">ดำเนินงาน 3</span>
@@ -128,7 +128,6 @@
               </tbody>
             </table>
           </div>
-          
         </div>
           <!-- <div class="c-header container-block block">
             <div class="block name">

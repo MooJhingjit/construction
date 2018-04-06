@@ -5,7 +5,7 @@
        <article class="tile is-child notification">
         <div class="project-name">Project name</div>
         <div class="current-task">งานปัจจุบัน: วางกระเบื้อง</div>
-        <div class="next-task">
+        <!-- <div class="next-task">
           <div class="name">งานถัดไป: xxxxxxx</div>
           <div class="date">วันที่อัพเดท: xx-xx-xxxx</div>
           <table class="table is-narrow">
@@ -32,7 +32,7 @@
               </tr>
             </tbody>
           </table>
-        </div>
+        </div> -->
         <div class="actions container-block">
           <button class="button block" @click="GOTOPAGE('FrontSiteUpdate', 'abc')">สถานะงาน</button>
         </div>

@@ -1,13 +1,4 @@
-@import 'variable.scss';
-@import 'custom.scss';
-@import url('../node_modules/font-awesome/css/font-awesome.min.css');
-$widescreenMonitorBreakpoint : 1440px;
 html { 
-    background: url('Assets/Images/bg2.jpg') no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
     font-size: 14px !important;
     body{
         .container-block{
@@ -33,6 +24,7 @@ html {
           }
         }
         .wrapper{
+          position: fixed;
             .opa{
                 position: absolute;
                 height: 100vh;
@@ -67,11 +59,31 @@ html {
                   .options-panel{
                     flex: 1!important;
                   }
+                  span.tag{
+                    background-color: #fa6854 !important;
+                  }
+                  &>div{
+                    position: relative;
+                    .block.alert{
+                      &>i{
+                        position: absolute;
+                        top: -8px;
+                        right: -8px;
+                        font-size: 1.1em;
+                        color: #fa6854 !important;
+                      }
+                    }
+                  }
                   @media (min-width: $tabletBreakpoint+1) {
                     &>div{
                       display: flex !important;
                       .is-mobile-only{
                         display: none;
+                      }
+                      .block.alert{
+                        &>i{
+                          display: none;
+                        }
                       }
                     }
                     .on-mobile{
@@ -86,14 +98,11 @@ html {
                     font-size: 1.1em;
                     position: relative;
                     cursor: pointer;
-                    a{
-                      color: $second-text-white-color;
-                      &:hover{
-                          top: 1px;
-                          color: $frist-text-white-color;
-                      }
+                    color: $second-text-white-color;
+                    &:hover{
+                        top: -1px;
+                        color: $frist-text-white-color;
                     }
-                    
                 }
                 .options-panel{
                     flex: 0 !important;
@@ -109,8 +118,7 @@ html {
                         .icon-menu{
                             cursor: pointer;
                             i{
-                                
-                                font-size: 2em;
+                              font-size: 2.5em;
                             }
                         }
                         figure{
@@ -145,6 +153,7 @@ html {
                             flex-wrap: wrap;
                         }
                         .block{
+                            position: relative;
                             margin-bottom: 0;
                             min-width: 80px;
                             width: 80px;
@@ -160,6 +169,12 @@ html {
                             .desc{
                                 font-size: 0.85em;
                                 margin-top: 15px;
+                            }
+                            span.tag{
+                              position: absolute;
+                              top: 3px;
+                              right: 16px;
+                              font-size: 0.6em;
                             }
                             &:hover{
                               color: $frist-text-black-color;
@@ -212,6 +227,7 @@ html {
                                     }
                                     i.fa-power-off{
                                         color: $frist-text-red-color;
+                                        
                                     }
                                     &:hover{
                                         color: $frist-text-black-color;
@@ -500,18 +516,15 @@ html {
                   }
                   article{
                     background: rgba(255, 255, 255, 0.85) !important;
+                    .extar{
+                      color: $red;
+                    }
                   }
                 }
                 .ordering-detail-page{
                   .detail-panel{
                     .detail-block{
                       position: relative;
-                      .order-type{
-                        position: absolute;
-                        top: 0px;
-                        right: 0px;
-                        border-radius: 0px;
-                      }
                     }
                     .rows-table{
                       margin-bottom: 0;
@@ -685,36 +698,44 @@ html {
                   }
                   .detail-panel{
                     .detail-block{
-                      justify-content: space-between;
-                      flex-direction: row;
-                      &>.block{
-                        border: 1px solid #dedede;
-                        @media (min-width: $computerBreakpoint) {
-                          width: 190px;
-                          flex-direction: column;
-                        }
-                        margin: 10px;
-                        background: white;
+                      .c-header{
                         .name{
-                          text-align: center;
-                          flex: 0;
-                          margin: 5px;
                           font-weight: bold;
-                          font-size: 1.1em;
+                          font-size: 1.2em;
                         }
-                        .task{
-                          flex: 1;
-                          padding: 10px;
-                          ul {
-                            list-style: none;
-                            margin: 0;
+                      }
+                      .c-body{
+                        justify-content: space-between;
+                        flex-direction: column;
+                        &>.block{
+                          border: 1px solid #dedede;
+                          @media (min-width: $computerBreakpoint) {
+                            width: 190px;
+                            flex-direction: column;
+                          }
+                          margin: 10px;
+                          background: white;
+                          .name{
+                            text-align: center;
+                            flex: 0;
+                            margin: 5px;
+                            font-size: 1em;
+                          }
+                          .task{
+                            flex: 1;
+                            padding: 10px;
+                            ul {
+                              list-style: none;
+                              margin: 0;
+                            }
                           }
                         }
+                        @media (min-width: $computerBreakpoint) {
+                          flex-wrap: wrap;
+                          flex-direction: row !important;
+                        }
                       }
-                      @media (min-width: $computerBreakpoint) {
-                        flex-wrap: wrap;
-                        flex-direction: row !important;
-                      }
+                      
                     }
                   }
                 }
@@ -776,20 +797,31 @@ html {
                 .add-material-page{
                   .detail-block{
                     .c-header{
-                      .tag{
-                        cursor: pointer;
-                        &:hover{
-                          background: #9a9a9a;
+                      .info{
+                        flex-direction: column;
+                        &>.block{
+                          margin-bottom: 5px;
+                          .tag{
+                            margin-top: 5px;
+                            cursor: pointer;
+                            &:hover{
+                              background: #9a9a9a;
+                            }
+                          }
+                          .tag.active{
+                            background: #9a9a9a;
+                          }
                         }
-                      }
-                      .tag.active{
-                        background: #9a9a9a;
+                        @media (min-width: $computerBreakpoint) {
+                          flex-direction: row;
+                        }
                       }
                     }
                     .c-body{
                       .table-template{
                         margin-bottom: 20px;
                         table{
+                          min-width: 550px;
                           thead {
                             tr{
                               th{
@@ -871,6 +903,28 @@ html {
                       }
                     }
                     .detail-panel{
+                      .detail-block{
+                        position: relative;
+                        .type{
+                          position: absolute;
+                          top: 0px;
+                          right: 0px;
+                          border-radius: 0px;
+                        }
+                      }
+                      .c-header{
+                        .transparent-table{
+                          span.value{
+                            margin-left: 3px;
+                          }
+                        }
+                      }
+                      .c-body{
+                        overflow: auto;
+                        &>table{
+                          min-width: 550px;
+                        }
+                      }
                       // padding: 0.75rem;
                       flex: 7;
                       &>.container-block{
@@ -942,7 +996,7 @@ html {
                         }
                       }
                       .footer-panel{
-                        flex-direction: row;
+                        flex-direction: column;
                         flex-wrap: wrap;
                         justify-content: space-around;
                         button{
@@ -950,11 +1004,17 @@ html {
                           flex: 0;
                         }
                         button+button{
-                          // margin-left: 10px;
+                          margin-top: 10px;
                         }
                         padding: 15px !important;
                         border-top: 1px solid #c1c1c1;
                         background: rgba(232, 232, 232, 0.85) !important;
+                        @media (min-width: $computerBreakpoint) {
+                          flex-direction: row;
+                          button+button{
+                            margin-top: 0;
+                          }
+                        }
                       }
                     }
                   }

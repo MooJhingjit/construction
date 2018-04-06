@@ -37,18 +37,18 @@
     <template v-if="true">
       <template slot="detail">
         <div class="container-block detail-block">
-          <div class="block">
+          <div class="block c-header">
             <table class="transparent-table">
               <tr>
-                <td>โครงการ: 	<span class="value">รามอินทรา พหลโยธิน 50</span></td>
+                <td>โครงการ:<span class="value">รามอินทรา พหลโยธิน 50</span></td>
               </tr>
               <tr>
-                <td>เลขที่สัญญา: 	<span class="value">LH120243216</span></td>
-                <td>แปลน: <span class="value">C01</span></td>
+                <td>เลขที่สัญญา:<span class="value">LH120243216</span></td>
+                <td>แปลน:<span class="value">C01</span></td>
               </tr>
               <tr>
-                <td>แบบบ้าน: <span class="value">244CA248C</span></td>
-                <td>ขั้นตอนการตำเนินงาน: <span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
+                <td>แบบบ้าน:<span class="value">244CA248C</span></td>
+                <td>ขั้นตอนการตำเนินงาน:<span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
               </tr>
             </table>
           </div>
@@ -74,13 +74,14 @@
               </tr>
             </table>
           </div>
-          <div class="block">
+          <div class="block c-body">
             <table class="table is-bordered rows-table">
               <thead>
                 <tr>
                   <th>วัสดุ</th>
                   <th>จำนวน</th>
                   <th>ราคา</th>
+                  <th>หมายเหตุ</th>
                 </tr>
               </thead>
               <tbody>
@@ -89,6 +90,7 @@
                     <input class="input" type="text" placeholder="Text input">
                   </td>
                   <td width="20"><input class="input" type="text" placeholder="Text input"></td>
+                  <td width="150"><input class="input" type="text" placeholder="Text input"></td>
                   <td width="150"><input class="input" type="text" placeholder="Text input"></td>
                 </tr>
               </tbody>
