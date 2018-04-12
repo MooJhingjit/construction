@@ -22,6 +22,12 @@
           <i class="fa fa-search" aria-hidden="true"></i>
         </span>
       </div>
+      <div class="search-input control has-icons-left">
+        <input class="input" type="text" placeholder="ค้นหาแบบบ้าน">
+        <span class="icon is-small is-left">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+      </div>
     </template>
     <template slot="search-results">
       <table class="table is-hoverable">
@@ -138,9 +144,86 @@
               </tbody>
             </table>
           </div>
+          <div class="block c-extend">
+            <div class="container-block period">
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 1
+                </label>
+              </div>
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 2
+                </label>
+              </div>
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 3
+                </label>
+              </div>
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 4
+                </label>
+              </div>
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 5
+                </label>
+              </div>
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 6
+                </label>
+              </div>
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 7
+                </label>
+              </div>
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 8
+                </label>
+              </div>
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 9
+                </label>
+              </div>
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 10
+                </label>
+              </div>
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 11
+                </label>
+              </div>
+              <div class="block container-block">
+                <label class="checkbox">
+                  <input type="checkbox">
+                  งวดที่ 12
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="container-block footer-panel">
           <button class="button">เริ่มดำเนินงาน</button>
+          <button class="button">ปิดงาน (เสร็จสิ้น)</button>
         </div>
       </template>
     </template>

@@ -22,7 +22,7 @@
               <div class="icon"><i class="fa fa-home" aria-hidden="true"></i></div>
               <div class="desc">แบบบ้าน</div>
             </div>
-            <div class="block container-block" @click="goToPage('xxxxxx')">
+            <div class="block container-block" @click="goToPage('Workorder', '')">
               <div class="icon"><i class="fa fa-tasks" aria-hidden="true"></i></div>
               <div class="desc">ลำดับการทำงาน</div>
             </div>

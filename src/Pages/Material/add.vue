@@ -71,12 +71,29 @@
                       <th colspan="3">โรงรถขวา</th>
                     </tr>
                     <tr>
-                      <th>B3PW-1</th>
-                      <th>B3PW-2</th>
+                      <th colspan="3">
+                        <div class="select">
+                          <select>
+                            <option>-----</option>
+                            <option>B3PW-1</option>
+                            <option>B3PW-2</option>
+                          </select>
+                        </div>
+                      </th>
+                      <th colspan="3">
+                        <div class="select">
+                          <select>
+                            <option>-----</option>
+                             <option>B3PW-1</option>
+                            <option>B3PW-2</option>
+                          </select>
+                        </div>
+                      </th>
+                      <!-- <th>B3PW-2</th>
                       <th>B3PW-3</th>
                       <th>B3PW-1</th>
                       <th>B3PW-2</th>
-                      <th>B3PW-3</th>
+                      <th>B3PW-3</th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -84,12 +101,8 @@
                       <td><input type="text" class="input" value="แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า450kg/m²)  ขนาด 0.35 x 3.90 m."></td>
                       <td width="90"><input type="text" class="input" value="แผ่น"></td>
                       <td width="90"><input type="text" class="input" value="293.74"></td>
-                      <td width="90"><input type="text" class="input" value="18.00"></td>
-                      <td width="90"><input type="text" class="input" value="18.00"></td>
-                      <td width="90"><input type="text" class="input" value="18.00"></td>
-                      <td width="90"><input type="text" class="input" value="18.00"></td>
-                      <td width="90"><input type="text" class="input" value="18.00"></td>
-                      <td width="90"><input type="text" class="input" value="18.00"></td>
+                      <td colspan="3" width="90"><input type="text" class="input" value="18.00"></td>
+                      <td colspan="3" width="90"><input type="text" class="input" value="18.00"></td>
                     </tr>
                   </tbody>
                 </table>

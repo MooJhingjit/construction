@@ -126,7 +126,6 @@
               </div>
             </div>
           </div>
-          
         </div>
         <div class="container-block footer-panel">
             <button class="button">บันทึกข้อมูล</button>

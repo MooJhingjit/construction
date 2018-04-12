@@ -18,6 +18,8 @@ const Material = () => import('@Pages/Material')
 const AddMaterial = () => import('@Pages/Material/add')
 const Store = () => import('@Pages/Store')
 const House = () => import('@Pages/House/template')
+const Workorder = () => import('@Pages/Workorder')
+
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -112,6 +114,11 @@ export default new VueRouter({
       path: '/house-template',
       name: 'House',
       component: House
+    },
+    {
+      path: '/work-order',
+      name: 'Workorder',
+      component: Workorder
     }
   ]
 })

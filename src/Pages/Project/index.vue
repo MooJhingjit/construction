@@ -1,7 +1,12 @@
 <template>
   <option-detail-template :templateObj="local.template">
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
-    <template slot="search-status"></template>
+    <template slot="search-status">
+      <div class="tags">
+        <span class="tag">ดำเนินงาน</span>
+        <span class="tag">เสร็จสิ้น</span>
+      </div>
+    </template>
     <template slot="search-input">
       <div class="search-input control has-icons-left">
         <input class="input" type="text" placeholder="ค้นหา">

@@ -5,50 +5,56 @@
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-12">
           <div class="tile">
-            <div class="tile is-parent is-vertical is-12">
+            <div class="tile is-parent is-vertical is-6">
               <article class="tile is-child notification">
                 <div class="tile">
-                  <div class="tile is-parent is-vertical is-6">
-                    <div class="title">การสั่งซื้อ (วันนี้)</div>
-                    <table class="table is-bordered rows-table">
-                      <thead>
-                        <tr>
-                          <th>สัญญา</th>
-                          <th>แบบบ้าน</th>
-                          <th>จำนวน</th>
-                          <th>ราคารวม</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>LH120243216</td>
-                          <td>244CA248C</td>
-                          <td>2</td>
-                          <td>400</td>
-                        </tr>
-                         <tr>
-                          <td>244CA248C</td>
-                          <td>244CA248C</td>
-                          <td>1</td>
-                          <td>900</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <div class="table-options">
-                      <span class="tag is-light" @click="GOTOPAGE('LosingMaterial', '')">ดูข้อมูลทั้งหมด</span>
-                    </div>
-                  </div>
-                  <div class="tile is-parent is-vertical is-6">
-                    <bar-chart :data="item4"  :height="150" ></bar-chart>
+                  <div class="tile is-parent is-vertical is-12">
+                    <bar-chart :data="item6"  :height="150" ></bar-chart>
                   </div>
                 </div>
               </article>
               <article class="tile is-child notification">
                 <div class="tile">
-                  <div class="tile is-parent is-vertical is-6">
-                    <div class="title">การจ่ายงวดงาน</div>
+                  <div class="tile is-parent is-vertical is-12">
+                    <bar-chart :data="item4"  :height="150" ></bar-chart>
                   </div>
-                  <div class="tile is-parent is-vertical is-6">
+                </div>
+              </article>
+            </div>
+            <div class="tile is-parent is-vertical ">
+              <article class="tile is-child notification">
+                <div class="container-block search-all">
+                  <div class="block">
+                    <div class="title">ปี</div>
+                    <div class="select">
+                      <select>
+                        <option>ทั้งหมด</option>
+                        <option>2018</option>
+                        <option>2018</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="block">
+                    <div class="title">เดือน</div>
+                    <div class="select">
+                      <select>
+                        <option>ทั้งหมด</option>
+                        <option>2018</option>
+                        <option>2018</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="container-block search-project">
+                  <div class="block">
+                    <div class="title"></div>
+                    <button class="button is-link">ค้นหาโดยโครงการ</button>
+                  </div>
+                </div>
+              </article>
+              <article class="tile is-child notification">
+                <div class="tile">
+                  <div class="tile is-parent is-vertical is-12">
                     <bar-chart :data="item5"  :height="150" ></bar-chart>
                   </div>
                 </div>
@@ -110,7 +116,7 @@ export default {
         tooltipFormat: '<span style="color: {{color}}">&#9679;</span>{{offset:offset}} <br/>{{value:value}} รายการ'
       },
       item4: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
         datasets: [
           {
             label: 'การสั่งซื้อ',
@@ -120,10 +126,20 @@ export default {
         ]
       },
       item5: {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
         datasets: [
           {
             label: 'การจ่ายค่างวด',
+            backgroundColor: '#E3E3E3',
+            data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
+          }
+        ]
+      },
+      item6: {
+        labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        datasets: [
+          {
+            label: 'ความสูญเสียรวม',
             backgroundColor: '#E3E3E3',
             data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
           }

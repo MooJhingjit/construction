@@ -64,12 +64,6 @@
               </div>
             </div>
             <div class="container-block">
-              <div class="text-title">เมนูสี</div>
-              <div class="value">
-                <input type="text" value="B2-2" placeholder="Primary input" class="input">
-              </div>
-            </div>
-            <div class="container-block">
               <div class="text-title">เมนูกระเบื้อง</div>
               <div class="value">
                 <input type="text" value="098SW-8SR2" placeholder="Primary input" class="input">
@@ -95,6 +89,16 @@
                     <option>ซ้าย</option>
                   </select>
                 </div>
+              </div>
+            </div>
+            <div class="container-block">
+              <div class="text-title">เมนูสี</div>
+              <div class="select">
+                <select>
+                  <option>B3PW-1</option>
+                  <option>B3PW-2</option>
+                  <option>B3PW-3</option>
+                </select>
               </div>
             </div>
           </div>

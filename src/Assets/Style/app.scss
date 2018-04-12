@@ -577,6 +577,8 @@ html {
                 }
                 .losing-page{
                   article{
+                    display: flex;
+                    flex-direction: column;
                     .title{
                       color: $frist-text-black-color !important;
                     }
@@ -592,6 +594,23 @@ html {
                       .is-parent{
                         margin: 0 !important;
                         padding: 0 !important;
+                      }
+                    }
+                    .search-all{
+                      flex: 1;
+                      .search-btn{
+                        .title{
+                          height: 18px !important;
+                        }
+                      }
+                    }
+                    .search-project{
+                      flex: 1;
+                      border-top: 1px solid $github;
+                      justify-content: center;
+                      align-items: center;
+                      .block{
+                        text-align: center;
                       }
                     }
                   }
@@ -745,6 +764,33 @@ html {
                       font-size: 1.2em;
                       margin-bottom: 5px;
                     }
+                    .c-extend{
+                      .period{
+                        flex-direction: row;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        align-items: center;
+                        .block{
+                          min-width: 120px;
+                          max-width: 120px;
+                          background: $white;
+                          margin: 10px;
+                          height: 40px;
+                          justify-content: center;
+                          align-items: center;
+                          input{
+                            position: relative;
+                            top: 2px;
+                          }
+                          @media (min-width: $computerBreakpoint) {
+                            min-width: 120px;
+                            input{
+                              top: 0px;
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
                 .create-contract-page, .add-material-page{
@@ -895,12 +941,34 @@ html {
                           }
                         }
                       }
+                      .expand{
+                        text-align: center;
+                        background: $white;
+                        display: none;
+                        i{
+                          font-size: 1.1em;
+                        }
+                      }
                       .function{
                         padding-top: 15px;
                         button{
                           margin-bottom: 5px;
                         }
                       }
+                    }
+                    .options-panel.small{
+                      flex:0px;
+                      max-width: 40px;
+                      &>.container-block{
+                        display: none;
+                      }
+                      .expand{
+                        display: block !important;
+                        i{
+                          color: $black;
+                        }
+                      }
+                      
                     }
                     .detail-panel{
                       .detail-block{

@@ -14,6 +14,9 @@
             <slot name="search-results"></slot>
           </div>
         </div>
+        <div class="expand">
+          <i class="fa fa-expand" aria-hidden="true"></i>
+        </div>
         <div class="container-block function">
           <!-- <button class="button is-link">เพิ่มข้อมูล</button> -->
           <!-- <button class="button is-info">เพิ่มรายการสั่งซื้อใหม่</button> -->

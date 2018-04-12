@@ -2,13 +2,13 @@
 <template>
   <div class="wrapper">
     <div class="background" style="
-  background: url('../static/img/bg2.jpg');
-  background-repeat: no-repeat;
-  background-position: center;
-  position: fixed;
-  height: 100%;
-  width: 100%;`
-  background-size: cover;"></div>
+    background: url('../static/img/bg2.jpg');
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-size: cover;"></div>
     <div class="content">
       <div class="menu-bar">
         <menu-bar :isDisableMenu="local.isDisableMenu" @setMenuStatus="pageClick"></menu-bar>

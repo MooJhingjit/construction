@@ -12,7 +12,19 @@
     </template>
     <template slot="search-input">
       <div class="search-input control has-icons-left">
+        <input class="input" type="text" placeholder="ค้นหาโครงการ">
+        <span class="icon is-small is-left">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+      </div>
+      <div class="search-input control has-icons-left">
         <input class="input" type="text" placeholder="ค้นหา" value="LH120610029">
+        <span class="icon is-small is-left">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+      </div>
+      <div class="search-input control has-icons-left">
+        <input class="input" type="text" placeholder="ค้นหาแบบบ้าน">
         <span class="icon is-small is-left">
           <i class="fa fa-search" aria-hidden="true"></i>
         </span>
