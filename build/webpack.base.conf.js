@@ -40,7 +40,9 @@ module.exports = {
       '@Modules': resolve('node_modules'),
       '@Pages': resolve('src/Pages'),
       '@Components': resolve('src/Components'),
-      '@Libraries': resolve('src/Libraries')
+      '@Libraries': resolve('src/Libraries'),
+      '@Services': resolve('src/Services'),
+      '@Config': resolve('src/Config')
     }
   },
   module: {

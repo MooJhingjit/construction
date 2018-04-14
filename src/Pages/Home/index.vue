@@ -127,6 +127,8 @@
 import barChart from '@Components/Chart/bar'
 import sparkLine from '@Components/Chart/spark-line'
 import breadcrumbBar from '@Components/Breadcrumb'
+import service from '@Services/app-service'
+import config from '@Config/app.config'
 export default {
   props: {
     // templateName: {
@@ -142,6 +144,8 @@ export default {
   name: 'HomePage',
   data () {
     return {
+      server: {
+      },
       local: {
         pageObj: {
           items: [
@@ -218,6 +222,7 @@ export default {
     // }
   },
   created () {
+    this.fetchData()
     // console.log('created')
     // this.property = 'Example property update.'
     // console.log('propertyComputed will update, as this.property is now reactive.')
@@ -252,9 +257,20 @@ export default {
     // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
   },
   methods: {
-    // goToPage (routeName, key = '') {
-    //   this.GOTOPAGE(routeName, key)
-    // }
+    fetchData () {
+      let resourceName = config.api.home.index
+      let queryString = {}
+      service.getResource({resourceName, queryString})
+        .then((res) => {
+          if (res.status === 200) {
+            this.server = res.data
+          }
+        })
+        .catch(() => {
+          console.log()
+          this.GOTOPAGE('Login', '')
+        })
+    }
   }
 }
 </script>

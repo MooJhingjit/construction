@@ -10,45 +10,59 @@
     right: 0;
     background-size: cover;"></div>
     <div class="content">
-      <div class="menu-bar">
+      <div class="menu-bar" v-if="local.showMenubar">
         <menu-bar :isDisableMenu="local.isDisableMenu" @setMenuStatus="pageClick"></menu-bar>
       </div>
-      <!-- <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-          <li><a href="#">Bulma</a></li>
-          <li class="is-active"><a href="#" aria-current="page">Breadcrumb</a></li>
-        </ul>
-      </nav> -->
       <div class="page-content" @click="pageClick()">
         <transition name="fade">
           <router-view></router-view>
         </transition>
       </div>
     </div>
-    <model-panel></model-panel>
+    <!-- <model-panel></model-panel> -->
   </div>
 </template>
 
 <script>
 import MenuBar from '@Components/MenuBar'
-import ModelPanel from '@Components/Model'
+import Helper from '@Libraries/common.helpers'
+// import ModelPanel from '@Components/Model'
 export default {
   components: {
-    MenuBar,
-    ModelPanel
+    MenuBar
+    // ModelPanel
   },
   name: 'app',
   data () {
     return {
       local: {
-        isDisableMenu: false
+        isDisableMenu: false,
+        isAuth: false,
+        showMenubar: false
       }
     }
   },
+  created () {
+    // if (this.$route.name !== 'Login') {
+    //   console.log(this.$route.name)
+    //   this.local.showMenubar = true
+    // } else {
+    //   console.log(111)
+    //   this.local.showMenubar = false
+    // }
+  },
   updated () {
-    // console.log('updated')
+    this.checkAuth()
   },
   methods: {
+    checkAuth () {
+      let token = Helper.GET_STORAGEITEM('app_token')
+      if (!token) {
+        this.GOTOPAGE('Login', '')
+        return
+      }
+      this.local.isAuth = true
+    },
     pageClick (tf = true) {
       this.local.isDisableMenu = tf
     }

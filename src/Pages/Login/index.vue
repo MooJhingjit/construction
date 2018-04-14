@@ -20,9 +20,6 @@
               </span>
             </div>
           </div>
-          <!-- <div class="block options container-block">
-            <div class="block">ลืมรหัสผ่าน</div>
-          </div> -->
           <div class="block submit">
             <button class="button" @click="submit()">เข้าสู่ระบบ</button>
           </div>
@@ -33,6 +30,9 @@
 </template>
 
 <script>
+import service from '@Services/app-service'
+import config from '@Config/app.config'
+import Helper from '@Libraries/common.helpers'
 export default {
   props: {
     // templateName: {
@@ -50,10 +50,28 @@ export default {
   },
   methods: {
     submit () {
-      this.$router.push({
-        name: 'Home',
-        params: {id: 'id'}
-      })
+      this.login()
+      // this.$router.push({
+      //   name: 'Home',
+      //   params: {id: 'id'}
+      // })
+    },
+    login () {
+      let resourceName = config.api.login
+      let data = {
+        username: 'pokkrong',
+        password: '1234'
+      }
+      service.postData({resourceName, data})
+        .then((res) => {
+          if (res.status === 200) {
+            Helper.SET_STORAGEITEM('app_token', res.data.token)
+            this.GOTOPAGE('Home', '')
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   }
 }
