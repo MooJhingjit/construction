@@ -4,7 +4,11 @@ const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use('/api', 
-  [require('./home'), require('./login')]
+  [
+    require('./home'),
+    require('./login'),
+    require('./user')
+  ]
 );
 
 module.exports = app;

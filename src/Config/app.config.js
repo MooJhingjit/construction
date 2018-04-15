@@ -4,6 +4,9 @@ const api = {
   'login': '/login',
   'home': {
     'index': '/home/index'
+  },
+  'user': {
+    'index': '/user'
   }
 }
 
