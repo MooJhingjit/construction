@@ -1,26 +1,48 @@
-const connection = require('../Database/connect')
+const userModel = require('../Models/userModel')
+const db = require('../Database/index')
+db.connect(function(err) {
+  if (err) return err
+})
 
-// connection.connect(function(err) {
-//   if (err) throw err
-//   console.log('You are now connected...')
-// })
+module.exports =  class User {  
+  constructor(id = '') {
+    this.id = id;
+    this.name
+    this.username
+    this.password
+    this.email
+    this.phone
+    this.address
+  }
 
-module.exports.test = () => {
-  connection.connect(function(err) {
-    if (err) throw err
-    console.log('You are now connected...')
-    connection.query('CREATE TABLE people(id int primary key, name varchar(255), age int, address text)', function(err, result) {
-      if (err) throw err
-      connection.query('INSERT INTO people (id, name, age, address) VALUES (?, ?, ?, ?)', [1, 'Larry', '41', 'California, USA'], function(err, result) {
-        if (err) throw err
-        connection.query('SELECT * FROM people', function(err, results) {
-          if (err) throw err
-          console.log(results[0].id)
-          console.log(results[0].name)
-          console.log(results[0].age)
-          console.log(results[0].address)
-        })
-      })
-    }) 
-  })
+  getUser (callback) {
+    db.query(`SELECT * FROM user WHERE id = ${this.id}`, (err, result) => {
+      return callback(result);
+    })
+    
+  }
+
+  getAllUsers (callback) {
+    db.query(`SELECT * FROM user`, (err, result) => {
+      return callback(result);
+    })
+  }
+
+  save () {
+    db.query('INSERT INTO user (id, name, username, password, email, phone, address) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [
+      null,
+      this.name,
+      this.username,
+      this.password,
+      this.email,
+      this.phone,
+      this.address
+    ],
+    function(err, result) {
+      console.log(err)
+      if (err) return 'err'
+      return 'result'
+    })
+  }
 }

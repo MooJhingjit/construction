@@ -19,9 +19,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Pokkrong Jhingjit</td>
-            <td>ผู้ดูแลระบบ</td>
+          <tr :class="{'selected': user.id == local.idSelected}" :key="index" v-for="(user, index) in local.users" @click="setUserDetail(user)">
+            <td>{{user.name}}</td>
+            <td>{{user.email}}</td>
           </tr>
         </tbody>
       </table>
@@ -43,35 +43,35 @@
             </div>
           </div>
           <div class="form-detail">
-            <div class="name">Pokkrong Jhingjit</div>
+            <div class="name">{{local.user.name}}</div>
             <div class="container-block">
               <div class="text-title">ชื่อ-นามสกุล</div>
-              <div class="value"><input class="input" type="text" value="Pokkrong Jhingjit" placeholder="ชื่อ-นามสกุล"></div>
+              <div class="value"><input class="input" type="text" v-model="local.user.name" value="Pokkrong Jhingjit" placeholder="ชื่อ-นามสกุล"></div>
             </div>
             <div class="container-block">
               <div class="text-title">ชื่อผู้ใช้</div>
-              <div class="value"><input class="input" type="text" placeholder="ชื่อผู้ใช้"></div>
+              <div class="value"><input class="input" type="text" v-model="local.user.username" placeholder="ชื่อผู้ใช้"></div>
             </div>
             <div class="container-block">
               <div class="text-title">รหัสผ่าน</div>
-              <div class="value"><input class="input" type="text" placeholder="รหัสผ่าน"></div>
+              <div class="value"><input class="input" type="text" v-model="local.user.password" placeholder="รหัสผ่าน"></div>
             </div>
             <div class="container-block">
               <div class="text-title">อีเมล์</div>
-              <div class="value"><input class="input" type="text" placeholder="อีเมล์"></div>
+              <div class="value"><input class="input" type="text" v-model="local.user.email" placeholder="อีเมล์"></div>
             </div>
             <div class="container-block">
               <div class="text-title">เบอร์โทรศัพท์</div>
-              <div class="value"><input class="input" type="text" placeholder="เบอร์โทรศัพท์"></div>
+              <div class="value"><input class="input" type="text" v-model="local.user.phone" placeholder="เบอร์โทรศัพท์"></div>
             </div>
             <div class="container-block">
               <div class="text-title">ที่อยู่</div>
-              <div class="value"><textarea class="textarea" id="" cols="30" rows="4"></textarea></div>
+              <div class="value"><textarea class="textarea" id="" v-model="local.user.address" cols="30" rows="4"></textarea></div>
             </div>
           </div>
         </div>
         <div class="container-block footer-panel">
-          <button class="button">บันทึกข้อมูล</button>
+          <button class="button" @click="submit()">บันทึกข้อมูล</button>
         </div>
       </template>
     </template>
@@ -126,29 +126,62 @@ export default {
         },
         template: {
           class: 'user-page'
-        }
+        },
+        idSelected: '',
+        user: {},
+        users: {}
       },
-      server: {}
+      server: {
+      }
     }
   },
   computed: {
   },
   created () {
     this.fetchData()
+    this.fetchAllData()
   },
   methods: {
-     fetchData () {
-      let resourceName = config.api.user.index
+    fetchData () {
+      let resourceName = config.api.users.index + '/16'
       let queryString = {}
       service.getResource({resourceName, queryString})
         .then((res) => {
           if (res.status === 200) {
-            this.server = res.data
-            console.log(this.server)
+            this.local.user = res.data
+            this.local.idSelected = this.local.user.id
           }
         })
         .catch(() => {
           this.GOTOPAGE('Login', '')
+        })
+    },
+    fetchAllData () {
+      let resourceName = config.api.users.index
+      let queryString = {}
+      service.getResource({resourceName, queryString})
+        .then((res) => {
+          if (res.status === 200) {
+            this.local.users = res.data
+          }
+        })
+        .catch(() => {
+        })
+    },
+    setUserDetail (user) {
+      this.local.user = user
+      this.local.idSelected = user.id
+    },
+    submit () {
+      let data = this.local.user
+      let resourceName = config.api.users.index
+      service.postResource({data, resourceName})
+        .then((res) => {
+          if (res.status === 200) {
+            console.log(res)
+          }
+        })
+        .catch(() => {
         })
     }
   }

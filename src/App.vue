@@ -38,7 +38,7 @@ export default {
       local: {
         isDisableMenu: false,
         isAuth: false,
-        showMenubar: false
+        showMenubar: true
       }
     }
   },

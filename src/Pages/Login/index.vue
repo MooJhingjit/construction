@@ -62,7 +62,7 @@ export default {
         username: 'pokkrong',
         password: '1234'
       }
-      service.postData({resourceName, data})
+      service.postResource({resourceName, data})
         .then((res) => {
           if (res.status === 200) {
             Helper.SET_STORAGEITEM('app_token', res.data.token)

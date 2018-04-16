@@ -9,3 +9,10 @@
 //     res.status(403).send('Forbidden')
 //   }
 // }
+const jwtDecode = require('jwt-decode')
+
+module.exports.getUserAuth = (token) => {
+  let bearer = token.split(' ');
+  let decoded = jwtDecode(bearer[1]);
+  return decoded.user
+}

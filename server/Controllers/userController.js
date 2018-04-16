@@ -2,18 +2,35 @@
 // const app = express();
 // const bodyParser = require('body-parser');
 // app.use(bodyParser.json());
-const userRepository = require('../Repository/userRepository')
+const helpers = require('../Libraries/helpers')
+const userModel = require('../Models/userModel')
 module.exports.getUser = (req, res, next) => {
-  let user = new userRepository('1')
-  let isSuccess = true
+  let userData = helpers.getUserAuth(req.headers['authorization'])
+  let user = new userModel(userData.id)
+  user.getUser((result) => {
+    res.status(200).json(result[0])
+  })
+}
 
-  let result = user.getUser(req.params.key)
-
-  if (isSuccess) {
+module.exports.getAllUsers = (req, res, next) => {
+  let user = new userModel()
+  user.getAllUsers((result) => {
     res.status(200).json(result)
-  } else {
-    res.status(400).json({'message': 'error'})
-  }
+  })
+}
+
+module.exports.create = (req, res, next) => {
+  // console.log(req.body.na)
+  let newUser = new userModel()
+  newUser.name= req.body.data.name
+  newUser.username = req.body.data.username
+  newUser.password = req.body.data.password
+  newUser.email = req.body.data.email
+  newUser.phone = req.body.data.phone
+  newUser.address = req.body.data.address
+  let result = newUser.save()
+  // console.log(result)
+  res.status(200).json(result)
 }
 
 module.exports.addUser = () => {

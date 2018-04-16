@@ -25,7 +25,7 @@ const getResource = (obj, callback) => {
   })
 }
 
-const postData = (obj, callback) => {
+const postResource = (obj, callback) => {
   return new Promise((resolve, reject) => {
     let instance = createHeader()
     instance.post(commonHelper.GET_FULLAPI(obj.resourceName), {
@@ -42,5 +42,5 @@ const postData = (obj, callback) => {
 
 export default {
   getResource,
-  postData
+  postResource
 }
