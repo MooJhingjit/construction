@@ -33,6 +33,7 @@
 import service from '@Services/app-service'
 import config from '@Config/app.config'
 import Helper from '@Libraries/common.helpers'
+import { mapActions } from 'vuex'
 export default {
   props: {
     // templateName: {
@@ -49,6 +50,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'setAuth'
+    ]),
     submit () {
       this.login()
       // this.$router.push({
@@ -65,7 +69,9 @@ export default {
       service.postResource({resourceName, data})
         .then((res) => {
           if (res.status === 200) {
+            Helper.SET_STORAGEITEM('isAuth', 1)
             Helper.SET_STORAGEITEM('app_token', res.data.token)
+            this.setAuth(true)
             this.GOTOPAGE('Home', '')
           }
         })

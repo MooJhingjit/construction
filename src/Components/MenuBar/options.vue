@@ -34,7 +34,7 @@
               <div class="icon"><i class="fa fa-check-square-o" aria-hidden="true"></i></div>
               <div class="desc">สิทธิ์การใช้งาน</div>
             </div>
-            <div class="block container-block" @click="goToPage('User', 'all')">
+            <div class="block container-block" @click="goToPage('Users', '')">
               <div class="icon"><i class="fa fa-address-book-o" aria-hidden="true"></i></div>
               <div class="desc">ผู้ใช้งาน</div>
             </div>

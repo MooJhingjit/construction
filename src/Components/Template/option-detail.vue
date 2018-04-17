@@ -2,7 +2,7 @@
   <section :class="['section', this.templateObj.class]">
     <slot name="title"></slot>
     <div class="container-block">
-      <div class="options-panel">
+      <div :class="{'options-panel':true, 'small': isSmallOptions}">
         <div class="container-block">
           <div class="search-status">
             <slot name="search-status"></slot>
@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="expand">
-          <i class="fa fa-expand" aria-hidden="true"></i>
+          <i class="fa fa-expand" aria-hidden="true" @click="expandOptionsPanel()"></i>
         </div>
         <div class="container-block function">
           <!-- <button class="button is-link">เพิ่มข้อมูล</button> -->
@@ -36,6 +36,10 @@ export default {
     templateObj: {
       type: Object,
       required: true
+    },
+    optionMinimize: {
+      type: Boolean,
+      required: false
     }
   },
   components: {
@@ -43,7 +47,7 @@ export default {
   name: 'optionsDetailTemplate',
   data () {
     return {
-      property: 'Blank'
+      isSmallOptions: false
     }
   },
   computed: {
@@ -56,36 +60,15 @@ export default {
     // this.property = 'Example property update.'
     // console.log('propertyComputed will update, as this.property is now reactive.')
   },
-  beforeMount () {
-    // console.log('beforeMount')
-    // console.log(`this.$el doesn't exist yet, but it will soon!`)
-  },
-  mounted () {
-    // console.log('mounted')
-    // console.log(this.$el.textContent) // I'm text inside the component.
-  },
-  beforeUpdate () {
-    // console.log('beforeUpdate')
-    // console.log(this.counter) // Logs the counter value every second, before the DOM updates.
-  },
-  updated () {
-    // console.log('updated')
-    // Fired every second, should always be true
-    // console.log(+this.$refs['dom-element'].textContent === this.counter)
-  },
-  beforeDestroy () {
-    // console.log('beforeDestroy')
-    // Perform the teardown procedure for someLeakyProperty.
-    // (In this case, effectively nothing)
-    // this.someLeakyProperty = null
-    // delete this.someLeakyProperty
-  },
-  destroyed () {
-    // console.log('destroyed')
-    // console.log(this) // There's practically nothing here!
-    // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
-  },
   methods: {
+    expandOptionsPanel () {
+      this.isSmallOptions = false
+    }
+  },
+  watch: {
+    optionMinimize: function () {
+      this.isSmallOptions = this.optionMinimize
+    }
   }
 }
 </script>

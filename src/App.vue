@@ -10,7 +10,7 @@
     right: 0;
     background-size: cover;"></div>
     <div class="content">
-      <div class="menu-bar" v-if="local.showMenubar">
+      <div class="menu-bar" v-if="auth">
         <menu-bar :isDisableMenu="local.isDisableMenu" @setMenuStatus="pageClick"></menu-bar>
       </div>
       <div class="page-content" @click="pageClick()">
@@ -25,7 +25,10 @@
 
 <script>
 import MenuBar from '@Components/MenuBar'
+import service from '@Services/app-service'
+import config from '@Config/app.config'
 import Helper from '@Libraries/common.helpers'
+import { mapGetters, mapActions } from 'vuex'
 // import ModelPanel from '@Components/Model'
 export default {
   components: {
@@ -36,13 +39,22 @@ export default {
   data () {
     return {
       local: {
-        isDisableMenu: false,
-        isAuth: false,
-        showMenubar: true
-      }
+        isDisableMenu: false
+        // isAuth: false,
+        // showMenubar: true
+      },
+      server: {}
     }
   },
+  computed: {
+    ...mapGetters([
+      'userData',
+      'auth'
+    ])
+  },
   created () {
+    this.checkAuth()
+    this.fetchData()
     // if (this.$route.name !== 'Login') {
     //   console.log(this.$route.name)
     //   this.local.showMenubar = true
@@ -55,13 +67,31 @@ export default {
     this.checkAuth()
   },
   methods: {
+    ...mapActions([
+      'setUserData',
+      'setAuth'
+    ]),
+    fetchData () {
+      let resourceName = config.api.app.resource
+      let queryString = {}
+      service.getResource({resourceName, queryString})
+        .then((res) => {
+          if (res.status === 200) {
+            this.server = res.data
+            this.setUserData(this.server.userData)
+          }
+        })
+        .catch(() => {
+          this.GOTOPAGE('Login', '')
+        })
+    },
     checkAuth () {
+      let isAuth = Helper.GET_STORAGEITEM('isAuth')
       let token = Helper.GET_STORAGEITEM('app_token')
-      if (!token) {
+      if (!isAuth || !token) {
+        this.setAuth(false)
         this.GOTOPAGE('Login', '')
-        return
       }
-      this.local.isAuth = true
     },
     pageClick (tf = true) {
       this.local.isDisableMenu = tf

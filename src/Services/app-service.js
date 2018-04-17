@@ -40,7 +40,23 @@ const postResource = (obj, callback) => {
   })
 }
 
+const putResource = (obj, callback) => {
+  return new Promise((resolve, reject) => {
+    let instance = createHeader()
+    instance.put(commonHelper.GET_FULLAPI(obj.resourceName), {
+      data: obj.data
+    })
+      .then((res) => {
+        resolve(res)
+      })
+      .catch((err) => {
+        reject(err)
+      })
+  })
+}
+
 export default {
   getResource,
-  postResource
+  postResource,
+  putResource
 }

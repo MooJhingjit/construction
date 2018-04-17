@@ -24,11 +24,27 @@ module.exports.create = (req, res, next) => {
   let newUser = new userModel()
   newUser.name= req.body.data.name
   newUser.username = req.body.data.username
-  newUser.password = req.body.data.password
+  newUser.password = '123456'
   newUser.email = req.body.data.email
   newUser.phone = req.body.data.phone
   newUser.address = req.body.data.address
+  newUser.position = req.body.data.position
   let result = newUser.save()
+  // console.log(result)
+  res.status(200).json(result)
+}
+
+module.exports.update = (req, res, next) => {
+  // console.log(req.body.na)
+  let user = new userModel(req.params.id)
+  user.name= req.body.data.name
+  user.username = req.body.data.username
+  // user.password = '123456'
+  user.email = req.body.data.email
+  user.phone = req.body.data.phone
+  user.address = req.body.data.address
+  user.position = req.body.data.position
+  let result = user.update()
   // console.log(result)
   res.status(200).json(result)
 }

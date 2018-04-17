@@ -5,7 +5,7 @@ const Login = () => import('@Pages/Login')
 const Ordering = () => import('@Pages/Ordering')
 const OrderingDetail = () => import('@Pages/Ordering/detail')
 const OrderingExtra = () => import('@Pages/Ordering/extra')
-const User = () => import('@Pages/User')
+const Users = () => import('@Pages/User')
 const Authority = () => import('@Pages/Authority')
 const Project = () => import('@Pages/Project')
 const Contract = () => import('@Pages/Contract')
@@ -51,9 +51,9 @@ export default new VueRouter({
       component: OrderingDetail
     },
     {
-      path: '/user/:key',
-      name: 'User',
-      component: User
+      path: '/users',
+      name: 'Users',
+      component: Users
     },
     {
       path: '/authority/:key',

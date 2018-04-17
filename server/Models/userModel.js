@@ -13,6 +13,7 @@ module.exports =  class User {
     this.email
     this.phone
     this.address
+    this.position
   }
 
   getUser (callback) {
@@ -29,7 +30,7 @@ module.exports =  class User {
   }
 
   save () {
-    db.query('INSERT INTO user (id, name, username, password, email, phone, address) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    db.query('INSERT INTO user (id, name, username, password, email, phone, address, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
     [
       null,
       this.name,
@@ -37,12 +38,29 @@ module.exports =  class User {
       this.password,
       this.email,
       this.phone,
-      this.address
+      this.address,
+      this.position
     ],
-    function(err, result) {
+    function (err, result) {
       console.log(err)
       if (err) return 'err'
       return 'result'
     })
+  }
+
+  update () {
+    var sql = `UPDATE user SET 
+    name = ?,
+    username = ?,
+    email = ?,
+    phone = ?,
+    address = ?,
+    position = ?
+    WHERE id = ?
+    `;
+    db.query(sql, [this.name, this.username, this.email, this.phone, this.address, this.position, this.id],function (err, result) {
+      if (err) throw err;
+      console.log(result.affectedRows + " record(s) updated");
+    });
   }
 }

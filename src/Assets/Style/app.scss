@@ -898,6 +898,7 @@ html {
                     @media (min-width: $computerBreakpoint) {
                       flex-direction: row;
                     }
+                    transition: all 0.5s ease;
                     .options-panel{
                       font-size: 0.9em;
                       flex: 3;
@@ -942,6 +943,7 @@ html {
                         }
                       }
                       .expand{
+                        cursor: pointer;
                         text-align: center;
                         background: $white;
                         display: none;
@@ -1040,6 +1042,7 @@ html {
                       .empty-panel{
                         align-items: center;
                         justify-content: center;
+                        height: 100%;
                         &>.block{
                           max-width: 400px;
                           flex-direction: column;

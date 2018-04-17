@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use('/api', 
   [
+    require('./app'),
     require('./home'),
     require('./login'),
     require('./user')
