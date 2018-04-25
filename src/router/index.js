@@ -13,7 +13,7 @@ const CreateContract = () => import('@Pages/Contract/create')
 const FrontSite = () => import('@Pages/FrontSite')
 const FrontSiteUpdate = () => import('@Pages/FrontSite/update-status')
 const Losing = () => import('@Pages/Losing')
-const LosingMaterial = () => import('@Pages/Losing/material')
+const LosingDetail = () => import('@Pages/Losing/detail')
 const Material = () => import('@Pages/Material')
 const AddMaterial = () => import('@Pages/Material/add')
 const Store = () => import('@Pages/Store')
@@ -91,9 +91,9 @@ export default new VueRouter({
       component: Losing
     },
     {
-      path: '/losing/material',
-      name: 'LosingMaterial',
-      component: LosingMaterial
+      path: '/losing/detail',
+      name: 'LosingDetail',
+      component: LosingDetail
     },
     {
       path: '/material/add',

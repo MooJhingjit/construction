@@ -4,8 +4,8 @@
     <div class="container-block">
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-12">
-          <div class="tile">
-            <div class="tile is-parent is-vertical is-6">
+          <!-- <div class="tile">
+            <div class="tile is-parent is-vertical is-12">
               <article class="tile is-child notification">
                 <div class="tile">
                   <div class="tile is-parent is-vertical is-12">
@@ -13,6 +13,53 @@
                   </div>
                 </div>
               </article>
+            </div>
+          </div> -->
+          <div class="tile">
+            <div class="tile is-parent is-vertical is-9">
+              <article class="tile is-child notification">
+                <div class="tile">
+                  <div class="tile is-parent is-vertical is-12">
+                    <bar-chart :data="item6"  :height="150" ></bar-chart>
+                  </div>
+                </div>
+              </article>
+            </div>
+            <div class="tile is-parent is-vertical">
+              <article class="tile is-child notification">
+                <div class="search-box container-block">
+                  <h6>ค้นหา</h6>
+                  <div class="block">
+                    <span>ปี : </span> <input type="text" class="input" />
+                  </div>
+                  <div class="block">
+                    <span>เดือน : </span> <input type="text" class="input" />
+                  </div>
+                  <div class="block">
+                    <div class="field is-grouped is-grouped-multiline">
+                      <div class="control">
+                        <div class="tags has-addons">
+                          <span class="tag is-light">โครงการ</span>
+                          <span class="tag is-info">5</span>
+                        </div>
+                      </div>
+                      <div class="control">
+                        <div class="tags has-addons">
+                          <span class="tag is-light">สัญญา</span>
+                          <span class="tag is-info">25</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="block">
+                    <button class="button is-link" @click="GOTOPAGE('LosingDetail', '')">รายละเอียด</button>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+          <div class="tile">
+            <div class="tile is-parent is-vertical is-6">
               <article class="tile is-child notification">
                 <div class="tile">
                   <div class="tile is-parent is-vertical is-12">
@@ -21,37 +68,7 @@
                 </div>
               </article>
             </div>
-            <div class="tile is-parent is-vertical ">
-              <article class="tile is-child notification">
-                <div class="container-block search-all">
-                  <div class="block">
-                    <div class="title">ปี</div>
-                    <div class="select">
-                      <select>
-                        <option>ทั้งหมด</option>
-                        <option>2018</option>
-                        <option>2018</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="block">
-                    <div class="title">เดือน</div>
-                    <div class="select">
-                      <select>
-                        <option>ทั้งหมด</option>
-                        <option>2018</option>
-                        <option>2018</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="container-block search-project">
-                  <div class="block">
-                    <div class="title"></div>
-                    <button class="button is-link">ค้นหาโดยโครงการ</button>
-                  </div>
-                </div>
-              </article>
+            <div class="tile is-parent is-vertical is-6">
               <article class="tile is-child notification">
                 <div class="tile">
                   <div class="tile is-parent is-vertical is-12">
@@ -85,7 +102,7 @@
 </template>
 
 <script>
-import barChart from '@Components/Chart/bar'
+import barChart from '@Components/Chart/line'
 import breadcrumbBar from '@Components/Breadcrumb'
 export default {
   props: {
@@ -120,8 +137,8 @@ export default {
         datasets: [
           {
             label: 'การสั่งซื้อ',
-            backgroundColor: '#ff903f',
-            data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+            data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11],
+            backgroundColor: 'rgba(255,146,146,.7)'
           }
         ]
       },
@@ -130,8 +147,8 @@ export default {
         datasets: [
           {
             label: 'การจ่ายค่างวด',
-            backgroundColor: '#E3E3E3',
-            data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
+            data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31],
+            backgroundColor: 'rgba(250,157,50,.7)'
           }
         ]
       },
@@ -140,8 +157,8 @@ export default {
         datasets: [
           {
             label: 'ความสูญเสียรวม',
-            backgroundColor: '#E3E3E3',
-            data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
+            data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31],
+            backgroundColor: 'rgba(169,169,169,.7)'
           }
         ]
       }

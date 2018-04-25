@@ -1,9 +1,10 @@
 <script>
 // CommitChart.js
 // http://vue-chartjs.org/#/home
-import { Line } from 'vue-chartjs'
+// https://www.npmjs.com/package/vue-chartjs
+import { Bar } from 'vue-chartjs'
 export default {
-  extends: Line,
+  extends: Bar,
   props: {
     data: {
       type: Object,
@@ -12,7 +13,16 @@ export default {
   },
   mounted () {
     // Overwriting base render method with actual data.
-    this.renderChart(this.data)
+    this.renderChart(this.data, {
+      responsive: true,
+      maintainAspectRatio: false,
+      legend: {display: false},
+      scales: {
+        xAxes: [{
+          display: false
+        }]
+      }
+    })
   }
 }
 </script>

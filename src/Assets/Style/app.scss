@@ -596,11 +596,17 @@ html {
                         padding: 0 !important;
                       }
                     }
-                    .search-all{
+
+                    .search-box{
                       flex: 1;
-                      .search-btn{
-                        .title{
-                          height: 18px !important;
+                      flex-direction: column;
+                      &>.block{
+                        flex: 0;
+                        button{
+                          width: 100%;
+                        }
+                        .field{
+                          justify-content: center;
                         }
                       }
                     }
@@ -614,6 +620,34 @@ html {
                       }
                     }
                   }
+                }
+                .losing-detail-page{
+                  .c-body{
+                    .card{
+                      margin-bottom: 10px;
+                      .card-name{
+                        padding: 3px;
+                        // font-size: 1.2em;
+                        font-weight: bold;
+                      }
+                      .card-content{
+                        padding: 3px;
+                        table{
+                          margin-bottom: .4rem;
+                        }
+                        .two-column{
+                          flex-direction: row;
+                        }
+                        .chart{
+                          .chart-name{
+                            text-align: center;
+                          }
+
+                        }
+                      }
+                    }
+                  }
+                  
                 }
                 .user-page{
                   .options-panel{
@@ -844,18 +878,32 @@ html {
                   .detail-block{
                     .c-header{
                       .info{
+                        .house-template{
+                          flex-direction: column;
+                          .title-name{
+                            font-weight: bold;
+                            width: 55px;
+                            display: inline-flex;
+                          }
+                          .block:not(:last-child){
+                            margin-bottom: 0px;
+                          }
+                          .tag{
+                            min-width: 60px;
+                          }
+                        }
                         flex-direction: column;
                         &>.block{
                           margin-bottom: 5px;
                           .tag{
                             margin-top: 5px;
-                            cursor: pointer;
-                            &:hover{
-                              background: #9a9a9a;
-                            }
+                            // cursor: pointer;
+                            // &:hover{
+                            //   background: #9a9a9a;
+                            // }
                           }
                           .tag.active{
-                            background: #9a9a9a;
+                            // background: #9a9a9a;
                           }
                         }
                         @media (min-width: $computerBreakpoint) {
@@ -1152,6 +1200,18 @@ html {
                   }
                   tr.selected{
                     background-color: whitesmoke;
+                  }
+                }
+
+                .tags-select{
+                  .tag{
+                    cursor: pointer;
+                    &:hover{
+                      background: #9a9a9a;
+                    }
+                  }
+                  .tag.active{
+                    background: #9a9a9a;
                   }
                 }
                 

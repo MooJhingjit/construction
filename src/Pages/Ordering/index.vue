@@ -157,7 +157,7 @@
 </template>
 
 <script>
-import barChart from '@Components/Chart/bar'
+import barChart from '@Components/Chart/line'
 import breadcrumbBar from '@Components/Breadcrumb'
 export default {
   props: {

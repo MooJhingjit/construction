@@ -11,18 +11,29 @@
                 <div class="date">วันที่ 21 มีนาคม 2561</div>
               </div> -->
               <div class="block info container-block">
-                <div class="block">
+                <div class="block store">
                   <div>ร้านค้า: <span class="value">ควอลิตี้คอนสตรัคชั่นโปรดักส์  จำกัด (มหาชน)</span></div>
                   <div>ประเภท: <span class="value">อิฐมวลเบา</span></div>
                 </div>
-                <div class="block">
-                  <span class="tag is-white active">098SW3</span>
-                  <span class="tag is-white">105PWY</span>
-                  <span class="tag is-white active">119PWY</span>
-                  <span class="tag is-white">142PWY</span>
-                  <span class="tag is-white">169PWY</span>
-                  <span class="tag is-white">198PWY</span>
-                  <span class="tag is-white">237PWY</span>
+                <div class="block container-block house-template tags-select">
+                  <div class="block">
+                    <span class="title-name">มัณทนา:</span>
+                    <span class="tag is-white active">098SW3</span>
+                    <span class="tag is-white">105PWY</span>
+                    <span class="tag is-white active">119PWY</span>
+                    <span class="tag is-white">142PWY</span>
+                    <span class="tag is-white">169PWY</span>
+                    <span class="tag is-white">198PWY</span>
+                    <span class="tag is-white">237PWY</span>
+                  </div>
+                  <div class="block">
+                    <span class="title-name">นันทวัน:</span>
+                    <span class="tag is-white">105PWY</span>
+                    <span class="tag is-white">142PWY</span>
+                    <span class="tag is-white">169PWY</span>
+                    <span class="tag is-white">198PWY</span>
+                    <span class="tag is-white">237PWY</span>
+                  </div>
                 </div>
               </div>
             </div>

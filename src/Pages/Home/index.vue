@@ -124,7 +124,7 @@
 </template>
 
 <script>
-import barChart from '@Components/Chart/bar'
+import barChart from '@Components/Chart/line'
 import sparkLine from '@Components/Chart/spark-line'
 import breadcrumbBar from '@Components/Breadcrumb'
 import service from '@Services/app-service'
@@ -198,7 +198,7 @@ export default {
         datasets: [
           {
             label: 'การสั่งซื้อ',
-            backgroundColor: '#F7894E',
+            backgroundColor: 'rgba(255,146,146,.7)',
             data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
           }
         ]
@@ -208,7 +208,7 @@ export default {
         datasets: [
           {
             label: 'การจ่ายค่างวด',
-            backgroundColor: '#F77979',
+            backgroundColor: 'rgba(250,157,50,.7)',
             data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
           }
         ]
