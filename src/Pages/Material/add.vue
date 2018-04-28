@@ -62,10 +62,15 @@
                     </tr>
                   </tbody>
                 </table>
-                <div class="table-options">
-                  <button class="button">บันทึกข้อมูล</button>
-                  <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                  <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                <div class="item-footer container-block">
+                  <div class="container-block block right">
+                    <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                    <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                  </div>
+                   <div class="container-block block action">
+                    <button class="button">บันทึกข้อมูล</button>
+                    <button class="button">ลบรายการ</button>
+                  </div>
                 </div>
               </div>
               <div class="table-template">
@@ -100,11 +105,6 @@
                           </select>
                         </div>
                       </th>
-                      <!-- <th>B3PW-2</th>
-                      <th>B3PW-3</th>
-                      <th>B3PW-1</th>
-                      <th>B3PW-2</th>
-                      <th>B3PW-3</th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -117,11 +117,35 @@
                     </tr>
                   </tbody>
                 </table>
-                <div class="table-options">
-                  <button class="button">บันทึกข้อมูล</button>
-                  <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                  <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                <div class="item-footer container-block">
+                  <div class="container-block block right">
+                    <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                    <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                  </div>
+                    <div class="container-block block action">
+                      <button class="button">บันทึกข้อมูล</button>
+                      <button class="button">ลบรายการ</button>
+                  </div>
                 </div>
+                <!-- <div class="item-footer container-block">
+                  <div class="container-block block right">
+                    <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                    <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                  </div>
+                   <div class="container-block block action">
+                    <button class="button">บันทึกข้อมูล</button>
+                    <button class="button">ลบรายการ</button>
+                  </div>
+                </div> -->
+                <!-- <div class="table-options item-footer container-block">
+                  <div class="container-block block left">
+                    <button class="button">บันทึกข้อมูล</button>
+                  </div>
+                  <div class="container-block block right">
+                    <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                    <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                  </div>
+                </div> -->
               </div>
             </div>
             <!-- <div class="c-footer container-block block">

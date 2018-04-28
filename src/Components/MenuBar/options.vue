@@ -30,7 +30,11 @@
               <div class="icon"><i class="fa fa-th-large" aria-hidden="true"></i></div>
               <div class="desc">ร้านค้า</div>
             </div>
-              <div class="block container-block" @click="goToPage('Authority', 'all')">
+            <div class="block container-block" @click="GOTOPAGE('OrderingGroup')">
+              <div class="icon"><i class="fa fa-th-large" aria-hidden="true"></i></div>
+              <div class="desc">กลุ่มวัสดุ</div>
+            </div>
+            <div class="block container-block" @click="goToPage('Authority', 'all')">
               <div class="icon"><i class="fa fa-check-square-o" aria-hidden="true"></i></div>
               <div class="desc">สิทธิ์การใช้งาน</div>
             </div>

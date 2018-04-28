@@ -5,6 +5,7 @@ const Login = () => import('@Pages/Login')
 const Ordering = () => import('@Pages/Ordering')
 const OrderingDetail = () => import('@Pages/Ordering/detail')
 const OrderingExtra = () => import('@Pages/Ordering/extra')
+const OrderingGroup = () => import('@Pages/Ordering/group')
 const Users = () => import('@Pages/User')
 const Authority = () => import('@Pages/Authority')
 const Project = () => import('@Pages/Project')
@@ -19,6 +20,7 @@ const AddMaterial = () => import('@Pages/Material/add')
 const Store = () => import('@Pages/Store')
 const House = () => import('@Pages/House/template')
 const Workorder = () => import('@Pages/Workorder')
+const EditWorkorder = () => import('@Pages/Workorder/edit')
 
 Vue.use(VueRouter)
 
@@ -44,6 +46,11 @@ export default new VueRouter({
       path: '/ordering/extra',
       name: 'OrderingExtra',
       component: OrderingExtra
+    },
+    {
+      path: '/ordering/group',
+      name: 'OrderingGroup',
+      component: OrderingGroup
     },
     {
       path: '/ordering/:key',
@@ -119,6 +126,11 @@ export default new VueRouter({
       path: '/work-order',
       name: 'Workorder',
       component: Workorder
+    },
+    {
+      path: '/work-order/edit/:key',
+      name: 'EditWorkorder',
+      component: EditWorkorder
     }
   ]
 })

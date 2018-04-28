@@ -555,6 +555,46 @@ html {
                   }
                   
                 }
+                .ordering-group-page{
+                  .detail-block{
+                    flex-direction: column;
+                    @media (min-width: $tabletBreakpoint) {
+                      flex-direction: row !important;
+                      .title-name{
+                        text-align: center;
+                      }
+                      .result{
+                        .items{
+                          table{
+                            tr:hover{
+                              td i {
+                                color: $red;
+                              }
+                            }
+                            td i{
+                              cursor: pointer;
+                            }
+                          }
+                        }
+                      }
+                      .search-material{
+                        padding: 0 5px;
+                        .items{
+                          margin-top: 5px;
+                          background: $white;
+                          min-height: 250px;
+                        }
+                      }
+                      &>.block{
+                        border: 1px solid #ccc;
+                        padding: 5px;
+                      }
+                      &>.block+.block{
+                        border-left: none;
+                      }
+                    }
+                  }
+                }
                 .ordering-extra-page{
                   .detail-panel{
                     .detail-block{
@@ -563,13 +603,13 @@ html {
                         table{
                           margin-bottom: 3px;
                         }
-                        .table-options{
-                          text-align: right;
-                          justify-content: flex-end;
-                          button{
-                            font-size: 1em;
-                          }
-                        }
+                        // .table-options{
+                        //   text-align: right;
+                        //   justify-content: flex-end;
+                        //   button{
+                        //     font-size: 1em;
+                        //   }
+                        // }
                       }
                     }
                     
@@ -876,7 +916,11 @@ html {
                 }
                 .add-material-page{
                   .detail-block{
+                    background: none !important;
                     .c-header{
+                      padding: 10px;
+                      background: $white;
+                      margin-bottom: 10px !important;
                       .info{
                         .house-template{
                           flex-direction: column;
@@ -913,8 +957,10 @@ html {
                     }
                     .c-body{
                       .table-template{
+                        // background: rgba(232, 232, 232, 0.85) !important;
                         margin-bottom: 20px;
                         table{
+                          // 
                           min-width: 550px;
                           thead {
                             tr{
@@ -928,12 +974,100 @@ html {
                               }
                             }
                           }
-                          
+                        }
+                        .item-footer{
+                          padding: 5px;
+                          .block:not(:last-child) {
+                            margin-bottom: 0rem;
+                          }
+                          background: rgba(232, 232, 232, 0.85) !important;
                         }
                       }
                     }
                   }
                   
+                }
+                .work-order-page{
+
+                  .c-body{
+                    table tr td{
+
+                      vertical-align: middle;
+                    }
+                    .name{
+                      font-weight: bold;
+                    }
+                    .product-list{
+                      margin-left: 10px;
+                    }
+                    table:not(:last-child) {
+                      margin-bottom: 0em;
+                    }
+                    .footer-panel{
+                      background: transparent !important;
+                    }
+                  }
+                }
+                .edit-work-order-page{
+                  .detail-panel .container-block{
+                    // background: transparent !important;
+                    .c-body{
+                      .block:not(:last-child){
+                        margin-bottom: 0em;
+                      }
+                      .item+.item{
+                        margin-top: 10px;
+                      }
+                      .item{
+                        
+                        // padding: 10px;
+                        .item-header{
+                          padding: 10px;
+                          background: $white;
+                          justify-content: space-around;
+                          .time{
+                            font-size: 1.1em;
+                            font-weight: bold;
+                            min-width: 100px;
+                          }
+                          .order-name{
+                            justify-content: flex-end;
+                            flex-direction: row;
+                            .name{
+                              font-weight: bold;
+                              width: 140x;
+                            }
+                            .control{
+                              margin-left: 5px;
+                            }
+                          }
+                          flex-direction: row;
+                        }
+                        .item-body{
+                          padding: 10px;
+                          background: $white;
+                          .inputs{
+                            .control{
+                              flex-direction: row;
+                              input{
+                                margin-right: 5px;
+                              }
+                              button{
+                                flex: 0;
+                                min-width: 40px;
+                              }
+                            }
+                            input{
+                              margin-bottom: 10px;
+                            }
+                          }
+                        }
+                        .item-footer{
+                          background: transparent !important;
+                        }
+                      }
+                    }
+                  }
                 }
                 // common template
                 section{
@@ -1047,7 +1181,7 @@ html {
                       flex: 7;
                       &>.container-block{
                         &>.block{
-                          margin-bottom: 0 !important;
+                          margin-bottom: 0;
                         }
                         // margin-bottom: 0.75rem;
                         // @media (min-width: $computerBreakpoint) {
@@ -1127,7 +1261,7 @@ html {
                         }
                         padding: 15px !important;
                         border-top: 1px solid #c1c1c1;
-                        background: rgba(232, 232, 232, 0.85) !important;
+                        background: rgba(232, 232, 232, 0.85);
                         @media (min-width: $computerBreakpoint) {
                           flex-direction: row;
                           button+button{
@@ -1154,6 +1288,26 @@ html {
                       &:hover{
                         // background: $second-text-white-color;
                       }
+                    }
+                  }
+                  .item-footer{
+                    padding: 10px 0;
+                    background: rgba(232, 232, 232, 0.85) !important;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    &>.block{
+                      button+button{
+                        margin-left: 5px;
+                      }
+                    }
+                    .action{
+                      justify-content: center;
+                    }
+                    .left{
+                      justify-content: flex-start;
+                    }
+                    .right{
+                      justify-content: flex-end;
                     }
                   }
                 }

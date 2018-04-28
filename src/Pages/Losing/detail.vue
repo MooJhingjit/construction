@@ -173,9 +173,9 @@
               </div>
             </div>
           </div>
-          <div class="card">
+          <!-- <div class="card">
             <div class="card-name">รายการจ่ายค่างวด</div>
-            <!-- <div class="card-content">
+            <div class="card-content">
               <table class="table is-bordered rows-table">
                 <thead>
                   <tr>
@@ -209,8 +209,8 @@
                   สรุปรายการจ่ายค่างวด สัญญา (แปลง)
                 </div>
               </div>
-            </div> -->
-          </div>
+            </div> 
+          </div>-->
            <div class="card">
             <!-- <div class="card-name">สรุปข้อมูลสูญเสียโครงการ รามอินทรา พหลโยธิน 50</div> -->
             <div class="card-content">
