@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr :class="{'selected': user.id == local.idSelected}" :key="index" v-for="(user, index) in local.users" @click="setUserDetail(user)">
+          <tr :class="{'selected': user.id == local.idSelected}" :key="index" v-for="(user, index) in local.users" @dblclick="setUserDetail(user)">
             <td>{{user.name}}</td>
             <td>{{user.email}}</td>
           </tr>
@@ -30,8 +30,12 @@
         <button class="pagination-next">หน้าถัดไป</button>
       </nav>
     </template>
+    <template slot="function">
+      <button class="button is-link" @click="submitForm('add')">เพิ่มข้อมูลใหม่</button>
+    </template>
     <template v-if="local.idSelected != ''">
       <template slot="detail">
+        <!-- <form @submit="onSubmit()" id="userForm"> -->
         <div class="container-block  detail-block">
           <div class="profile-img container-block">
             <div class="block">
@@ -46,23 +50,23 @@
             <div class="name">{{local.userInput.name}}</div>
             <div class="container-block">
               <div class="text-title">ชื่อ-นามสกุล</div>
-              <div class="value"><input class="input" type="text" v-model="local.userInput.name" value="Pokkrong Jhingjit" placeholder="ชื่อ-นามสกุล"></div>
+              <div class="value"><input class="input" type="text" v-model="local.userInput.name" value="Pokkrong Jhingjit" placeholder="ชื่อ-นามสกุล" required /></div>
             </div>
             <div class="container-block">
               <div class="text-title">ชื่อผู้ใช้</div>
-              <div class="value"><input class="input" type="text" v-model="local.userInput.username" placeholder="ชื่อผู้ใช้"></div>
+              <div class="value"><input class="input" type="text" v-model="local.userInput.username" placeholder="ชื่อผู้ใช้" required /></div>
             </div>
             <div class="container-block">
               <div class="text-title">ตำแหน่ง</div>
-              <div class="value"><input class="input" type="text" v-model="local.userInput.position" placeholder="ตำแหน่ง"></div>
+              <div class="value"><input class="input" type="text" v-model="local.userInput.position" placeholder="ตำแหน่ง" required /></div>
             </div>
             <div class="container-block">
               <div class="text-title">อีเมล์</div>
-              <div class="value"><input class="input" type="text" v-model="local.userInput.email" placeholder="อีเมล์"></div>
+              <div class="value"><input class="input" type="text" v-model="local.userInput.email" placeholder="อีเมล์" required /></div>
             </div>
             <div class="container-block">
               <div class="text-title">เบอร์โทรศัพท์</div>
-              <div class="value"><input class="input" type="text" v-model="local.userInput.phone" placeholder="เบอร์โทรศัพท์"></div>
+              <div class="value"><input class="input" type="text" v-model="local.userInput.phone" placeholder="เบอร์โทรศัพท์" required /></div>
             </div>
             <div class="container-block">
               <div class="text-title">ที่อยู่</div>
@@ -71,15 +75,17 @@
           </div>
         </div>
         <div class="container-block footer-panel">
-          <button class="button" @click="submitForm()">บันทึกข้อมูล</button>
-          <button class="button is-danger" @click="cancelForm()">ยกเลิก</button>
+          <button class="button" @click="submitForm('edit')">บันทึกข้อมูล</button>
+          <button class="button is-warning" @click="submitForm('cancel')">ยกเลิก</button>
+          <button v-if="this.local.idSelected != 'new'" class="button is-danger" @click="submitForm('delete')">ลบข้อมูล</button>
         </div>
+        <!-- </form> -->
       </template>
     </template>
     <template v-else>
       <template slot="detail">
         <div class="container-block empty-panel">
-          <div class="block container-block">
+          <!-- <div class="block container-block">
             <div class="block no-data">
                 ไม่พบข้อมูลที่ต้องการ
             </div>
@@ -93,7 +99,7 @@
             <div class="block add-data">
               <button class="button" @click="addNew()">เพิ่มข้อมูลใหม่</button>
             </div>
-          </div>
+          </div> -->
         </div>
       </template>
     </template>
@@ -131,8 +137,8 @@ export default {
         isOptionMinimize: false,
         idSelected: '',
         users: {},
-        userInput: {},
-        submitMode: 'add'
+        userInput: {}
+        // submitMode: 'add'
       },
       server: {
       }
@@ -144,21 +150,9 @@ export default {
     this.fetchData()
   },
   methods: {
-    // fetchData () {
-    //   let resourceName = config.api.users.index + '/16'
-    //   let queryString = {}
-    //   service.getResource({resourceName, queryString})
-    //     .then((res) => {
-    //       if (res.status === 200) {
-    //       }
-    //     })
-    //     .catch(() => {
-    //       this.GOTOPAGE('Login', '')
-    //     })
-    // },
     fetchData () {
       let resourceName = config.api.users.index
-      let queryString = {}
+      let queryString = []
       service.getResource({resourceName, queryString})
         .then((res) => {
           if (res.status === 200) {
@@ -169,29 +163,34 @@ export default {
         })
     },
     setUserDetail (user) {
-      this.local.userInput = user
       this.local.idSelected = user.id
+      this.local.userInput.name = user.name
+      this.local.userInput.username = user.username
+      this.local.userInput.position = user.position
+      this.local.userInput.email = user.email
+      this.local.userInput.phone = user.phone
+      this.local.userInput.address = user.address
       this.local.submitMode = 'edit'
     },
-    addNew () {
-      this.local.isOptionMinimize = true
-      this.local.idSelected = 'new'
-      this.cleanUserInput()
-    },
-    cleanUserInput () {
-      this.local.userInput.name = ''
-      this.local.userInput.username = ''
-      this.local.userInput.position = ''
-      this.local.userInput.email = ''
-      this.local.userInput.phone = ''
-      this.local.userInput.address = ''
-    },
-    submitForm () {
-      let data = this.local.userInput
+    // onSubmit () {
+    //   console.log(this.local.userInput.username)
+    //   // do somethings
+    // },
+    submitForm (type) {
+      let data = {}
       let resourceName = config.api.users.index
-      switch (this.local.submitMode) {
+      if (type === 'edit' && this.local.idSelected === 'new') {
+        type = 'save'
+      }
+      switch (type) {
         case 'add':
-          resourceName = config.api.users.index
+          this.local.idSelected = 'new'
+          this.cleanUserInput()
+          break
+        case 'save':
+          data = this.local.userInput
+          console.log(data)
+          // resourceName = config.api.users.index
           service.postResource({data, resourceName})
             .then((res) => {
               if (res.status === 200) {
@@ -200,10 +199,26 @@ export default {
                 this.cleanUserInput()
               }
             })
-            .catch(() => {
+            .catch((err) => {
+              console.log(err)
+            })
+          break
+        case 'delete':
+          resourceName = `${resourceName}/${this.local.idSelected}`
+          let queryString = []
+          service.deleteResource({resourceName, queryString})
+            .then((res) => {
+              if (res.status === 200) {
+                this.fetchData()
+                this.local.idSelected = ''
+              }
+            })
+            .catch((err) => {
+              console.log(err)
             })
           break
         case 'edit':
+          data = this.local.userInput
           resourceName = `${resourceName}/${this.local.idSelected}`
           service.putResource({data, resourceName})
             .then((res) => {
@@ -213,14 +228,23 @@ export default {
                 this.cleanUserInput()
               }
             })
-            .catch(() => {
+            .catch((err) => {
+              console.log(err)
             })
+          break
+        case 'cancel':
+          this.local.idSelected = ''
+          this.local.isOptionMinimize = false
           break
       }
     },
-    cancelForm () {
-      this.local.idSelected = ''
-      this.local.isOptionMinimize = false
+    cleanUserInput () {
+      this.local.userInput.name = ''
+      this.local.userInput.username = ''
+      this.local.userInput.position = ''
+      this.local.userInput.email = ''
+      this.local.userInput.phone = ''
+      this.local.userInput.address = ''
     }
   }
 }

@@ -63,4 +63,12 @@ module.exports =  class User {
       console.log(result.affectedRows + " record(s) updated");
     });
   }
+
+  delete () {
+    let sql = `DELETE FROM user WHERE id = ?`;
+    db.query(sql, [this.id],function (err, result) {
+      if (err) throw err;
+      console.log(result.affectedRows + " record(s) updated");
+    });
+  }
 }

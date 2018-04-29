@@ -55,8 +55,22 @@ const putResource = (obj, callback) => {
   })
 }
 
+const deleteResource = (obj, callback) => {
+  return new Promise((resolve, reject) => {
+    let instance = createHeader()
+    instance.delete(commonHelper.GET_FULLAPI(obj.resourceName, obj.queryString))
+      .then((res) => {
+        resolve(res)
+      })
+      .catch((err) => {
+        reject(err)
+      })
+  })
+}
+
 export default {
   getResource,
   postResource,
-  putResource
+  putResource,
+  deleteResource
 }

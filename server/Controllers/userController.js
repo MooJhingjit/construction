@@ -49,6 +49,12 @@ module.exports.update = (req, res, next) => {
   res.status(200).json(result)
 }
 
+module.exports.delete = (req, res, next) => {
+  let user = new userModel(req.params.id)
+  let result = user.delete()
+  res.status(200).json({})
+}
+
 module.exports.addUser = () => {
   console.log('addUser')
 }

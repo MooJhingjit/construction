@@ -18,6 +18,7 @@
           <i class="fa fa-expand" aria-hidden="true" @click="expandOptionsPanel()"></i>
         </div>
         <div class="container-block function">
+          <slot name="function"></slot>
           <!-- <button class="button is-link">เพิ่มข้อมูล</button> -->
           <!-- <button class="button is-info">เพิ่มรายการสั่งซื้อใหม่</button> -->
           <!-- <button class="button is-danger">เพิ่มข้อมูล</button> -->
