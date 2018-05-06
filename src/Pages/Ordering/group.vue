@@ -24,16 +24,7 @@
           </thead>
           <tbody>
             <tr>
-              <td>xxxxxxxxx</td>
-            </tr>
-            <tr>
-              <td>xxxxxxxxx</td>
-            </tr>
-            <tr>
-              <td>xxxxxxxxx</td>
-            </tr>
-            <tr>
-              <td>xxxxxxxxx</td>
+              <td>วัสดุเริ่มต้น</td>
             </tr>
           </tbody>
       </table>
@@ -42,13 +33,16 @@
         <button class="pagination-next">หน้าถัดไป</button>
       </nav>
     </template>
+    <template slot="function">
+      <button class="button is-link" @click="submitForm('add')">เพิ่มข้อมูลใหม่</button>
+    </template>
     <template v-if="true">
       <template slot="detail">
         <div class="container-block detail-block">
           <div class="block result">
             <div class="title-name">กลุ่มวัสดุ</div>
             <div class="name">
-              <input type="text" class="input" />
+              <input type="text" class="input" value="วัสดุเริ่มต้น"/>
             </div>
             <div class="items">
               <table class="transparent-table">
@@ -61,22 +55,17 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td>xxxxxxxxx xxxxxxxxx</td>
+                    <td>แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า450kg/m²) ขนาด 0.35 x 2.83m.(SHEAE KEY 1จุด)</td>
                     <td><input type="text" size="2" class="input"></td>
                     <td><i class="fa fa-times" aria-hidden="true"></i></td>
                   </tr>
                   <tr>
-                    <td>xxxxxxxxx xxxxxxxxx</td>
+                    <td>เสาเข็ม I 12x12x2.00 m(.งานถังบำบัด)</td>
                     <td><input type="text" size="2" class="input"></td>
                     <td><i class="fa fa-times" aria-hidden="true"></i></td>
                   </tr>
                   <tr>
-                    <td>xxxxxxxxx xxxxxxxxx</td>
-                    <td><input type="text" size="2" class="input"></td>
-                    <td><i class="fa fa-times" aria-hidden="true"></i></td>
-                  </tr>
-                  <tr>
-                    <td>xxxxxxxxx xxxxxxxxx</td>
+                    <td>อิฐ Q-CON 7.5 Cm.</td>
                     <td><input type="text" size="2" class="input"></td>
                     <td><i class="fa fa-times" aria-hidden="true"></i></td>
                   </tr>
@@ -95,19 +84,19 @@
             <div class="items container-block">
               <table>
                 <tr>
-                  <td>xxxxxxxxxx xxxxxxxxx</td>
+                  <td>แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า450kg/m²) ขนาด 0.35 x 2.83m.(SHEAE KEY 1จุด)</td>
                 </tr>
                 <tr>
-                  <td>xxxxxxxxxx xxxxxxxxx</td>
+                  <td>แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า450kg/m²)  ขนาด 0.35 x 1.94 m.</td>
                 </tr>
                 <tr>
-                  <td>xxxxxxxxxx xxxxxxxxx</td>
+                  <td>แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า200kg/m²) ขนาด 0.35 x 4.03 m.</td>
                 </tr>
                 <tr>
-                  <td>xxxxxxxxxx xxxxxxxxx</td>
+                  <td>แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า200kg/m²) ขนาด 0.35 x 3.35 m.</td>
                 </tr>
                 <tr>
-                  <td>xxxxxxxxxx xxxxxxxxx</td>
+                  <td>แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า200kg/m²) ขนาด 0.35 x 2.40 m.</td>
                 </tr>
               </table>
             </div>
@@ -115,6 +104,7 @@
         </div>
         <div class="container-block footer-panel">
           <button class="button">บันทึกข้อมูล</button>
+          <button class="button is-danger" >ลบข้อมูล</button>
         </div>
       </template>
     </template>

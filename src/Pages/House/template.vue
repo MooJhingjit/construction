@@ -1,50 +1,50 @@
 <template>
   <option-detail-template :templateObj="local.template">
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
-    <template slot="search-status"></template>
-    <template slot="search-input">
+    <template slot="data-table">
+      <div class="search-status"></div>
       <div class="search-input control has-icons-left">
-        <input class="input" type="text" placeholder="ค้นหา">
-        <span class="icon is-small is-left">
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </span>
+          <input class="input" type="text" placeholder="ค้นหา">
+          <span class="icon is-small is-left">
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </span>
+        </div>
+      <div class="search-results">
+        <table class="table is-bordered rows-table">
+          <thead>
+              <tr>
+                <th>แปลน</th>
+                <th>แบบบ้าน</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>G03</td>
+                <td>098SW319I</td>
+              </tr>
+              <tr>
+                <td>G04</td>
+                <td>098SW319I</td>
+              </tr>
+              <tr>
+                <td>G05</td>
+                <td>098SW319I</td>
+              </tr>
+              <tr>
+                <td>G14</td>
+                <td>098SW319I</td>
+              </tr>
+              <tr>
+                <td>E01</td>
+                <td>198PWY32T</td>
+              </tr>
+            </tbody>
+        </table>
+        <nav class="pagination" role="navigation" aria-label="pagination">
+          <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
+          <button class="pagination-next">หน้าถัดไป</button>
+        </nav>
       </div>
-    </template>
-    <template slot="search-results">
-      <table class="table is-bordered rows-table">
-        <thead>
-            <tr>
-              <th>แปลน</th>
-              <th>แบบบ้าน</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>G03</td>
-              <td>098SW319I</td>
-            </tr>
-            <tr>
-              <td>G04</td>
-              <td>098SW319I</td>
-            </tr>
-            <tr>
-              <td>G05</td>
-              <td>098SW319I</td>
-            </tr>
-            <tr>
-              <td>G14</td>
-              <td>098SW319I</td>
-            </tr>
-            <tr>
-              <td>E01</td>
-              <td>198PWY32T</td>
-            </tr>
-          </tbody>
-      </table>
-      <nav class="pagination" role="navigation" aria-label="pagination">
-        <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
-        <button class="pagination-next">หน้าถัดไป</button>
-      </nav>
     </template>
     <template v-if="true">
       <template slot="detail">
@@ -120,7 +120,7 @@
 
 <script>
 import breadcrumbBar from '@Components/Breadcrumb'
-import optionDetailTemplate from '@Components/Template/option-detail'
+import optionDetailTemplate from '@Components/Template/option-detail2'
 import noResultTemplate from '@Components/Template/no-result'
 export default {
   props: {

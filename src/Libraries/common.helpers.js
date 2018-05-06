@@ -20,9 +20,9 @@ const REMOVE_STORAGEITEM = (key) => {
 const GET_FULLAPI = (path, queryString) => {
   let params = ''
   let endPoint = config.api.apiEndPoint
-  // if (queryString !== undefined) {
-  //   params = '?' + queryString
-  // }
+  if (queryString !== undefined) {
+    params = '?' + queryString
+  }
   return endPoint.concat(path) + params
 }
 

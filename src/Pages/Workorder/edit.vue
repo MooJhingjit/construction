@@ -21,29 +21,56 @@
                       </div>
                     </div>
                     <div class="item-body">
-                      <div class="name">รายละเอียดงาน</div>
+                      <table>
+                        <thead>
+                          <tr>
+                            <td>รายละเอียดงาน</td>
+                            <!-- <td>ระยะเวลา</td> -->
+                            <td>สั่งซื้อรายการถัดไป</td>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td><input type="text" class="input"  value="ถังบำบัดน้ำเสียและถังเก็บน้ำใต้ดิน"></td>
+                            <!-- <td><input type="text" class="input" ></td> -->
+                            <td><input type="text" class="input" ></td>
+                          </tr>
+                          <tr>
+                            <td><input type="text" class="input"  value="งานเดินท่อประปาใต้อาคาร"></td>
+                            <!-- <td><input type="text" class="input" ></td> -->
+                            <td><input type="text" class="input" ></td>
+                          </tr>
+                          <tr>
+                            <td><input type="text" class="input"  value="งานเทพื้นชั้นหนึ่ง 100%"></td>
+                            <!-- <td><input type="text" class="input" ></td> -->
+                            <td><input type="text" class="input" ></td>
+                          </tr>
+                          <tr>
+                            <td><input type="text" class="input"  value="งานโครงหลังคารอบบน ล่าง"></td>
+                            <!-- <td><input type="text" class="input" ></td> -->
+                            <td><input type="text" class="input" ></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <!-- <div class="name">รายละเอียดงาน</div>
                       <div class="inputs">
                         <div class="control container-block">
-                          <input class="input block" type="text" >
+                          <input class="input block" type="text" value="ถังบำบัดน้ำเสียและถังเก็บน้ำใต้ดิน" >
                           <button class="button block is-danger"><i class="fa fa-minus" aria-hidden="true"></i></button>
                         </div>
                         <div class="control container-block">
-                          <input class="input block" type="text" >
+                          <input class="input block" type="text" value="งานเดินท่อประปาใต้อาคาร" >
                           <button class="button block is-danger"><i class="fa fa-minus" aria-hidden="true"></i></button>
                         </div>
                         <div class="control container-block">
-                          <input class="input block" type="text" >
+                          <input class="input block" type="text" value="งานเทพื้นชั้นหนึ่ง 100%" >
                           <button class="button block is-danger"><i class="fa fa-minus" aria-hidden="true"></i></button>
                         </div>
                         <div class="control container-block">
-                          <input class="input block" type="text" >
+                          <input class="input block" type="text" value="งานโครงหลังคารอบบน ล่าง" >
                           <button class="button block is-danger"><i class="fa fa-minus" aria-hidden="true"></i></button>
                         </div>
-                        <div class="control container-block">
-                          <input class="input block" type="text" >
-                          <button class="button block is-danger"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                        </div>
-                      </div>
+                      </div> -->
                     </div>
                     <div class="item-footer container-block">
                       <div class="container-block block right">

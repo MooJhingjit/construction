@@ -37,7 +37,7 @@ export default {
   },
   components: {
   },
-  name: 'optionsDetailTemplate',
+  name: 'optionsDetailTemplate2',
   data () {
     return {
       isSmallOptions: false

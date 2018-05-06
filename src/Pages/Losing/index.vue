@@ -28,13 +28,16 @@
             <div class="tile is-parent is-vertical">
               <article class="tile is-child notification">
                 <div class="search-box container-block">
-                  <h6>ค้นหา</h6>
+                  <!-- <h6>ค้นหา</h6> -->
                   <div class="block">
-                    <span>ปี : </span> <input type="text" class="input" />
+                    <!-- <span>ปี : </span>  -->
+                    <input type="text" class="input" placeholder="ปี"/>
+                    <br/>
+                    <input type="text" class="input" placeholder="เดือน"/>
                   </div>
-                  <div class="block">
+                  <!-- <div class="block">
                     <span>เดือน : </span> <input type="text" class="input" />
-                  </div>
+                  </div> -->
                   <div class="block">
                     <div class="field is-grouped is-grouped-multiline">
                       <div class="control">

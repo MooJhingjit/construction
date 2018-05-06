@@ -12,7 +12,7 @@ export default {
   },
   mounted () {
     // Overwriting base render method with actual data.
-    this.renderChart(this.data, {responsive: true, maintainAspectRatio: false, legend: {display: false}})
+    this.renderChart(this.data, {maintainAspectRatio: false, legend: {display: true}})
   }
 }
 </script>

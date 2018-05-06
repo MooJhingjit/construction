@@ -32,6 +32,15 @@ export default {
         name: pageName,
         params: {key: key}
       })
+    },
+    BUILDPARAM (params = []) {
+      let queryString = ''
+      if (Object.keys(params).length) {
+        Object.keys(params).forEach(function (key) {
+          queryString += key + '=' + params[key] + '&'
+        })
+        return queryString.slice(0, -1)
+      }
     }
     // BUILDPARAM (params = []) {
     //   let queryString = ''

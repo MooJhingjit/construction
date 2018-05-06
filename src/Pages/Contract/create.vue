@@ -13,6 +13,9 @@
               <div class="block info">
                 <table class="transparent-table">
                   <tr>
+                    <td>ที่ตั้ง:</td>
+                    <td colspan="3"><input class="input" style="max-width: 100%;" type="text" placeholder="ที่ตั้ง"></td>
+                  <tr>
                     <td>เลขที่สัญญา:</td>
                     <td><input class="input" type="text" placeholder="เลขที่สัญญา"></td>
                     <td>ประเภทสัญญา:</td>
@@ -21,26 +24,20 @@
                   <tr>
                     <td>โครงการ:</td>
                     <td><input class="input" type="text" value="นันทวัน-ศรีนครินทร์" placeholder="โครงการ"></td>
-                    <td>แบบบ้าน:</td>
-                    <td><input class="input" type="text" placeholder="แบบบ้าน"></td>
-                  </tr>
-                  <tr>
-                    <td>แปลง:</td>
-                    <td><input class="input" type="text" placeholder="แปลง"></td>
-                    <td>Quarter:</td>
-                    <td><input class="input" type="text" placeholder="Quarter"></td>
+                    <td>แบบบ้าน/แปลง:</td>
+                    <td><input class="input" type="text" placeholder="แบบบ้าน/แปลง"></td>
                   </tr>
                   <tr>
                     <td>ราคา:</td>
                     <td><input class="input" type="text" placeholder="ราคา"></td>
-                    <td>เงินเบิกล่วงหน้า:</td>
-                    <td><input class="input" type="text" placeholder="เงินเบิกล่วงหน้า"></td>
+                    <td>Quarter:</td>
+                    <td><input class="input" type="text" placeholder="Quarter"></td>
                   </tr>
                   <tr>
                     <td>วันที่ออกสัญญา:</td>
                     <td><input class="input" type="text" placeholder="วันที่ออกสัญญา"></td>
-                    <td></td>
-                    <td></td>
+                    <td>เงินเบิกล่วงหน้า:</td>
+                    <td><input class="input" type="text" placeholder="เงินเบิกล่วงหน้า"></td>
                   </tr>
                 </table>
               </div>
@@ -51,39 +48,16 @@
                   <tr>
                     <th>งวดที่</th>
                     <th>จำนวนเงิน</th>
+                    <th>วันที่เริ่ม</th>
                     <th>วันกำหนดเสร็จ</th>
-                    <th>วัสดุนอกสัญญา ( * ยกเว้นค่าของ, ** ยกเว้นค่าของและค่าแรง )</th>
+                    <!-- <th>วัสดุนอกสัญญา ( * ยกเว้นค่าของ, ** ยกเว้นค่าของและค่าแรง )</th> -->
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td width="70"><input type="text" class="input"></td>
-                    <td width="130"><input type="text" class="input"></td>
-                    <td width="130"><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
-                  </tr>
-                  <tr>
-                    <td><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
+                    <td width=""><input type="text" class="input"></td>
+                    <td width=""><input type="text" class="input"></td>
                     <td><input type="text" class="input"></td>
                   </tr>
                 </tbody>
@@ -96,12 +70,16 @@
             <div class="c-footer container-block block">
               <table class="transparent-table">
                 <tr>
-                  <td>จำนวนงวด: 10 งวด</td>
-                  <td>จำนวนเงินทั้งหมด 1,000 บาท</td>
+                  <td>ผู้ว่าจ้าง: บริษัท แลนด์แอนด์เฮ้าส์ จำกัด (มหาชน)</td>
+                  <td>วันที่ 21 มีนาคม 2561 ถึงวันที่ 10 ธันวาคม 2561</td>
                 </tr>
                 <tr>
-                  <td>วันที่ 21 มีนาคม 2561 ถึงวันที่ 10 ธันวาคม 2561</td>
-                  <td>หนึ่งพันบาทถ้วน</td>
+                  <td>จำนวนงวด 10 งวด</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>จำนวนเงินทั้งหมด 1,000 บาท <br/>(หนึ่งพันบาทถ้วน)</td>
+                  <td>เบิกเงินล่วงหน้าจำนวน 1,000 บาท <br/>(หนึ่งพันบาทถ้วน)</td>
                 </tr>
               </table>
             </div>

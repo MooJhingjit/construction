@@ -8,7 +8,8 @@ app.use('/api',
     require('./app'),
     require('./home'),
     require('./login'),
-    require('./user')
+    require('./user'),
+    require('./project')
   ]
 );
 

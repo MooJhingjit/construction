@@ -8,6 +8,9 @@ const api = {
   'home': {
     'index': '/home/index'
   },
+  'project': {
+    'index': '/project'
+  },
   'users': {
     'index': '/users'
   }

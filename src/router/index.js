@@ -21,6 +21,7 @@ const Store = () => import('@Pages/Store')
 const House = () => import('@Pages/House/template')
 const Workorder = () => import('@Pages/Workorder')
 const EditWorkorder = () => import('@Pages/Workorder/edit')
+const Profile = () => import('@Pages/Profile')
 
 Vue.use(VueRouter)
 
@@ -131,6 +132,11 @@ export default new VueRouter({
       path: '/work-order/edit/:key',
       name: 'EditWorkorder',
       component: EditWorkorder
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile
     }
   ]
 })

@@ -34,29 +34,29 @@
         <thead>
           <tr>
             <th>ชื่อสัญญา</th>
-            <th>วันที่</th>
+            <th>แบบบ้าน</th>
             <th>สถานะ</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>LH120610015</td>
-            <td>21/09/60</td>
+            <td>098SW319I</td>
             <td><span class="tag is-link">ดำเนินการ</span></td>
           </tr>
           <tr>
             <td>LH120243216</td>
-            <td>27/08/60</td>
+            <td>098SW319I</td>
             <td><span class="tag is-warning">รออนุมัติ</span></td>
           </tr>
           <tr>
             <td>LH122950016</td>
-            <td>27/08/60</td>
+            <td>119PWY22T</td>
             <td><span class="tag is-link">ดำเนินการ</span></td>
           </tr>
           <tr>
             <td>LH120610397</td>
-            <td>26/09/60</td>
+            <td>198PWY32T</td>
             <td><span class="tag is-link">ดำเนินการ</span></td>
           </tr>
         </tbody>
@@ -102,7 +102,6 @@
                 <tr>
                   <th>รายละเอียดงาน</th>
                   <th>วันที่ตามสัญญา</th>
-                  <th>วันที่ประมาณใหม่</th>
                   <th>วันที่ทำจริง</th>
                   <th>สถานะ</th>
                   <th>งวด</th>
@@ -113,14 +112,12 @@
                   <td>10000 : *Confirm Lay-Out</td>
                   <td>05/01/61</td>
                   <td>05/01/61</td>
-                  <td>05/01/61</td>
                   <td>เสร็จแล้ว</td>
                   <td>20</td>
                 </tr>
                 <tr>
                   <td>11000 : ตอกเสาเข็ม</td>
                   <td>11/01/61</td>
-                  <td>20/03/61</td>
                   <td>20/03/61</td>
                   <td>เสร็จแล้ว</td>
                   <td>20</td>
@@ -129,14 +126,12 @@
                   <td>11825 : กำหนด_ติดตั้งทดสอบความสมบูรณ์เสาเข็ม</td>
                   <td>11/02/61</td>
                   <td>30/03/61</td>
-                  <td>30/03/61</td>
                   <td>ยังไม่เสร็จ</td>
                   <td>20</td>
                 </tr>
                 <tr>
                   <td>12100 : *ทำสัญญาก่อสร้าง</td>
                   <td>05/01/61</td>
-                  <td>28/02/61</td>
                   <td>28/02/61</td>
                   <td>เสร็จแล้ว</td>
                   <td>19</td>

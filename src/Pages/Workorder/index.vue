@@ -34,7 +34,7 @@
                         <div class="product-list">product xxxx</div>
                       </td>
                     </tr>
-                    <tr>
+                    <!-- <tr>
                       <td>2</td>
                       <td>
                         <div class="list">ถังบำบัดน้ำเสียและถังเก็บน้ำใต้ดิน</div>
@@ -65,7 +65,7 @@
                         <div class="product-list">product xxxx</div>
                         <div class="product-list">product xxxx</div>
                       </td>
-                    </tr>
+                    </tr> -->
                   </tbody>
                 </table>
                 <div class="container-block footer-panel">

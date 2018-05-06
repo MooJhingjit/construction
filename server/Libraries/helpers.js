@@ -16,3 +16,15 @@ module.exports.getUserAuth = (token) => {
   let decoded = jwtDecode(bearer[1]);
   return decoded.user
 }
+
+module.exports.getCurrentTime = (type) => {
+  let res = ''
+  let currentdate = new Date()
+  if (type === 'sql') {
+    let date = `${currentdate.getFullYear()}-${currentdate.getMonth()+1}-${currentdate.getDate()}`
+    let time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`
+    res = `${date} ${time}`
+    // res = '2018-05-01 22:38:03'
+  }
+  return res
+}

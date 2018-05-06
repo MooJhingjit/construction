@@ -1,4 +1,4 @@
-const userModel = require('../Models/userModel')
+// const userModel = require('../Models/userModel')
 const db = require('../Database/index')
 db.connect(function(err) {
   if (err) return err

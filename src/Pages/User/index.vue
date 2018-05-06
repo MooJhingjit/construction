@@ -82,26 +82,7 @@
         <!-- </form> -->
       </template>
     </template>
-    <template v-else>
-      <template slot="detail">
-        <div class="container-block empty-panel">
-          <!-- <div class="block container-block">
-            <div class="block no-data">
-                ไม่พบข้อมูลที่ต้องการ
-            </div>
-            <div class="block select-data">
-              <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-              <span>เลือกข้อมูลทางซ้ายมือเพื่อแสดง</span>
-            </div>
-            <div class="block or">
-              หรือ
-            </div>
-            <div class="block add-data">
-              <button class="button" @click="addNew()">เพิ่มข้อมูลใหม่</button>
-            </div>
-          </div> -->
-        </div>
-      </template>
+    <template v-else slot="detail">
     </template>
   </option-detail-template>
 </template>

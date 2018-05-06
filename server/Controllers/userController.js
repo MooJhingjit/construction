@@ -6,7 +6,11 @@ const helpers = require('../Libraries/helpers')
 const userModel = require('../Models/userModel')
 module.exports.getUser = (req, res, next) => {
   let userData = helpers.getUserAuth(req.headers['authorization'])
-  let user = new userModel(userData.id)
+  let id = req.params.key
+  if (req.params.key == 'profile') {
+    id = userData.id
+  }
+  let user = new userModel(id)
   user.getUser((result) => {
     res.status(200).json(result[0])
   })
