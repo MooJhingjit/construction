@@ -15,8 +15,13 @@ module.exports.getData = (req, res, next) => {
 
 module.exports.getAllData = (req, res, next) => {
   let project = new projectModel()
+  project.status = req.query.status
+  project.name = req.query.main_search
   project.getAllData((result) => {
-    let data = prepareData(result)
+    let data = []
+    if (result) {
+      data = prepareData(result)
+    }
     res.status(200).json(data)
   })
 }
@@ -26,6 +31,7 @@ module.exports.create = (req, res, next) => {
   let newItem = new projectModel()
   newItem.code= req.body.data.code
   newItem.name = req.body.data.name
+  newItem.address = req.body.data.address
   newItem.type = req.body.data.type
   let result = newItem.save()
   res.status(200).json(result)
@@ -36,6 +42,7 @@ module.exports.update = (req, res, next) => {
   let newItem = new projectModel(req.params.id)
   newItem.code= req.body.data.code
   newItem.name = req.body.data.name
+  newItem.address = req.body.data.address
   newItem.type = req.body.data.type
   let result = newItem.update()
   // console.log(result)

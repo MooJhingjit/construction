@@ -9,6 +9,7 @@ module.exports =  class Project {
     this.id = id;
     this.code
     this.name
+    this.address
     this.type
   }
 
@@ -20,17 +21,19 @@ module.exports =  class Project {
   }
 
   getAllData (callback) {
-    db.query(`SELECT * FROM project`, (err, result) => {
+    let condition = this.getCondition('allData')
+    db.query(`SELECT * FROM project ${condition}`, (err, result) => {
       return callback(result);
     })
   }
 
   save () {
-    db.query('INSERT INTO project (id, code, name, type, created_at) VALUES (?, ?, ?, ?, ?)',
+    db.query('INSERT INTO project (id, code, name, address, type, created_at) VALUES (?, ?, ?, ?, ?, ?)',
     [
       null,
       this.code,
       this.name,
+      this.address,
       this.type,
       helpers.getCurrentTime('sql')
     ],
@@ -45,11 +48,12 @@ module.exports =  class Project {
     var sql = `UPDATE project SET 
     code = ?,
     name = ?,
+    address = ?,
     type = ?,
     created_at = ?
     WHERE id = ?
     `;
-    db.query(sql, [this.code, this.name, this.type, helpers.getCurrentTime('sql'), this.id],function (err, result) {
+    db.query(sql, [this.code, this.name, this.address, this.type, helpers.getCurrentTime('sql'), this.id],function (err, result) {
       if (err) throw err;
       console.log(result.affectedRows + " record(s) updated");
     });
@@ -61,5 +65,20 @@ module.exports =  class Project {
       if (err) throw err;
       console.log(result.affectedRows + " record(s) updated");
     });
+  }
+
+  getCondition (actionType) {
+    let condition = 'WHERE'
+    if (this.name || this.status) {
+      if (this.name) {
+        condition += ` name like "%${this.name}%"`
+      }
+      if (this.status) {
+        condition += ` status = "${this.status}"`
+      }
+    } else {
+      condition += ` 1`
+    }
+    return condition
   }
 }

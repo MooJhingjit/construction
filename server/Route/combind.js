@@ -9,7 +9,8 @@ app.use('/api',
     require('./home'),
     require('./login'),
     require('./user'),
-    require('./project')
+    require('./project'),
+    require('./contract')
   ]
 );
 
