@@ -11,11 +11,22 @@ const api = {
   'project': {
     'index': '/project'
   },
+  'contract': {
+    'index': '/contract'
+  },
   'users': {
     'index': '/users'
   }
 }
 
+const variable = {
+  projectType: [
+    {key: '1', name: 'มัณฑนา'},
+    {key: '2', name: 'นันทวัน'}
+  ]
+}
+
 export default {
-  api
+  api,
+  variable
 }

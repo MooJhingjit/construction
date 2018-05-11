@@ -25,12 +25,15 @@
               <div class="value"><input class="input" type="text" v-model="local.inputs.name" placeholder="ชื่อโครงการ" required /></div>
             </div>
             <div class="container-block">
+              <div class="text-title">ที่ตั้ง</div>
+              <div class="value"><input class="input" type="text" v-model="local.inputs.address" placeholder="ที่ตั้ง" required /></div>
+            </div>
+            <div class="container-block">
               <div class="text-title">ประเภท</div>
               <div class="value">
                 <div class="select">
                   <select v-model="local.inputs.type">
-                    <option name="นันทวัน">นันทวัน</option>
-                    <option name="มัณฑนา">มัณฑนา</option>
+                    <option :key="index" name="นันทวัน" v-for="(item, index) in PROJECT_TYPE">{{item.name}}</option>
                   </select>
                 </div>
               </div>
@@ -40,7 +43,7 @@
         <div class="container-block footer-panel">
           <button class="button" @click="submitForm('edit')">บันทึกข้อมูล</button>
           <button v-if="this.local.idSelected != 'new'" class="button is-danger" @click="submitForm('delete')">ลบข้อมูล</button>
-          <button v-if="this.local.idSelected != 'new'" class="button" @click="GOTOPAGE('CreateContract', 'project')">สร้างสัญญาใหม่</button>
+          <button v-if="this.local.idSelected != 'new'" class="button" @click="GOTOPAGE('CreateContract', local.idSelected)">สร้างสัญญาใหม่</button>
           <button v-if="this.local.idSelected != 'new'" class="button" @click="GOTOPAGE('Contract', 'project-id')">สัญญาในโครงการนี้ทั้งหมด</button>
         </div>
       </template>
@@ -79,7 +82,8 @@ export default {
           class: 'project-page'
         },
         statusSearch: [
-          {title: 'ทั้งหมด', name: 'all'},
+          {title: 'ทั้งหมด', name: ''},
+          {title: 'รออนุมัติ', name: 'ready'},
           {title: 'ดำเนินงาน', name: 'inprocess'},
           {title: 'เสร็จสิ้น', name: 'done'}
         ],
@@ -101,6 +105,7 @@ export default {
       this.local.idSelected = item.id
       this.local.inputs.code = item.code
       this.local.inputs.name = item.name
+      this.local.inputs.address = item.address
       this.local.inputs.type = item.type
       this.local.submitMode = 'edit'
     },
@@ -170,6 +175,7 @@ export default {
     cleanInput () {
       this.local.inputs.code = ''
       this.local.inputs.name = ''
+      this.local.inputs.address = ''
       this.local.inputs.type = ''
     }
   }

@@ -8,36 +8,38 @@
             <div class="c-header container-block block">
               <div class="block name">
                 สัญญาว่าจ้างปลูกสร้างอาคาร
-                <div class="date">วันที่ 21 มีนาคม 2561</div>
+                <div class="date">วันที่ {{getCurrentData}} </div>
               </div>
               <div class="block info">
                 <table class="transparent-table">
                   <tr>
-                    <td>ที่ตั้ง:</td>
-                    <td colspan="3"><input class="input" style="max-width: 100%;" type="text" placeholder="ที่ตั้ง"></td>
-                  <tr>
                     <td>เลขที่สัญญา:</td>
-                    <td><input class="input" type="text" placeholder="เลขที่สัญญา"></td>
-                    <td>ประเภทสัญญา:</td>
-                    <td><input class="input" type="text" placeholder="ประเภทสัญญา"></td>
-                  </tr>
+                    <td><input class="input" v-model="local.contractItems.code" type="text" placeholder="เลขที่สัญญา"></td>
+                    <td>ที่ตั้ง:</td>
+                    <td><input class="input" v-model="local.project.address" style="max-width: 100%;" type="text" placeholder="ที่ตั้ง"></td>
                   <tr>
                     <td>โครงการ:</td>
-                    <td><input class="input" type="text" value="นันทวัน-ศรีนครินทร์" placeholder="โครงการ"></td>
-                    <td>แบบบ้าน/แปลง:</td>
-                    <td><input class="input" type="text" placeholder="แบบบ้าน/แปลง"></td>
+                    <td><input class="input" type="text" v-model="local.project.name" placeholder="โครงการ"></td>
+                    <td>ประเภทสัญญา:</td>
+                    <td><input class="input" type="text" v-model="local.contractItems.contractType" placeholder="ประเภทสัญญา"></td>
+                  </tr>
+                  <tr>
+                    <td>แปลง:</td>
+                    <td><input class="input" type="text" v-model="local.contractItems.plan" placeholder="แปลง"></td>
+                    <td>แบบบ้าน:</td>
+                    <td><input class="input" type="text" v-model="local.contractItems.houseTemp" placeholder="แบบบ้าน"></td>
                   </tr>
                   <tr>
                     <td>ราคา:</td>
-                    <td><input class="input" type="text" placeholder="ราคา"></td>
+                    <td><input class="input" type="text" @blur="runContractLists()" v-model="local.contractItems.price" placeholder="ราคา"></td>
                     <td>Quarter:</td>
-                    <td><input class="input" type="text" placeholder="Quarter"></td>
+                    <td><input class="input" type="text" v-model="local.contractItems.quarter"  placeholder="Quarter"></td>
                   </tr>
                   <tr>
                     <td>วันที่ออกสัญญา:</td>
-                    <td><input class="input" type="text" placeholder="วันที่ออกสัญญา"></td>
+                    <td><input class="input" type="text" v-model="local.contractItems.dateStart" placeholder="วันที่ออกสัญญา"></td>
                     <td>เงินเบิกล่วงหน้า:</td>
-                    <td><input class="input" type="text" placeholder="เงินเบิกล่วงหน้า"></td>
+                    <td><input class="input" type="text" v-model="local.contractItems.paid" placeholder="เงินเบิกล่วงหน้า"></td>
                   </tr>
                 </table>
               </div>
@@ -54,11 +56,11 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td width="70"><input type="text" class="input"></td>
-                    <td width=""><input type="text" class="input"></td>
-                    <td width=""><input type="text" class="input"></td>
-                    <td><input type="text" class="input"></td>
+                  <tr :key="index" v-for="(item, index) in contractTimes">
+                    <td width="70"><input type="text" v-model="item.time" class="input"></td>
+                    <td width=""><input type="text" v-model="item.price"  class="input"></td>
+                    <td width=""><input type="text" v-model="item.dateStart"  class="input"></td>
+                    <td><input type="text" v-model="item.dateEnd"  class="input"></td>
                   </tr>
                 </tbody>
               </table>
@@ -85,8 +87,8 @@
             </div>
           </div>
           <div class="container-block footer-panel">
-            <button class="button is-warning">รออนุมัติ</button>
-            <button class="button is-success">เริ่มดำเนินงาน</button>
+            <button class="button is-warning" @click="submitForm('wait')">รออนุมัติ</button>
+            <button class="button is-success" @click="submitForm('ip')">เริ่มดำเนินงาน</button>
           </div>
         </template>
         <template v-else>
@@ -117,6 +119,9 @@
 
 <script>
 import breadcrumbBar from '@Components/Breadcrumb'
+import service from '@Services/app-service'
+import config from '@Config/app.config'
+import Helper from '@Libraries/common.helpers'
 export default {
   props: {
     // templateName: {
@@ -139,51 +144,93 @@ export default {
         },
         template: {
           class: 'create-contract-page'
-        }
+        },
+        isTimeStart: false,
+        contractItems: {
+          code: '',
+          projectId: this.$route.params.key,
+          contractType: '10 งวด',
+          plan: '',
+          houseTemp: '',
+          price: '',
+          quarter: '',
+          dateStart: '',
+          paid: '',
+          status: '',
+          times: [
+            {time: '1', priceRate: 15, price: 0, dateStart: '', dateEnd: ''},
+            {time: '2', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
+            {time: '3', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
+            {time: '4', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
+            {time: '5', priceRate: 20, price: 0, dateStart: '', dateEnd: ''},
+            {time: '6', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
+            {time: '7', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
+            {time: '8', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
+            {time: '9', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
+            {time: '10', priceRate: 5, price: 0, dateStart: '', dateEnd: ''}
+          ]
+        },
+        project: {}
       }
     }
   },
   computed: {
-    // propertyComputed() {
-    //   console.log('I change when this.property changes.')
-    //   return this.property
-    // }
+    contractTimes () {
+      if (this.local.isTimeStart) {
+        return this.local.contractItems.times
+      }
+      return []
+    },
+    getCurrentData () {
+      return Helper.GET_DATETHAI('now')
+    }
   },
   created () {
+    this.fetchData()
     // console.log('created')
     // this.property = 'Example property update.'
     // console.log('propertyComputed will update, as this.property is now reactive.')
   },
-  beforeMount () {
-    // console.log('beforeMount')
-    // console.log(`this.$el doesn't exist yet, but it will soon!`)
-  },
-  mounted () {
-    // console.log('mounted')
-    // console.log(this.$el.textContent) // I'm text inside the component.
-  },
-  beforeUpdate () {
-    // console.log('beforeUpdate')
-    // console.log(this.counter) // Logs the counter value every second, before the DOM updates.
-  },
-  updated () {
-    // console.log('updated')
-    // Fired every second, should always be true
-    // console.log(+this.$refs['dom-element'].textContent === this.counter)
-  },
-  beforeDestroy () {
-    // console.log('beforeDestroy')
-    // Perform the teardown procedure for someLeakyProperty.
-    // (In this case, effectively nothing)
-    // this.someLeakyProperty = null
-    // delete this.someLeakyProperty
-  },
-  destroyed () {
-    // console.log('destroyed')
-    // console.log(this) // There's practically nothing here!
-    // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
-  },
   methods: {
+    fetchData () {
+      let resourceName = `${config.api.project.index}/${this.$route.params.key}`
+      let queryString = this.BUILDPARAM()
+      service.getResource({resourceName, queryString})
+        .then((res) => {
+          if (res.status === 200) {
+            this.local.project = res.data
+          }
+        })
+        .catch(() => {
+        })
+    },
+    submitForm (status) {
+      this.local.contractItems.status = status
+      let data = {}
+      let resourceName = config.api.contract.index
+      data = this.local.contractItems
+      service.postResource({data, resourceName})
+        .then((res) => {
+          if (res.status === 200) {
+            console.log('success')
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    runContractLists () {
+      if (this.local.contractItems.price !== '') {
+        this.local.contractItems.times.map(item => {
+          item.price = this.calculatePrice(item.priceRate)
+        })
+        this.local.isTimeStart = true
+      }
+    },
+    calculatePrice (priceRate) {
+      let totalPrice = this.local.contractItems.price
+      return priceRate * totalPrice / 100
+    }
   }
 }
 </script>

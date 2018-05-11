@@ -3,11 +3,12 @@
 // import Config from '@AppConfig/app.config'
 // import moment from 'moment'
 // import swal from 'sweetalert'
+import config from '@Config/app.config'
 export default {
   computed: {
-    // ...mapGetters([
-    //   'appData'
-    // ])
+    PROJECT_TYPE () {
+      return config.variable.projectType
+    }
   },
   filters: {
     // CAPITALIZE: function (value) {

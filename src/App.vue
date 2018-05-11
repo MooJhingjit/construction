@@ -73,7 +73,7 @@ export default {
     ]),
     fetchData () {
       let resourceName = config.api.app.resource
-      let queryString = {}
+      let queryString = this.BUILDPARAM()
       service.getResource({resourceName, queryString})
         .then((res) => {
           if (res.status === 200) {
