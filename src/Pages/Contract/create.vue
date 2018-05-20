@@ -1,5 +1,5 @@
 <template>
-    <section :class="['section', local.template.class]">
+    <section :class="['section', local.pageObj.template.class]">
     <breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar>
     <div class="container-block">
       <div class="detail-panel">
@@ -14,32 +14,101 @@
                 <table class="transparent-table">
                   <tr>
                     <td>เลขที่สัญญา:</td>
-                    <td><input class="input" v-model="local.contractItems.code" type="text" placeholder="เลขที่สัญญา"></td>
+                    <td>
+                      <!-- <input class="input" v-model="local.inputs.code" type="text" placeholder="เลขที่สัญญา"> -->
+                      <my-input
+                      :value="local.inputs.code"
+                      :inputObj="{type: 'text', name: 'contract_code', placeholder: 'เลขที่สัญญา', validate: 'required'}"
+                      :validator="$validator"
+                      @input="value => { local.inputs.code = value }"
+                      ></my-input>
+                    </td>
                     <td>ที่ตั้ง:</td>
-                    <td><input class="input" v-model="local.project.address" style="max-width: 100%;" type="text" placeholder="ที่ตั้ง"></td>
+                    <td>
+                      <!-- <input class="input" v-model="local.project.address" type="text" placeholder="ที่ตั้ง"> -->
+                      <my-input
+                      :value="local.project.address"
+                      :inputObj="{type: 'text', name: 'project_address', placeholder: 'ที่ตั้ง', validate: ''}"
+                      :validator="$validator"
+                      @input="value => { local.project.address = value }"
+                      ></my-input>
+                    </td>
                   <tr>
                     <td>โครงการ:</td>
-                    <td><input class="input" type="text" v-model="local.project.name" placeholder="โครงการ"></td>
+                    <td>
+                      <!-- <input class="input" type="text" v-model="local.project.name" placeholder="โครงการ"> -->
+                      <my-input
+                      :value="local.project.name"
+                      :inputObj="{type: 'text', name: 'project_name', placeholder: 'โครงการ', validate: 'required'}"
+                      :validator="$validator"
+                      @input="value => { local.project.name = value }"
+                      ></my-input>
+                    </td>
                     <td>ประเภทสัญญา:</td>
-                    <td><input class="input" type="text" v-model="local.contractItems.contractType" placeholder="ประเภทสัญญา"></td>
+                    <td>
+                      <!-- <input class="input" type="text" v-model="local.inputs.contractType" placeholder="ประเภทสัญญา"> -->
+                      <my-input
+                      :value="local.inputs.contractType"
+                      :inputObj="{type: 'text', name: 'contract_type', placeholder: 'ประเภทสัญญา', validate: 'required'}"
+                      :validator="$validator"
+                      @input="value => { local.inputs.contractType = value }"
+                      ></my-input>
+                    </td>
                   </tr>
                   <tr>
                     <td>แปลง:</td>
-                    <td><input class="input" type="text" v-model="local.contractItems.plan" placeholder="แปลง"></td>
+                    <td>
+                      <input class="input" type="text" v-model="local.inputs.plan" placeholder="แปลง">
+                    </td>
                     <td>แบบบ้าน:</td>
-                    <td><input class="input" type="text" v-model="local.contractItems.houseTemp" placeholder="แบบบ้าน"></td>
+                    <td>
+                      <input class="input" type="text" v-model="local.inputs.houseTemp" placeholder="แบบบ้าน">
+                    </td>
                   </tr>
                   <tr>
                     <td>ราคา:</td>
-                    <td><input class="input" type="text" @blur="runContractLists()" v-model="local.contractItems.price" placeholder="ราคา"></td>
+                    <td>
+                      <!-- <input class="input" type="text"  v-model="local.inputs.price" placeholder="ราคา"> -->
+                      <my-input
+                      @onBlur="runContractLists()"
+                      :value="local.inputs.price"
+                      :inputObj="{type: 'text', isBlur: true, name: 'contract_price', placeholder: 'ราคา', validate: 'required'}"
+                      :validator="$validator"
+                      @input="value => { local.inputs.price = value }"
+                      ></my-input>
+                    </td>
                     <td>Quarter:</td>
-                    <td><input class="input" type="text" v-model="local.contractItems.quarter"  placeholder="Quarter"></td>
+                    <td>
+                      <!-- <input class="input" type="text" v-model="local.inputs.quarter"  placeholder="Quarter"> -->
+                      <my-input
+                      :value="local.inputs.quarter"
+                      :inputObj="{type: 'text', name: 'contract_quarter', placeholder: 'Quarter', validate: 'required'}"
+                      :validator="$validator"
+                      @input="value => { local.inputs.quarter = value }"
+                      ></my-input>
+                    </td>
                   </tr>
                   <tr>
                     <td>วันที่ออกสัญญา:</td>
-                    <td><input class="input" type="text" v-model="local.contractItems.dateStart" placeholder="วันที่ออกสัญญา"></td>
+                    <td>
+                      <!-- <input class="input" type="text" v-model="local.inputs.dateStart" placeholder="วันที่ออกสัญญา"> -->
+                      <my-input
+                      :value="local.inputs.dateStart"
+                      :inputObj="{type: 'text', name: 'contract_datestart', placeholder: 'วันที่ออกสัญญา', validate: 'required'}"
+                      :validator="$validator"
+                      @input="value => { local.inputs.dateStart = value }"
+                      ></my-input>
+                    </td>
                     <td>เงินเบิกล่วงหน้า:</td>
-                    <td><input class="input" type="text" v-model="local.contractItems.paid" placeholder="เงินเบิกล่วงหน้า"></td>
+                    <td>
+                      <!-- <input class="input" type="text" v-model="local.inputs.paid" placeholder="เงินเบิกล่วงหน้า"> -->
+                      <my-input
+                      :value="local.inputs.paid"
+                      :inputObj="{type: 'text', name: 'contract_paid', placeholder: 'เงินเบิกล่วงหน้า', validate: ''}"
+                      :validator="$validator"
+                      @input="value => { local.inputs.paid = value }"
+                      ></my-input>
+                    </td>
                   </tr>
                 </table>
               </div>
@@ -64,29 +133,26 @@
                   </tr>
                 </tbody>
               </table>
-              <div class="table-options">
+              <!-- <div class="table-options">
                 <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
                 <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
-              </div>
+              </div> -->
             </div>
-            <div class="c-footer container-block block">
+            <div class="c-footer container-block block" v-if="this.local.isTimeStart">
               <table class="transparent-table">
                 <tr>
                   <td>ผู้ว่าจ้าง: บริษัท แลนด์แอนด์เฮ้าส์ จำกัด (มหาชน)</td>
                   <td>วันที่ 21 มีนาคม 2561 ถึงวันที่ 10 ธันวาคม 2561</td>
                 </tr>
                 <tr>
-                  <td>จำนวนงวด 10 งวด</td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>จำนวนเงินทั้งหมด 1,000 บาท <br/>(หนึ่งพันบาทถ้วน)</td>
-                  <td>เบิกเงินล่วงหน้าจำนวน 1,000 บาท <br/>(หนึ่งพันบาทถ้วน)</td>
+                  <td>จำนวนงวด {{local.inputs.price}} บาท <br/>(หนึ่งพันบาทถ้วน)</td>
+                  <td>เบิกเงินล่วงหน้าจำนวน {{local.inputs.paid}} บาท <br/>(หนึ่งพันบาทถ้วน)</td>
                 </tr>
               </table>
+
             </div>
           </div>
-          <div class="container-block footer-panel">
+          <div class="container-block footer-panel" v-if="this.local.isTimeStart">
             <button class="button is-warning" @click="submitForm('wait')">รออนุมัติ</button>
             <button class="button is-success" @click="submitForm('ip')">เริ่มดำเนินงาน</button>
           </div>
@@ -122,6 +188,7 @@ import breadcrumbBar from '@Components/Breadcrumb'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
 import Helper from '@Libraries/common.helpers'
+import myInput from '@Components/Form/my-input'
 export default {
   props: {
     // templateName: {
@@ -130,7 +197,8 @@ export default {
     // }
   },
   components: {
-    breadcrumbBar
+    breadcrumbBar,
+    myInput
   },
   name: 'CreateContractPage',
   data () {
@@ -139,14 +207,14 @@ export default {
         pageObj: {
           items: [
             {name: 'โครงการ', route: 'Project', key: '', active: true, icon: 'fa fa-file-text'},
-            {name: 'สร้างสัญญาใหม่', route: 'CreateContract', key: 'project', active: true, icon: ''}
-          ]
-        },
-        template: {
-          class: 'create-contract-page'
+            {name: 'สร้างสัญญาใหม่', route: 'CreateContract', key: this.$route.params.key, active: true, icon: ''}
+          ],
+          template: {
+            class: 'create-contract-page'
+          }
         },
         isTimeStart: false,
-        contractItems: {
+        inputs: {
           code: '',
           projectId: this.$route.params.key,
           contractType: '10 งวด',
@@ -158,16 +226,16 @@ export default {
           paid: '',
           status: '',
           times: [
-            {time: '1', priceRate: 15, price: 0, dateStart: '', dateEnd: ''},
-            {time: '2', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
-            {time: '3', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
-            {time: '4', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
-            {time: '5', priceRate: 20, price: 0, dateStart: '', dateEnd: ''},
-            {time: '6', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
-            {time: '7', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
-            {time: '8', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
-            {time: '9', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
-            {time: '10', priceRate: 5, price: 0, dateStart: '', dateEnd: ''}
+            {time: '1', priceRate: 15, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
+            {time: '2', priceRate: 10, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
+            {time: '3', priceRate: 5, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
+            {time: '4', priceRate: 5, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
+            {time: '5', priceRate: 20, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
+            {time: '6', priceRate: 5, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
+            {time: '7', priceRate: 5, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
+            {time: '8', priceRate: 10, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
+            {time: '9', priceRate: 10, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
+            {time: '10', priceRate: 5, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'}
           ]
         },
         project: {}
@@ -177,7 +245,7 @@ export default {
   computed: {
     contractTimes () {
       if (this.local.isTimeStart) {
-        return this.local.contractItems.times
+        return this.local.inputs.times
       }
       return []
     },
@@ -205,30 +273,37 @@ export default {
         })
     },
     submitForm (status) {
-      this.local.contractItems.status = status
-      let data = {}
-      let resourceName = config.api.contract.index
-      data = this.local.contractItems
-      service.postResource({data, resourceName})
-        .then((res) => {
-          if (res.status === 200) {
-            console.log('success')
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      this.$validator.validateAll().then((tf) => {
+        if (tf) {
+          this.local.inputs.status = status
+          let data = {}
+          let resourceName = config.api.contract.index
+          data = this.local.inputs
+          service.postResource({data, resourceName})
+            .then((res) => {
+              if (res.status === 200) {
+                console.log('success')
+                this.NOTIFY('success')
+              } else {
+                this.NOTIFY('error')
+              }
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }
+      })
     },
     runContractLists () {
-      if (this.local.contractItems.price !== '') {
-        this.local.contractItems.times.map(item => {
+      if (this.local.inputs.price !== '') {
+        this.local.inputs.times.map(item => {
           item.price = this.calculatePrice(item.priceRate)
         })
         this.local.isTimeStart = true
       }
     },
     calculatePrice (priceRate) {
-      let totalPrice = this.local.contractItems.price
+      let totalPrice = this.local.inputs.price
       return priceRate * totalPrice / 100
     }
   }

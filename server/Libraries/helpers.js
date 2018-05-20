@@ -28,3 +28,26 @@ module.exports.getCurrentTime = (type) => {
   }
   return res
 }
+
+module.exports.prepareDataTable = (result, total, config) => {
+  let data = {
+    total: total[0].count,
+    header: config.header,
+    body: ''
+  }
+  data.body = result.map(element => {
+    let id = element.id
+    let data = {}
+    return {
+      key: element.id,
+      show: config.show,
+      items: element
+    }
+  });
+  // console.log(data)
+  return data
+}
+
+module.exports.getTableoffset = (limit, currentPage) => {
+  return ((currentPage - 1) * limit)
+}

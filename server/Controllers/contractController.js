@@ -1,28 +1,46 @@
 const helpers = require('../Libraries/helpers')
+const projectModel = require('../Models/projectModel')
 const contractModel = require('../Models/contractModel')
+const contractTimeModel = require('../Models/contractTimeModel')
 
-// module.exports.getData = (req, res, next) => {
-//   let id = req.params.key
-//   let project = new projectModel(id)
-//   project.getData((result) => {
-//     res.status(200).json(result[0])
-//   })
-// }
+const getData = async (req, res, next) => {
+  let id = req.params.key
+  let contract = new contractModel(id)
+  let contractResult = await contract.getData()
+  let projectResult = {}
+  if (req.query.type === 'full') {
+    let project = new projectModel(contractResult[0].project_id)
+    projectResult = await project.getData()
+  }
+  let result = {
+    contract: contractResult[0],
+    project: projectResult[0],
+    status: 'success'
+  }
+  
+  res.status(200).json(result)
+}
 
-// module.exports.getAllData = (req, res, next) => {
-//   let project = new projectModel()
-//   project.status = req.query.status
-//   project.name = req.query.main_search
-//   project.getAllData((result) => {
-//     let data = []
-//     if (result) {
-//       data = prepareData(result)
-//     }
-//     res.status(200).json(data)
-//   })
-// }
+const getAllData = async (req, res, next) => {
+  let contract = new contractModel()
+  contract.status = req.query.status
+  contract.name = req.query.main_search
+  let total = await contract.count()
+  contract.limit = req.query.limit
+  contract.offset = helpers.getTableoffset(req.query.limit, req.query.currentPage)
+  let result = await contract.getAllData()
+  let data = []
+  if (result) {
+    let config = {
+      header: [{name: 'เลขที่สัญญา'}, {name: 'แบบบ้าน'}],
+      show: ['code', 'house_temp']
+    }
+    data = helpers.prepareDataTable(result, total, config)
+  }
+  res.status(200).json(data)
+}
 
-module.exports.create = (req, res, next) => {
+const createData = async (req, res, next) => {
   // console.log(req.body.na)
   let newItem = new contractModel()
   newItem.code = req.body.data.code
@@ -35,42 +53,62 @@ module.exports.create = (req, res, next) => {
   newItem.date_start = req.body.data.dateStart
   newItem.paid = req.body.data.paid
   newItem.status = req.body.data.status
-  let result = newItem.save()
+  let result = await newItem.save() // this will return result.insertId
+  await createContractTime(req.body.data.code, req.body.data.times)
+
   res.status(200).json({status: 'success'})
 }
 
-// module.exports.update = (req, res, next) => {
-//   // console.log(req.body.na)
-//   let newItem = new projectModel(req.params.id)
-//   newItem.code= req.body.data.code
-//   newItem.name = req.body.data.name
-//   newItem.address = req.body.data.address
-//   newItem.type = req.body.data.type
-//   let result = newItem.update()
-//   // console.log(result)
-//   res.status(200).json(result)
-// }
+const createContractTime = (contractCode, dataArr) => {
+  dataArr.forEach(item => {
+    let newContractTime = new contractTimeModel()
+    newContractTime.contract_code = contractCode
+    newContractTime.time = item.time
+    newContractTime.price = item.price
+    newContractTime.is_success = 0
+    newContractTime.date_start = item.dateStart
+    newContractTime.date_end = item.dateEnd
+    newContractTime.save()
+  });
+}
 
-// module.exports.delete = (req, res, next) => {
-//   let newItem = new projectModel(req.params.id)
-//   let result = newItem.delete()
-//   res.status(200).json({})
-// }
+const updateData = async (req, res, next) => {
+  // let newItem = new projectModel(req.params.id)
+  // newItem.code= req.body.data.code
+  // newItem.name = req.body.data.name
+  // newItem.address = req.body.data.address
+  // newItem.type = req.body.data.type
+  // let result = newItem.update()
+  // res.status(200).json(result)
+}
 
-// function prepareData (result) {
-//   let data = {
-//     header: [{name: 'รหัส'}, {name: 'ชื่อโครงการ'}, {name: 'ประเภท'}],
-//     body: ''
-//   }
-//   data.body = result.map(element => {
-//     let id = element.id
-//     let data = {}
-//     return {
-//       key: element.id,
-//       show: ['code', 'name', 'type'],
-//       items: element
-//     }
-//   });
-//   // console.log(data)
-//   return data
-// }
+const deleteData = async (req, res, next) => {
+  let newItem = new contractModel(req.params.id)
+  let result = newItem.delete()
+  res.status(200).json({})
+}
+
+function prepareData (result) {
+  let data = {
+    header: [{name: 'เลขที่สัญญา'}, {name: 'แบบบ้าน'}],
+    body: ''
+  }
+  data.body = result.map(element => {
+    let id = element.id
+    let data = {}
+    return {
+      key: element.id,
+      show: ['code', 'house_temp'],
+      items: element
+    }
+  });
+  // console.log(data)
+  return data
+}
+
+
+module.exports.getData = getData
+module.exports.getAllData = getAllData
+module.exports.createData = createData
+module.exports.updateData = updateData
+module.exports.deleteData = deleteData

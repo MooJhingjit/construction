@@ -1,5 +1,5 @@
 <template>
-    <section :class="['section', local.template.class]">
+    <section :class="['section', local.pageObj.template.class]">
     <breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar>
     <div class="container-block">
       <div class="detail-panel">
@@ -14,24 +14,21 @@
                     <tr>
                       <th>งวด</th>
                       <th>รายละเอียดงาน</th>
-                      <th>รายจัดซื้อก่อนหน้า</th>
+                      <th>รายจัดซื้อ</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>1</td>
+                    <tr :key="index" v-for="(item, index) in local.workOrderObj">
+                      <td>{{item.time}}</td>
                       <td>
-                        <div class="list">ถังบำบัดน้ำเสียและถังเก็บน้ำใต้ดิน</div>
-                        <div class="list">งานเดินท่อประปาใต้อาคาร</div>
-                        <div class="list">งานเทพื้นชั้นหนึ่ง 100%</div>
-                        <div class="list">งานโครงหลังคารอบบน ล่าง</div>
+                        <div :key="taskIndex" class="list" v-for="(task, taskIndex) in item.tasks">{{task.name}}</div>
                       </td>
                       <td>
-                        <div class="name">name of product group</div>
-                        <div class="product-list">product xxxx</div>
-                        <div class="product-list">product xxxx</div>
-                        <div class="product-list">product xxxx</div>
-                        <div class="product-list">product xxxx</div>
+                        <div :key="taskIndex" class="list" v-for="(task, taskIndex) in item.tasks">{{task.post_order}}</div>
+                      </td>
+                      <td>
+                        <button class="button" @click="GOTOPAGE('EditWorkorder', item.time)">แก้ไขงวดที่ {{item.time}}</button>
                       </td>
                     </tr>
                     <!-- <tr>
@@ -69,7 +66,7 @@
                   </tbody>
                 </table>
                 <div class="container-block footer-panel">
-                  <button class="button" @click="GOTOPAGE('EditWorkorder', 'xxx')">แก้ไขรายการ</button>
+                  <button class="button" @click="addItem()">เพิ่มงวด</button>
                 </div>
               </div>
             </div>
@@ -103,6 +100,8 @@
 
 <script>
 import breadcrumbBar from '@Components/Breadcrumb'
+import service from '@Services/app-service'
+import config from '@Config/app.config'
 export default {
   props: {
     // templateName: {
@@ -120,55 +119,46 @@ export default {
         pageObj: {
           items: [
             {name: 'ลำดับการทำงาน', route: 'Workorder', key: '', active: true, icon: 'fa fa-address-book-o'}
-          ]
+          ],
+          template: {
+            class: 'work-order-page'
+          }
         },
-        template: {
-          class: 'work-order-page'
-        }
+        workOrderObj: {}
       }
     }
   },
   computed: {
-    // propertyComputed() {
-    //   console.log('I change when this.property changes.')
-    //   return this.property
-    // }
   },
   created () {
-    // console.log('created')
-    // this.property = 'Example property update.'
-    // console.log('propertyComputed will update, as this.property is now reactive.')
-  },
-  beforeMount () {
-    // console.log('beforeMount')
-    // console.log(`this.$el doesn't exist yet, but it will soon!`)
-  },
-  mounted () {
-    // console.log('mounted')
-    // console.log(this.$el.textContent) // I'm text inside the component.
-  },
-  beforeUpdate () {
-    // console.log('beforeUpdate')
-    // console.log(this.counter) // Logs the counter value every second, before the DOM updates.
-  },
-  updated () {
-    // console.log('updated')
-    // Fired every second, should always be true
-    // console.log(+this.$refs['dom-element'].textContent === this.counter)
-  },
-  beforeDestroy () {
-    // console.log('beforeDestroy')
-    // Perform the teardown procedure for someLeakyProperty.
-    // (In this case, effectively nothing)
-    // this.someLeakyProperty = null
-    // delete this.someLeakyProperty
-  },
-  destroyed () {
-    // console.log('destroyed')
-    // console.log(this) // There's practically nothing here!
-    // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
+    this.fetchData()
   },
   methods: {
+    fetchData () {
+      let resourceName = `${config.api.workOrder.index}`
+      let queryString = this.BUILDPARAM()
+      service.getResource({resourceName, queryString})
+        .then((res) => {
+          if (res.status === 200) {
+            this.local.workOrderObj = res.data
+          }
+        })
+        .catch(() => {
+        })
+    },
+    addItem () {
+      let data = {}
+      let resourceName = `${config.api.workOrder.index}`
+      service.postResource({data, resourceName})
+        .then((res) => {
+          if (res.status === 200) {
+            this.GOTOPAGE('EditWorkorder', res.data.time)
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <section :class="['section', local.template.class]">
+    <section :class="['section', local.pageObj.template.class]">
       <breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar>
       <div class="container-block">
         <div class="detail-panel">
@@ -9,11 +9,11 @@
                 <div class="items">
                   <div class="item">
                     <div class="item-header container-block">
-                      <div class="time block">งวดที่ 1</div>
+                      <div class="time block">งวดที่ {{local.time}}</div>
                       <div class="order-name container-block block">
                         <span class="name">รายการสั่งซื้อก่อนหน้า </span>
                         <div class="control has-icons-right">
-                          <input class="input" type="text" placeholder="">
+                          <input class="input" type="text" v-model="local.pre_order" placeholder="">
                           <span class="icon is-right">
                             <i class="fa fa-search" aria-hidden="true"></i>
                           </span>
@@ -26,61 +26,36 @@
                           <tr>
                             <td>รายละเอียดงาน</td>
                             <!-- <td>ระยะเวลา</td> -->
-                            <td>สั่งซื้อรายการถัดไป</td>
+                            <td width="250">สั่งซื้อรายการถัดไป</td>
+                            <td width="100"></td>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td><input type="text" class="input"  value="ถังบำบัดน้ำเสียและถังเก็บน้ำใต้ดิน"></td>
-                            <!-- <td><input type="text" class="input" ></td> -->
-                            <td><input type="text" class="input" ></td>
-                          </tr>
-                          <tr>
-                            <td><input type="text" class="input"  value="งานเดินท่อประปาใต้อาคาร"></td>
-                            <!-- <td><input type="text" class="input" ></td> -->
-                            <td><input type="text" class="input" ></td>
-                          </tr>
-                          <tr>
-                            <td><input type="text" class="input"  value="งานเทพื้นชั้นหนึ่ง 100%"></td>
-                            <!-- <td><input type="text" class="input" ></td> -->
-                            <td><input type="text" class="input" ></td>
-                          </tr>
-                          <tr>
-                            <td><input type="text" class="input"  value="งานโครงหลังคารอบบน ล่าง"></td>
-                            <!-- <td><input type="text" class="input" ></td> -->
-                            <td><input type="text" class="input" ></td>
+                          <tr :key="index" v-for="(item, index) in workOrderItem">
+                              <td>
+                                <my-input
+                                  :value="item.taskName"
+                                  :inputObj="{type: 'text', name: `order_group_${index}`, placeholder: 'ระบุรายละเอียดงาน', validate: 'required'}"
+                                  :validator="$validator"
+                                  @input="value => { item.taskName = value }"
+                                  ></my-input>
+                                <!-- <input type="text" class="input" v-model="item.taskName"> -->
+                              </td>
+                              <td>
+                                <input type="text" class="input" v-model="item.postOrderId">
+                              </td>
+                              <td><button @click="deleteTime(index)" class="button is-danger">ลบรายการนี้</button></td>
                           </tr>
                         </tbody>
                       </table>
-                      <!-- <div class="name">รายละเอียดงาน</div>
-                      <div class="inputs">
-                        <div class="control container-block">
-                          <input class="input block" type="text" value="ถังบำบัดน้ำเสียและถังเก็บน้ำใต้ดิน" >
-                          <button class="button block is-danger"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                        </div>
-                        <div class="control container-block">
-                          <input class="input block" type="text" value="งานเดินท่อประปาใต้อาคาร" >
-                          <button class="button block is-danger"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                        </div>
-                        <div class="control container-block">
-                          <input class="input block" type="text" value="งานเทพื้นชั้นหนึ่ง 100%" >
-                          <button class="button block is-danger"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                        </div>
-                        <div class="control container-block">
-                          <input class="input block" type="text" value="งานโครงหลังคารอบบน ล่าง" >
-                          <button class="button block is-danger"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                        </div>
-                      </div> -->
                     </div>
                     <div class="item-footer container-block">
                       <div class="container-block block right">
-                        <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                        <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button class="button" @click="editRow('remove')"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                        <button class="button" @click="editRow('add')"><i class="fa fa-plus" aria-hidden="true"></i></button>
                       </div>
                        <div class="container-block block action">
-                        <button class="button">บันทึกข้อมูล</button>
-                        <button class="button">ลบงวดนี้</button>
-                        <button class="button">เพิ่มงวดถัดไป</button>
+                        <button class="button" @click="submitForm()">บันทึกข้อมูลงวดที่ {{local.time}}</button>
                       </div>
                     </div>
                   </div>
@@ -116,15 +91,17 @@
 
 <script>
 import breadcrumbBar from '@Components/Breadcrumb'
+import service from '@Services/app-service'
+import config from '@Config/app.config'
+import inputSearchSelect from '@Components/Form/search-select'
+import myInput from '@Components/Form/my-input'
 export default {
   props: {
-    // templateName: {
-    //   type: String,
-    //   required: true
-    // }
   },
   components: {
-    breadcrumbBar
+    breadcrumbBar,
+    inputSearchSelect,
+    myInput
   },
   name: 'EditWorkOrderPage',
   data () {
@@ -134,55 +111,96 @@ export default {
           items: [
             {name: 'ลำดับการทำงาน', route: 'Workorder', key: '', active: false, icon: 'fa fa-address-book-o'},
             {name: 'แก้ไข', route: 'EditWorkorder', key: 'xxxx', active: true, icon: ''}
-          ]
+          ],
+          template: {
+            class: 'edit-work-order-page'
+          }
         },
-        template: {
-          class: 'edit-work-order-page'
-        }
+        time: this.$route.params.key,
+        pre_order: null,
+        workOrderTemplate: {
+          time: this.time,
+          taskName: '',
+          postOrderId: ''
+        },
+        items: []
       }
     }
   },
   computed: {
-    // propertyComputed() {
-    //   console.log('I change when this.property changes.')
-    //   return this.property
-    // }
+    workOrderItem () {
+      if (!this.local.items.length) {
+        // this.local.items.push(this.local.workOrderTemplate)
+      }
+      return this.local.items
+    }
   },
   created () {
-    // console.log('created')
-    // this.property = 'Example property update.'
-    // console.log('propertyComputed will update, as this.property is now reactive.')
-  },
-  beforeMount () {
-    // console.log('beforeMount')
-    // console.log(`this.$el doesn't exist yet, but it will soon!`)
-  },
-  mounted () {
-    // console.log('mounted')
-    // console.log(this.$el.textContent) // I'm text inside the component.
-  },
-  beforeUpdate () {
-    // console.log('beforeUpdate')
-    // console.log(this.counter) // Logs the counter value every second, before the DOM updates.
-  },
-  updated () {
-    // console.log('updated')
-    // Fired every second, should always be true
-    // console.log(+this.$refs['dom-element'].textContent === this.counter)
-  },
-  beforeDestroy () {
-    // console.log('beforeDestroy')
-    // Perform the teardown procedure for someLeakyProperty.
-    // (In this case, effectively nothing)
-    // this.someLeakyProperty = null
-    // delete this.someLeakyProperty
-  },
-  destroyed () {
-    // console.log('destroyed')
-    // console.log(this) // There's practically nothing here!
-    // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
+    this.fetchData()
   },
   methods: {
+    fetchData () {
+      let resourceName = `${config.api.workOrder.index}/${this.$route.params.key}`
+      let queryString = this.BUILDPARAM({type: 'full'})
+      service.getResource({resourceName, queryString})
+        .then((res) => {
+          if (res.status === 200) {
+            if (res.data.length) {
+              this.local.pre_order = res.data[0].pre_order
+              this.local.items = res.data.map(item => {
+                return {
+                  time: item.time,
+                  taskName: item.name,
+                  postOrderId: item.post_order
+                }
+              })
+            } else {
+              this.local.items.push(this.local.workOrderTemplate)
+            }
+          }
+        })
+        .catch(() => {
+        })
+    },
+    editRow (type) {
+      if (type === 'add') {
+        // let newObj = this.local.workOrderTemplate
+        this.local.items.push({
+          time: this.time,
+          taskName: '',
+          postOrderId: ''
+        })
+      } else {
+        this.local.items.pop()
+      }
+    },
+    deleteTime (indexOfOrder) {
+      this.local.items.splice(indexOfOrder, 1)
+    },
+    submitForm () {
+      this.$validator.validateAll().then((tf) => {
+        if (tf) {
+          let resourceName = `${config.api.workOrder.index}/${this.$route.params.key}`
+          let data = {
+            time: this.local.time,
+            pre_order: this.local.pre_order,
+            workOrderLists: this.local.items
+          }
+          service.putResource({data, resourceName})
+            .then((res) => {
+              if (res.status === 200) {
+                console.log(res)
+                this.NOTIFY('success')
+              } else {
+                this.NOTIFY('error')
+              }
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        }
+      })
+    }
   }
 }
 </script>

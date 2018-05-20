@@ -8,6 +8,12 @@ export default {
   computed: {
     PROJECT_TYPE () {
       return config.variable.projectType
+    },
+    LEFTRIGHT () {
+      return config.variable.leftRight
+    },
+    HOUSECOLOR () {
+      return config.variable.housecolor
     }
   },
   filters: {
@@ -28,6 +34,17 @@ export default {
     //   // return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     //   return parseFloat(number).toFixed(digit).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     // },
+    GET_WORKSTATUS (statusCode) {
+      return config.variable.status[statusCode]
+    },
+    GET_PROJECT_TYPE (key) {
+      return config.variable.projectType.filter(item => {
+        return item.key === key
+      })
+    },
+    GET_STATUSNAME (key) {
+      return config.variable.status[key]
+    },
     GOTOPAGE (pageName, key = '') {
       this.$router.push({
         name: pageName,
@@ -41,6 +58,42 @@ export default {
           queryString += key + '=' + params[key] + '&'
         })
         return queryString.slice(0, -1)
+      }
+    },
+    NOTIFY (type) {
+      switch (type) {
+        case 'success':
+          this.$snackbar.open({
+            duration: 5000,
+            message: 'ทำรายการเสร็จสิ้น',
+            type: 'is-primary',
+            position: 'is-bottom-right',
+            actionText: '',
+            queue: false,
+            onAction: () => {
+              // this.$toast.open({
+              //     message: 'Action pressed',
+              //     queue: false
+              // })
+            }
+          })
+          break
+        case 'error':
+          this.$snackbar.open({
+            duration: 5000,
+            message: 'เกิดข้อผิดพลาด โปรดทำรายการอีกครั้ง',
+            type: 'is-danger',
+            position: 'is-bottom-right',
+            actionText: '',
+            queue: false,
+            onAction: () => {
+              // this.$toast.open({
+              //     message: 'Action pressed',
+              //     queue: false
+              // })
+            }
+          })
+          break
       }
     }
     // BUILDPARAM (params = []) {

@@ -114,6 +114,9 @@ export default {
             .then((res) => {
               if (res.status === 200) {
                 this.fetchData()
+                this.NOTIFY('success')
+              } else {
+                this.NOTIFY('error')
               }
             })
             .catch((err) => {

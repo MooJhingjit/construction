@@ -14,15 +14,43 @@ const api = {
   'contract': {
     'index': '/contract'
   },
+  'workOrder': {
+    'index': '/work-order'
+  },
+  'materialGroup': {
+    'index': '/material-group'
+  },
   'users': {
     'index': '/users'
+  },
+  'house': {
+    'index': '/house'
   }
 }
 
 const variable = {
   projectType: [
-    {key: '1', name: 'มัณฑนา'},
-    {key: '2', name: 'นันทวัน'}
+    {key: 1, name: 'มัณฑนา'},
+    {key: 2, name: 'นันทวัน'}
+  ],
+  status: {
+    wait: 'รออนุมัติ',
+    ip: 'กำลังดำเนินงาน',
+    done: 'เสร็จสิ้น'
+  },
+  times: 10,
+  leftRight: [
+    {key: 'left', name: 'ซ้าย'},
+    {key: 'right', name: 'ขวา'}
+  ],
+  housecolor: [
+    {key: 'B3PW1', name: 'B3PW-1'},
+    {key: 'B3PW2', name: 'B3PW-2'},
+    {key: 'B3PW3', name: 'B3PW-3'},
+    {key: 'B3PW4', name: 'B3PW-4'},
+    {key: 'B21', name: 'B2-1'},
+    {key: 'B22', name: 'B2-2'},
+    {key: 'B23', name: 'B2-2'}
   ]
 }
 

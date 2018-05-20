@@ -2,7 +2,7 @@
 <template>
   <div class="wrapper">
     <div class="background" style="
-    background: url('../static/img/bg2.jpg');
+    background: url('https://www.wallpaperup.com/uploads/wallpapers/2016/11/30/1059029/1d1ae3165389ed9dbbcc03b551a16422-700.jpg');
     position: fixed;
     top: 0;
     bottom: 0;
@@ -73,7 +73,7 @@ export default {
     ]),
     fetchData () {
       let resourceName = config.api.app.resource
-      let queryString = this.BUILDPARAM()
+      let queryString = this.BUILDPARAM([])
       service.getResource({resourceName, queryString})
         .then((res) => {
           if (res.status === 200) {

@@ -1,8 +1,6 @@
 const helpers = require('../Libraries/helpers')
-const db = require('../Database/index')
-db.connect(function(err) {
-  if (err) return err
-})
+const database = require('./databaseModel')
+const db = new database()
 
 module.exports =  class Project {  
   constructor(id = '') {
@@ -11,24 +9,26 @@ module.exports =  class Project {
     this.name
     this.address
     this.type
+    this.limit = 5
+    this.offset = 0
   }
 
-  getData (callback) {
-    db.query(`SELECT * FROM project WHERE id = ${this.id}`, (err, result) => {
-      return callback(result);
-    })
-    
+  getData () {
+    return db.query(`SELECT * FROM project WHERE id = ${this.id}`)
   }
 
-  getAllData (callback) {
+  getAllData () {
     let condition = this.getCondition('allData')
-    db.query(`SELECT * FROM project ${condition}`, (err, result) => {
-      return callback(result);
-    })
+    return db.query(`SELECT * FROM project ${condition} ORDER BY id LIMIT ${this.limit} OFFSET ${this.offset} `)
+  }
+
+  count () {
+    let condition = this.getCondition('allData')
+    return db.query(`SELECT count(id) as count FROM project ${condition}`)
   }
 
   save () {
-    db.query('INSERT INTO project (id, code, name, address, type, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+    return db.query('INSERT INTO project (id, code, name, address, type, created_at) VALUES (?, ?, ?, ?, ?, ?)',
     [
       null,
       this.code,
@@ -36,12 +36,7 @@ module.exports =  class Project {
       this.address,
       this.type,
       helpers.getCurrentTime('sql')
-    ],
-    function (err, result) {
-      console.log(err)
-      if (err) return 'err'
-      return 'result'
-    })
+    ])
   }
 
   update () {
@@ -53,18 +48,11 @@ module.exports =  class Project {
     created_at = ?
     WHERE id = ?
     `;
-    db.query(sql, [this.code, this.name, this.address, this.type, helpers.getCurrentTime('sql'), this.id],function (err, result) {
-      if (err) throw err;
-      console.log(result.affectedRows + " record(s) updated");
-    });
+    return db.query(sql, [this.code, this.name, this.address, this.type, helpers.getCurrentTime('sql'), this.id],);
   }
 
   delete () {
-    let sql = `DELETE FROM project WHERE id = ?`;
-    db.query(sql, [this.id],function (err, result) {
-      if (err) throw err;
-      console.log(result.affectedRows + " record(s) updated");
-    });
+    return db.query(`DELETE FROM project WHERE id = ?`, [this.id]);
   }
 
   getCondition (actionType) {

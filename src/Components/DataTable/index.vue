@@ -20,13 +20,20 @@
             </thead>
             <tbody>
               <tr :class="{'selected': itemBody.key == local.idSelected}" :key="index" v-for="(itemBody, index) in local.items.body" @dblclick="setDataSelected(itemBody.items)">
-                <td :key="index" v-for="(item, index) in itemBody.show">{{itemBody.items[item]}}</td>
+                <td :key="index" v-for="(item, index) in itemBody.show">
+                  <template v-if="item == 'status'">
+                    {{GET_STATUSNAME(itemBody.items[item])}}
+                  </template>
+                  <template v-else>
+                    {{itemBody.items[item]}}
+                  </template>
+                </td>
               </tr>
             </tbody>
         </table>
         <nav class="pagination" role="navigation" aria-label="pagination">
-          <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
-          <button class="pagination-next">หน้าถัดไป</button>
+          <button class="pagination-previous" @click="changePage('previous')" :disabled="local.currentPage == 1">ก่อนหน้า</button>
+          <button class="pagination-next" @click="changePage('next')" :disabled="local.totalPage == local.currentPage">หน้าถัดไป</button>
         </nav>
       </div>
     </div>
@@ -55,7 +62,10 @@ export default {
         idSelected: '',
         queryString: [],
         textSearch: '',
-        statusSelected: ''
+        statusSelected: '',
+        limitRequest: 5,
+        currentPage: 1,
+        totalPage: 0
       }
     }
   },
@@ -74,15 +84,21 @@ export default {
   methods: {
     fetchData () {
       let resourceName = this.resourceName
+      this.local.queryString['limit'] = this.local.limitRequest
+      this.local.queryString['currentPage'] = this.local.currentPage
       let queryString = this.BUILDPARAM(this.local.queryString)
       service.getResource({resourceName, queryString})
         .then((res) => {
           if (res.status === 200) {
             this.local.items = res.data
+            this.setTotalPage()
           }
         })
         .catch(() => {
         })
+    },
+    reloadDataTable () {
+      this.fetchData()
     },
     filterByStatus (statusName) {
       let item = []
@@ -97,6 +113,18 @@ export default {
     searchByText () {
       this.local.queryString['main_search'] = this.local.textSearch
       this.fetchData()
+    },
+    changePage (action) {
+      if (action === 'next') {
+        this.local.currentPage += 1
+      } else {
+        if (this.local.currentPage === 1) return
+        this.local.currentPage -= 1
+      }
+      this.reloadDataTable()
+    },
+    setTotalPage () {
+      this.local.totalPage = Math.ceil(this.local.items.total / this.local.limitRequest)
     }
   }
 }

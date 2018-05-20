@@ -178,6 +178,9 @@ export default {
                 this.fetchData()
                 this.local.idSelected = ''
                 this.cleanUserInput()
+                this.NOTIFY('success')
+              } else {
+                this.NOTIFY('error')
               }
             })
             .catch((err) => {
@@ -192,6 +195,9 @@ export default {
               if (res.status === 200) {
                 this.fetchData()
                 this.local.idSelected = ''
+                this.NOTIFY('success')
+              } else {
+                this.NOTIFY('error')
               }
             })
             .catch((err) => {
@@ -207,6 +213,9 @@ export default {
                 this.fetchData()
                 this.local.idSelected = ''
                 this.cleanUserInput()
+                this.NOTIFY('success')
+              } else {
+                this.NOTIFY('error')
               }
             })
             .catch((err) => {

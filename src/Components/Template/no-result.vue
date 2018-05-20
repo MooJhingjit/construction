@@ -1,7 +1,7 @@
 <template>
   <div class="container-block empty-panel">
     <div class="block container-block">
-      <div class="block select-data">
+      <!-- <div class="block select-data">
         <span>เลือกข้อมูลเพื่อแสดง</span>
       </div>
       <div class="block or">
@@ -9,7 +9,7 @@
       </div>
       <div class="block add-data">
         <slot name="options"></slot>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

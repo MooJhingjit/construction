@@ -17,7 +17,8 @@
         </div>
       </div>
       <div class="detail-panel">
-        <slot name="detail"></slot>
+        <div class="close-panel" v-if="isShowPanel" @click="cancleForm"><i class="fa fa-times" aria-hidden="true"></i></div>
+        <slot name="detail" v-if="isShowPanel"></slot>
       </div>
     </div>
   </section>
@@ -33,6 +34,10 @@ export default {
     optionMinimize: {
       type: Boolean,
       required: false
+    },
+    isSelected: {
+      type: [Number, String],
+      required: false
     }
   },
   components: {
@@ -40,7 +45,8 @@ export default {
   name: 'optionsDetailTemplate',
   data () {
     return {
-      isSmallOptions: false
+      isSmallOptions: false,
+      isShowPanel: false
     }
   },
   computed: {
@@ -53,14 +59,32 @@ export default {
     // this.property = 'Example property update.'
     // console.log('propertyComputed will update, as this.property is now reactive.')
   },
+  updated () {
+    // this.setPanel()
+  },
   methods: {
     expandOptionsPanel () {
       this.isSmallOptions = false
+    },
+    cancleForm () {
+      this.$emit('cancleForm')
+      this.isShowPanel = false
+    },
+    setPanel () {
+      console.log(this.isShowPanel)
+      if (this.isSelected !== null && this.isSelected !== '') {
+        this.isShowPanel = true
+      } else {
+        this.isShowPanel = false
+      }
     }
   },
   watch: {
     optionMinimize: function () {
       this.isSmallOptions = this.optionMinimize
+    },
+    isSelected: function () {
+      this.setPanel()
     }
   }
 }

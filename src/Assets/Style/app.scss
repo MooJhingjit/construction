@@ -586,7 +586,7 @@ html {
                         }
                       }
                       &>.block{
-                        border: 1px solid #ccc;
+                        // border: 1px solid #ccc;
                         padding: 5px;
                       }
                       &>.block+.block{
@@ -1012,11 +1012,12 @@ html {
                   .detail-panel .container-block{
                     // background: transparent !important;
                     .c-body{
+                      padding-top: 0px; 
                       .block:not(:last-child){
                         margin-bottom: 0em;
                       }
                       .item+.item{
-                        margin-top: 10px;
+                        // margin-top: 10px;
                       }
                       .item{
                         
@@ -1155,12 +1156,28 @@ html {
                       
                     }
                     .detail-panel{
+                      position: relative;
+                      .close-panel{
+                        z-index: 4;
+                        right: 0;
+                        top: 0;
+                        position: absolute;
+                        width: 20px;
+                        height: 20px;
+                        cursor: pointer;
+                        text-align: center;
+                        background: $red;
+                        i{
+                          color: $white;
+                        }
+                      }
                       .detail-block{
+                        z-index: 3;
                         position: relative;
                         .type{
                           position: absolute;
                           top: 0px;
-                          right: 0px;
+                          right: 20px;
                           border-radius: 0px;
                         }
                       }
@@ -1172,7 +1189,9 @@ html {
                         }
                       }
                       .c-body{
-                        overflow: auto;
+
+                        padding: 15px 0; 
+                        // overflow: auto;
                         &>table{
                           min-width: 550px;
                         }
@@ -1370,6 +1389,20 @@ html {
                   }
                 }
                 
+            }
+            // custom component
+            .search-select-input{
+              position: relative;
+              .result-panel{
+                position: absolute;
+                top: 40px;
+                flex-direction: column !important;
+                background: $white;
+                padding: 5px;
+                max-height: 150px;
+                overflow-y: scroll;
+                width: 100%;
+              }
             }
         }
     }

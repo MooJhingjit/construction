@@ -1,10 +1,8 @@
 const helpers = require('../Libraries/helpers')
-const db = require('../Database/index')
-db.connect(function(err) {
-  if (err) return err
-})
+const database = require('./databaseModel')
+const db = new database()
 
-module.exports =  class Project {  
+module.exports =  class Contract {  
   constructor(id = '') {
     this.id = id;
     this.code
@@ -17,24 +15,26 @@ module.exports =  class Project {
     this.date_start
     this.paid
     this.status
+    this.limit
+    this.offset
   }
 
-  // getData (callback) {
-  //   db.query(`SELECT * FROM project WHERE id = ${this.id}`, (err, result) => {
-  //     return callback(result);
-  //   })
-    
-  // }
+  getData () {
+    return db.query(`SELECT * FROM contract WHERE id = ${this.id}`) 
+  }
 
-  // getAllData (callback) {
-  //   let condition = this.getCondition('allData')
-  //   db.query(`SELECT * FROM project ${condition}`, (err, result) => {
-  //     return callback(result);
-  //   })
-  // }
+  getAllData () {
+    let condition = this.getCondition('allData')
+    return db.query(`SELECT * FROM contract ${condition} ORDER BY id LIMIT ${this.limit} OFFSET ${this.offset} `)
+  }
+
+  count () {
+    let condition = this.getCondition('allData')
+    return db.query(`SELECT count(id) as count FROM contract ${condition}`)
+  }
 
   save () {
-    db.query(
+    return db.query(
       'INSERT INTO contract (id, code, project_id, contract_type, plan, house_temp, price, quarter, date_start, paid, status, created_at)'
       + 'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
     [
@@ -50,49 +50,25 @@ module.exports =  class Project {
       this.paid,
       this.status,
       helpers.getCurrentTime('sql')
-    ],
-    function (err, result) {
-      console.log(err)
-      if (err) return 'err'
-      return result
-    })
+    ])
   }
 
-  // update () {
-  //   var sql = `UPDATE project SET 
-  //   code = ?,
-  //   name = ?,
-  //   address = ?,
-  //   type = ?,
-  //   created_at = ?
-  //   WHERE id = ?
-  //   `;
-  //   db.query(sql, [this.code, this.name, this.address, this.type, helpers.getCurrentTime('sql'), this.id],function (err, result) {
-  //     if (err) throw err;
-  //     console.log(result.affectedRows + " record(s) updated");
-  //   });
-  // }
+  delete () {
+    return db.query(`DELETE FROM project WHERE id = ?`, [this.id]);
+  }
 
-  // delete () {
-  //   let sql = `DELETE FROM project WHERE id = ?`;
-  //   db.query(sql, [this.id],function (err, result) {
-  //     if (err) throw err;
-  //     console.log(result.affectedRows + " record(s) updated");
-  //   });
-  // }
-
-  // getCondition (actionType) {
-  //   let condition = 'WHERE'
-  //   if (this.name || this.status) {
-  //     if (this.name) {
-  //       condition += ` name like "%${this.name}%"`
-  //     }
-  //     if (this.status) {
-  //       condition += ` status = "${this.status}"`
-  //     }
-  //   } else {
-  //     condition += ` 1`
-  //   }
-  //   return condition
-  // }
+  getCondition (actionType) {
+    let condition = 'WHERE'
+    if (this.name || this.status) {
+      if (this.name) {
+        condition += ` name like "%${this.name}%"`
+      }
+      if (this.status) {
+        condition += ` status = "${this.status}"`
+      }
+    } else {
+      condition += ` 1`
+    }
+    return condition
+  }
 }

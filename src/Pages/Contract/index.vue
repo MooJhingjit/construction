@@ -1,7 +1,14 @@
 <template>
-  <option-detail-template :templateObj="local.template">
+  <option-detail-template :templateObj="local.pageObj.template" :isSelected="local.idSelected"  @cancleForm="submitForm('cancel')">
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
-    <template slot="search-status">
+    <template slot="data-table">
+      <data-table ref="dataTable"
+      :resourceName="resourceName"
+      :statusSearch="local.statusSearch"
+      @selectedData="selectedDataHandle"
+      ></data-table>
+    </template>
+    <!-- <template slot="search-status">
       <div class="tags">
         <span class="tag is-success">เสร็จสิ้น 42</span>
         <span class="tag is-warning">รออนุมัติ 5</span>
@@ -65,22 +72,22 @@
         <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
         <button class="pagination-next">หน้าถัดไป</button>
       </nav>
-    </template>
-    <template v-if="true">
+    </template> -->
+    <template v-if="local.item.status === 'success'">
       <template slot="detail">
         <div class="container-block  detail-block">
-          <span class="type tag">ดำเนินงาน</span>
+          <span class="type tag">{{GET_WORKSTATUS(local.item.contract.status)}}</span>
           <div class="block c-header">
             <table class="transparent-table">
               <tr>
-              <td>โครงการ:<span class="value">รามอินทรา พหลโยธิน 50</span></td>
+              <td>โครงการ:<span class="value">{{local.item.project.name}}</span></td>
               </tr>
               <tr>
-                <td>เลขที่สัญญา:<span class="value">LH120243216</span></td>
-                <td>แปลน: <span class="value">C01</span></td>
+                <td>เลขที่สัญญา:<span class="value">{{local.item.contract.code}}</span></td>
+                <td>แปลน: <span class="value">{{local.item.contract.plan}}</span></td>
               </tr>
               <tr>
-                <td>แบบบ้าน:<span class="value">244CA248C</span></td>
+                <td>แบบบ้าน:<span class="value">{{local.item.contract.house_temp}}</span></td>
                 <td>ขั้นตอนการตำเนินงาน: <span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
               </tr>
               <tr>
@@ -217,12 +224,12 @@
           </div>
         </div>
         <div class="container-block footer-panel">
-          <button class="button">เริ่มดำเนินงาน</button>
+          <button class="button" v-if="local.item.contract.status == 'wait'">เริ่มดำเนินงาน</button>
           <button class="button">ปิดงาน (เสร็จสิ้น)</button>
         </div>
       </template>
     </template>
-    <template v-else>
+    <!-- <template v-else>
       <template slot="detail">
         <div class="container-block empty-panel">
           <div class="block container-block">
@@ -242,13 +249,17 @@
           </div>
         </div>
       </template>
-    </template>
+    </template> -->
   </option-detail-template>
 </template>
 
 <script>
 import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
+// import service from '@Services/app-service'
+import config from '@Config/app.config'
+import service from '@Services/app-service'
+import dataTable from '@Components/DataTable'
 export default {
   props: {
     // templateName: {
@@ -258,7 +269,8 @@ export default {
   },
   components: {
     breadcrumbBar,
-    optionDetailTemplate
+    optionDetailTemplate,
+    dataTable
   },
   name: 'ContractPage',
   data () {
@@ -267,55 +279,47 @@ export default {
         pageObj: {
           items: [
             {name: 'ข้อมูลสัญญา', route: 'Contract', key: 'test', active: true, icon: 'fa fa-file-text'}
-          ]
+          ],
+          template: {
+            class: 'contract-page'
+          }
         },
-        template: {
-          class: 'contract-page'
-        }
+        statusSearch: [
+          {title: 'ทั้งหมด', name: ''},
+          {title: 'เสร็จสิ้น', name: 'done'},
+          {title: 'รออนุมัติ', name: 'wait'},
+          {title: 'ดำเนินการ', name: 'ip'}
+        ],
+        idSelected: null,
+        item: {}
       }
     }
   },
   computed: {
-    // propertyComputed() {
-    //   console.log('I change when this.property changes.')
-    //   return this.property
-    // }
+    resourceName () {
+      return config.api.contract.index
+    }
   },
   created () {
     // console.log('created')
     // this.property = 'Example property update.'
     // console.log('propertyComputed will update, as this.property is now reactive.')
   },
-  beforeMount () {
-    // console.log('beforeMount')
-    // console.log(`this.$el doesn't exist yet, but it will soon!`)
-  },
-  mounted () {
-    // console.log('mounted')
-    // console.log(this.$el.textContent) // I'm text inside the component.
-  },
-  beforeUpdate () {
-    // console.log('beforeUpdate')
-    // console.log(this.counter) // Logs the counter value every second, before the DOM updates.
-  },
-  updated () {
-    // console.log('updated')
-    // Fired every second, should always be true
-    // console.log(+this.$refs['dom-element'].textContent === this.counter)
-  },
-  beforeDestroy () {
-    // console.log('beforeDestroy')
-    // Perform the teardown procedure for someLeakyProperty.
-    // (In this case, effectively nothing)
-    // this.someLeakyProperty = null
-    // delete this.someLeakyProperty
-  },
-  destroyed () {
-    // console.log('destroyed')
-    // console.log(this) // There's practically nothing here!
-    // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
-  },
   methods: {
+    async selectedDataHandle (item) {
+      this.local.idSelected = item.id
+      let queryString = this.BUILDPARAM({type: 'full'})
+      let contractItem = await service.getResource({
+        resourceName: `${config.api.contract.index}/${item.id}`,
+        queryString
+      })
+      this.local.item = contractItem.data
+      // this.local.inputs.code = item.code
+      // this.local.inputs.name = item.name
+      // this.local.inputs.address = item.address
+      // this.local.inputs.type = item.type
+      // this.local.submitMode = 'edit'
+    }
   }
 }
 </script>

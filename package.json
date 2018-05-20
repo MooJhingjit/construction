@@ -12,9 +12,11 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "buefy": "^0.6.5",
     "chart.js": "^2.7.2",
     "jquery": "^3.2.1",
     "jquery-sparkline": "^2.4.0",
+    "vee-validate": "^2.0.9",
     "vue": "^2.5.2",
     "vue-chartjs": "^3.2.1",
     "vue-router": "^3.0.1",

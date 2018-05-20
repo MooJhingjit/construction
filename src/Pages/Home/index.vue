@@ -40,7 +40,7 @@
                   </div>
                 </div>
               </article>
-              <article class="tile is-child notification">
+              <!-- <article class="tile is-child notification">
                 <div class="container-block stat">
                   <div class="block chart container-block">
                     <spark-line :config="config" :data="item3"></spark-line>
@@ -53,7 +53,7 @@
                     <button class="button" @click="GOTOPAGE('Contract', 'all-success')">แสดงข้อมูล</button>
                   </div>
                 </div>
-              </article>
+              </article> -->
             </div>
             <div class="tile is-parent">
               <article class="tile is-child notification">

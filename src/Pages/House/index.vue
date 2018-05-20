@@ -17,60 +17,88 @@
         <div class="container-block detail-block">
           <div class="c-body">
             <div class="form-detail">
-              <div class="name">{{local.inputs.code}}  {{local.inputs.name}}</div>
+            <div class="name">{{local.inputs.plan}}  {{local.inputs.name}}</div>
               <div class="container-block">
-                <div class="text-title">รหัสโครงการ</div>
+                <div class="text-title">แปลน</div>
                 <div class="value">
-                  <!-- required|numeric -->
-                  <my-input
-                  :value="local.inputs.code"
-                  :inputObj="{type: 'text', name: 'project_code', placeholder: 'รหัสโครงการ', validate: 'required'}"
-                  :validator="$validator"
-                  @input="value => { local.inputs.code = value }"
-                  ></my-input>
+                   <my-input
+                    :value="local.inputs.plan"
+                    :inputObj="{type: 'text', name: 'house_plan', placeholder: 'แปลน', validate: 'required'}"
+                    :validator="$validator"
+                    @input="value => { local.inputs.plan = value }"
+                    ></my-input>
+                  <!-- <input type="text" value="G03" placeholder="Primary input" class="input"> -->
                 </div>
               </div>
               <div class="container-block">
-                <div class="text-title">ชื่อโครงการ</div>
+                <div class="text-title">แบบบ้าน</div>
                 <div class="value">
+                  <!-- <input type="text" value="098SW319I" placeholder="Primary input" class="input"> -->
                   <my-input
-                  :value="local.inputs.name"
-                  :inputObj="{type: 'text', name: 'project_name', placeholder: 'ชื่อโครงการ', validate: 'required'}"
-                  :validator="$validator"
-                  @input="value => { local.inputs.name = value }"
-                  ></my-input>
+                    :value="local.inputs.name"
+                    :inputObj="{type: 'text', name: 'house_name', placeholder: 'แบบบ้าน', validate: 'required'}"
+                    :validator="$validator"
+                    @input="value => { local.inputs.name = value }"
+                    ></my-input>
                 </div>
               </div>
               <div class="container-block">
-                <div class="text-title">ที่ตั้ง</div>
+                <div class="text-title">เมนูกระเบื้อง</div>
                 <div class="value">
-                  <b-field>
-                    <b-input
-                        type="text"
-                        v-model="local.inputs.address"
-                        placeholder="ที่ตั้ง" >
-                    </b-input>
-                  </b-field>
+                  <!-- <input type="text" value="098SW-8SR2" placeholder="Primary input" class="input"> -->
+                  <my-input
+                    :value="local.inputs.tile"
+                    :inputObj="{type: 'text', name: 'house_tile', placeholder: 'เมนูกระเบื้อง', validate: 'required'}"
+                    :validator="$validator"
+                    @input="value => { local.inputs.tile = value }"
+                    ></my-input>
                 </div>
               </div>
               <div class="container-block">
-                <div class="text-title">ประเภท</div>
+                <div class="text-title">โรงจอดรถ</div>
+                <div class="value">
+                   <my-input
+                    :value="local.inputs.garage"
+                    :inputObj="{type: 'select', icon: 'home', inputValue: LEFTRIGHT, name: 'house_garage', placeholder: 'โรงจอดรถ', validate: 'required'}"
+                    :validator="$validator"
+                    @input="value => { local.inputs.garage = value }"
+                    ></my-input>
+                </div>
+              </div>
+              <div class="container-block">
+                <div class="text-title">บันไดวน</div>
                 <div class="value">
                   <my-input
-                  :value="local.inputs.type"
-                  :inputObj="{type: 'select', icon: 'home', inputValue: PROJECT_TYPE, name: 'project_type', placeholder: '', validate: 'required'}"
-                  :validator="$validator"
-                  @input="value => { local.inputs.type = value }"
-                  ></my-input>
+                    :value="local.inputs.stair"
+                    :inputObj="{type: 'select', icon: 'home', inputValue: LEFTRIGHT, name: 'house_stair', placeholder: 'บันไดวน', validate: 'required'}"
+                    :validator="$validator"
+                    @input="value => { local.inputs.stair = value }"
+                    ></my-input>
                 </div>
+              </div>
+              <div class="container-block">
+                <div class="text-title">เมนูสี</div>
+                <div class="value">
+                  <my-input
+                    :value="local.inputs.color"
+                    :inputObj="{type: 'select', icon: 'home', inputValue: HOUSECOLOR, name: 'house_stair', placeholder: 'เมนูสี', validate: 'required'}"
+                    :validator="$validator"
+                    @input="value => { local.inputs.color = value }"
+                    ></my-input>
+                </div>
+                <!-- <div class="select">
+                  <select>
+                    <option>B3PW-1</option>
+                    <option>B3PW-2</option>
+                    <option>B3PW-3</option>
+                  </select>
+                </div> -->
               </div>
             </div>
           </div>
         </div>
         <div class="container-block footer-panel">
           <button class="button" @click="submitForm('edit')">บันทึกข้อมูล</button>
-          <button v-if="this.local.idSelected != 'new'" class="button" @click="GOTOPAGE('CreateContract', local.idSelected)">สร้างสัญญาใหม่</button>
-          <button v-if="this.local.idSelected != 'new'" class="button" @click="GOTOPAGE('Contract', 'project-id')">สัญญาในโครงการนี้ทั้งหมด</button>
           <button v-if="this.local.idSelected != 'new'" class="button is-danger" @click="submitForm('delete')">ลบข้อมูล</button>
         </div>
       </template>
@@ -105,17 +133,17 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'โครงการ', route: 'Project', key: 'xxx', active: true, icon: 'fa fa-folder-open-o'}
+            {name: 'แบบบ้าน', route: 'Project', key: '', active: true, icon: 'fa fa-address-book-o'}
           ],
           template: {
-            class: 'project-page'
+            class: 'house-template-page'
           }
         },
-        statusSearch: [
-          {title: 'ทั้งหมด', name: ''},
-          {title: 'ดำเนินงาน', name: 'ip'},
-          {title: 'เสร็จสิ้น', name: 'done'}
-        ],
+        // statusSearch: [
+        //   {title: 'ทั้งหมด', name: ''},
+        //   {title: 'ดำเนินงาน', name: 'ip'},
+        //   {title: 'เสร็จสิ้น', name: 'done'}
+        // ],
         idSelected: '',
         items: {},
         inputs: {}
@@ -124,7 +152,7 @@ export default {
   },
   computed: {
     resourceName () {
-      return config.api.project.index
+      return config.api.house.index
     }
   },
   created () {
@@ -133,17 +161,19 @@ export default {
     selectedDataHandle (item) {
       this.errors.clear()
       this.local.idSelected = item.id
-      this.local.inputs.code = item.code
+      this.local.inputs.plan = item.plan
       this.local.inputs.name = item.name
-      this.local.inputs.address = item.address
-      this.local.inputs.type = item.type
+      this.local.inputs.tile = item.tile
+      this.local.inputs.garage = item.garage
+      this.local.inputs.stair = item.stair
+      this.local.inputs.color = item.color
       this.local.submitMode = 'edit'
     },
     submitForm (type) {
       this.$validator.validateAll().then((tf) => {
         if (tf) {
           let data = {}
-          let resourceName = config.api.project.index
+          let resourceName = config.api.house.index
           if (type === 'edit' && this.local.idSelected === 'new') {
             type = 'save'
           }
@@ -157,7 +187,7 @@ export default {
               service.postResource({data, resourceName})
                 .then((res) => {
                   if (res.status === 200) {
-                    this.reloadTable()
+                    this.$refs.dataTable.fetchData()
                     this.local.idSelected = ''
                     this.cleanInput()
                     this.NOTIFY('success')
@@ -175,7 +205,7 @@ export default {
               service.deleteResource({resourceName, queryString})
                 .then((res) => {
                   if (res.status === 200) {
-                    this.reloadTable()
+                    this.$refs.dataTable.fetchData()
                     this.local.idSelected = ''
                     this.NOTIFY('success')
                   } else {
@@ -192,7 +222,7 @@ export default {
               service.putResource({data, resourceName})
                 .then((res) => {
                   if (res.status === 200) {
-                    this.reloadTable()
+                    this.$refs.dataTable.fetchData()
                     this.local.idSelected = ''
                     this.cleanInput()
                     this.NOTIFY('success')
@@ -213,13 +243,15 @@ export default {
       })
     },
     reloadTable () {
-      this.$refs.dataTable.fetchData()
+      // this.$refs.dataTable.fetchData()
     },
     cleanInput () {
-      this.local.inputs.code = ''
+      this.local.inputs.plan = ''
       this.local.inputs.name = ''
-      this.local.inputs.address = ''
-      this.local.inputs.type = ''
+      this.local.inputs.tile = ''
+      this.local.inputs.garage = ''
+      this.local.inputs.stair = ''
+      this.local.inputs.color = ''
     }
   }
 }
