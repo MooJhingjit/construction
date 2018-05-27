@@ -1,5 +1,9 @@
 <template>
-  <option-detail-template ref="template" :templateObj="local.pageObj.template" :isSelected="local.idSelected"  @cancleForm="submitForm('cancel')">
+  <option-detail-template ref="template"
+  :templateObj="local.pageObj.template"
+  :isSelected="local.idSelected"
+  @cancleForm="submitForm('cancel')"
+  >
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="data-table">
       <data-table ref="dataTable"
@@ -117,7 +121,7 @@ export default {
           {title: 'เสร็จสิ้น', name: 'done'}
         ],
         idSelected: '',
-        items: {},
+        // items: {},
         inputs: {}
       }
     }
@@ -140,6 +144,10 @@ export default {
       this.local.submitMode = 'edit'
     },
     submitForm (type) {
+      if (type === 'cancel') {
+        this.local.idSelected = null
+        return
+      }
       this.$validator.validateAll().then((tf) => {
         if (tf) {
           let data = {}
@@ -203,10 +211,6 @@ export default {
                 .catch((err) => {
                   console.log(err)
                 })
-              break
-            case 'cancel':
-              this.local.idSelected = ''
-              this.local.isOptionMinimize = false
               break
           }
         }

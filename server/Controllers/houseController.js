@@ -14,7 +14,6 @@ const getData = (req, res, next) => {
 async function getAllData (req, res, next) {
   let house = new houseModel()
   let data = []
-  // project.status = req.query.status
   house.name = req.query.main_search
   let total = await house.count()
   house.limit = req.query.limit
@@ -30,10 +29,24 @@ async function getAllData (req, res, next) {
   res.status(200).json(data)
 }
 
+async function getDropDown (req, res, next) {
+  let house = new houseModel()
+  let data = await house.getAllSelection()
+  data = data.map(item => {
+    return {
+      key: item.id,
+      value: `${item.plan} ${item.name}`,
+      garage: item.garage
+    }
+  })
+  res.status(200).json(data)
+}
+
 async function createData (req, res, next) {
   let newItem = new houseModel()
   newItem.plan = req.body.data.plan
   newItem.name = req.body.data.name
+  newItem.type = req.body.data.type
   newItem.tile = req.body.data.tile
   newItem.garage = req.body.data.garage
   newItem.stair = req.body.data.stair
@@ -46,6 +59,7 @@ async function updateData (req, res, next) {
   let item = new houseModel(req.params.id)
   item.plan = req.body.data.plan
   item.name = req.body.data.name
+  item.type = req.body.data.type
   item.tile = req.body.data.tile
   item.garage = req.body.data.garage
   item.stair = req.body.data.stair
@@ -61,6 +75,7 @@ async function deleteData (req, res, next) {
 }
 
 module.exports.getData = getData
+module.exports.getDropDown = getDropDown
 module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData

@@ -43,6 +43,17 @@
                 </div>
               </div>
               <div class="container-block">
+                <div class="text-title">ประเภท</div>
+                <div class="value">
+                  <my-input
+                  :value="local.inputs.type"
+                  :inputObj="{type: 'select', icon: 'home', inputValue: PROJECT_TYPE, name: 'project_type', placeholder: '', validate: 'required'}"
+                  :validator="$validator"
+                  @input="value => { local.inputs.type = value }"
+                  ></my-input>
+                </div>
+              </div>
+              <div class="container-block">
                 <div class="text-title">เมนูกระเบื้อง</div>
                 <div class="value">
                   <!-- <input type="text" value="098SW-8SR2" placeholder="Primary input" class="input"> -->
@@ -163,6 +174,7 @@ export default {
       this.local.idSelected = item.id
       this.local.inputs.plan = item.plan
       this.local.inputs.name = item.name
+      this.local.inputs.type = item.type
       this.local.inputs.tile = item.tile
       this.local.inputs.garage = item.garage
       this.local.inputs.stair = item.stair
@@ -170,6 +182,10 @@ export default {
       this.local.submitMode = 'edit'
     },
     submitForm (type) {
+      if (type === 'cancel') {
+        this.local.idSelected = null
+        return
+      }
       this.$validator.validateAll().then((tf) => {
         if (tf) {
           let data = {}
@@ -234,10 +250,6 @@ export default {
                   console.log(err)
                 })
               break
-            case 'cancel':
-              this.local.idSelected = ''
-              this.local.isOptionMinimize = false
-              break
           }
         }
       })
@@ -248,6 +260,7 @@ export default {
     cleanInput () {
       this.local.inputs.plan = ''
       this.local.inputs.name = ''
+      this.local.inputs.type = ''
       this.local.inputs.tile = ''
       this.local.inputs.garage = ''
       this.local.inputs.stair = ''

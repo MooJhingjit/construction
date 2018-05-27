@@ -1,0 +1,281 @@
+<template>
+  <div class="table-template">
+    <table class="table is-hoverable">
+      <thead>
+        <tr>
+          <th rowspan="3">รายการ</th>
+          <th rowspan="3">หน่วย</th>
+          <th rowspan="3">ราคา/หน่วย</th>
+          <th colspan="6">105PWY22F</th>
+        </tr>
+        <tr>
+          <th colspan="3">โรงรถซ้าย</th>
+          <th colspan="3">โรงรถขวา</th>
+        </tr>
+        <tr>
+          <th colspan="3">
+            <div class="select">
+              <my-input
+              :value="local.colorSelected.leftColor"
+              :inputObj="{type: 'select', icon: 'home', inputValue: HOUSECOLOR, name: 'house_stair', placeholder: 'เมนูสี', validate: ''}"
+              :validator="$validator"
+              @input="value => { local.colorSelected.leftColor = value }"
+              @change="setLeftColor"
+              ></my-input>
+            </div>
+          </th>
+          <th colspan="3">
+            <div class="select">
+              <my-input
+              :value="local.colorSelected.rightColor"
+              :inputObj="{type: 'select', icon: 'home', inputValue: HOUSECOLOR, name: 'house_stair', placeholder: 'เมนูสี', validate: ''}"
+              :validator="$validator"
+              @input="value => { local.colorSelected.rightColor = value}"
+              @change="setRightColor"
+              ></my-input>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr :key="index" v-for="(item, index) in inputsItem">
+          <td>
+            <my-input
+              :value="item.name"
+              :inputObj="{type: 'text', name: `name_${index}`, placeholder: 'รายการ', validate: 'required'}"
+              :validator="$validator"
+              @input="value => { item.name = value }"
+              ></my-input>
+          </td>
+          <td>
+            <my-input
+              :value="item.amount"
+              :inputObj="{type: 'text', name: `amount_${index}`, placeholder: 'หน่วย', validate: 'required'}"
+              :validator="$validator"
+              @input="value => { item.amount = value }"
+              ></my-input>
+          </td>
+          <td>
+            <my-input
+              :value="item.price"
+              :inputObj="{type: 'text', name: `price_${index}`, placeholder: 'ราคา/หน่วย', validate: 'required'}"
+              :validator="$validator"
+              @input="value => { item.price = value }"
+              ></my-input>
+          </td>
+          <td>
+            <my-input
+              :value="item.l_default[local.colorSelected.leftColor]"
+              :inputObj="{type: 'text', name: `left_${index}`, placeholder: 'ซ้าย', validate: 'required'}"
+              :validator="$validator"
+              @input="value => { item.l_default[local.colorSelected.leftColor] = value }"
+              ></my-input>
+          </td>
+          <td>
+            <my-input
+              :value="item.r_default[local.colorSelected.rightColor]"
+              :inputObj="{type: 'text', name: `right_${index}`, placeholder: 'ขวา', validate: 'required'}"
+              :validator="$validator"
+              @input="value => { item.r_default[local.colorSelected.rightColor] = value }"
+              ></my-input>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="item-footer container-block">
+      <div class="container-block block right">
+        <button class="button" @click="editRow('remove')"><i class="fa fa-minus" aria-hidden="true"></i></button>
+        <button class="button" @click="editRow('add')"><i class="fa fa-plus" aria-hidden="true"></i></button>
+      </div>
+      <div class="container-block block action" v-if="this.local.items.length">
+        <my-action
+          type="update"
+          :obj="{title: 'บันทึกข้อมูล'}"
+            @clickEvent="submitForm('update')"
+        >
+        </my-action>
+        <my-action
+          type="delete"
+          :obj="{title: 'ลบข้อมูล'}"
+          @clickEvent="submitForm('delete')"
+        >
+        </my-action>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import myInput from '@Components/Form/my-input'
+import config from '@Config/app.config'
+import service from '@Services/app-service'
+import myAction from '@Components/Form/my-action'
+export default {
+  name: 'materialTempalte',
+  components: {
+    myInput,
+    myAction
+  },
+  props: {
+    obj: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    inputsItem () {
+      if (!this.local.items.length) {
+        // this.local.items.push(this.local.workOrderTemplate)
+      }
+      return this.local.items
+    }
+  },
+  data () {
+    return {
+      local: {
+        items: [],
+        colorSelected: {
+          leftColor: '',
+          rightColor: ''
+        },
+        itemsTemplate: {
+          id: null,
+          name: '',
+          amount: '',
+          price: '',
+          l_default: {},
+          r_default: {}
+        }
+      }
+    }
+  },
+  created () {
+    this.fetchData()
+    this.local.colorSelected.leftColor = this.HOUSECOLOR[0].key
+    this.local.colorSelected.rightColor = this.HOUSECOLOR[0].key
+  },
+  updated () {
+  },
+  methods: {
+    fetchData () {
+      // this.local.items.push(this.local.itemsTemplate)
+      let resourceName = `${config.api.material.index}/${this.obj.storeId}`
+      let queryString = this.BUILDPARAM({house: this.obj.houseTemplate.key})
+      service.getResource({resourceName, queryString})
+        .then((res) => {
+          if (res.status === 200) {
+            this.local.items = res.data
+            // this.local.itemsTemplate.l_default[key] = ''
+            // this.local.itemsTemplate.r_default[key] = ''
+          }
+        })
+        .catch(() => {
+        })
+    },
+    editRow (type) {
+      if (type === 'add') {
+        let leftObj = {}
+        for (let key in this.local.itemsTemplate.l_default) {
+          leftObj[key] = ''
+        }
+        let rightObj = {}
+        for (let key in this.local.itemsTemplate.r_default) {
+          rightObj[key] = ''
+        }
+        this.local.items.push({
+          id: '',
+          name: '',
+          amount: '',
+          price: '',
+          l_default: leftObj,
+          r_default: rightObj
+        })
+      } else {
+        this.local.items.pop()
+      }
+    },
+    async submitForm (type) {
+      let resourceName = `${config.api.material.index}`
+      let isValid = await this.$validator.validateAll()
+      let res = null
+      switch (type) {
+        case 'delete':
+          let queryString = this.BUILDPARAM({
+            storeId: this.obj.storeId,
+            houseId: this.obj.houseTemplate.key
+          })
+          res = await service.deleteResource({resourceName, queryString})
+          this.local.items = []
+          break
+        case 'update':
+          if (!isValid || !this.local.items.length) return
+          let data = this.setDataFormat()
+          res = await service.postResource({data, resourceName})
+          break
+      }
+      if (res.status === 200) {
+        this.NOTIFY('success')
+        return
+      }
+      this.NOTIFY('error')
+    },
+    setDataFormat () {
+      let detail = this.local.items.map(item => {
+        return {
+          id: item.id,
+          name: item.name,
+          storeId: this.obj.storeId,
+          houseId: this.obj.houseTemplate.key,
+          amount: item.amount,
+          price: item.price,
+          priceDetail: {
+            l_default: item.l_default,
+            r_default: item.r_default
+          }
+        }
+      })
+      // let priceDetail = this.local.items.map(item => {
+      //   return {
+      //     l_default: item.l_default,
+      //     r_default: item.r_default
+      //   }
+      // })
+      return {
+        houseId: this.obj.houseTemplate.key,
+        storeId: this.obj.storeId,
+        detail
+      }
+    },
+    setRightColor () {
+      let key = this.local.colorSelected.rightColor
+      if (!this.local.itemsTemplate.r_default.hasOwnProperty(key)) {
+        this.local.itemsTemplate.r_default[key] = ''
+        this.local.items.map(item => {
+          if (!item.r_default.hasOwnProperty(key)) {
+            item.r_default[key] = ''
+          }
+        })
+      }
+      // console.log(this.local.colorSelected.rightColor)
+    },
+    setLeftColor () {
+      let key = this.local.colorSelected.leftColor
+      if (!this.local.itemsTemplate.l_default.hasOwnProperty(key)) {
+        this.local.itemsTemplate.l_default[key] = ''
+        this.local.items.map(item => {
+          if (!item.l_default.hasOwnProperty(key)) {
+            item.l_default[key] = ''
+          }
+        })
+      }
+      // console.log(this.local.colorSelected.leftColor)
+    }
+  }
+  // watch: {
+  //   local.colorSelected.rightColor: function () {
+  //     this.local.options.isActive = !this.isDisableMenu
+  //     this.local.profile.isActive = !this.isDisableMenu
+  //   }
+  // }
+}
+</script>

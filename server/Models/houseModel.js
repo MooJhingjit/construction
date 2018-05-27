@@ -7,6 +7,7 @@ module.exports =  class House {
     this.id = id;
     this.plan
     this.name
+    this.type
     this.tile
     this.garage
     this.stair
@@ -24,17 +25,22 @@ module.exports =  class House {
     return db.query(`SELECT * FROM house ${condition} ORDER BY id LIMIT ${this.limit} OFFSET ${this.offset} `)
   }
 
+  getAllSelection () {
+    return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
+  }
+
   count () {
     let condition = this.getCondition('allData')
     return db.query(`SELECT count(id) as count FROM house ${condition}`)
   }
 
   save () {
-    return db.query('INSERT INTO house (id, plan, name, tile, garage, stair, color, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    return db.query('INSERT INTO house (id, plan, name, type, tile, garage, stair, color, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
     [
       null,
       this.plan,
       this.name,
+      this.type,
       this.tile,
       this.garage,
       this.stair,
@@ -47,6 +53,7 @@ module.exports =  class House {
     var sql = `UPDATE house SET 
     plan = ?,
     name = ?,
+    type = ?,
     tile = ?,
     garage = ?,
     stair = ?,
@@ -54,7 +61,7 @@ module.exports =  class House {
     created_at = ?
     WHERE id = ?
     `;
-    return db.query(sql, [this.plan, this.name, this.tile, this.garage, this.stair, this.color, helpers.getCurrentTime('sql'), this.id]);
+    return db.query(sql, [this.plan, this.name, this.type, this.tile, this.garage, this.stair, this.color, helpers.getCurrentTime('sql'), this.id]);
   }
 
   delete () {

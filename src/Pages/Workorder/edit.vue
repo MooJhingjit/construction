@@ -39,7 +39,6 @@
                                   :validator="$validator"
                                   @input="value => { item.taskName = value }"
                                   ></my-input>
-                                <!-- <input type="text" class="input" v-model="item.taskName"> -->
                               </td>
                               <td>
                                 <input type="text" class="input" v-model="item.postOrderId">

@@ -164,6 +164,10 @@ export default {
     submitForm (type) {
       this.$validator.validateAll().then((tf) => {
         if (tf) {
+          if (type === 'cancel') {
+            this.cleanInput()
+            return
+          }
           let data = {}
           let resourceName = this.resourceName
           if (type === 'update' && this.local.inputs.id === 'new') {
@@ -222,9 +226,6 @@ export default {
                 .catch((err) => {
                   console.log(err)
                 })
-              break
-            case 'cancel':
-              this.cleanInput()
               break
           }
         }

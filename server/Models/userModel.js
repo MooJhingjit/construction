@@ -1,8 +1,7 @@
 // const userModel = require('../Models/userModel')
-const db = require('../Database/index')
-db.connect(function(err) {
-  if (err) return err
-})
+const helpers = require('../Libraries/helpers')
+const database = require('./databaseModel')
+const db = new database()
 
 module.exports =  class User {  
   constructor(id = '') {
@@ -14,23 +13,27 @@ module.exports =  class User {
     this.phone
     this.address
     this.position
+    this.limit = 5
+    this.offset = 0
   }
 
-  getUser (callback) {
-    db.query(`SELECT * FROM user WHERE id = ${this.id}`, (err, result) => {
-      return callback(result);
-    })
-    
+  getUser () {
+    return db.query(`SELECT * FROM user WHERE id = ${this.id}`)
   }
 
-  getAllUsers (callback) {
-    db.query(`SELECT * FROM user`, (err, result) => {
-      return callback(result);
-    })
+  getAllData () {
+    let condition = this.getCondition('allData')
+    return db.query(`SELECT * FROM user ${condition} ORDER BY id LIMIT ${this.limit} OFFSET ${this.offset} `)
   }
 
+  count () {
+    let condition = this.getCondition('allData')
+    return db.query(`SELECT count(id) as count FROM user ${condition}`)
+  }
+
+  
   save () {
-    db.query('INSERT INTO user (id, name, username, password, email, phone, address, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    return db.query('INSERT INTO user (id, name, username, password, email, phone, address, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
     [
       null,
       this.name,
@@ -40,12 +43,7 @@ module.exports =  class User {
       this.phone,
       this.address,
       this.position
-    ],
-    function (err, result) {
-      console.log(err)
-      if (err) return 'err'
-      return 'result'
-    })
+    ])
   }
 
   update () {
@@ -57,18 +55,24 @@ module.exports =  class User {
     address = ?,
     position = ?
     WHERE id = ?
-    `;
-    db.query(sql, [this.name, this.username, this.email, this.phone, this.address, this.position, this.id],function (err, result) {
-      if (err) throw err;
-      console.log(result.affectedRows + " record(s) updated");
-    });
+    `
+    return db.query(sql, [this.name, this.username, this.email, this.phone, this.address, this.position, this.id]);
   }
 
   delete () {
     let sql = `DELETE FROM user WHERE id = ?`;
-    db.query(sql, [this.id],function (err, result) {
-      if (err) throw err;
-      console.log(result.affectedRows + " record(s) updated");
-    });
+    return db.query(sql, [this.id]);
+  }
+
+  getCondition (actionType) {
+    let condition = 'WHERE'
+    if (this.name || this.status) {
+      if (this.name) {
+        condition += ` name like "%${this.name}%"`
+      }
+    } else {
+      condition += ` 1`
+    }
+    return condition
   }
 }

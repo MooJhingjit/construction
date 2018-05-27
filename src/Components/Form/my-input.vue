@@ -10,6 +10,7 @@
             :name="local.name"
             v-model="inputVal"
             :placeholder="local.placeholder"
+            :autocomplete="local.autocomplete || 'off'"
             v-validate="local.validate">
         </b-input>
       </b-field>
@@ -36,7 +37,7 @@ export default {
   props: {
     // validator: this.validator,
     value: {
-      type: String,
+      type: [String, Number],
       required: false
     },
     inputObj: {
@@ -79,6 +80,7 @@ export default {
   watch: {
     inputVal (val) {
       this.$emit('input', val)
+      this.$emit('change', val)
     },
     value () {
       this.inputVal = this.value

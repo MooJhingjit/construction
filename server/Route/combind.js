@@ -7,10 +7,12 @@ app.use('/api',
   [
     require('./app'),
     require('./home'),
+    require('./store'),
     require('./user'),
     require('./login'),
     require('./house'),
     require('./project'),
+    require('./material'),
     require('./contract'),
     require('./workOrder'),
     require('./materialGroup')

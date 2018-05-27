@@ -259,7 +259,7 @@ export default {
   methods: {
     fetchData () {
       let resourceName = config.api.home.index
-      let queryString = {}
+      let queryString = []
       service.getResource({resourceName, queryString})
         .then((res) => {
           if (res.status === 200) {

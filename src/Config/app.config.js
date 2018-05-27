@@ -24,7 +24,14 @@ const api = {
     'index': '/users'
   },
   'house': {
-    'index': '/house'
+    'index': '/house',
+    'dropdown': '/house-selection'
+  },
+  'store': {
+    'index': '/store'
+  },
+  'material': {
+    'index': '/material'
   }
 }
 
@@ -40,6 +47,7 @@ const variable = {
   },
   times: 10,
   leftRight: [
+    {key: 'none', name: 'ไม่ระบุ'},
     {key: 'left', name: 'ซ้าย'},
     {key: 'right', name: 'ขวา'}
   ],

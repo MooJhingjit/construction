@@ -71,7 +71,6 @@ export default {
       this.isShowPanel = false
     },
     setPanel () {
-      console.log(this.isShowPanel)
       if (this.isSelected !== null && this.isSelected !== '') {
         this.isShowPanel = true
       } else {
