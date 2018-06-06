@@ -4,7 +4,7 @@
     <template slot="data-table">
       <data-table ref="dataTable"
       :resourceName="resourceName"
-      :statusSearch="local.statusSearch"
+      :statusSearch="statusSearch"
       @selectedData="selectedDataHandle"
       ></data-table>
     </template>
@@ -23,7 +23,7 @@
                 <div class="value">
                    <my-input
                     :value="local.inputs.plan"
-                    :inputObj="{type: 'text', name: 'house_plan', placeholder: 'แปลน', validate: 'required'}"
+                    :inputObj="{type: 'text', name: 'house_plan', placeholder: 'แปลน', validate: ''}"
                     :validator="$validator"
                     @input="value => { local.inputs.plan = value }"
                     ></my-input>
@@ -109,8 +109,21 @@
           </div>
         </div>
         <div class="container-block footer-panel">
-          <button class="button" @click="submitForm('edit')">บันทึกข้อมูล</button>
-          <button v-if="this.local.idSelected != 'new'" class="button is-danger" @click="submitForm('delete')">ลบข้อมูล</button>
+          <my-action
+            type="update"
+            :obj="{title: 'บันทึกข้อมูล'}"
+             @clickEvent="submitForm('update')"
+          >
+          </my-action>
+          <my-action
+            type="delete"
+            :obj="{title: 'บันทึกข้อมูล'}"
+             @clickEvent="submitForm('ลบข้อมูล')"
+             v-if="this.local.idSelected != 'new'"
+          >
+          </my-action>
+          <!-- <button class="button" @click="submitForm('editupdate')">บันทึกข้อมูล</button> -->
+          <!-- <button v-if="this.local.idSelected != 'new'" class="button is-danger" @click="submitForm('delete')">ลบข้อมูล</button> -->
         </div>
       </template>
     </template>
@@ -128,6 +141,7 @@ import service from '@Services/app-service'
 import config from '@Config/app.config'
 import dataTable from '@Components/DataTable'
 import myInput from '@Components/Form/my-input'
+import myAction from '@Components/Form/my-action'
 export default {
   props: {
   },
@@ -136,7 +150,8 @@ export default {
     optionDetailTemplate,
     noResultTemplate,
     dataTable,
-    myInput
+    myInput,
+    myAction
   },
   name: 'UserPage',
   data () {
@@ -150,11 +165,7 @@ export default {
             class: 'house-template-page'
           }
         },
-        // statusSearch: [
-        //   {title: 'ทั้งหมด', name: ''},
-        //   {title: 'ดำเนินงาน', name: 'ip'},
-        //   {title: 'เสร็จสิ้น', name: 'done'}
-        // ],
+        // statusSearch: this.statusSearch,
         idSelected: '',
         items: {},
         inputs: {}
@@ -164,9 +175,19 @@ export default {
   computed: {
     resourceName () {
       return config.api.house.index
+    },
+    statusSearch () {
+      let obj = config.variable.projectType.map(item => {
+        return {
+          title: item.name,
+          key: item.key
+        }
+      })
+      return obj
     }
   },
   created () {
+    // console.log(this.statusSearch)
   },
   methods: {
     selectedDataHandle (item) {
@@ -179,83 +200,123 @@ export default {
       this.local.inputs.garage = item.garage
       this.local.inputs.stair = item.stair
       this.local.inputs.color = item.color
-      this.local.submitMode = 'edit'
+      this.local.submitMode = 'update'
     },
-    submitForm (type) {
-      if (type === 'cancel') {
-        this.local.idSelected = null
+    // submitForm (type) {
+    //   if (type === 'cancel') {
+    //     this.local.idSelected = null
+    //     return
+    //   }
+    //   this.$validator.validateAll().then((tf) => {
+    //     if (tf) {
+    //       let data = {}
+    //       let resourceName = config.api.house.index
+    //       if (type === 'update' && this.local.idSelected === 'new') {
+    //         type = 'save'
+    //       }
+    //       switch (type) {
+    //         case 'add':
+    //           this.local.idSelected = 'new'
+    //           this.cleanInput()
+    //           break
+    //         case 'save':
+    //           data = this.local.inputs
+    //           service.postResource({data, resourceName})
+    //             .then((res) => {
+    //               if (res.status === 200) {
+    //                 this.$refs.dataTable.fetchData()
+    //                 this.local.idSelected = ''
+    //                 this.cleanInput()
+    //                 this.NOTIFY('success')
+    //               } else {
+    //                 this.NOTIFY('error')
+    //               }
+    //             })
+    //             .catch((err) => {
+    //               console.log(err)
+    //             })
+    //           break
+    //         case 'delete':
+    //           resourceName = `${resourceName}/${this.local.idSelected}`
+    //           let queryString = []
+    //           service.deleteResource({resourceName, queryString})
+    //             .then((res) => {
+    //               if (res.status === 200) {
+    //                 this.$refs.dataTable.fetchData()
+    //                 this.local.idSelected = ''
+    //                 this.NOTIFY('success')
+    //               } else {
+    //                 this.NOTIFY('error')
+    //               }
+    //             })
+    //             .catch((err) => {
+    //               console.log(err)
+    //             })
+    //           break
+    //         case 'editupdate':
+    //           data = this.local.inputs
+    //           resourceName = `${resourceName}/${this.local.idSelected}`
+    //           service.putResource({data, resourceName})
+    //             .then((res) => {
+    //               if (res.status === 200) {
+    //                 this.$refs.dataTable.fetchData()
+    //                 this.local.idSelected = ''
+    //                 this.cleanInput()
+    //                 this.NOTIFY('success')
+    //               } else {
+    //                 this.NOTIFY('error')
+    //               }
+    //             })
+    //             .catch((err) => {
+    //               console.log(err)
+    //             })
+    //           break
+    //       }
+    //     }
+    //   })
+    // },
+    async submitForm (type) {
+      let isValid = await this.$validator.validateAll()
+      let resourceName = this.resourceName
+      if (type === 'update' && this.local.idSelected === 'new') type = 'save'
+      let data = {}
+      let res = null
+      switch (type) {
+        case 'add':
+          this.local.idSelected = 'new'
+          this.cleanInput()
+          return
+        case 'cancel':
+          this.local.idSelected = null
+          return
+        case 'update':
+          if (!isValid) return
+          data = this.local.inputs
+          resourceName = `${resourceName}/${this.local.idSelected}`
+          res = await service.putResource({data, resourceName})
+          break
+        case 'delete':
+          resourceName = `${resourceName}/${this.local.idSelected}`
+          let queryString = []
+          res = await service.deleteResource({resourceName, queryString})
+          break
+        case 'save':
+          if (!isValid) return
+          data = this.local.inputs
+          res = await service.postResource({data, resourceName})
+          break
+      }
+      if (res.status === 200) {
+        this.reloadTable()
+        this.cleanInput()
+        this.local.idSelected = ''
+        this.NOTIFY('success')
         return
       }
-      this.$validator.validateAll().then((tf) => {
-        if (tf) {
-          let data = {}
-          let resourceName = config.api.house.index
-          if (type === 'edit' && this.local.idSelected === 'new') {
-            type = 'save'
-          }
-          switch (type) {
-            case 'add':
-              this.local.idSelected = 'new'
-              this.cleanInput()
-              break
-            case 'save':
-              data = this.local.inputs
-              service.postResource({data, resourceName})
-                .then((res) => {
-                  if (res.status === 200) {
-                    this.$refs.dataTable.fetchData()
-                    this.local.idSelected = ''
-                    this.cleanInput()
-                    this.NOTIFY('success')
-                  } else {
-                    this.NOTIFY('error')
-                  }
-                })
-                .catch((err) => {
-                  console.log(err)
-                })
-              break
-            case 'delete':
-              resourceName = `${resourceName}/${this.local.idSelected}`
-              let queryString = []
-              service.deleteResource({resourceName, queryString})
-                .then((res) => {
-                  if (res.status === 200) {
-                    this.$refs.dataTable.fetchData()
-                    this.local.idSelected = ''
-                    this.NOTIFY('success')
-                  } else {
-                    this.NOTIFY('error')
-                  }
-                })
-                .catch((err) => {
-                  console.log(err)
-                })
-              break
-            case 'edit':
-              data = this.local.inputs
-              resourceName = `${resourceName}/${this.local.idSelected}`
-              service.putResource({data, resourceName})
-                .then((res) => {
-                  if (res.status === 200) {
-                    this.$refs.dataTable.fetchData()
-                    this.local.idSelected = ''
-                    this.cleanInput()
-                    this.NOTIFY('success')
-                  } else {
-                    this.NOTIFY('error')
-                  }
-                })
-                .catch((err) => {
-                  console.log(err)
-                })
-              break
-          }
-        }
-      })
+      this.NOTIFY('error')
     },
     reloadTable () {
-      // this.$refs.dataTable.fetchData()
+      this.$refs.dataTable.fetchData()
     },
     cleanInput () {
       this.local.inputs.plan = ''

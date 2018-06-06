@@ -4,6 +4,7 @@
 // import moment from 'moment'
 // import swal from 'sweetalert'
 import config from '@Config/app.config'
+import moment from 'moment'
 export default {
   computed: {
     PROJECT_TYPE () {
@@ -45,6 +46,9 @@ export default {
     GET_STATUSNAME (key) {
       return config.variable.status[key]
     },
+    SET_DATEFORMAT (date) {
+      return moment(date).format('DD-MM-YYYY')
+    },
     GOTOPAGE (pageName, key = '') {
       this.$router.push({
         name: pageName,
@@ -67,7 +71,7 @@ export default {
             duration: 5000,
             message: 'ทำรายการเสร็จสิ้น',
             type: 'is-primary',
-            position: 'is-bottom-right',
+            position: 'is-bottom-left',
             actionText: '',
             queue: false,
             onAction: () => {

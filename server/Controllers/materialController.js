@@ -1,6 +1,7 @@
 // const util = require('util')
 const helpers = require('../Libraries/helpers')
 const materialModel = require('../Models/materialModel')
+const materialGroupDetailModel = require('../Models/materialGroupDetailModel')
 
 async function getFullMaterial (req, res, next) {
   let items, result = null
@@ -20,21 +21,42 @@ async function getFullMaterial (req, res, next) {
         side['left'] = 'l_default'
         side['right'] = 'r_default'
         for (let index in dataPrice) {
-          // console.log(index)
-          // console.log('-------')
           let leftRight = dataPrice[index].side
           let key = dataPrice[index].color
           let value = dataPrice[index].price
           priceObj[side[leftRight]][key] = value
         }
-        return Object.assign({}, {
+        let materialGroupDetail = new materialGroupDetailModel()
+        materialGroupDetail.material_id = item.id
+        materialGroupDetailRes = await materialGroupDetail.getGroupByMaterial()
+        let materialGroupArr = []
+        materialGroupDetailRes.map(item => {
+          materialGroupArr.push(item.id)
+        })
+        // console.log(materialGroup)
+        let result = {
           id: item.id,
           house_id: item.house_id,
           store_id: item.store_id,
           name: item.name,
+          delay: item.delay,
+          unit: item.unit,
           amount: item.amount,
           price: item.price,
-        }, priceObj)
+          l_default: priceObj.l_default,
+          r_default: priceObj.r_default,
+          materialGroup: materialGroupArr
+        }
+        // return Object.assign({}, {
+        //   id: item.id,
+        //   house_id: item.house_id,
+        //   store_id: item.store_id,
+        //   name: item.name,
+        //   unit: item.unit,
+        //   amount: item.amount,
+        //   price: item.price,
+        // }, priceObj)
+        return result
       })
     )
   }
@@ -53,8 +75,10 @@ async function createData (req, res, next) {
       newItem.house_id = item.houseId
       newItem.store_id = item.storeId
       newItem.name = item.name
-      newItem.amount = item.amount
-      newItem.price = item.price
+      newItem.delay = item.delay
+      newItem.unit = item.unit
+      newItem.amount = item.amount || 0
+      newItem.price = item.price || 0
       if (oldItem && newItem.id) {
         isUpdate = true
         await newItem.updateMaterial()
@@ -63,6 +87,19 @@ async function createData (req, res, next) {
         materialId = await newItem.save()
         materialId = materialId[0]
       }
+      if (item.materialGroup.length) {
+        for (var group in item.materialGroup) {
+          let groupData = {
+            house_id: item.houseId,
+            material_id: materialId,
+            amount: item.amount,
+            material_group_id: item.materialGroup[group],
+          }
+          createMaterialGroup(groupData)
+        }
+      }
+      
+      // materialGroup.
       for (var lKey in item.priceDetail.l_default) {
         let priceData = {
           id: materialId,
@@ -91,10 +128,23 @@ async function createPriceDetail (instant, obj, isUpdate) {
   return result
 }
 
+async function createMaterialGroup (obj, isUpdate) {
+  let instant = new materialGroupDetailModel()
+  instant.house_id = obj.house_id
+  instant.material_group_id = obj.material_group_id
+  instant.material_id = obj.material_id
+  instant.amount = obj.amount
+  let result = await instant.save(obj)
+  return result
+}
+
+
 async function cleanData (inputs) {
   let item = new materialModel()
+  let materialGroup = new materialGroupDetailModel()
   if (inputs.houseId) {
     item.house_id = inputs.houseId
+    materialGroup.house_id = inputs.houseId
   }
   item.store_id = inputs.storeId
   let items = await item.getDataByAttr()
@@ -107,6 +157,7 @@ async function cleanData (inputs) {
   })
   item.clearMaterialDetail(id)
   item.clearMaterial(inputId) // not in
+  await materialGroup.clearMaterialGroup(inputId)
 }
 
 async function deleteMaterail (req, res, next) {
@@ -117,6 +168,19 @@ async function deleteMaterail (req, res, next) {
   }
   await cleanData(inputs)
   res.status(200).json({})
+}
+
+async function getDropDown (req, res, next) {
+  let item = new materialModel()
+  item.name = req.query.main_search
+  let data = await item.getAllSelection()
+  data = data.map(item => {
+    return {
+      key: item.id,
+      value: `${item.name}`
+    }
+  })
+  res.status(200).json(data)
 }
 
 // async function deleteMaterail (req, res, next) {
@@ -132,3 +196,4 @@ async function deleteMaterail (req, res, next) {
 module.exports.getFullMaterial = getFullMaterial
 module.exports.createData = createData
 module.exports.deleteData = deleteMaterail
+module.exports.getDropDown = getDropDown

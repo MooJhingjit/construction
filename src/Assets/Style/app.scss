@@ -577,6 +577,11 @@ html {
                           }
                         }
                       }
+                      .data-table{
+                        .search-status{
+                          margin: 10px 0;
+                        }
+                      }
                       .search-material{
                         padding: 0 5px;
                         .items{
@@ -893,7 +898,7 @@ html {
                             margin-right: 15px;
                           }
                           input{
-                            max-width: 150px;
+                            // max-width: 150px;
                           }
                         }
                       }
@@ -990,9 +995,11 @@ html {
                 .work-order-page{
 
                   .c-body{
+                    padding: 0 !important;
+                    table{
+                      margin-bottom: 0px;
+                    }
                     table tr td{
-
-                      vertical-align: middle;
                     }
                     .name{
                       font-weight: bold;
@@ -1091,39 +1098,7 @@ html {
                         padding-bottom: 0rem;
                       }
                       &>.container-block{
-                        background: rgba(255, 255, 255, 0.85) !important;
-                        flex-direction: column;
-                        padding: 5px;
-                        .search-status{
-                          margin-bottom: 5px;
-                          .tags{
-                            justify-content: flex-end;
-                            .tag{
-                              cursor: pointer;
-                              border: 1px solid transparent;
-                              &:hover{
-                                border: 1px solid #9a8f8f;
-                              }
-                            }
-                          }
-                          
-                        }
-                        .search-input{
-                          margin-bottom: 5px;
-                          input:focus { 
-                            outline: none !important;
-                            border-color:none !important;
-                            box-shadow: none !important;
-                          }
-                          input:hover{
-                            border-color: none !important;
-                          }
-                        }
-                        .search-results{
-                          table{
-                            
-                          }
-                        }
+                        // data-table
                       }
                       .expand{
                         cursor: pointer;
@@ -1138,6 +1113,7 @@ html {
                         padding-top: 15px;
                         button{
                           margin-bottom: 5px;
+                          width: 100%;
                         }
                       }
                     }
@@ -1376,7 +1352,38 @@ html {
                     background-color: whitesmoke;
                   }
                 }
-
+                .data-table{
+                  background: rgba(255, 255, 255, 0.85) !important;
+                  flex-direction: column;
+                  padding: 5px;
+                  .search-status{
+                    margin-bottom: 5px;
+                    .tags{
+                      justify-content: flex-end;
+                      .tag{
+                        cursor: pointer;
+                        border: 1px solid transparent;
+                        &:hover{
+                          border: 1px solid #9a8f8f;
+                        }
+                      }
+                    }
+                    
+                  }
+                  .search-input{
+                    margin-bottom: 5px;
+                    input:focus { 
+                      outline: none !important;
+                      border-color:none !important;
+                      box-shadow: none !important;
+                    }
+                    input:hover{
+                      border-color: none !important;
+                    }
+                  }
+                  .search-results{
+                  }
+                }
                 .tags-select{
                   .tag{
                     cursor: pointer;
@@ -1408,6 +1415,47 @@ html {
         .dialog.modal{
           position: absolute;
           z-index: 9999;
+        }
+        .notices{
+          z-index: 10000;
+        }
+        .tag:not(.is-rounded){
+          border-radius: 0px !important;
+        }
+        span.select{
+          width: 100%;
+          select{
+            width: 100%;
+          }
+        }
+        .data-table{
+          width: 100%;
+        }
+        .dropdown.is-active{
+          .background{
+            display: block !important;
+          }
+          .dropdown-menu{
+            overflow-y: unset !important;
+            .dropdown-content{
+              padding: 1em;
+            }
+            .taginput .taginput-container.is-focusable{
+              border-color: inherit !important;
+              box-shadow: none !important;
+            }
+            position: fixed;
+            width: calc(100vw - 40px);
+            max-width: 460px;
+            max-height: calc(100vh - 120px);
+            top: 25% !important;
+            left: 50% !important;
+            bottom: auto !important;
+            right: auto !important;
+            transform: translate3d(-50%, -25%, 0);
+            white-space: normal;
+            overflow-y: auto;
+          }
         }
     }
 }

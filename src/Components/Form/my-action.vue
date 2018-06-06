@@ -27,12 +27,19 @@ export default {
   },
   computed: {
     btnClass () {
-      return [
-        'button',
-        {'is-danger': this.type === 'delete'},
-        {'is-light ': this.type === 'link'},
-        {'is-light': this.type === 'update'}
-      ]
+      if (this.obj.color) {
+        return [
+          'button',
+          this.obj.color
+        ]
+      } else {
+        return [
+          'button',
+          {'is-danger': this.type === 'delete'},
+          {'is-light ': this.type === 'link'},
+          {'is-light': this.type === 'update'}
+        ]
+      }
     },
     btnIcon () {
       return [

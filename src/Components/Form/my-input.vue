@@ -1,12 +1,12 @@
 <template>
   <div>
-    <template v-if="local.type == 'text'">
+    <template v-if="local.type == 'text' || local.type == 'textarea'">
       <b-field
         :type="errors.has(local.name) ? 'is-danger': ''"
         :message="errors.has(local.name) ? 'โปรดตรวจสอบข้อมมูลข้างต้น' : ''">
         <b-input
             @blur="blurEvent()"
-            :type="local.text"
+            :type="local.type"
             :name="local.name"
             v-model="inputVal"
             :placeholder="local.placeholder"
@@ -29,6 +29,32 @@
         </b-select>
       </b-field>
     </template>
+    <template v-else-if="local.type == 'datepicker'">
+      <b-field
+      :type="errors.has(local.name) ? 'is-danger': ''"
+        :message="errors.has(local.name) ? 'โปรดตรวจสอบข้อมมูลข้างต้น' : ''">
+        <b-datepicker
+            :placeholder="local.placeholder"
+            :name="local.name"
+            :date-formatter="(date) => date.toLocaleDateString('en-GB')"
+            v-model="inputVal"
+            icon="calendar"
+            v-validate="local.validate">
+        </b-datepicker>
+      </b-field>
+    </template>
+    <!-- <template v-else-if="local.type == 'textarea'">
+      <b-field
+        :type="errors.has(local.name) ? 'is-danger': ''"
+        :message="errors.has(local.name) ? 'โปรดตรวจสอบข้อมมูลข้างต้น' : ''">
+        <b-input
+            type="textarea"
+            minlength="10"
+            maxlength="100"
+            placeholder="Maxlength automatically counts characters">
+        </b-input>
+      </b-field>
+    </template> -->
   </div>
 </template>
 
@@ -37,7 +63,7 @@ export default {
   props: {
     // validator: this.validator,
     value: {
-      type: [String, Number],
+      type: [String, Number, Date],
       required: false
     },
     inputObj: {

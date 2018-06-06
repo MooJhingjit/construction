@@ -2,7 +2,9 @@
     <div class="data-table">
       <div class="search-status">
         <div class="tags">
-          <span :class="['tag', {'is-warning': local.statusSelected == item.name}]" :key="index" v-for="(item, index) in statusSearch" @click="filterByStatus(item.name)">{{item.title}}</span>
+          <span :class="['tag', {'is-warning': local.statusSelected == item.key}]"
+          :key="index" v-for="(item, index) in statusSearch"
+          @click="filterByStatus(item.key)">{{item.title}}</span>
         </div>
       </div>
       <div class="search-input control has-icons-left">
@@ -100,11 +102,11 @@ export default {
     reloadDataTable () {
       this.fetchData()
     },
-    filterByStatus (statusName) {
+    filterByStatus (key) {
       let item = []
-      item['status'] = statusName
-      this.local.statusSelected = statusName
-      this.local.queryString['status'] = statusName
+      item['status'] = key
+      this.local.statusSelected = key
+      this.local.queryString['status'] = key
       this.fetchData()
     },
     setDataSelected (item) {

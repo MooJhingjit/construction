@@ -8,6 +8,7 @@ module.exports =  class WorkOrderDetail {
     this.work_order_time
     this.name
     this.post_order
+    // this.delay
   }
 
   getData () {

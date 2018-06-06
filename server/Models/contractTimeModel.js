@@ -1,9 +1,10 @@
+const knex = require('knex')
+const db = require('../Database/config')
 const helpers = require('../Libraries/helpers')
-const database = require('./databaseModel')
-const db = new database()
 
-module.exports =  class ContractTime {  
-  constructor(id = '') {
+module.exports =  class Contract {
+  constructor(id){
+    this.knex = knex(db.config);
     this.id = id;
     this.contract_code
     this.time
@@ -13,31 +14,33 @@ module.exports =  class ContractTime {
     this.date_end
   }
 
-  getData () {
-    return db.query(`SELECT * FROM project WHERE id = ${this.id}`)
+  async getData () {
+    let result = await this.knex('contract_times')
+    .where({contract_code: this.contract_code})
+    .orderBy('time', 'asc')
+    return result
   }
 
-  getAllData () {
-    return db.query(`SELECT * FROM contract_times`)
+  async save () {
+    let result = await this.knex('contract_times').insert({
+      contract_code: this.contract_code,
+      time: this.time,
+      price: this.price,
+      is_success: this.is_success,
+      date_start: this.date_start,
+      date_end: this.date_end,
+      created_at: helpers.getCurrentTime('sql')
+    })
+    return result
   }
 
-  save () {
-    return db.query(
-      'INSERT INTO contract_times (id, contract_code, time, price, is_success, date_start, date_end, created_at)'
-      + 'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-    [
-      null,
-      this.contract_code,
-      this.time,
-      this.price,
-      this.is_success,
-      this.date_start,
-      this.date_end,
-      helpers.getCurrentTime('sql')
-    ])
+  async updateData () {
+    let result = await this.knex('contract_times')
+    .where({id: this.id})
+    .update({
+      is_success: this.is_success
+    })
+    return result
   }
 
-  delete () {
-    return db.query(`DELETE FROM contract_times WHERE id = ?`, [this.id]);
-  }
 }

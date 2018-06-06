@@ -7,7 +7,9 @@
         :keep-first="keepFirst"
         :open-on-focus="openOnFocus"
         :data="filteredDataObj"
+        @input="val => searchValue(val)"
         field="value"
+        icon="search"
         @select="option => selected = option">
       </b-autocomplete>
     </b-field>
@@ -47,6 +49,11 @@ export default {
           .toLowerCase()
           .indexOf(this.name.toLowerCase()) >= 0
       })
+    }
+  },
+  methods: {
+    searchValue (val) {
+      this.$emit('searchValue', val)
     }
   },
   watch: {

@@ -3,6 +3,7 @@ const router = express.Router();
 const materialGroupController = require('../Controllers/materialGroupController.js')
 
 router.get('/material-group', materialGroupController.getAllData);
+router.get('/material-group-selection', materialGroupController.getDropDown);
 router.get('/material-group/:key', materialGroupController.getData);
 router.post('/material-group', materialGroupController.createData);
 router.put('/material-group/:id', materialGroupController.updateData);

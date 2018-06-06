@@ -6,19 +6,21 @@ const api = {
   },
   'login': '/login',
   'home': {
-    'index': '/home/index'
+    'index': '/home'
   },
   'project': {
     'index': '/project'
   },
   'contract': {
-    'index': '/contract'
+    'index': '/contract',
+    'time': '/contract-time'
   },
   'workOrder': {
     'index': '/work-order'
   },
   'materialGroup': {
-    'index': '/material-group'
+    'index': '/material-group',
+    'dropdown': '/material-group-selection'
   },
   'users': {
     'index': '/users'
@@ -31,7 +33,8 @@ const api = {
     'index': '/store'
   },
   'material': {
-    'index': '/material'
+    'index': '/material',
+    'dropdown': '/material-selection'
   }
 }
 

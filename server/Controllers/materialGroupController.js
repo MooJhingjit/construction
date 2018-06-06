@@ -14,36 +14,56 @@ const getData = (req, res, next) => {
 
 async function getAllData (req, res, next) {
   let materialGroup = new materialGroupModel()
-  // let materialGroupDetail = new materialGroupDetailModel()
   let data = []
-  // project.status = req.query.status
   // project.name = req.query.main_search
-  let total = await materialGroup.count()
-  materialGroup.limit = req.query.limit
-  materialGroup.offset = helpers.getTableoffset(req.query.limit, req.query.currentPage)
-  let result = await materialGroup.getAllData()
-  if (result) {
-
-    result = await Promise.all(
-      result.map(async (item) => {
-        let materialGroupDetail = new materialGroupDetailModel()
-        materialGroupDetail.material_group_id = item.id
-        detail = await materialGroupDetail.getData()
-        return {
-          id: item.id,
-          name: item.name,
-          itemCount: detail.length,
-          detail: detail || null,
-          created: item.created_at
-        }
-      })
-    )
-    let config = {
-      header: [{name: 'รายการ'}, {name: 'จำนวนวัสดุ'}],
-      show: ['name', 'itemCount']
+  if (req.query.type === 'selection') {
+    data = await materialGroup.getDropdownData()
+    data = data.map(item => {
+      return {
+        id: item.id,
+        name: item.name
+      }
+    })
+  } else {
+    let total = await materialGroup.count()
+    materialGroup.limit = req.query.limit
+    materialGroup.offset = helpers.getTableoffset(req.query.limit, req.query.currentPage)
+    let result = await materialGroup.getAllData()
+    if (result) {
+      result = await Promise.all(
+        result.map(async (item) => {
+          let materialGroupDetail = new materialGroupDetailModel()
+          materialGroupDetail.material_group_id = item.id
+          detail = await materialGroupDetail.getData()
+          return {
+            id: item.id,
+            name: item.name,
+            itemCount: detail.length,
+            detail: detail || null,
+            created: item.created_at
+          }
+        })
+      )
+      let config = {
+        header: [{name: 'รายการ'}, {name: 'จำนวนวัสดุ'}],
+        show: ['name', 'itemCount']
+      }
+      data = helpers.prepareDataTable(result, total, config)
     }
-    data = helpers.prepareDataTable(result, total, config)
   }
+  res.status(200).json(data)
+}
+
+async function getDropDown (req, res, next) {
+  let item = new materialGroupModel()
+  item.name = req.query.main_search
+  let data = await item.getAllSelection()
+  data = data.map(item => {
+    return {
+      key: item.id,
+      value: `${item.name}`
+    }
+  })
   res.status(200).json(data)
 }
 
@@ -78,6 +98,7 @@ async function updateData (req, res, next) {
     newItem.material_group_id = req.body.data.id
     newItem.material_id = item.materialId
     newItem.amount = item.amount
+    newItem.house_id = item.houseId
     newItem.save()
   })
   
@@ -93,6 +114,7 @@ async function deleteData (req, res, next) {
   res.status(200).json(result)
 }
 
+module.exports.getDropDown = getDropDown
 module.exports.getData = getData
 module.exports.getAllData = getAllData
 module.exports.createData = createData

@@ -9,6 +9,8 @@ module.exports =  class Material {
     this.house_id
     this.store_id
     this.name
+    this.delay
+    this.unit
     this.amount
     this.price
   }
@@ -45,6 +47,8 @@ module.exports =  class Material {
   async save () {
     let result = await this.knex('material').insert({
       name: this.name,
+      delay: this.delay,
+      unit: this.unit,
       house_id: this.house_id,
       store_id: this.store_id,
       amount: this.amount,
@@ -59,6 +63,8 @@ module.exports =  class Material {
     .where({id: this.id})
     .update({
       name: this.name,
+      delay: this.delay,
+      unit: this.unit,
       house_id: this.house_id,
       store_id: this.store_id,
       amount: this.amount,
@@ -111,6 +117,15 @@ module.exports =  class Material {
     let result = await this.knex('material_price')
     .whereIn('material_id', idArr)
     .del()
+    return result
+  }
+
+  async getAllSelection () {
+    let result = await this.knex.select('id', 'name')
+    .from('material')
+    .where('name', 'like', `%${this.name || ''}%`)
+    .orderBy('id', 'desc')
+    .limit(20).offset(0)
     return result
   }
   

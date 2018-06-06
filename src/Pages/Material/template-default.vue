@@ -4,13 +4,16 @@
       <thead>
          <tr>
           <th rowspan="2">รายการ</th>
-          <th rowspan="2">หน่วย</th>
-          <th rowspan="2">ราคา/หน่วย</th>
+          <th rowspan="2" width="80">ระยะเวลาจัดส่ง</th>
+          <th rowspan="2" width="80">จำนวนเริ่มต้น</th>
+          <th rowspan="2" width="120">หน่วย</th>
+          <th rowspan="2" width="120">ราคา/หน่วย</th>
           <th colspan="2">{{obj.houseTemplate.value}}</th>
         </tr>
         <tr>
-          <th>ซ้าย</th>
-          <th>ขวา</th>
+          <th width="80">ซ้าย</th>
+          <th width="80">ขวา</th>
+          <th width="80">กลุ่มวัสดุ</th>
         </tr>
       </thead>
       <tbody>
@@ -25,6 +28,14 @@
           </td>
           <td>
             <my-input
+              :value="item.delay"
+              :inputObj="{type: 'text', name: `delay_${index}`, placeholder: '', validate: ''}"
+              :validator="$validator"
+              @input="value => { item.delay = value }"
+              ></my-input>
+          </td>
+          <td>
+            <my-input
               :value="item.amount"
               :inputObj="{type: 'text', name: `amount_${index}`, placeholder: 'หน่วย', validate: 'required'}"
               :validator="$validator"
@@ -33,8 +44,16 @@
           </td>
           <td>
             <my-input
+              :value="item.unit"
+              :inputObj="{type: 'text', name: `unit_${index}`, placeholder: '', validate: ''}"
+              :validator="$validator"
+              @input="value => { item.unit = value }"
+              ></my-input>
+          </td>
+          <td>
+            <my-input
               :value="item.price"
-              :inputObj="{type: 'text', name: `price_${index}`, placeholder: 'ราคา/หน่วย', validate: 'required'}"
+              :inputObj="{type: 'text', name: `price_${index}`, placeholder: 'ราคา/หน่วย', validate: ''}"
               :validator="$validator"
               @input="value => { item.price = value }"
               ></my-input>
@@ -42,7 +61,7 @@
           <td>
             <my-input
               :value="item.l_default[local.colorSelected.leftColor]"
-              :inputObj="{type: 'text', name: `left_${index}`, placeholder: 'ซ้าย', validate: 'required'}"
+              :inputObj="{type: 'text', name: `left_${index}`, placeholder: 'ซ้าย', validate: ''}"
               :validator="$validator"
               @input="value => { item.l_default[local.colorSelected.leftColor] = value }"
               ></my-input>
@@ -50,10 +69,18 @@
           <td>
             <my-input
               :value="item.r_default[local.colorSelected.rightColor]"
-              :inputObj="{type: 'text', name: `right_${index}`, placeholder: 'ขวา', validate: 'required'}"
+              :inputObj="{type: 'text', name: `right_${index}`, placeholder: 'ขวา', validate: ''}"
               :validator="$validator"
               @input="value => { item.r_default[local.colorSelected.rightColor] = value }"
               ></my-input>
+          </td>
+          <td>
+            <my-tags-selection
+            :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ'}"
+            :resourceName="materialGroupResource"
+            :itemSelected="item.materialGroup"
+            @selected="value => { item.materialGroup = value }"
+            ></my-tags-selection>
           </td>
         </tr>
       </tbody>
@@ -86,11 +113,13 @@ import myInput from '@Components/Form/my-input'
 import config from '@Config/app.config'
 import service from '@Services/app-service'
 import myAction from '@Components/Form/my-action'
+import myTagsSelection from '@Components/Form/my-tags-selection'
 export default {
   name: 'materialTempalte',
   components: {
     myInput,
-    myAction
+    myAction,
+    myTagsSelection
   },
   props: {
     obj: {
@@ -104,6 +133,9 @@ export default {
         // this.local.items.push(this.local.workOrderTemplate)
       }
       return this.local.items
+    },
+    materialGroupResource () {
+      return config.api.materialGroup.index
     }
   },
   data () {
@@ -117,8 +149,11 @@ export default {
         itemsTemplate: {
           id: null,
           name: '',
-          amount: '',
+          delay: '',
+          unit: '',
+          amount: 1,
           price: '',
+          materialGroup: [],
           l_default: {},
           r_default: {}
         }
@@ -133,20 +168,13 @@ export default {
   updated () {
   },
   methods: {
-    fetchData () {
-      // this.local.items.push(this.local.itemsTemplate)
-      let resourceName = `${config.api.material.index}/${this.obj.storeId}`
+    async fetchData () {
       let queryString = this.BUILDPARAM({house: this.obj.houseTemplate.key})
-      service.getResource({resourceName, queryString})
-        .then((res) => {
-          if (res.status === 200) {
-            this.local.items = res.data
-            // this.local.itemsTemplate.l_default[key] = ''
-            // this.local.itemsTemplate.r_default[key] = ''
-          }
-        })
-        .catch(() => {
-        })
+      let resourceName = `${config.api.material.index}/${this.obj.storeId}`
+      let items = await service.getResource({resourceName, queryString})
+      // let materialGroup = await service.getResource({resourceName: config.api.materialGroup.index, queryString: [this.BUILDPARAM({type: 'selection'})]})
+      this.local.items = items.data
+      // this.local.materialGroupItems = materialGroup.data
     },
     editRow (type) {
       if (type === 'add') {
@@ -161,8 +189,11 @@ export default {
         this.local.items.push({
           id: '',
           name: '',
-          amount: '',
+          delay: '',
+          unit: '',
+          amount: 1,
           price: '',
+          materialGroup: [],
           l_default: leftObj,
           r_default: rightObj
         })
@@ -191,6 +222,7 @@ export default {
       }
       if (res.status === 200) {
         this.NOTIFY('success')
+        this.fetchData()
         return
       }
       this.NOTIFY('error')
@@ -200,10 +232,13 @@ export default {
         return {
           id: item.id,
           name: item.name,
+          delay: item.delay,
+          unit: item.unit,
           storeId: this.obj.storeId,
           houseId: this.obj.houseTemplate.key,
           amount: item.amount,
           price: item.price,
+          materialGroup: item.materialGroup,
           priceDetail: {
             l_default: item.l_default,
             r_default: item.r_default

@@ -14,7 +14,7 @@
                     <tr>
                       <th>งวด</th>
                       <th>รายละเอียดงาน</th>
-                      <th>รายจัดซื้อ</th>
+                      <th>รายการจัดซื้อ</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -25,7 +25,7 @@
                         <div :key="taskIndex" class="list" v-for="(task, taskIndex) in item.tasks">{{task.name}}</div>
                       </td>
                       <td>
-                        <div :key="taskIndex" class="list" v-for="(task, taskIndex) in item.tasks">{{task.post_order}}</div>
+                        <div :key="taskIndex" class="list" v-for="(task, taskIndex) in item.tasks">{{task.material_group_name}}</div>
                       </td>
                       <td>
                         <button class="button" @click="GOTOPAGE('EditWorkorder', item.time)">แก้ไขงวดที่ {{item.time}}</button>
@@ -65,8 +65,13 @@
                     </tr> -->
                   </tbody>
                 </table>
-                <div class="container-block footer-panel">
-                  <button class="button" @click="addItem()">เพิ่มงวด</button>
+                <div class="container-block footer-panel" v-if="local.workOrderObj.length < 10">
+                  <my-action
+                    type="update"
+                    :obj="{title: 'เพิ่มงวด'}"
+                    @clickEvent="addItem()"
+                  >
+                  </my-action>
                 </div>
               </div>
             </div>
@@ -102,6 +107,7 @@
 import breadcrumbBar from '@Components/Breadcrumb'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
+import myAction from '@Components/Form/my-action'
 export default {
   props: {
     // templateName: {
@@ -110,7 +116,8 @@ export default {
     // }
   },
   components: {
-    breadcrumbBar
+    breadcrumbBar,
+    myAction
   },
   name: 'WorkOrderPage',
   data () {

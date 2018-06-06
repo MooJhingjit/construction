@@ -46,6 +46,11 @@ module.exports =  class MaterialGroup {
     return db.query(`DELETE FROM material_group WHERE id = ?`, [this.id]);
   }
 
+  getDropdownData () {
+    let condition = this.getCondition('allData')
+    return db.query(`SELECT * FROM material_group ORDER BY id `)
+  }
+
   getCondition (actionType) {
     let condition = 'WHERE'
     if (this.name || this.status) {

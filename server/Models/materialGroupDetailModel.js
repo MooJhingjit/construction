@@ -1,67 +1,100 @@
+const knex = require('knex')
+const db = require('../Database/config')
 const helpers = require('../Libraries/helpers')
-const database = require('./databaseModel')
-const db = new database()
 
-module.exports =  class MaterialGroupDetail {  
-  constructor(id = '') {
+module.exports =  class MaterialGroupDetail {
+  constructor(id){
+    this.knex = knex(db.config);
     this.id = id
+    this.house_id
     this.material_group_id
     this.material_id
     this.amount
   }
 
-  getData () {
-    return db.query(`SELECT * FROM material_group_detail WHERE material_group_id = ${this.material_group_id}`)
+  async getData () {
+    let result = await this.knex.select('material_group_detail.*', 'material.name as name').from('material_group_detail')
+    .leftJoin('material', 'material.id', 'material_group_detail.material_id')
+    .where({
+      material_group_id: this.material_group_id
+    })
+    return result
   }
 
-  getAllData () {
-    let condition = this.getCondition('allData')
-    return db.query(`SELECT * FROM material_group_detail ${condition} ORDER BY id LIMIT ${this.limit} OFFSET ${this.offset} `)
+  async getGroupByMaterial () {
+    let result = await this.knex.select('material_group.id', 'material_group.name').from('material_group_detail')
+    .leftJoin('material_group', 'material_group.id', 'material_group_detail.material_group_id')
+    .where({
+      material_id: this.material_id
+    })
+    return result
   }
 
-  count () {
-    let condition = this.getCondition('allData')
-    return db.query(`SELECT count(id) as count FROM material_group_detail ${condition}`)
+  async getAllSelection () {
+    let result = await this.knex.select('id', 'name')
+    .from('material_group')
+    .where('name', 'like', `%${this.name || ''}%`)
+    .orderBy('id', 'desc')
+    .limit(20).offset(0)
+    return result
   }
 
-  save () {
-    return db.query('INSERT INTO material_group_detail (id, material_group_id, material_id, amount, created_at) VALUES (?, ?, ?, ?, ?)',
-    [
-      null,
-      this.material_group_id,
-      this.material_id,
-      this.amount,
-      helpers.getCurrentTime('sql')
-    ])
+  async getAllData () {
+    let result = await this.knex('material_group_detail')
+    .where(this.getCondition())
+    .where('name', 'like', `%${this.name || ''}%`)
+    .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    return result
   }
 
-  update () {
-    var sql = `UPDATE material_group_detail SET 
-    material_group_id = ?,
-    material_id = ?,
-    amount = ?,
-    created_at = ?
-    WHERE id = ?
-    `;
-    return db.query(sql, [this.material_group_id, this.material_id, this.amount, helpers.getCurrentTime('sql'), this.id],);
+  async count () {
+    let result = await this.knex('material_group_detail').count('id as count').where(this.getCondition())
+    return result
   }
 
-  delete () {
-    return db.query(`DELETE FROM material_group_detail WHERE material_group_id = ?`, [this.material_group_id]);
+  async save () {
+    let result = await this.knex('material_group_detail').insert({
+      house_id: this.house_id,
+      material_group_id: this.material_group_id,
+      material_id: this.material_id,
+      amount: this.amount,
+      created_at: helpers.getCurrentTime('sql')
+    })
+    return result
   }
 
-  getCondition (actionType) {
-    let condition = 'WHERE'
-    if (this.name || this.status) {
-      if (this.name) {
-        condition += ` name like "%${this.name}%"`
-      }
-      if (this.status) {
-        condition += ` status = "${this.status}"`
-      }
-    } else {
-      condition += ` 1`
+  async update () {
+    let result = await this.knex('material_group_detail')
+    .where({id: this.id})
+    .update({
+      house_id: this.house_id,
+      material_group_id: this.material_group_id,
+      material_id: this.material_id,
+      amount: this.amount,
+      created_at: helpers.getCurrentTime('sql')
+    })
+    return result
+  }
+
+  async delete () {
+    let result = await this.knex('material_group_detail')
+    .where({material_group_id: this.material_group_id})
+    .del()
+    return result
+  }
+
+  async clearMaterialGroup (idArr) {
+    let result = await this.knex('material_group_detail')
+    .whereIn('material_id', idArr)
+    .del()
+    return result
+  }
+
+  getCondition () {
+    let conditions = {}
+    if (this.status) {
+      conditions.status = this.status
     }
-    return condition
+    return conditions
   }
 }

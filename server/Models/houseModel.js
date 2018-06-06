@@ -1,9 +1,10 @@
+const knex = require('knex')
+const db = require('../Database/config')
 const helpers = require('../Libraries/helpers')
-const database = require('./databaseModel')
-const db = new database()
 
-module.exports =  class House {  
-  constructor(id = '') {
+module.exports =  class House {
+  constructor(id){
+    this.knex = knex(db.config);
     this.id = id;
     this.plan
     this.name
@@ -15,68 +16,66 @@ module.exports =  class House {
     this.limit = 5
     this.offset = 0
   }
-
-  getData () {
-    // return db.query(`SELECT * FROM project WHERE id = ${this.id}`)
+  async getAllData () {
+    let result = await this.knex('house').where(this.getCondition())
+    .where('name', 'like', `%${this.name || ''}%`)
+    .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    return result
   }
 
-  getAllData () {
-    let condition = this.getCondition('allData')
-    return db.query(`SELECT * FROM house ${condition} ORDER BY id LIMIT ${this.limit} OFFSET ${this.offset} `)
+  async getAllSelection () {
+    let result = await this.knex.select('name').from('house').groupBy('name').orderBy('name', 'desc')
+    // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
+    return result
   }
 
-  getAllSelection () {
-    return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
+  async count () {
+    let result = await this.knex('house').count('id as count').where(this.getCondition())
+    return result
   }
 
-  count () {
-    let condition = this.getCondition('allData')
-    return db.query(`SELECT count(id) as count FROM house ${condition}`)
+  async save () {
+    let result = await this.knex('house').insert({
+      plan: this.plan,
+      name: this.name,
+      type: this.type,
+      tile: this.tile,
+      garage: this.garage,
+      stair: this.stair,
+      color: this.color,
+      created_at: helpers.getCurrentTime('sql')
+    })
+    return result
   }
 
-  save () {
-    return db.query('INSERT INTO house (id, plan, name, type, tile, garage, stair, color, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-    [
-      null,
-      this.plan,
-      this.name,
-      this.type,
-      this.tile,
-      this.garage,
-      this.stair,
-      this.color,
-      helpers.getCurrentTime('sql')
-    ])
+  async update () {
+    let result = await this.knex('house')
+    .where({id: this.id})
+    .update({
+      plan: this.plan,
+      name: this.name,
+      type: this.type,
+      tile: this.tile,
+      garage: this.garage,
+      stair: this.stair,
+      color: this.color,
+      created_at: helpers.getCurrentTime('sql')
+    })
+    return result
   }
 
-  update () {
-    var sql = `UPDATE house SET 
-    plan = ?,
-    name = ?,
-    type = ?,
-    tile = ?,
-    garage = ?,
-    stair = ?,
-    color = ?,
-    created_at = ?
-    WHERE id = ?
-    `;
-    return db.query(sql, [this.plan, this.name, this.type, this.tile, this.garage, this.stair, this.color, helpers.getCurrentTime('sql'), this.id]);
+  async delete () {
+    let result = await this.knex('house')
+    .where({id: this.id})
+    .del()
+    return result
   }
 
-  delete () {
-    return db.query(`DELETE FROM house WHERE id = ?`, [this.id]);
-  }
-
-  getCondition (actionType) {
-    let condition = 'WHERE'
-    if (this.name || this.status) {
-      if (this.name) {
-        condition += ` name like "%${this.name}%"`
-      }
-    } else {
-      condition += ` 1`
+  getCondition () {
+    let conditions = {}
+    if (this.type) {
+      conditions.type = this.type
     }
-    return condition
+    return conditions
   }
 }

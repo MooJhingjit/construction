@@ -1,74 +1,93 @@
+const knex = require('knex')
+const db = require('../Database/config')
 const helpers = require('../Libraries/helpers')
-const database = require('./databaseModel')
-const db = new database()
 
-module.exports =  class Contract {  
-  constructor(id = '') {
+module.exports =  class Contract {
+  constructor(id){
+    this.knex = knex(db.config);
     this.id = id;
     this.code
     this.project_id
     this.contract_type
     this.plan
-    this.house_temp
+    this.house_id
     this.price
     this.quarter
     this.date_start
     this.paid
     this.status
-    this.limit
-    this.offset
+    this.limit = 5
+    this.offset = 0
   }
 
-  getData () {
-    return db.query(`SELECT * FROM contract WHERE id = ${this.id}`) 
+  async getData () {
+    let result = await this.knex.select('contract.*', 'contract.plan as contractPlan', 'house.*')
+    .from('contract')
+    .leftJoin('house', 'contract.house_id', 'house.id')
+    .where({'contract.code': this.code})
+    return result
   }
 
-  getAllData () {
-    let condition = this.getCondition('allData')
-    return db.query(`SELECT * FROM contract ${condition} ORDER BY id LIMIT ${this.limit} OFFSET ${this.offset} `)
+  async getAllData () {
+    let result = await this.knex('contract').where(this.getCondition())
+    .where('code', 'like', `%${this.code || ''}%`)
+    .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    return result
   }
 
-  count () {
-    let condition = this.getCondition('allData')
-    return db.query(`SELECT count(id) as count FROM contract ${condition}`)
+  async count () {
+    let result = await this.knex('contract').count('id as count').where(this.getCondition())
+    return result
   }
 
-  save () {
-    return db.query(
-      'INSERT INTO contract (id, code, project_id, contract_type, plan, house_temp, price, quarter, date_start, paid, status, created_at)'
-      + 'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    [
-      null,
-      this.code,
-      this.project_id,
-      this.contract_type,
-      this.plan,
-      this.house_temp,
-      this.price,
-      this.quarter,
-      this.date_start,
-      this.paid,
-      this.status,
-      helpers.getCurrentTime('sql')
-    ])
+  async save () {
+    let result = await this.knex('contract').insert({
+      code: this.code,
+      project_id: this.project_id,
+      contract_type: this.contract_type,
+      plan: this.plan,
+      house_id: this.house_id,
+      price: this.price,
+      quarter: this.quarter,
+      date_start: this.date_start,
+      paid: this.paid,
+      status: this.status,
+      created_at: helpers.getCurrentTime('sql')
+    })
+    return result
   }
 
-  delete () {
-    return db.query(`DELETE FROM project WHERE id = ?`, [this.id]);
+  // async update () {
+  //   let result = await this.knex('contract')
+  //   .where({id: this.id})
+  //   .update({
+  //     code: this.code,
+  //     project_id: this.project_id,
+  //     contract_type: this.contract_type,
+  //     plan: this.plan,
+  //     house_id: this.house_id,
+  //     price: this.price,
+  //     quarter: this.quarter,
+  //     date_start: this.date_start,
+  //     paid: this.paid,
+  //     status: this.status,
+  //     created_at: helpers.getCurrentTime('sql')
+  //   })
+  //   return result
+  // }
+
+  async delete () {
+    let result = await this.knex('contract')
+    .where({id: this.id})
+    .del()
+    return result
   }
 
-  getCondition (actionType) {
-    let condition = 'WHERE'
-    if (this.name || this.status) {
-      if (this.name) {
-        condition += ` name like "%${this.name}%"`
-      }
-      if (this.status) {
-        condition += ` status = "${this.status}"`
-      }
-    } else {
-      condition += ` 1`
+  getCondition () {
+    let conditions = {}
+    if (this.status) {
+      conditions.status = this.status
     }
-    return condition
+    return conditions
   }
 }

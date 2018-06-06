@@ -1,9 +1,10 @@
+const knex = require('knex')
+const db = require('../Database/config')
 const helpers = require('../Libraries/helpers')
-const database = require('./databaseModel')
-const db = new database()
 
-module.exports =  class Project {  
-  constructor(id = '') {
+module.exports =  class project {
+  constructor(id){
+    this.knex = knex(db.config);
     this.id = id;
     this.code
     this.name
@@ -13,60 +14,67 @@ module.exports =  class Project {
     this.offset = 0
   }
 
-  getData () {
-    return db.query(`SELECT * FROM project WHERE id = ${this.id}`)
+  async getData () {
+    let result = await this.knex('project').where({id: this.id})
+    return result
   }
 
-  getAllData () {
-    let condition = this.getCondition('allData')
-    return db.query(`SELECT * FROM project ${condition} ORDER BY id LIMIT ${this.limit} OFFSET ${this.offset} `)
+  async getAllData () {
+    let result = await this.knex('project').where(this.getCondition())
+    .where('name', 'like', `%${this.name || ''}%`)
+    .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    return result
   }
 
-  count () {
-    let condition = this.getCondition('allData')
-    return db.query(`SELECT count(id) as count FROM project ${condition}`)
+  async count () {
+    let result = await this.knex('project').count('id as count').where(this.getCondition())
+    return result
   }
 
-  save () {
-    return db.query('INSERT INTO project (id, code, name, address, type, created_at) VALUES (?, ?, ?, ?, ?, ?)',
-    [
-      null,
-      this.code,
-      this.name,
-      this.address,
-      this.type,
-      helpers.getCurrentTime('sql')
-    ])
+  async save () {
+    let result = await this.knex('project').insert({
+      code: this.code,
+      name: this.name,
+      address: this.address,
+      type: this.type,
+      created_at: helpers.getCurrentTime('sql')
+    })
+    return result
   }
 
-  update () {
-    var sql = `UPDATE project SET 
-    code = ?,
-    name = ?,
-    address = ?,
-    type = ?,
-    created_at = ?
-    WHERE id = ?
-    `;
-    return db.query(sql, [this.code, this.name, this.address, this.type, helpers.getCurrentTime('sql'), this.id],);
+  async update () {
+    let result = await this.knex('project')
+    .where({id: this.id})
+    .update({
+      code: this.code,
+      name: this.name,
+      address: this.address,
+      type: this.type,
+      created_at: helpers.getCurrentTime('sql')
+    })
+    return result
   }
 
-  delete () {
-    return db.query(`DELETE FROM project WHERE id = ?`, [this.id]);
+  async delete () {
+    let result = await this.knex('project')
+    .where({id: this.id})
+    .del()
+    return result
   }
 
-  getCondition (actionType) {
-    let condition = 'WHERE'
-    if (this.name || this.status) {
-      if (this.name) {
-        condition += ` name like "%${this.name}%"`
-      }
-      if (this.status) {
-        condition += ` status = "${this.status}"`
-      }
-    } else {
-      condition += ` 1`
+  async getStat () {
+    // let result = await this.knex.select(knex.raw('count(*) as count'), knex.raw('DATE_FORMAT(created_at,"%Y-%m-%d") as created_day'))
+    // .from('project')
+    // .whereRaw(`YEAR(created_at) = ${helpers.getCurrentTime('year')}`)
+    // .groupByRaw('MONTH(created_at)')
+    return null
+  }
+
+  getCondition () {
+    let conditions = {}
+    if (this.status) {
+      conditions.status = this.status
     }
-    return condition
+    return conditions
   }
 }

@@ -18,6 +18,7 @@
     "jquery-sparkline": "^2.4.0",
     "knex": "^0.14.6",
     "mariasql": "^0.2.6",
+    "moment": "^2.22.1",
     "mysql": "^2.15.0",
     "vee-validate": "^2.0.9",
     "vue": "^2.5.2",

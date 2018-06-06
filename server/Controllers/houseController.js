@@ -14,6 +14,7 @@ const getData = (req, res, next) => {
 async function getAllData (req, res, next) {
   let house = new houseModel()
   let data = []
+  house.type = req.query.status
   house.name = req.query.main_search
   let total = await house.count()
   house.limit = req.query.limit
@@ -34,9 +35,8 @@ async function getDropDown (req, res, next) {
   let data = await house.getAllSelection()
   data = data.map(item => {
     return {
-      key: item.id,
-      value: `${item.plan} ${item.name}`,
-      garage: item.garage
+      key: item.name,
+      value: `${item.name}`
     }
   })
   res.status(200).json(data)

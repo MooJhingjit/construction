@@ -1,4 +1,3 @@
-// const util = require('util')
 const helpers = require('../Libraries/helpers')
 const projectModel = require('../Models/projectModel')
 
@@ -32,7 +31,6 @@ async function getAllData (req, res, next) {
 }
 
 async function createData (req, res, next) {
-  // console.log(req.body.na)
   let newItem = new projectModel()
   newItem.code= req.body.data.code
   newItem.name = req.body.data.name
@@ -43,14 +41,12 @@ async function createData (req, res, next) {
 }
 
 async function updateData (req, res, next) {
-  // console.log(req.body.na)
   let item = new projectModel(req.params.id)
   item.code= req.body.data.code
   item.name = req.body.data.name
   item.address = req.body.data.address
   item.type = req.body.data.type
   let result = await item.update()
-  // console.log(result)
   res.status(200).json(result)
 }
 
@@ -60,6 +56,21 @@ async function deleteData (req, res, next) {
   res.status(200).json({})
 }
 
+function getStat () {
+  let project = new projectModel()
+  return {
+    count: 120,
+    class: 'project',
+    name: 'Project',
+    detail: '',
+    dataSets: {
+      label: ['xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx'],
+      values: [1, 5, 6, 8, 7, 4, 5, 9, 2, 7, 2, 5]
+    },
+    barColor: '#4571BB'
+  }
+}
+module.exports.getStat = getStat
 module.exports.getData = getData
 module.exports.getAllData = getAllData
 module.exports.createData = createData

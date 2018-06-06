@@ -2,6 +2,7 @@
 const helpers = require('../Libraries/helpers')
 const storeModel = require('../Models/storeModel')
 const materialModel = require('../Models/materialModel')
+const materialGroupDetailModel = require('../Models/materialGroupDetailModel')
 
 async function getData (req, res, next) {
   let id = req.params.key
@@ -59,6 +60,7 @@ async function deleteData (req, res, next) {
   let item = new storeModel(req.params.id)
   await item.delete()
   let material = new materialModel()
+  let materialGroupDetail = new materialGroupDetailModel()
   material.store_id = req.params.id
   let materials = await material.getDataByAttr()
   let materialId = []
@@ -67,6 +69,7 @@ async function deleteData (req, res, next) {
   })
   await material.clearMaterial([]) // not in
   await material.clearMaterialDetail(materialId)
+  await materialGroupDetail.clearMaterialGroup(materialId)
   res.status(200).json({})
 }
 

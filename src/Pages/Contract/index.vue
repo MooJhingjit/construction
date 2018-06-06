@@ -73,22 +73,22 @@
         <button class="pagination-next">หน้าถัดไป</button>
       </nav>
     </template> -->
-    <template v-if="local.item.status === 'success'">
+    <template v-if="local.idSelected">
       <template slot="detail">
         <div class="container-block  detail-block">
-          <span class="type tag">{{GET_WORKSTATUS(local.item.contract.status)}}</span>
+          <span class="type tag">{{GET_WORKSTATUS(local.inputs.contract.status)}}</span>
           <div class="block c-header">
             <table class="transparent-table">
               <tr>
-              <td>โครงการ:<span class="value">{{local.item.project.name}}</span></td>
+              <td>โครงการ:<span class="value">{{local.inputs.project.name}}</span></td>
               </tr>
               <tr>
-                <td>เลขที่สัญญา:<span class="value">{{local.item.contract.code}}</span></td>
-                <td>แปลน: <span class="value">{{local.item.contract.plan}}</span></td>
+                <td>เลขที่สัญญา:<span class="value">{{local.inputs.contract.code}}</span></td>
+                <td>แบบบ้าน:<span class="value">{{local.inputs.contract.house_id}}</span></td>
               </tr>
               <tr>
-                <td>แบบบ้าน:<span class="value">{{local.item.contract.house_temp}}</span></td>
                 <td>ขั้นตอนการตำเนินงาน: <span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
+                <td>แปลน: <span class="value">{{local.inputs.contract.contractPlan}}</span></td>
               </tr>
               <tr>
                 <td>วันที่งวด 9 ตามส/ญ:<span class="value">27/08/61</span></td>
@@ -98,9 +98,9 @@
                 <td>วันที่ End Prod.ตามส/ญ:<span class="value">16/09/61</span></td>
                 <td>วันที่ทำสัญญา:<span class="value">27/08/61</span></td>
               </tr>
-              <tr>
-                <td colspan="2">งานล่าสุด:<span class="value">ทำสัญญาก่อสร้าง</span></td>
-              </tr>
+              <!-- <tr>
+                <td colspan="2">งานปัจจุบัน:<span class="value">ทำสัญญาก่อสร้าง</span></td>
+              </tr> -->
             </table>
           </div>
           <div class="block c-body">
@@ -114,7 +114,7 @@
                   <th>งวด</th>
                 </tr>
               </thead>
-              <tbody>
+              <!-- <tbody>
                 <tr>
                   <td>10000 : *Confirm Lay-Out</td>
                   <td>05/01/61</td>
@@ -143,89 +143,36 @@
                   <td>เสร็จแล้ว</td>
                   <td>19</td>
                 </tr>
-              </tbody>
+              </tbody> -->
             </table>
           </div>
           <div class="block c-extend">
             <div class="container-block period">
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 1
-                </label>
-              </div>
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 2
-                </label>
-              </div>
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 3
-                </label>
-              </div>
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 4
-                </label>
-              </div>
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 5
-                </label>
-              </div>
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 6
-                </label>
-              </div>
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 7
-                </label>
-              </div>
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 8
-                </label>
-              </div>
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 9
-                </label>
-              </div>
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 10
-                </label>
-              </div>
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 11
-                </label>
-              </div>
-              <div class="block container-block">
-                <label class="checkbox">
-                  <input type="checkbox">
-                  งวดที่ 12
+              <div class="block container-block" :key="index" v-for="(item, index) in local.inputs.contractTime">
+                <label class="checkbox" >
+                  <!-- @click="updateContractTime($event, item.id, item.is_success)" -->
+                  <input type="checkbox" @change="updateContractTime(item.id, item.time)" :ref="`time_${item.time}`" :checked="item.is_success">
+                  งวดที่ {{item.time}}
                 </label>
               </div>
             </div>
           </div>
         </div>
         <div class="container-block footer-panel">
-          <button class="button" v-if="local.item.contract.status == 'wait'">เริ่มดำเนินงาน</button>
-          <button class="button">ปิดงาน (เสร็จสิ้น)</button>
+          <my-action
+              type="update"
+              :obj="{title: 'เริ่มดำเนินงาน', color: 'is-warning'}"
+              @clickEvent="submitForm('update', 'ip')"
+              v-if="local.inputs.contract.status == 'wait'"
+            >
+            </my-action>
+          <my-action
+            type="update"
+            :obj="{title: 'ปิดงาน (เสร็จสิ้น)', color: 'is-success'}"
+            @clickEvent="submitForm('update', 'done')"
+            v-if="local.inputs.contract.status == 'ip'"
+          >
+          </my-action>
         </div>
       </template>
     </template>
@@ -260,6 +207,7 @@ import optionDetailTemplate from '@Components/Template/option-detail'
 import config from '@Config/app.config'
 import service from '@Services/app-service'
 import dataTable from '@Components/DataTable'
+import myAction from '@Components/Form/my-action'
 export default {
   props: {
     // templateName: {
@@ -270,7 +218,8 @@ export default {
   components: {
     breadcrumbBar,
     optionDetailTemplate,
-    dataTable
+    dataTable,
+    myAction
   },
   name: 'ContractPage',
   data () {
@@ -285,13 +234,17 @@ export default {
           }
         },
         statusSearch: [
-          {title: 'ทั้งหมด', name: ''},
-          {title: 'เสร็จสิ้น', name: 'done'},
-          {title: 'รออนุมัติ', name: 'wait'},
-          {title: 'ดำเนินการ', name: 'ip'}
+          {title: 'ทั้งหมด', key: ''},
+          {title: 'เสร็จสิ้น', key: 'done'},
+          {title: 'รออนุมัติ', key: 'wait'},
+          {title: 'ดำเนินการ', key: 'ip'}
         ],
         idSelected: null,
-        item: {}
+        inputs: {
+          project: {},
+          contractTime: {},
+          contract: {}
+        }
       }
     }
   },
@@ -307,18 +260,66 @@ export default {
   },
   methods: {
     async selectedDataHandle (item) {
-      this.local.idSelected = item.id
+      this.local.idSelected = item.code
       let queryString = this.BUILDPARAM({type: 'full'})
       let contractItem = await service.getResource({
-        resourceName: `${config.api.contract.index}/${item.id}`,
+        resourceName: `${config.api.contract.index}/${item.code}`,
         queryString
       })
-      this.local.item = contractItem.data
-      // this.local.inputs.code = item.code
-      // this.local.inputs.name = item.name
-      // this.local.inputs.address = item.address
-      // this.local.inputs.type = item.type
-      // this.local.submitMode = 'edit'
+      this.local.inputs.project = contractItem.data.project
+      this.local.inputs.contract = contractItem.data.contract
+      this.local.inputs.contractTime = contractItem.data.contractTime
+    },
+    async updateContractTime (id, time) {
+      let ele = `time_${time}`
+      let data = {
+        isSuccess: this.$refs[ele][0].checked
+      }
+      let resourceName = `${config.api.contract.time}/${id}`
+      let res = await service.putResource({data, resourceName})
+      if (res.status === 200) {
+        this.NOTIFY('success')
+      } else {
+        this.NOTIFY('error')
+      }
+    },
+    async submitForm (type) {
+      // let isValid = await this.$validator.validateAll()
+      // let resourceName = this.resourceName
+      if (type === 'update' && this.local.idSelected === 'new') type = 'save'
+      // let data = {}
+      let res = null
+      switch (type) {
+        case 'add':
+          // this.local.idSelected = 'new'
+          // this.cleanInput()
+          return
+        case 'cancel':
+          this.local.idSelected = null
+          return
+        case 'update':
+          // if (!isValid) return
+          // data = this.local.inputs
+          // resourceName = `${resourceName}/${this.local.idSelected}`
+          // res = await service.putResource({data, resourceName})
+          break
+        case 'delete':
+          // resourceName = `${resourceName}/${this.local.idSelected}`
+          // let queryString = []
+          // res = await service.deleteResource({resourceName, queryString})
+          break
+        case 'save':
+          // if (!isValid) return
+          // data = this.local.inputs
+          // res = await service.postResource({data, resourceName})
+          break
+      }
+      if (res.status === 200) {
+        this.local.idSelected = null
+        this.NOTIFY('success')
+        return
+      }
+      this.NOTIFY('error')
     }
   }
 }

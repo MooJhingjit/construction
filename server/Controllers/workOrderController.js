@@ -12,6 +12,25 @@ async function getData (req, res, next) {
   switch(req.query.type) {
     case 'full':
       result = await workOrder.getData()
+      result = result.map(item => {
+        let material_group = []
+        if (item.material_group_id) {
+          material_group.push({
+            id: item.material_group_id,
+            name: item.material_group_name
+          })
+        }
+        return {
+          time: item.time,
+          pre_order: item.pre_order,
+          // // delay: item.delay,
+          work_order_date: item.work_order_date,
+          name: item.name,
+          post_order: item.post_order,
+          work_order_detail_date: item.work_order_detail_date,
+          material_group: material_group
+        }
+      })
         break;
     default:
       result = await workOrder.getData()
@@ -38,7 +57,6 @@ async function getAllData (req, res, next) {
         }
       })
     )
-    console.log(result)
     // result = result.map(item => {
     //   let workOrderDetial = new workOrderModel()
     //   workOrderDetial.time = item.time
@@ -56,7 +74,6 @@ async function getAllData (req, res, next) {
 }
 
 async function createData (req, res, next) {
-  // console.log(req.body.na)
   let newItem = new workOrderModel()
   let total = await newItem.count()
   newItem.time = total[0].count + 1
@@ -66,12 +83,12 @@ async function createData (req, res, next) {
 }
 
 async function updateData (req, res, next) {
-  // console.log(req.body.data)
   let workOrder = new workOrderModel() // id == time
   workOrder.time = req.body.data.time
-  workOrder.pre_order = req.body.data.pre_order
+  if (req.body.data.pre_order.length) {
+    workOrder.pre_order = req.body.data.pre_order[0].id
+  }
   await workOrder.update()
-  console.log('dfdf')
   let oldItem = new workOrderDetailModel()
   oldItem.work_order_time = workOrder.time
   await oldItem.delete()
@@ -80,7 +97,10 @@ async function updateData (req, res, next) {
     let newItem = new workOrderDetailModel()
     newItem.work_order_time = workOrder.time
     newItem.name = item.taskName
-    newItem.post_order = item.postOrderId
+    if (item.postOrder.length) {
+      newItem.post_order = item.postOrder[0].id
+    }
+    // // newItem.delay = item.delay
     newItem.save()
   })
   res.status(200).json({})

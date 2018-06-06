@@ -103,7 +103,7 @@ export default {
         this.local.materialTemplate = null
         return
       }
-      if (this.local.houseTemplate.selected.garage === 'none') {
+      if (this.local.houseTemplate.selected.key === '098SW319I') {
         this.local.materialTemplate = materialTemplateDefault
       } else {
         this.local.materialTemplate = materialTemplateGarage

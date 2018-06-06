@@ -17,14 +17,23 @@ module.exports.getUserAuth = (token) => {
   return decoded.user
 }
 
-module.exports.getCurrentTime = (type) => {
+module.exports.getCurrentTime = (type, dateInput = null) => {
   let res = ''
-  let currentdate = new Date()
+  let currentdate
+  if (dateInput) {
+    currentdate = new Date(dateInput)
+  } else {
+    currentdate = new Date()
+  }
+  let date = `${currentdate.getFullYear()}-${currentdate.getMonth()+1}-${currentdate.getDate()}`
+  let time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`
   if (type === 'sql') {
-    let date = `${currentdate.getFullYear()}-${currentdate.getMonth()+1}-${currentdate.getDate()}`
-    let time = `${currentdate.getHours()}:${currentdate.getMinutes()}:${currentdate.getSeconds()}`
     res = `${date} ${time}`
     // res = '2018-05-01 22:38:03'
+  } else if (type === 'date') {
+    res = `${date}`
+  } else if (type === 'year') {
+    res = currentdate.getFullYear()
   }
   return res
 }

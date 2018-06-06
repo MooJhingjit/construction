@@ -1,5 +1,5 @@
 <template>
-  <option-detail-template ref="template" :isSelected="local.inputs.id" :templateObj="local.pageObj.template" @cancleForm="submitForm('cancel')">
+  <option-detail-template ref="template" :isSelected="local.idSelected" :templateObj="local.pageObj.template" @cancleForm="submitForm('cancel')">
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="data-table">
       <data-table ref="dataTable"
@@ -11,7 +11,7 @@
     <template slot="function">
       <button class="button is-link" @click="submitForm('add')">เพิ่มข้อมูลใหม่</button>
     </template>
-    <template v-if="local.inputs.id">
+    <template v-if="local.idSelected">
       <template slot="detail">
         <div class="container-block detail-block">
           <div class="block result">
@@ -29,6 +29,7 @@
               <table class="transparent-table">
                 <thead>
                   <tr>
+                    <td>แบบบ้าน</td>
                     <td>รายการ</td>
                     <td width="40">จำนวน</td>
                     <td></td>
@@ -36,7 +37,8 @@
                 </thead>
                 <tbody>
                   <tr :key="index" v-for="(item, index) in local.inputs.lists">
-                    <td>{{item.materialId}}</td>
+                    <td>{{item.houseId}}</td>
+                    <td>{{item.materialName}}</td>
                     <td><input type="number" size="2" v-model="item.amount" class="input"></td>
                     <td><i class="fa fa-times" aria-hidden="true" @click="deleteListsItem(index)"></i></td>
                   </tr>
@@ -44,38 +46,64 @@
               </table>
             </div>
           </div>
-          <div class="block search-material">
+          <!-- <div class="block data-table">
             <div class="title-name">ค้นหารายการวัสดุ</div>
-            <div class="control has-icons-right">
-              <input class="input" type="text" placeholder="">
-              <span class="icon is-right">
-                <i class="fa fa-search" aria-hidden="true"></i>
-              </span>
+            <div class="search-input control has-icons-left">
+              <my-auto-complete
+              @select="itemSelectedHandle"
+              :arrInputs="local.materials"
+              placeholder="ค้นหาชื่อวัสดุ"
+              label=""
+              @searchValue="searchValueHandle"
+              ></my-auto-complete>
             </div>
-            <div class="items container-block">
-              <table>
-                <tr @click="addItemsList()">
-                  <td>แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า450kg/m²) ขนาด 0.35 x 2.83m.(SHEAE KEY 1จุด)</td>
-                </tr>
-                <tr>
-                  <td>แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า450kg/m²)  ขนาด 0.35 x 1.94 m.</td>
-                </tr>
-                <tr>
-                  <td>แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า200kg/m²) ขนาด 0.35 x 4.03 m.</td>
-                </tr>
-                <tr>
-                  <td>แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า200kg/m²) ขนาด 0.35 x 3.35 m.</td>
-                </tr>
-                <tr>
-                  <td>แผ่นพื้นสำเร็จรูป ชนิด3ขา(LLไม่น้อยกว่า200kg/m²) ขนาด 0.35 x 2.40 m.</td>
-                </tr>
+            <div class="search-results">
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <tbody>
+                  <tr @click="addItemsList()">
+                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
+                  </tr>
+                  <tr>
+                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
+                  </tr>
+                  <tr>
+                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
+                  </tr>
+                  <tr>
+                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
+                  </tr>
+                  <tr>
+                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
+                  </tr>
+                  <tr>
+                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
+                  </tr>
+                  <tr>
+                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
+                  </tr>
+                  <tr>
+                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="container-block footer-panel">
-          <button class="button" @click="submitForm('update')">บันทึกข้อมูล</button>
-          <button class="button is-danger" @click="submitForm('delete')">ลบข้อมูล</button>
+          <my-action
+            type="update"
+            :obj="{title: 'บันทึกข้อมูล'}"
+             @clickEvent="submitForm('update')"
+          >
+          </my-action>
+          <my-action
+            type="delete"
+            :obj="{title: 'ลบข้อมูล'}"
+             @clickEvent="submitForm('delete')"
+          >
+          </my-action>
+          <!-- <button class="button" @click="submitForm('update')">บันทึกข้อมูล</button>
+          <button class="button is-danger" @click="submitForm('delete')">ลบข้อมูล</button> -->
         </div>
       </template>
     </template>
@@ -93,6 +121,8 @@ import service from '@Services/app-service'
 import config from '@Config/app.config'
 import dataTable from '@Components/DataTable'
 import myInput from '@Components/Form/my-input'
+import myAction from '@Components/Form/my-action'
+import myAutoComplete from '@Components/Form/my-autocomp'
 export default {
   props: {
     // templateName: {
@@ -105,7 +135,9 @@ export default {
     optionDetailTemplate,
     noResultTemplate,
     dataTable,
-    myInput
+    myInput,
+    myAction,
+    myAutoComplete
   },
   name: 'OrderingGroup',
   data () {
@@ -120,11 +152,15 @@ export default {
           }
         },
         statusSearch: [],
+        idSelected: '',
         inputs: {
           id: null,
           name: null,
           lists: []
-        }
+        },
+        materials: {},
+        materialMainSearch: '',
+        materialStatusSelected: ''
       }
     }
   },
@@ -133,110 +169,101 @@ export default {
       return config.api.materialGroup.index
     }
   },
-  created () {
-    // console.log('created')
-    // this.property = 'Example property update.'
-    // console.log('propertyComputed will update, as this.property is now reactive.')
-  },
   updated () {
   },
+  created () {
+    this.getMaterialItems()
+  },
   methods: {
+    // async getMaterialItems () {
+    //   let params = []
+    //   params['main_search'] = this.local.materialMainSearch
+    //   let queryString = this.BUILDPARAM(params)
+    //   let materials = await service.getResource({resourceName: config.api.material.dropdown, queryString})
+    //   this.local.materials = materials.data
+    // },
     selectedDataHandle (item) {
+      this.local.idSelected = item.id
       this.local.inputs.id = item.id
       this.local.inputs.name = item.name
       this.local.inputs.lists = item.detail.map(itemDetail => {
         return {
           materialId: itemDetail.material_id,
-          amount: itemDetail.amount
+          amount: itemDetail.amount,
+          houseId: itemDetail.house_id,
+          materialName: itemDetail.name
         }
       })
-      // this.local.inputs.lists.materialId = item.detail.material_id
-      // this.local.inputs.lists.amount = item.detail.amount
     },
     deleteListsItem (index) {
       this.local.inputs.lists.splice(index, 1)
     },
     cleanInput () {
+      this.local.idSelected = null
       this.local.inputs.id = null
       this.local.inputs.name = null
       this.local.inputs.lists = []
     },
-    submitForm (type) {
-      this.$validator.validateAll().then((tf) => {
-        if (tf) {
-          if (type === 'cancel') {
-            this.cleanInput()
-            return
-          }
-          let data = {}
-          let resourceName = this.resourceName
-          if (type === 'update' && this.local.inputs.id === 'new') {
-            type = 'save'
-          }
-          switch (type) {
-            case 'add':
-              this.cleanInput()
-              this.local.inputs.id = 'new'
-              break
-            case 'save':
-              data = this.local.inputs
-              service.postResource({data, resourceName})
-                .then((res) => {
-                  if (res.status === 200) {
-                    this.cleanInput()
-                    this.$refs.dataTable.fetchData()
-                    this.NOTIFY('success')
-                  } else {
-                    this.NOTIFY('error')
-                  }
-                })
-                .catch((err) => {
-                  console.log(err)
-                })
-              break
-            case 'delete':
-              resourceName = `${resourceName}/${this.local.inputs.id}`
-              let queryString = null
-              service.deleteResource({resourceName, queryString})
-                .then((res) => {
-                  if (res.status === 200) {
-                    this.cleanInput()
-                    this.$refs.dataTable.fetchData()
-                    this.NOTIFY('success')
-                  } else {
-                    this.NOTIFY('error')
-                  }
-                })
-                .catch((err) => {
-                  console.log(err)
-                })
-              break
-            case 'update':
-              data = this.local.inputs
-              resourceName = `${resourceName}/${this.local.inputs.id}`
-              service.putResource({data, resourceName})
-                .then((res) => {
-                  if (res.status === 200) {
-                    this.$refs.dataTable.fetchData()
-                    this.NOTIFY('success')
-                  } else {
-                    this.NOTIFY('error')
-                  }
-                })
-                .catch((err) => {
-                  console.log(err)
-                })
-              break
-          }
-        }
-      })
+    async submitForm (type) {
+      let isValid = await this.$validator.validateAll()
+      let resourceName = this.resourceName
+      if (type === 'update' && this.local.idSelected === 'new') type = 'save'
+      let data = {}
+      let res = null
+      switch (type) {
+        case 'add':
+          this.cleanInput()
+          this.local.idSelected = 'new'
+          return
+        case 'cancel':
+          this.cleanInput()
+          return
+        case 'update':
+          if (!isValid) return
+          data = this.local.inputs
+          resourceName = `${resourceName}/${this.local.idSelected}`
+          res = await service.putResource({data, resourceName})
+          break
+        case 'delete':
+          resourceName = `${resourceName}/${this.local.idSelected}`
+          let queryString = []
+          res = await service.deleteResource({resourceName, queryString})
+          break
+        case 'save':
+          if (!isValid) return
+          data = this.local.inputs
+          res = await service.postResource({data, resourceName})
+          break
+      }
+      if (res.status === 200) {
+        this.reloadTable()
+        this.cleanInput()
+        this.local.idSelected = ''
+        this.NOTIFY('success')
+        return
+      }
+      this.NOTIFY('error')
     },
-    addItemsList () {
-      this.local.inputs.lists.push({
-        amount: 8,
-        materialId: 3
-      })
+    // addItemsList () {
+    //   this.local.inputs.lists.push({
+    //     amount: 8,
+    //     materialId: 3
+    //   })
+    // },
+    reloadTable () {
+      this.$refs.dataTable.fetchData()
+    },
+    itemSelectedHandle () {
+      //
+    },
+    searchValueHandle (val) {
+      this.local.materialMainSearch = val
+      this.getMaterialItems()
     }
+    // filterByStatus (key) {
+    //   this.local.materialStatusSelected = key
+    //   this.getMaterialItems()
+    // }
   }
 }
 </script>

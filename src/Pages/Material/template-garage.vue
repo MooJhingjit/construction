@@ -3,17 +3,17 @@
     <table class="table is-hoverable">
       <thead>
         <tr>
-          <th rowspan="3">รายการ</th>
-          <th rowspan="3">หน่วย</th>
-          <th rowspan="3">ราคา/หน่วย</th>
-          <th colspan="6">105PWY22F</th>
+          <th rowspan="2">รายการ</th>
+          <th rowspan="2" width="80">ระยะเวลาจัดส่ง</th>
+          <th rowspan="2" width="80">จำนวนเริ่มต้น</th>
+          <th rowspan="2" width="120">หน่วย</th>
+          <th rowspan="2" width="120">ราคา/หน่วย</th>
+          <th colspan="6">{{obj.houseTemplate.value}}</th>
+          <th rowspan="2" width="80">กลุ่มวัสดุ</th>
         </tr>
         <tr>
-          <th colspan="3">โรงรถซ้าย</th>
-          <th colspan="3">โรงรถขวา</th>
-        </tr>
-        <tr>
-          <th colspan="3">
+          <th width="80" colspan="3">โรงรถซ้าย
+            <br />
             <div class="select">
               <my-input
               :value="local.colorSelected.leftColor"
@@ -24,7 +24,8 @@
               ></my-input>
             </div>
           </th>
-          <th colspan="3">
+          <th width="80" colspan="3">โรงรถขวา
+            <br />
             <div class="select">
               <my-input
               :value="local.colorSelected.rightColor"
@@ -49,6 +50,22 @@
           </td>
           <td>
             <my-input
+              :value="item.delay"
+              :inputObj="{type: 'text', name: `delay_${index}`, placeholder: '', validate: ''}"
+              :validator="$validator"
+              @input="value => { item.delay = value }"
+              ></my-input>
+          </td>
+          <td>
+            <my-input
+              :value="item.amount"
+              :inputObj="{type: 'text', name: `amount_${index}`, placeholder: 'หน่วย', validate: 'required'}"
+              :validator="$validator"
+              @input="value => { item.amount = value }"
+              ></my-input>
+          </td>
+          <td>
+            <my-input
               :value="item.amount"
               :inputObj="{type: 'text', name: `amount_${index}`, placeholder: 'หน่วย', validate: 'required'}"
               :validator="$validator"
@@ -63,7 +80,7 @@
               @input="value => { item.price = value }"
               ></my-input>
           </td>
-          <td>
+          <td colspan="3">
             <my-input
               :value="item.l_default[local.colorSelected.leftColor]"
               :inputObj="{type: 'text', name: `left_${index}`, placeholder: 'ซ้าย', validate: 'required'}"
@@ -71,13 +88,21 @@
               @input="value => { item.l_default[local.colorSelected.leftColor] = value }"
               ></my-input>
           </td>
-          <td>
+          <td colspan="3">
             <my-input
               :value="item.r_default[local.colorSelected.rightColor]"
               :inputObj="{type: 'text', name: `right_${index}`, placeholder: 'ขวา', validate: 'required'}"
               :validator="$validator"
               @input="value => { item.r_default[local.colorSelected.rightColor] = value }"
               ></my-input>
+          </td>
+          <td>
+             <my-tags-selection
+            :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ'}"
+            :resourceName="materialGroupResource"
+            :itemSelected="item.materialGroup"
+            @selected="value => { item.materialGroup = value }"
+            ></my-tags-selection>
           </td>
         </tr>
       </tbody>
@@ -110,11 +135,13 @@ import myInput from '@Components/Form/my-input'
 import config from '@Config/app.config'
 import service from '@Services/app-service'
 import myAction from '@Components/Form/my-action'
+import myTagsSelection from '@Components/Form/my-tags-selection'
 export default {
   name: 'materialTempalte',
   components: {
     myInput,
-    myAction
+    myAction,
+    myTagsSelection
   },
   props: {
     obj: {
@@ -128,6 +155,9 @@ export default {
         // this.local.items.push(this.local.workOrderTemplate)
       }
       return this.local.items
+    },
+    materialGroupResource () {
+      return config.api.materialGroup.index
     }
   },
   data () {
@@ -141,11 +171,15 @@ export default {
         itemsTemplate: {
           id: null,
           name: '',
-          amount: '',
+          delay: '',
+          unit: '',
+          amount: 1,
           price: '',
+          materialGroup: [],
           l_default: {},
           r_default: {}
-        }
+        },
+        materialGroupItems: []
       }
     }
   },
@@ -157,20 +191,11 @@ export default {
   updated () {
   },
   methods: {
-    fetchData () {
-      // this.local.items.push(this.local.itemsTemplate)
-      let resourceName = `${config.api.material.index}/${this.obj.storeId}`
+    async fetchData () {
       let queryString = this.BUILDPARAM({house: this.obj.houseTemplate.key})
-      service.getResource({resourceName, queryString})
-        .then((res) => {
-          if (res.status === 200) {
-            this.local.items = res.data
-            // this.local.itemsTemplate.l_default[key] = ''
-            // this.local.itemsTemplate.r_default[key] = ''
-          }
-        })
-        .catch(() => {
-        })
+      let resourceName = `${config.api.material.index}/${this.obj.storeId}`
+      let items = await service.getResource({resourceName, queryString})
+      this.local.items = items.data
     },
     editRow (type) {
       if (type === 'add') {
@@ -185,8 +210,11 @@ export default {
         this.local.items.push({
           id: '',
           name: '',
-          amount: '',
+          delay: '',
+          unit: '',
+          amount: 1,
           price: '',
+          materialGroup: [],
           l_default: leftObj,
           r_default: rightObj
         })
@@ -224,22 +252,19 @@ export default {
         return {
           id: item.id,
           name: item.name,
+          delay: item.delay,
+          unit: item.unit,
           storeId: this.obj.storeId,
           houseId: this.obj.houseTemplate.key,
           amount: item.amount,
           price: item.price,
+          materialGroup: item.materialGroup,
           priceDetail: {
             l_default: item.l_default,
             r_default: item.r_default
           }
         }
       })
-      // let priceDetail = this.local.items.map(item => {
-      //   return {
-      //     l_default: item.l_default,
-      //     r_default: item.r_default
-      //   }
-      // })
       return {
         houseId: this.obj.houseTemplate.key,
         storeId: this.obj.storeId,
@@ -256,7 +281,6 @@ export default {
           }
         })
       }
-      // console.log(this.local.colorSelected.rightColor)
     },
     setLeftColor () {
       let key = this.local.colorSelected.leftColor
@@ -268,14 +292,7 @@ export default {
           }
         })
       }
-      // console.log(this.local.colorSelected.leftColor)
     }
   }
-  // watch: {
-  //   local.colorSelected.rightColor: function () {
-  //     this.local.options.isActive = !this.isDisableMenu
-  //     this.local.profile.isActive = !this.isDisableMenu
-  //   }
-  // }
 }
 </script>

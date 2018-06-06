@@ -56,13 +56,19 @@
                     </td>
                   </tr>
                   <tr>
+                    <td>แบบบ้าน:</td>
+                    <td>
+                      <my-auto-complete
+                      @select="objVal => {local.inputs.houseId = objVal.key}"
+                      :arrInputs="local.houseTemplate.inputs"
+                      placeholder="แบบบ้าน"
+                      label=""
+                      ></my-auto-complete>
+                      <!-- <input class="input" type="text" v-model="local.inputs.houseTemp" placeholder="แบบบ้าน"> -->
+                    </td>
                     <td>แปลง:</td>
                     <td>
                       <input class="input" type="text" v-model="local.inputs.plan" placeholder="แปลง">
-                    </td>
-                    <td>แบบบ้าน:</td>
-                    <td>
-                      <input class="input" type="text" v-model="local.inputs.houseTemp" placeholder="แบบบ้าน">
                     </td>
                   </tr>
                   <tr>
@@ -93,10 +99,10 @@
                     <td>
                       <!-- <input class="input" type="text" v-model="local.inputs.dateStart" placeholder="วันที่ออกสัญญา"> -->
                       <my-input
-                      :value="local.inputs.dateStart"
-                      :inputObj="{type: 'text', name: 'contract_datestart', placeholder: 'วันที่ออกสัญญา', validate: 'required'}"
+                      :value="local.inputs.dateStart || null"
+                      :inputObj="{type: 'datepicker', name: 'contract_datestart', placeholder: 'วันที่ออกสัญญา', validate: 'required'}"
                       :validator="$validator"
-                      @input="value => { local.inputs.dateStart = value }"
+                       @input="value => { local.inputs.dateStart = value }"
                       ></my-input>
                     </td>
                     <td>เงินเบิกล่วงหน้า:</td>
@@ -113,7 +119,7 @@
                 </table>
               </div>
             </div>
-            <div class="c-body">
+            <div class="c-body" v-if="this.local.isTimeStart">
               <table class="table is-hoverable">
                 <thead>
                   <tr>
@@ -153,8 +159,20 @@
             </div>
           </div>
           <div class="container-block footer-panel" v-if="this.local.isTimeStart">
-            <button class="button is-warning" @click="submitForm('wait')">รออนุมัติ</button>
-            <button class="button is-success" @click="submitForm('ip')">เริ่มดำเนินงาน</button>
+            <my-action
+              type="update"
+              :obj="{title: 'รออนุมัติ', color: 'is-warning'}"
+              @clickEvent="submitForm('save', 'wait')"
+            >
+            </my-action>
+            <my-action
+              type="update"
+              :obj="{title: 'เริ่มดำเนินงาน', color: 'is-success'}"
+              @clickEvent="submitForm('save', 'ip')"
+            >
+            </my-action>
+            <!-- <button class="button is-warning" @click="submitForm('save', 'wait')">รออนุมัติ</button>
+            <button class="button is-success" @click="submitForm('save', 'ip')">เริ่มดำเนินงาน</button> -->
           </div>
         </template>
         <template v-else>
@@ -189,6 +207,8 @@ import service from '@Services/app-service'
 import config from '@Config/app.config'
 import Helper from '@Libraries/common.helpers'
 import myInput from '@Components/Form/my-input'
+import myAction from '@Components/Form/my-action'
+import myAutoComplete from '@Components/Form/my-autocomp'
 export default {
   props: {
     // templateName: {
@@ -198,7 +218,9 @@ export default {
   },
   components: {
     breadcrumbBar,
-    myInput
+    myInput,
+    myAction,
+    myAutoComplete
   },
   name: 'CreateContractPage',
   data () {
@@ -219,7 +241,7 @@ export default {
           projectId: this.$route.params.key,
           contractType: '10 งวด',
           plan: '',
-          houseTemp: '',
+          houseId: '',
           price: '',
           quarter: '',
           dateStart: '',
@@ -238,7 +260,11 @@ export default {
             {time: '10', priceRate: 5, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'}
           ]
         },
-        project: {}
+        project: {},
+        houseTemplate: {
+          inputs: [],
+          selected: null
+        }
       }
     }
   },
@@ -251,6 +277,9 @@ export default {
     },
     getCurrentData () {
       return Helper.GET_DATETHAI('now')
+    },
+    resourceName () {
+      return config.api.contract.index
     }
   },
   created () {
@@ -260,39 +289,52 @@ export default {
     // console.log('propertyComputed will update, as this.property is now reactive.')
   },
   methods: {
-    fetchData () {
+    async fetchData () {
       let resourceName = `${config.api.project.index}/${this.$route.params.key}`
       let queryString = this.BUILDPARAM()
-      service.getResource({resourceName, queryString})
-        .then((res) => {
-          if (res.status === 200) {
-            this.local.project = res.data
-          }
-        })
-        .catch(() => {
-        })
+      let project = await service.getResource({resourceName, queryString})
+      this.local.project = project.data
+      let houseTemplate = await service.getResource({resourceName: config.api.house.dropdown, queryString})
+      this.local.houseTemplate.inputs = houseTemplate.data
     },
-    submitForm (status) {
-      this.$validator.validateAll().then((tf) => {
-        if (tf) {
+    async submitForm (type, status) {
+      let isValid = await this.$validator.validateAll()
+      let resourceName = this.resourceName
+      let data = {}
+      let res = null
+      switch (type) {
+        case 'save':
+          if (!isValid) return
           this.local.inputs.status = status
-          let data = {}
-          let resourceName = config.api.contract.index
           data = this.local.inputs
-          service.postResource({data, resourceName})
-            .then((res) => {
-              if (res.status === 200) {
-                console.log('success')
-                this.NOTIFY('success')
-              } else {
-                this.NOTIFY('error')
-              }
-            })
-            .catch((err) => {
-              console.log(err)
-            })
-        }
-      })
+          res = await service.postResource({data, resourceName})
+          break
+      }
+      if (res.status === 200) {
+        this.NOTIFY('success')
+        this.GOTOPAGE('Contract', this.local.inputs.code)
+        return
+      }
+      this.NOTIFY('error')
+      // this.$validator.validateAll().then((tf) => {
+      //   if (tf) {
+      //     this.local.inputs.status = status
+      //     let data = {}
+      //     let resourceName = config.api.contract.index
+      //     data = this.local.inputs
+      //     service.postResource({data, resourceName})
+      //       .then((res) => {
+      //         if (res.status === 200) {
+      //           this.NOTIFY('success')
+      //         } else {
+      //           this.NOTIFY('error')
+      //         }
+      //       })
+      //       .catch((err) => {
+      //         console.log(err)
+      //       })
+      //   }
+      // })
     },
     runContractLists () {
       if (this.local.inputs.price !== '') {
@@ -305,6 +347,9 @@ export default {
     calculatePrice (priceRate) {
       let totalPrice = this.local.inputs.price
       return priceRate * totalPrice / 100
+    },
+    setDateVal (date) {
+      this.local.inputs.dateStart = date
     }
   }
 }
