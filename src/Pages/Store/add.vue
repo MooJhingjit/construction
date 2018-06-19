@@ -65,8 +65,8 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'ข้อมูลร้านค้า', route: 'Store', key: '', active: false, icon: 'fa fa-address-book-o'},
-            {name: 'สร้างสินค้าใหม่', route: 'AddMaterial', key: 'store-id', active: true, icon: ''}
+            {name: 'ร้านค้า', route: 'Store', key: '', active: false, icon: 'fa fa-th-large'},
+            {name: 'สร้างสินค้าใหม่', route: 'AddMaterial', key: this.$route.params.key, active: true, icon: ''}
           ],
           template: {
             class: 'add-material-page'

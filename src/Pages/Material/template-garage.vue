@@ -9,7 +9,7 @@
           <th rowspan="2" width="120">หน่วย</th>
           <th rowspan="2" width="120">ราคา/หน่วย</th>
           <th colspan="6">{{obj.houseTemplate.value}}</th>
-          <th rowspan="2" width="80">กลุ่มวัสดุ</th>
+          <!-- <th rowspan="2" width="80">กลุ่มวัสดุ</th> -->
         </tr>
         <tr>
           <th width="80" colspan="3">โรงรถซ้าย
@@ -96,19 +96,26 @@
               @input="value => { item.r_default[local.colorSelected.rightColor] = value }"
               ></my-input>
           </td>
-          <td>
+          <!-- <td>
              <my-tags-selection
             :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ'}"
             :resourceName="materialGroupResource"
             :itemSelected="item.materialGroup"
             @selected="value => { item.materialGroup = value }"
             ></my-tags-selection>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>
     <div class="item-footer container-block">
       <div class="container-block block right">
+         <my-tags-selection
+          v-if="this.local.items.length"
+          :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ'}"
+          :resourceName="materialGroupResource"
+          :itemSelected="local.materialGroupAll"
+          @selected="addMaterialToGroup"
+          ></my-tags-selection>
         <button class="button" @click="editRow('remove')"><i class="fa fa-minus" aria-hidden="true"></i></button>
         <button class="button" @click="editRow('add')"><i class="fa fa-plus" aria-hidden="true"></i></button>
       </div>
@@ -179,7 +186,7 @@ export default {
           l_default: {},
           r_default: {}
         },
-        materialGroupItems: []
+        materialGroupAll: []
       }
     }
   },
@@ -196,6 +203,7 @@ export default {
       let resourceName = `${config.api.material.index}/${this.obj.storeId}`
       let items = await service.getResource({resourceName, queryString})
       this.local.items = items.data
+      this.setMaterialGroup()
     },
     editRow (type) {
       if (type === 'add') {
@@ -218,6 +226,7 @@ export default {
           l_default: leftObj,
           r_default: rightObj
         })
+        this.addMaterialToGroup(this.local.materialGroupAll)
       } else {
         this.local.items.pop()
       }
@@ -234,6 +243,7 @@ export default {
           })
           res = await service.deleteResource({resourceName, queryString})
           this.local.items = []
+          this.local.materialGroupAll = []
           break
         case 'update':
           if (!isValid || !this.local.items.length) return
@@ -243,6 +253,7 @@ export default {
       }
       if (res.status === 200) {
         this.NOTIFY('success')
+        this.fetchData()
         return
       }
       this.NOTIFY('error')
@@ -292,6 +303,18 @@ export default {
           }
         })
       }
+    },
+    setMaterialGroup () {
+      if (this.local.items.length) {
+        this.local.materialGroupAll = this.local.items[0].materialGroup
+        this.$refs.materialGroup.getFilterResult()
+      }
+    },
+    addMaterialToGroup (value) {
+      this.local.materialGroupAll = value
+      this.local.items.map((item) => {
+        item.materialGroup = value
+      })
     }
   }
 }

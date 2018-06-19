@@ -140,6 +140,7 @@ async function createMaterialGroup (obj, isUpdate) {
 
 
 async function cleanData (inputs) {
+  
   let item = new materialModel()
   let materialGroup = new materialGroupDetailModel()
   if (inputs.houseId) {
@@ -157,7 +158,7 @@ async function cleanData (inputs) {
   })
   item.clearMaterialDetail(id)
   item.clearMaterial(inputId) // not in
-  await materialGroup.clearMaterialGroup(inputId)
+  await materialGroup.clearMaterialGroup(id)
 }
 
 async function deleteMaterail (req, res, next) {

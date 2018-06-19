@@ -11,26 +11,17 @@ async function getData (req, res, next) {
   let result = []
   switch(req.query.type) {
     case 'full':
-      result = await workOrder.getData()
-      result = result.map(item => {
-        let material_group = []
-        if (item.material_group_id) {
-          material_group.push({
-            id: item.material_group_id,
-            name: item.material_group_name
-          })
-        }
-        return {
-          time: item.time,
-          pre_order: item.pre_order,
-          // // delay: item.delay,
-          work_order_date: item.work_order_date,
-          name: item.name,
-          post_order: item.post_order,
-          work_order_detail_date: item.work_order_detail_date,
-          material_group: material_group
-        }
-      })
+      workOrder = await workOrder.getData()
+      let workOrderDetail = new workOrderDetailModel()
+      workOrderDetail.work_order_time = workOrder[0].time
+      let orderLists = await workOrderDetail.getData()
+      workOrder = workOrder[0]
+      result = {
+        id: workOrder.id,
+        time: workOrder.time,
+        pre_order: workOrder.pre_order,
+        lists: orderLists
+      }
         break;
     default:
       result = await workOrder.getData()
@@ -43,32 +34,19 @@ async function getAllData (req, res, next) {
   let data = []
   let result = await workOrder.getAllData()
   if (result) {
-    
     result = await Promise.all(
       result.map(async (item) => {
-        let workOrderDetial = new workOrderModel()
-        workOrderDetial.time = item.time
+        let workOrderDetial = new workOrderDetailModel()
+        workOrderDetial.work_order_time = item.time
         detail = await workOrderDetial.getData()
         return {
           time: item.time,
           pre_order: item.pre_order,
-          tasks: detail || null,
+          tasks: detail || [],
           created: item.created_at
         }
       })
     )
-    // result = result.map(item => {
-    //   let workOrderDetial = new workOrderModel()
-    //   workOrderDetial.time = item.time
-    //   detail = await workOrderDetial.getData()
-    //   console.log(detail)
-    //   return {
-    //     time: item.time,
-    //     pre_order: item.pre_order,
-    //     tasks: detail || null,
-    //     created: item.created_at
-    //   }
-    // })
   }
   res.status(200).json(result)
 }
@@ -86,7 +64,7 @@ async function updateData (req, res, next) {
   let workOrder = new workOrderModel() // id == time
   workOrder.time = req.body.data.time
   if (req.body.data.pre_order.length) {
-    workOrder.pre_order = req.body.data.pre_order[0].id
+    workOrder.pre_order = req.body.data.pre_order[0]
   }
   await workOrder.update()
   let oldItem = new workOrderDetailModel()
@@ -98,13 +76,14 @@ async function updateData (req, res, next) {
     newItem.work_order_time = workOrder.time
     newItem.name = item.taskName
     if (item.postOrder.length) {
-      newItem.post_order = item.postOrder[0].id
+      newItem.post_order = item.postOrder[0]
     }
     // // newItem.delay = item.delay
     newItem.save()
   })
   res.status(200).json({})
 }
+
 
 // async function deleteData (req, res, next) {
 //   let newItem = new projectModel(req.params.id)

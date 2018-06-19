@@ -59,7 +59,7 @@
                     <td>แบบบ้าน:</td>
                     <td>
                       <my-auto-complete
-                      @select="objVal => {local.inputs.houseId = objVal.key}"
+                      @select="houseSelectedHandle"
                       :arrInputs="local.houseTemplate.inputs"
                       placeholder="แบบบ้าน"
                       label=""
@@ -68,7 +68,13 @@
                     </td>
                     <td>แปลง:</td>
                     <td>
-                      <input class="input" type="text" v-model="local.inputs.plan" placeholder="แปลง">
+                      <!-- <input class="input" type="text" v-model="local.inputs.plan" placeholder="แปลง"> -->
+                      <my-auto-complete
+                      @select="objVal => {local.inputs.plan = objVal.key}"
+                      :arrInputs="local.planTemplate.inputs"
+                      placeholder="แปลง"
+                      label=""
+                      ></my-auto-complete>
                     </td>
                   </tr>
                   <tr>
@@ -83,15 +89,14 @@
                       @input="value => { local.inputs.price = value }"
                       ></my-input>
                     </td>
-                    <td>Quarter:</td>
+                    <td></td>
                     <td>
-                      <!-- <input class="input" type="text" v-model="local.inputs.quarter"  placeholder="Quarter"> -->
-                      <my-input
+                      <!-- <my-input
                       :value="local.inputs.quarter"
                       :inputObj="{type: 'text', name: 'contract_quarter', placeholder: 'Quarter', validate: 'required'}"
                       :validator="$validator"
                       @input="value => { local.inputs.quarter = value }"
-                      ></my-input>
+                      ></my-input> -->
                     </td>
                   </tr>
                   <tr>
@@ -243,7 +248,6 @@ export default {
           plan: '',
           houseId: '',
           price: '',
-          quarter: '',
           dateStart: '',
           paid: '',
           status: '',
@@ -262,6 +266,10 @@ export default {
         },
         project: {},
         houseTemplate: {
+          inputs: [],
+          selected: null
+        },
+        planTemplate: {
           inputs: [],
           selected: null
         }
@@ -336,6 +344,21 @@ export default {
       //   }
       // })
     },
+    houseSelectedHandle (objVal) {
+      if (objVal === null) {
+        console.log('te')
+        this.local.planTemplate.inputs = []
+      } else {
+        this.local.inputs.houseId = objVal.key
+        this.getPlan()
+      }
+    },
+    async getPlan () {
+      let queryString = this.BUILDPARAM({house: this.local.inputs.houseId})
+      let planTemplate = await service.getResource({resourceName: config.api.house.dropdown, queryString})
+      // console.log(planTemplate.data)
+      this.local.planTemplate.inputs = planTemplate.data
+    },
     runContractLists () {
       if (this.local.inputs.price !== '') {
         this.local.inputs.times.map(item => {
@@ -345,7 +368,8 @@ export default {
       }
     },
     calculatePrice (priceRate) {
-      let totalPrice = this.local.inputs.price
+      this.local.inputs.paid = (this.local.inputs.price * 10) / 100
+      let totalPrice = this.local.inputs.price - this.local.inputs.paid
       return priceRate * totalPrice / 100
     },
     setDateVal (date) {

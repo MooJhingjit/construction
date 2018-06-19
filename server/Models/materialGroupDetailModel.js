@@ -90,6 +90,16 @@ module.exports =  class MaterialGroupDetail {
     return result
   }
 
+  async getMaterialByGroup () {
+    let result = await this.knex('material_group_detail')
+    .where({
+      material_group_id: this.material_group_id,
+      house_id: this.house_id
+    })
+    return result
+  }
+  
+
   getCondition () {
     let conditions = {}
     if (this.status) {

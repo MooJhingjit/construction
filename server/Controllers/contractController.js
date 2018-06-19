@@ -1,4 +1,6 @@
 const helpers = require('../Libraries/helpers')
+// const {getPreOrder} = require('./workOrderController.js')
+const {startOrdering} = require('./orderingController.js')
 const projectModel = require('../Models/projectModel')
 const contractModel = require('../Models/contractModel')
 const contractTimeModel = require('../Models/contractTimeModel')
@@ -52,14 +54,38 @@ const createData = async (req, res, next) => {
   newItem.plan = req.body.data.plan
   newItem.house_id = req.body.data.houseId
   newItem.price = req.body.data.price
-  newItem.quarter = req.body.data.quarter
+  // newItem.quarter = req.body.data.quarter
   newItem.date_start = helpers.getCurrentTime('date', req.body.data.dateStart)
-  newItem.paid = req.body.data.paid
+  newItem.paid = req.body.data.paid || 0
   newItem.status = req.body.data.status
   let result = await newItem.save() // this will return result.insertId
+  if (newItem.status === 'ip') {
+    startWorking(result.insertId, newItem.house_id)
+  }
   await createContractTime(req.body.data.code, req.body.data.times)
 
   res.status(200).json({status: 'success'})
+}
+
+const updateContractStatus = async (req, res, next) => {
+  let newItem = new contractModel()
+  newItem.code = req.params.id
+  newItem.status = req.body.data.status
+  let result = await newItem.updateStatus()
+  switch(newItem.status) {
+    case 'ip':
+        startWorking(newItem.status, req.body.data.houseId)
+        break
+    case 'done':
+        // orderMaterial()
+        break
+} 
+  res.status(200).json(result)
+}
+
+const startWorking = async (conractId, houseId) => {
+  // time 1 by default
+  let result = await startOrdering(1, houseId)
 }
 
 const createContractTime = (contractCode, dataArr) => {
@@ -74,8 +100,6 @@ const createContractTime = (contractCode, dataArr) => {
     newContractTime.save()
   });
 }
-
-
 
 const updateTimeData = async (req, res, next) => {
   let contractTime = new contractTimeModel(req.params.id)
@@ -127,5 +151,6 @@ module.exports.getStat = getStat
 module.exports.getData = getData
 module.exports.getAllData = getAllData
 module.exports.createData = createData
+module.exports.updateContractStatus = updateContractStatus
 module.exports.updateTimeData = updateTimeData
 module.exports.deleteData = deleteData

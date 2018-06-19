@@ -32,13 +32,26 @@ async function getAllData (req, res, next) {
 
 async function getDropDown (req, res, next) {
   let house = new houseModel()
-  let data = await house.getAllSelection()
-  data = data.map(item => {
-    return {
-      key: item.name,
-      value: `${item.name}`
-    }
-  })
+  let data = {}
+  if (req.query.house) {
+    house.name = req.query.house
+    data = await house.getPlanSelection()
+    data = data.map(item => {
+      return {
+        key: item.plan,
+        value: `${item.plan}`
+      }
+    })
+  } else {
+    data = await house.getAllSelection()
+    data = data.map(item => {
+      return {
+        key: item.name,
+        value: `${item.name}`
+      }
+    })
+  }
+  
   res.status(200).json(data)
 }
 

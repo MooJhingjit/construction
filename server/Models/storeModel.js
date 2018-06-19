@@ -22,8 +22,9 @@ module.exports =  class Store {
   }
 
   async getAllData () {
-    let result = await this.knex('store').where(this.getCondition())
+    let result = await this.knex('store')
     .where('name', 'like', `%${this.name || ''}%`)
+    .orWhere('type', 'like', `%${this.name || ''}%`)
     .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
     return result
   }
@@ -73,6 +74,7 @@ module.exports =  class Store {
     if (this.status) {
       conditions.status = this.status
     }
+    
     return conditions
   }
 }

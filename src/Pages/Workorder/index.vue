@@ -14,7 +14,7 @@
                     <tr>
                       <th>งวด</th>
                       <th>รายละเอียดงาน</th>
-                      <th>รายการจัดซื้อ</th>
+                      <th>กลุ่มวัสดุจัดซื้อ</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -28,7 +28,7 @@
                         <div :key="taskIndex" class="list" v-for="(task, taskIndex) in item.tasks">{{task.material_group_name}}</div>
                       </td>
                       <td>
-                        <button class="button" @click="GOTOPAGE('EditWorkorder', item.time)">แก้ไขงวดที่ {{item.time}}</button>
+                        <button class="button is-outlined" @click="GOTOPAGE('EditWorkorder', item.time)">แก้ไขงวดที่ {{item.time}}</button>
                       </td>
                     </tr>
                     <!-- <tr>
@@ -125,7 +125,7 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'ลำดับการทำงาน', route: 'Workorder', key: '', active: true, icon: 'fa fa-address-book-o'}
+            {name: 'ลำดับการทำงาน', route: 'Workorder', key: '', active: true, icon: 'fa fa-tasks'}
           ],
           template: {
             class: 'work-order-page'

@@ -1,68 +1,80 @@
-const helpers = require('../Libraries/helpers')
-const database = require('./databaseModel')
-const db = new database()
 
-module.exports =  class WorkOrderDetail {  
-  constructor(id = '') {
+const knex = require('knex')
+const db = require('../Database/config')
+const helpers = require('../Libraries/helpers')
+
+module.exports =  class WorkOrder {
+  constructor(id){
+    this.knex = knex(db.config);
     this.id = id
     this.work_order_time
     this.name
     this.post_order
-    // this.delay
   }
 
-  getData () {
-    return db.query(`SELECT * FROM work_order_detail WHERE work_order_time = ${this.work_order_time}`)
-  }
-
-  // getAllData () {
-  //   let condition = this.getCondition('allData')
-  //   return db.query(`SELECT * FROM work_order ${condition} ORDER BY id LIMIT ${this.limit} OFFSET ${this.offset} `)
+  // async getData () {
+  //   let result = await this.knex.select('time', 'pre_order', 'work_order.created_at as work_order_date', 'work_order_detail.name as name', 'post_order',
+  //   'work_order_detail.created_at as work_order_detail_date',
+  //   'material_group.name as material_group_name', 'material_group.id as material_group_id'
+  //   )
+  //   .from('work_order_detail')
+  //   .leftJoin('work_order_detail', 'work_order.time', 'work_order_detail.work_order_time')
+  //   .leftJoin('material_group', 'material_group .id', 'work_order_detail.post_order')
+  //   .where({'work_order.time': this.time})
+  //   .orderBy('work_order_detail.id', 'asc')
+  //   return result
   // }
 
-  count () {
-    let condition = this.getCondition('allData')
-    return db.query(`SELECT count(id) as work_order_detail FROM work_order ${condition}`)
+  async getData () { // with matert
+    let result = await this.knex
+    .select('work_order_detail.name as name', 'post_order',
+    'work_order_detail.created_at as work_order_detail_date',
+    'material_group.name as material_group_name', 'material_group.id as material_group_id'
+    )
+    .from('work_order_detail')
+    .leftJoin('material_group', 'material_group.id', 'work_order_detail.post_order')
+    .where({'work_order_detail.work_order_time': this.work_order_time})
+    .orderBy('work_order_detail.id', 'asc')
+    return result
   }
 
-  save () {
-    return db.query('INSERT INTO work_order_detail (id, work_order_time, name, post_order, created_at) VALUES (?, ?, ?, ?, ?)',
-    [
-      null,
-      this.work_order_time,
-      this.name,
-      this.post_order,
-      helpers.getCurrentTime('sql')
-    ])
+
+  async getAllData () {
+    let result = await this.knex('work_order_detail')
+    return result
   }
 
-  update () {
-    var sql = `UPDATE work_order_detail SET 
-    work_order_time = ?,
-    name = ?,
-    post_order = ?,
-    created_at = ?
-    WHERE id = ?
-    `;
-    return db.query(sql, [this.work_order_time, this.name, this.post_order, helpers.getCurrentTime('sql'), this.id],);
+  async count () {
+    let result = await this.knex('work_order_detail').count('id as count')
+    return result
   }
 
-  delete () {
-    return db.query(`DELETE FROM work_order_detail WHERE work_order_time = ?`, [this.work_order_time]);
+  async save () {
+    let result = await this.knex('work_order_detail').insert({
+      work_order_time: this.work_order_time,
+      name: this.name,
+      post_order: this.post_order,
+      created_at: helpers.getCurrentTime('sql')
+    })
+    return result
   }
 
-  getCondition (actionType) {
-    let condition = 'WHERE'
-    if (this.name || this.status) {
-      if (this.name) {
-        condition += ` name like "%${this.name}%"`
-      }
-      if (this.status) {
-        condition += ` status = "${this.status}"`
-      }
-    } else {
-      condition += ` 1`
-    }
-    return condition
+  async update () {
+    let result = await this.knex('work_order_detail')
+    .where({id: this.id})
+    .update({
+      work_order_time: this.work_order_time,
+      name: this.name,
+      post_order: this.post_order,
+      created_at: helpers.getCurrentTime('sql')
+    })
+    return result
+  }
+
+  async delete () {
+    let result = await this.knex('work_order_detail')
+    .where({work_order_time: this.work_order_time})
+    .del()
+    return result
   }
 }

@@ -1,11 +1,11 @@
 <template>
     <div :class="{'sub-menu-panel profile-block  box-shadow-panel': true, 'active': (isActive && !isDisableMenu) }">
         <div class="container-block">
-            <div class="profile-head container-block">
+            <!-- <div class="profile-head container-block">
                 <div class="prifile-img block">
                     <img src="../../../static/img/avatar2.png">
                 </div>
-            </div>
+            </div> -->
             <div class="profile-body container-block block">
                 <div class="name">Pokkron Jhingjit</div>
                 <div class="options container-block">

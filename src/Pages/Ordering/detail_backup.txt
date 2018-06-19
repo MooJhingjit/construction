@@ -1,22 +1,75 @@
 <template>
-  <option-detail-template ref="template"
+  <option-detail-template
   :templateObj="local.pageObj.template"
-  :isSelected="local.idSelected"
-  @cancleForm="submitForm('cancel')"
+  :isSelected="'isSelected'"
   >
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
-    <template slot="data-table">
-      <data-table ref="dataTable"
-      :resourceName="resourceName"
-      :statusSearch="local.statusSearch"
-      @selectedData="selectedDataHandle"
-      :isDemo="true"
-      ></data-table>
-    </template>
+    <template slot="data-table"></template>
     <template slot="function">
-      <!-- <button class="button is-link" @click="submitForm('add')">เพิ่มข้อมูลใหม่</button> -->
+      <button class="button is-link" @click="submitForm('add')">เพิ่มข้อมูลใหม่</button>
     </template>
-    <template v-if="local.idSelected != ''">
+    <template slot="search-status">
+      <div class="tags">
+        <span class="tag">ปกติ</span>
+        <span class="tag">พิเศษ</span>
+        <span class="tag is-info">รอสินค้า 5</span>
+        <span class="tag is-warning">รออนุมัติ 5</span>
+        <span class="tag is-success">รับสินค้า 5</span>
+      </div>
+    </template>
+    <template slot="search-input">
+      <div class="search-input control has-icons-left">
+        <input class="input" type="text" placeholder="ค้นหาโครงการ">
+        <span class="icon is-small is-left">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+      </div>
+      <div class="search-input control has-icons-left">
+        <input class="input" type="text" placeholder="ค้นหา" value="LH120610029">
+        <span class="icon is-small is-left">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+      </div>
+      <div class="search-input control has-icons-left">
+        <input class="input" type="text" placeholder="ค้นหาแบบบ้าน">
+        <span class="icon is-small is-left">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+      </div>
+    </template>
+    <template slot="search-results">
+      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th>เลขที่สัญญา</th>
+            <th>ประเภท</th>
+            <th>สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>LH120610029</td>
+            <td>ปกติ</td>
+            <td><span class="tag is-link">รอสินค้า</span></td>
+          </tr>
+          <tr>
+            <td>LH120610029</td>
+             <td>พิเศษ</td>
+             <td><span class="tag is-warning">รออนุมัติ</span></td>
+          </tr>
+          <tr>
+            <td>LH120610026</td>
+            <td>ปกติ</td>
+            <td><span class="tag is-success">รับสินค้า</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <nav class="pagination" role="navigation" aria-label="pagination">
+        <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
+        <button class="pagination-next">หน้าถัดไป</button>
+      </nav>
+    </template>
+    <template v-if="true">
       <template slot="detail">
         <div class="container-block detail-block">
           <span class="type tag">ปกติ</span>
@@ -125,24 +178,20 @@
 </template>
 
 <script>
-import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
 import noResultTemplate from '@Components/Template/no-result'
-import service from '@Services/app-service'
-import config from '@Config/app.config'
-import dataTable from '@Components/DataTable'
-import myInput from '@Components/Form/my-input'
-import myAction from '@Components/Form/my-action'
+import breadcrumbBar from '@Components/Breadcrumb'
 export default {
   props: {
+    // templateName: {
+    //   type: String,
+    //   required: true
+    // }
   },
   components: {
-    breadcrumbBar,
     optionDetailTemplate,
     noResultTemplate,
-    dataTable,
-    myInput,
-    myAction
+    breadcrumbBar
   },
   name: 'OrderingDetail',
   data () {
@@ -156,87 +205,22 @@ export default {
           template: {
             class: 'ordering-detail-page'
           }
-        },
-        statusSearch: [
-          {title: 'ปกติ', key: ''},
-          {title: 'พิเศษ', key: ''},
-          {title: 'รอสินค้า', key: ''},
-          {title: 'รออนุมัติ', key: ''},
-          {title: 'รับสินค้า', key: ''}
-        ],
-        idSelected: '',
-        // items: {},
-        inputs: {}
+        }
       }
     }
   },
   computed: {
-    resourceName () {
-      return config.api.project.index
-    }
+    // propertyComputed() {
+    //   console.log('I change when this.property changes.')
+    //   return this.property
+    // }
   },
   created () {
-    this.submitForm('add')
+    // console.log('created')
+    // this.property = 'Example property update.'
+    // console.log('propertyComputed will update, as this.property is now reactive.')
   },
   methods: {
-    selectedDataHandle (item) {
-    //   this.errors.clear()
-    //   this.local.idSelected = item.id
-    //   this.local.inputs.code = item.code
-    //   this.local.inputs.name = item.name
-    //   this.local.inputs.address = item.address
-    //   this.local.inputs.type = item.type
-    //   this.local.submitMode = 'update'
-    },
-    async submitForm (type) {
-      let isValid = await this.$validator.validateAll()
-      let resourceName = this.resourceName
-      if (type === 'update' && this.local.idSelected === 'new') type = 'save'
-      let data = {}
-      let res = null
-      switch (type) {
-        case 'add':
-          this.local.idSelected = 'new'
-          this.cleanInput()
-          return
-        case 'cancel':
-          this.local.idSelected = null
-          return
-        case 'update':
-          if (!isValid) return
-          data = this.local.inputs
-          resourceName = `${resourceName}/${this.local.idSelected}`
-          res = await service.putResource({data, resourceName})
-          break
-        case 'delete':
-          resourceName = `${resourceName}/${this.local.idSelected}`
-          let queryString = []
-          res = await service.deleteResource({resourceName, queryString})
-          break
-        case 'save':
-          if (!isValid) return
-          data = this.local.inputs
-          res = await service.postResource({data, resourceName})
-          break
-      }
-      if (res.status === 200) {
-        this.reloadTable()
-        this.cleanInput()
-        this.local.idSelected = ''
-        this.NOTIFY('success')
-        return
-      }
-      this.NOTIFY('error')
-    },
-    // reloadTable () {
-    //   this.$refs.dataTable.fetchData()
-    // },
-    cleanInput () {
-      // this.local.inputs.code = ''
-      // this.local.inputs.name = ''
-      // this.local.inputs.address = ''
-      // this.local.inputs.type = ''
-    }
   }
 }
 </script>

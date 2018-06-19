@@ -13,7 +13,7 @@
         <tr>
           <th width="80">ซ้าย</th>
           <th width="80">ขวา</th>
-          <th width="80">กลุ่มวัสดุ</th>
+          <!-- <th width="80">กลุ่มวัสดุ</th> -->
         </tr>
       </thead>
       <tbody>
@@ -74,19 +74,29 @@
               @input="value => { item.r_default[local.colorSelected.rightColor] = value }"
               ></my-input>
           </td>
-          <td>
+          <!-- <td>
+            {{item.materialGroup}}
             <my-tags-selection
             :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ'}"
             :resourceName="materialGroupResource"
             :itemSelected="item.materialGroup"
             @selected="value => { item.materialGroup = value }"
             ></my-tags-selection>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>
     <div class="item-footer container-block">
       <div class="container-block block right">
+        <!-- {{this.local.materialGroupAll}} -->
+        <my-tags-selection
+          v-if="this.local.items.length"
+          ref='materialGroup'
+          :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ'}"
+          :resourceName="materialGroupResource"
+          :itemSelected="local.materialGroupAll"
+          @selected="addMaterialToGroup"
+        ></my-tags-selection>
         <button class="button" @click="editRow('remove')"><i class="fa fa-minus" aria-hidden="true"></i></button>
         <button class="button" @click="editRow('add')"><i class="fa fa-plus" aria-hidden="true"></i></button>
       </div>
@@ -156,7 +166,8 @@ export default {
           materialGroup: [],
           l_default: {},
           r_default: {}
-        }
+        },
+        materialGroupAll: []
       }
     }
   },
@@ -174,6 +185,7 @@ export default {
       let items = await service.getResource({resourceName, queryString})
       // let materialGroup = await service.getResource({resourceName: config.api.materialGroup.index, queryString: [this.BUILDPARAM({type: 'selection'})]})
       this.local.items = items.data
+      this.setMaterialGroup()
       // this.local.materialGroupItems = materialGroup.data
     },
     editRow (type) {
@@ -197,6 +209,7 @@ export default {
           l_default: leftObj,
           r_default: rightObj
         })
+        this.addMaterialToGroup(this.local.materialGroupAll)
       } else {
         this.local.items.pop()
       }
@@ -213,6 +226,7 @@ export default {
           })
           res = await service.deleteResource({resourceName, queryString})
           this.local.items = []
+          this.local.materialGroupAll = []
           break
         case 'update':
           if (!isValid || !this.local.items.length) return
@@ -280,6 +294,18 @@ export default {
         })
       }
       // console.log(this.local.colorSelected.leftColor)
+    },
+    setMaterialGroup () {
+      if (this.local.items.length) {
+        this.local.materialGroupAll = this.local.items[0].materialGroup
+        this.$refs.materialGroup.getFilterResult()
+      }
+    },
+    addMaterialToGroup (value) {
+      this.local.materialGroupAll = value
+      this.local.items.map((item) => {
+        item.materialGroup = value
+      })
     }
   }
   // watch: {

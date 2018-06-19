@@ -62,6 +62,16 @@ export default {
         })
         return
       }
+      if (this.obj.isConfirm) {
+        this.$dialog.confirm({
+          message: 'ยืนยันการทำรายการ',
+          cancelText: 'ยกเลิก',
+          confirmText: 'ยืนยัน',
+          type: 'is-success',
+          onConfirm: () => this.$emit('clickEvent')
+        })
+        return
+      }
       this.$emit('clickEvent')
     }
   },

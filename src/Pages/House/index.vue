@@ -117,7 +117,7 @@
           </my-action>
           <my-action
             type="delete"
-            :obj="{title: 'บันทึกข้อมูล'}"
+            :obj="{title: 'ลบข้อมูล'}"
              @clickEvent="submitForm('ลบข้อมูล')"
              v-if="this.local.idSelected != 'new'"
           >
@@ -159,7 +159,7 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'แบบบ้าน', route: 'Project', key: '', active: true, icon: 'fa fa-address-book-o'}
+            {name: 'แบบบ้าน', route: 'Project', key: '', active: true, icon: 'fa fa-home'}
           ],
           template: {
             class: 'house-template-page'

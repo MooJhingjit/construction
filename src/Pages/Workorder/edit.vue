@@ -11,7 +11,7 @@
                     <div class="item-header container-block">
                       <div class="time block">งวดที่ {{local.time}}</div>
                       <div class="order-name container-block block">
-                        <span class="name">รายการสั่งซื้อก่อนหน้า </span>
+                        <span class="name">รายการสั่งซื้อก่อนหน้างวดที่ {{local.time}} </span>
                         <!-- <div class="control has-icons-right">
                           <input class="input" type="text" v-model="local.pre_order" placeholder="">
                           <span class="icon is-right">
@@ -19,10 +19,11 @@
                           </span>
                         </div> -->
                         <my-tags-selection
+                        v-if="local.itemTime"
                         :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ', maxtags: '1'}"
                         :resourceName="materialGroupResource"
-                        :itemSelected="[local.pre_order]"
-                        @selected="value => { local.pre_order = value }"
+                        :itemSelected="local.itemPreOrder"
+                        @selected="value => { local.itemPreOrder = value }"
                         ></my-tags-selection>
                       </div>
                     </div>
@@ -36,7 +37,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr :key="index" v-for="(item, index) in workOrderItem">
+                          <tr :key="index" v-for="(item, index) in local.itemLists">
                               <td>
                                 <my-input
                                   :value="item.taskName"
@@ -49,7 +50,7 @@
                                  <my-tags-selection
                                 :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ', maxtags: '1'}"
                                 :resourceName="materialGroupResource"
-                                :itemSelected="[item.postOrder]"
+                                :itemSelected="item.postOrder"
                                 @selected="value => { item.postOrder = value }"
                                 ></my-tags-selection>
                               </td>
@@ -130,22 +131,26 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'ลำดับการทำงาน', route: 'Workorder', key: '', active: false, icon: 'fa fa-address-book-o'},
-            {name: 'แก้ไข', route: 'EditWorkorder', key: 'xxxx', active: true, icon: ''}
+            {name: 'ลำดับการทำงาน', route: 'Workorder', key: '', active: false, icon: 'fa fa-tasks'},
+            {name: 'แก้ไข', route: 'EditWorkorder', key: this.$route.params.key, active: true, icon: ''}
           ],
           template: {
             class: 'edit-work-order-page'
           }
         },
         time: this.$route.params.key,
-        pre_order: null,
         workOrderTemplate: {
           time: this.time,
-          taskName: '',
-          postOrder: [],
-          material_group: []
+          preOrder: [],
+          lists: [{
+            taskName: '',
+            postOrder: []
+          }]
+          // material_group: []
         },
-        items: [],
+        itemPreOrder: null,
+        itemTime: null,
+        itemLists: [],
         materialGroup: {
           mainSearch: ''
         }
@@ -153,12 +158,6 @@ export default {
     }
   },
   computed: {
-    workOrderItem () {
-      if (!this.local.items.length) {
-        // this.local.items.push(this.local.workOrderTemplate)
-      }
-      return this.local.items
-    },
     resourceName () {
       return config.api.workOrder.index
     },
@@ -176,19 +175,17 @@ export default {
       service.getResource({resourceName, queryString})
         .then((res) => {
           if (res.status === 200) {
-            if (res.data.length) {
-              this.local.pre_order = res.data[0].pre_order
-              this.local.items = res.data.map(item => {
+            if (res.data) {
+              this.local.itemTime = res.data.time
+              this.local.itemPreOrder = [res.data.pre_order]
+              this.local.itemLists = res.data.lists.map(item => {
                 return {
-                  time: item.time,
                   taskName: item.name,
-                  postOrder: item.post_order,
-                  // delay: item.delay,
-                  material_group: item.material_group
+                  postOrder: [item.post_order]
                 }
               })
             } else {
-              this.local.items.push(this.local.workOrderTemplate)
+              this.local.item.push(this.local.workOrderTemplate)
             }
           }
         })
@@ -197,18 +194,16 @@ export default {
     },
     editRow (type) {
       if (type === 'add') {
-        this.local.items.push({
-          time: this.time,
+        this.local.itemLists.push({
           taskName: '',
-          postOrder: [],
-          material_group: []
+          postOrder: []
         })
       } else {
-        this.local.items.pop()
+        this.local.itemLists.pop()
       }
     },
     deleteTime (indexOfOrder) {
-      this.local.items.splice(indexOfOrder, 1)
+      this.local.itemLists.splice(indexOfOrder, 1)
     },
     async submitForm (type) {
       let isValid = await this.$validator.validateAll()
@@ -219,9 +214,9 @@ export default {
         case 'update':
           if (!isValid) return
           data = {
-            time: this.local.time,
-            pre_order: this.local.pre_order,
-            workOrderLists: this.local.items
+            time: this.local.itemTime,
+            pre_order: this.local.itemPreOrder,
+            workOrderLists: this.local.itemLists
           }
           resourceName = `${resourceName}/${this.$route.params.key}`
           res = await service.putResource({data, resourceName})

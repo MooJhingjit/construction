@@ -10,18 +10,25 @@ module.exports =  class WorkOrder {
     this.pre_order
   }
 
+  // async getData () {
+  //   let result = await this.knex.select('time', 'pre_order', 'work_order.created_at as work_order_date', 'work_order_detail.name as name', 'post_order',
+  //   'work_order_detail.created_at as work_order_detail_date',
+  //   'material_group.name as material_group_name', 'material_group.id as material_group_id'
+  //   )
+  //   .from('work_order')
+  //   .leftJoin('work_order_detail', 'work_order.time', 'work_order_detail.work_order_time')
+  //   .leftJoin('material_group', 'material_group .id', 'work_order_detail.post_order')
+  //   .where({'work_order.time': this.time})
+  //   .orderBy('work_order_detail.id', 'asc')
+  //   return result
+  // }
+
   async getData () {
-    let result = await this.knex.select('time', 'pre_order', 'work_order.created_at as work_order_date', 'work_order_detail.name as name', 'post_order',
-    'work_order_detail.created_at as work_order_detail_date',
-    'material_group.name as material_group_name', 'material_group.id as material_group_id'
-    )
-    .from('work_order')
-    .leftJoin('work_order_detail', 'work_order.time', 'work_order_detail.work_order_time')
-    .leftJoin('material_group', 'material_group .id', 'work_order_detail.post_order')
-    .where({'work_order.time': this.time})
-    .orderBy('work_order_detail.id', 'asc')
+    let result = await this.knex('work_order')
+    .where({'time': this.time})
     return result
   }
+
 
   async getAllData () {
     let result = await this.knex('work_order')

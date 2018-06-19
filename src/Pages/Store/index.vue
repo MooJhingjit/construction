@@ -145,7 +145,7 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'ข้อมูลร้านค้า', route: 'Store', key: '', active: true, icon: 'fa fa-address-book-o'}
+            {name: 'ร้านค้า', route: 'Store', key: '', active: true, icon: 'fa fa-th-large'}
           ],
           template: {
             class: 'store-page'

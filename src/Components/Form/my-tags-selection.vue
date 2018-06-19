@@ -1,6 +1,5 @@
 <template>
   <section>
-    {{itemSelected}}
     <b-dropdown>
       <button class="button" slot="trigger">
         <b-icon icon="list"></b-icon>
@@ -16,7 +15,8 @@
                 field="name"
                 icon="search"
                 :placeholder="objInputs.placeholder"
-                @add="addItem"
+                @add="changeItems"
+                @remove="changeItems"
                 @typing="getFilteredTags">
                 <template slot-scope="props">
                     <strong>{{props.option.name}}</strong>
@@ -26,7 +26,7 @@
                 </template>
             </b-taginput>
         </b-field>
-        <pre style="max-height: 400px"><b>Tags:</b>{{ local.tags }}</pre>
+        <!-- <pre style="max-height: 400px"><b>Tags:</b>{{ local.tags }}</pre> -->
     </section>
     </b-dropdown>
   </section>
@@ -70,18 +70,23 @@ export default {
       let resourceName = this.resourceName
       let materialGroup = await service.getResource({resourceName, queryString: [this.BUILDPARAM({type: 'selection'})]})
       this.local.data = materialGroup.data
-      this.local.tags = this.getFilterResult()
+      this.getFilterResult()
     },
     getFilteredTags (text) {
       this.local.filteredTags = this.local.data.filter((option) => {
         return option.name.indexOf(text) >= 0
       })
     },
-    addItem () {
-      this.$emit('selected', this.local.tags)
+    changeItems () {
+      let tagsArr = []
+      this.local.tags.map(item => {
+        tagsArr.push(item.id)
+      })
+      this.$emit('selected', tagsArr)
     },
     getFilterResult () {
-      return this.local.data.filter(item => {
+      if (this.itemSelected === null || this.itemSelected === undefined) return []
+      this.local.tags = this.local.data.filter(item => {
         return this.itemSelected.includes(item.id)
       })
     }
@@ -89,10 +94,7 @@ export default {
   watch: {
     itemSelected () {
       this.getFilterResult()
-    },
-    // arrInputs () {
-    //   this.data = this.arrInputs
-    // }
+    }
   }
 }
 </script>

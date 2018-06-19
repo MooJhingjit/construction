@@ -16,13 +16,13 @@ $yellow: #ffe500;
 $red:#d83434;
 
 $yellow-invert: #000;
-$pink-invert: #fff;
+$blue-invert: #fff;
 $family-serif: serif;
 
 // 3. Set the derived variables
 // Use the new pink as the primary color
-$primary: $pink;
-$primary-invert: $pink-invert;
+$primary: $blue;
+$primary-invert: $blue-invert;
 // Use the existing orange as the danger color
 $danger: $orange;
 // Use the new serif family

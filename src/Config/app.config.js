@@ -13,7 +13,8 @@ const api = {
   },
   'contract': {
     'index': '/contract',
-    'time': '/contract-time'
+    'time': '/contract-time',
+    'status': '/contract-status'
   },
   'workOrder': {
     'index': '/work-order'

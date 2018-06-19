@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const helpers = require('./Libraries/helpers')
+// const helpers = require('./Libraries/helpers')
 const jwt = require('jsonwebtoken');
 
 app.all('*', verifyToken, function(req, res, next) {
@@ -18,24 +18,26 @@ function verifyToken(req, res, next) {
     next();
     return;
   }
-  if(typeof bearerHeader !== 'undefined') {
-    const bearer = bearerHeader.split(' ');
-    const token = bearer[1];
-    if (req.url === '/api/login') {
-      next();
-      return;
-    }
-    jwt.verify(token, 'secretkey', (err, authData) => {
-      if (err) {
-        res.status(401).send('Forbidden')
-      } else {
-        req.token = token;
-        next();
-      }
-    })
+  if (req.url === '/api/login') {
+    next();
+    return;
   } else {
-    res.status(403).send('Forbidden')
+    if(bearerHeader !== undefined) {
+      const bearer = bearerHeader.split(' ');
+      const token = bearer[1];
+      jwt.verify(token, 'secretkey', (err, authData) => {
+        if (err) {
+          res.status(401).send('Forbidden')
+        } else {
+          req.token = token;
+          next();
+        }
+      })
+    } else {
+      res.status(403).send('Forbidden')
+    }
   }
+  
 }
 
 //listen for requests

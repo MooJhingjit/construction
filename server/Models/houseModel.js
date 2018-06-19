@@ -29,6 +29,12 @@ module.exports =  class House {
     return result
   }
 
+  async getPlanSelection () {
+    let result = await this.knex.select('plan').from('house').where({name: this.name}).orderBy('plan', 'desc')
+    // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
+    return result
+  }
+
   async count () {
     let result = await this.knex('house').count('id as count').where(this.getCondition())
     return result

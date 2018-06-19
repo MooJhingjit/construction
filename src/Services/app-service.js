@@ -3,11 +3,12 @@ import commonHelper from '@Libraries/common.helpers'
 
 const createHeader = () => {
   let appToken = commonHelper.GET_STORAGEITEM('app_token')
+  let headers = {'Content-Type': 'application/json'}
+  if (appToken) {
+    headers.Authorization = `bearer ${appToken.substring(1, appToken.length - 1)}`
+  }
   let instance = axios.create({
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `bearer ${appToken.substring(1, appToken.length - 1)}`
-    }
+    headers
   })
   return instance
 }

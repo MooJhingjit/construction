@@ -12,7 +12,7 @@ module.exports =  class Contract {
     this.plan
     this.house_id
     this.price
-    this.quarter
+    // this.quarter
     this.date_start
     this.paid
     this.status
@@ -48,7 +48,7 @@ module.exports =  class Contract {
       plan: this.plan,
       house_id: this.house_id,
       price: this.price,
-      quarter: this.quarter,
+      // quarter: this.quarter,
       date_start: this.date_start,
       paid: this.paid,
       status: this.status,
@@ -75,6 +75,15 @@ module.exports =  class Contract {
   //   })
   //   return result
   // }
+
+  async updateStatus () {
+    let result = await this.knex('contract')
+    .where({code: this.code})
+    .update({
+      status: this.status,
+    })
+    return result
+  }
 
   async delete () {
     let result = await this.knex('contract')

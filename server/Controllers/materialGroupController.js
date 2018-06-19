@@ -114,9 +114,18 @@ async function deleteData (req, res, next) {
   res.status(200).json(result)
 }
 
+async function getMaterialByGroup (groupId, houseId) {
+  let materials = new materialGroupDetailModel()
+  materials.material_group_id = groupId
+  materials.house_id = houseId
+  let result = await materials.getMaterialByGroup()
+  return result
+}
+
 module.exports.getDropDown = getDropDown
 module.exports.getData = getData
 module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.deleteData = deleteData
+module.exports.getMaterialByGroup = getMaterialByGroup

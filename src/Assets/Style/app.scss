@@ -18,6 +18,7 @@ html {
           border: none;
           td{
             border: none;
+            vertical-align: middle;
           }
           tr:hover {
               background-color: transparent !important;
@@ -564,16 +565,41 @@ html {
                         text-align: center;
                       }
                       .result{
+                        .title-name{
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          .label{
+                            margin-right: 5px;
+                            font-weight: bold;
+                          }
+                          div{
+                            display: inline-block;
+                            margin: 0px;
+                          }
+                        }
                         .items{
                           table{
+                            thead{
+                              td{
+                                // padding: 0;
+                                // margin: 0;
+                                vertical-align: middle;
+                              }
+                            }
                             tr:hover{
                               td i {
                                 color: $red;
                               }
                             }
-                            td i{
-                              cursor: pointer;
+                            
+                            td {
+                              vertical-align: middle;
+                              i{
+                                cursor: pointer;
+                              }
                             }
+                            
                           }
                         }
                       }
@@ -1041,9 +1067,11 @@ html {
                           .order-name{
                             justify-content: flex-end;
                             flex-direction: row;
+                            align-items: center;
                             .name{
                               font-weight: bold;
                               width: 140x;
+                              margin-right: 5px;
                             }
                             .control{
                               margin-left: 5px;
@@ -1455,6 +1483,22 @@ html {
             transform: translate3d(-50%, -25%, 0);
             white-space: normal;
             overflow-y: auto;
+          }
+        }
+        .dropdown-menu{
+          .control .help.counter{
+            float: unset;
+          }
+        }
+        table{
+          thead{
+            th{
+              text-align: center !important;
+            }
+          }
+          tbody td{
+            text-align: center;
+            vertical-align: middle !important;
           }
         }
     }

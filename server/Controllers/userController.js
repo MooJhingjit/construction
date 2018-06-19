@@ -31,7 +31,7 @@ async function getAllData (req, res, next) {
   let result = await user.getAllData()
   if (result) {
     let config = {
-      header: [{name: 'ชื่อโครงการ'}],
+      header: [{name: 'ผู้ใช้งาน'}],
       show: ['name']
     }
     data = helpers.prepareDataTable(result, total, config)

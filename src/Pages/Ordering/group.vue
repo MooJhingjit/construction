@@ -15,21 +15,27 @@
       <template slot="detail">
         <div class="container-block detail-block">
           <div class="block result">
-            <div class="title-name">กลุ่มวัสดุ</div>
-            <div class="name">
+            <div class="title-name">
+              <div class="label">กลุ่มวัสดุ</div>
               <my-input
                 :value="local.inputs.name"
                 :inputObj="{type: 'text', name: 'order_group', placeholder: 'ชื่อกลุ่มวัสดุ', validate: 'required'}"
                 :validator="$validator"
                 @input="value => { local.inputs.name = value }"
                 ></my-input>
-              <!-- <input type="text" class="input" v-model="local.inputs.name"/> -->
             </div>
-            <div class="items">
-              <table class="transparent-table">
+            <div class="items" >
+              <table class="transparent-table" v-if="local.inputs.lists.length">
                 <thead>
                   <tr>
-                    <td>แบบบ้าน</td>
+                    <td width="200">
+                      <my-auto-complete
+                      @select="houseSelectedHandle"
+                      :arrInputs="local.houseTemplate.inputs"
+                      placeholder="ค้นหาแบบบ้าน"
+                      label=""
+                      ></my-auto-complete>
+                    </td>
                     <td>รายการ</td>
                     <td width="40">จำนวน</td>
                     <td></td>
@@ -44,50 +50,11 @@
                   </tr>
                 </tbody>
               </table>
+              <div v-else>
+                <!-- <label for="">ไม่มีข้อมูล</label> -->
+              </div>
             </div>
           </div>
-          <!-- <div class="block data-table">
-            <div class="title-name">ค้นหารายการวัสดุ</div>
-            <div class="search-input control has-icons-left">
-              <my-auto-complete
-              @select="itemSelectedHandle"
-              :arrInputs="local.materials"
-              placeholder="ค้นหาชื่อวัสดุ"
-              label=""
-              @searchValue="searchValueHandle"
-              ></my-auto-complete>
-            </div>
-            <div class="search-results">
-              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-                <tbody>
-                  <tr @click="addItemsList()">
-                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
-                  </tr>
-                  <tr>
-                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
-                  </tr>
-                  <tr>
-                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
-                  </tr>
-                  <tr>
-                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
-                  </tr>
-                  <tr>
-                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
-                  </tr>
-                  <tr>
-                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
-                  </tr>
-                  <tr>
-                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
-                  </tr>
-                  <tr>
-                    <td>xzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxxxzxxxxxxxxx</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div> -->
         </div>
         <div class="container-block footer-panel">
           <my-action
@@ -158,9 +125,14 @@ export default {
           name: null,
           lists: []
         },
+        lists: [],
         materials: {},
         materialMainSearch: '',
-        materialStatusSelected: ''
+        materialStatusSelected: '',
+        houseTemplate: {
+          inputs: [],
+          selected: null
+        }
       }
     }
   },
@@ -172,7 +144,7 @@ export default {
   updated () {
   },
   created () {
-    this.getMaterialItems()
+    this.fetchData()
   },
   methods: {
     // async getMaterialItems () {
@@ -182,6 +154,22 @@ export default {
     //   let materials = await service.getResource({resourceName: config.api.material.dropdown, queryString})
     //   this.local.materials = materials.data
     // },
+    async fetchData () {
+      let queryString = this.BUILDPARAM()
+      let houseTemplate = await service.getResource({resourceName: config.api.house.dropdown, queryString})
+      this.local.houseTemplate.inputs = houseTemplate.data
+    },
+    houseSelectedHandle (objVal) {
+      if (objVal === null) {
+        this.local.inputs.lists = this.local.lists
+        return
+      }
+      this.local.houseTemplate.selected = objVal
+      this.local.inputs.lists = this.local.lists.filter(item => {
+        return item.houseId === objVal.key
+      })
+      // console.log(this.local.inputs.lists)
+    },
     selectedDataHandle (item) {
       this.local.idSelected = item.id
       this.local.inputs.id = item.id
@@ -194,6 +182,7 @@ export default {
           materialName: itemDetail.name
         }
       })
+      this.local.lists = this.local.inputs.lists
     },
     deleteListsItem (index) {
       this.local.inputs.lists.splice(index, 1)
@@ -255,11 +244,11 @@ export default {
     },
     itemSelectedHandle () {
       //
-    },
-    searchValueHandle (val) {
-      this.local.materialMainSearch = val
-      this.getMaterialItems()
     }
+    // searchValueHandle (val) {
+    //   this.local.materialMainSearch = val
+    //   this.getMaterialItems()
+    // }
     // filterByStatus (key) {
     //   this.local.materialStatusSelected = key
     //   this.getMaterialItems()

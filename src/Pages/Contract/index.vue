@@ -114,7 +114,7 @@
                   <th>งวด</th>
                 </tr>
               </thead>
-              <!-- <tbody>
+              <tbody>
                 <tr>
                   <td>10000 : *Confirm Lay-Out</td>
                   <td>05/01/61</td>
@@ -143,7 +143,7 @@
                   <td>เสร็จแล้ว</td>
                   <td>19</td>
                 </tr>
-              </tbody> -->
+              </tbody>
             </table>
           </div>
           <div class="block c-extend">
@@ -161,14 +161,14 @@
         <div class="container-block footer-panel">
           <my-action
               type="update"
-              :obj="{title: 'เริ่มดำเนินงาน', color: 'is-warning'}"
+              :obj="{title: 'เริ่มดำเนินงาน', color: 'is-warning', isConfirm: true}"
               @clickEvent="submitForm('update', 'ip')"
               v-if="local.inputs.contract.status == 'wait'"
             >
             </my-action>
           <my-action
             type="update"
-            :obj="{title: 'ปิดงาน (เสร็จสิ้น)', color: 'is-success'}"
+            :obj="{title: 'ปิดงาน (เสร็จสิ้น)', color: 'is-success', isConfirm: true}"
             @clickEvent="submitForm('update', 'done')"
             v-if="local.inputs.contract.status == 'ip'"
           >
@@ -283,11 +283,11 @@ export default {
         this.NOTIFY('error')
       }
     },
-    async submitForm (type) {
-      // let isValid = await this.$validator.validateAll()
-      // let resourceName = this.resourceName
+    async submitForm (type, value = '') {
+      let isValid = await this.$validator.validateAll()
+      let resourceName = this.resourceName
       if (type === 'update' && this.local.idSelected === 'new') type = 'save'
-      // let data = {}
+      let data = {}
       let res = null
       switch (type) {
         case 'add':
@@ -298,10 +298,11 @@ export default {
           this.local.idSelected = null
           return
         case 'update':
-          // if (!isValid) return
-          // data = this.local.inputs
-          // resourceName = `${resourceName}/${this.local.idSelected}`
-          // res = await service.putResource({data, resourceName})
+          if (!isValid) return
+          data.status = value
+          data.houseId = this.local.inputs.contract.house_id
+          resourceName = `${config.api.contract.status}/${this.local.idSelected}`
+          res = await service.putResource({data, resourceName})
           break
         case 'delete':
           // resourceName = `${resourceName}/${this.local.idSelected}`
