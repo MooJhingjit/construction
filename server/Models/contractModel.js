@@ -92,6 +92,12 @@ module.exports =  class Contract {
     return result
   }
 
+  async getPreiod () {
+    let result = await this.knex('contract_preiod')
+    .where({house_id: this.house_id})
+    return result
+  }
+
   getCondition () {
     let conditions = {}
     if (this.status) {

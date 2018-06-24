@@ -1,25 +1,31 @@
 const helpers = require('../Libraries/helpers')
-// const {getPreOrder} = require('./workOrderController.js')
-const {startOrdering} = require('./orderingController.js')
+// const working = require('./workingController.js')
+// const {startOrdering} = require('./orderingController.js')
 const projectModel = require('../Models/projectModel')
 const contractModel = require('../Models/contractModel')
 const contractTimeModel = require('../Models/contractTimeModel')
+const contractProcessModel = require('../Models/contractProcessModel')
+const workOrder = require('./workOrderController.js')
+const ordering = require('./orderingController.js')
 
 const getData = async (req, res, next) => {
   let contract = new contractModel()
   contract.code = req.params.key
   let contractResult = await contract.getData()
   let projectResult = {}
+  let contractProcess = []
   if (req.query.type === 'full') {
     let project = new projectModel(contractResult[0].project_id)
     projectResult = await project.getData()
     let contractTime = new contractTimeModel()
     contractTime.contract_code = req.params.key
     projcontractTimeResult = await contractTime.getData()
+    contractProcess = await getContractProcess(contract.code)
   }
   let result = {
     contract: contractResult[0],
     contractTime: projcontractTimeResult,
+    process: contractProcess,
     project: projectResult[0],
     status: 'success'
   }
@@ -67,27 +73,6 @@ const createData = async (req, res, next) => {
   res.status(200).json({status: 'success'})
 }
 
-const updateContractStatus = async (req, res, next) => {
-  let newItem = new contractModel()
-  newItem.code = req.params.id
-  newItem.status = req.body.data.status
-  let result = await newItem.updateStatus()
-  switch(newItem.status) {
-    case 'ip':
-        startWorking(newItem.status, req.body.data.houseId)
-        break
-    case 'done':
-        // orderMaterial()
-        break
-} 
-  res.status(200).json(result)
-}
-
-const startWorking = async (conractId, houseId) => {
-  // time 1 by default
-  let result = await startOrdering(1, houseId)
-}
-
 const createContractTime = (contractCode, dataArr) => {
   dataArr.forEach(item => {
     let newContractTime = new contractTimeModel()
@@ -129,23 +114,99 @@ function getStat () {
   }
 }
 
-// function prepareData (result) {
-//   let data = {
-//     header: [{name: 'เลขที่สัญญา'}, {name: 'แบบบ้าน'}],
-//     body: ''
-//   }
-//   data.body = result.map(element => {
-//     let id = element.id
-//     let data = {}
-//     return {
-//       key: element.id,
-//       show: ['code', 'house_id'],
-//       items: element
-//     }
-//   });
-  // console.log(data)
-//   return data
-// }
+const getContractPeriod = async (req, res, next) => {
+  let item = new contractModel()
+  item.house_id = req.params.house_id
+  let result = await item.getPreiod()
+  let obj = null
+  console.log(result.length)
+  if (result.length) {
+    obj = {}
+    result.map((item) => {
+      obj[item.time] = item.preiod
+    })
+  }
+  res.status(200).json(obj)
+}
+
+const updateContractStatus = async (req, res, next) => {
+  let newItem = new contractModel()
+  newItem.code = req.params.id
+  newItem.status = req.body.data.status
+  let result = await newItem.updateStatus()
+  switch(newItem.status) {
+    case 'ip':
+        await setContractProcess(newItem.code, req.body.data.houseId)
+        await reviewContractProcess(newItem.code, req.body.data.houseId, 1)
+        break
+    case 'done':
+        // orderMaterial()
+        break
+} 
+  res.status(200).json({})
+}
+
+const getContractProcess = async (contractCode) => {
+  let item = new contractProcessModel(contractCode)
+  let result = []
+  let workProcess = await item.getData()
+  if (workProcess.length) {
+    currentTask = workProcess.filter((item) => {
+      return item.status === 'ip'
+    })[0]
+    currentTask = currentTask.time
+    result = workProcess.filter((item) => {
+      return item.time === currentTask
+    })
+  }
+  return result
+}
+
+// copy process
+const setContractProcess = async (contractCode, houseId) => {
+  let workingTemplate = await workOrder.getWorkingTemplate(contractCode)
+  await Promise.all(
+    workingTemplate.map( async (item) => {
+      let newItem = new contractProcessModel(contractCode)
+      newItem.time = item.work_order_time
+      newItem.order = item.order
+      newItem.order_condition = 0
+      newItem.name = item.name
+      newItem.start_date = null
+      newItem.real_date = null
+      newItem.delay = 0
+      newItem.status = item.work_order_time == 1 && item.order == 1 ? 'ip' : 'wait'
+      await newItem.save()
+    })
+  )
+}
+
+const editContractProcess = async (req, res, next) => {
+  let process = req.body.data
+  await Promise.all(
+    process.map( async (item) => {
+      let process = new contractProcessModel()
+      process.start_date = item.start_date
+      process.real_date = item.real_date
+      process.delay = item.delay
+      process.id = item.id
+      await process.updateDate()
+    })
+  )
+  res.status(200).json({})
+}
+
+const updateContractProcess = async (req, res, next) => {
+  // update from frontsite
+  // let contractCode = req.xxx
+  // find next taskOrder and send to updateWorkingProcess
+  // ordering.prepareOrdering(contractCode, taskOrder)
+}
+
+const reviewContractProcess = async (contractCode = '', houseId, taskOrder) => {
+  // review for checking what is the order
+  ordering.prepareOrdering(houseId, taskOrder)
+}
 
 module.exports.getStat = getStat
 module.exports.getData = getData
@@ -154,3 +215,5 @@ module.exports.createData = createData
 module.exports.updateContractStatus = updateContractStatus
 module.exports.updateTimeData = updateTimeData
 module.exports.deleteData = deleteData
+module.exports.getContractPeriod = getContractPeriod
+module.exports.editContractProcess = editContractProcess

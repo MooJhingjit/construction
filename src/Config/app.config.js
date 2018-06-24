@@ -14,7 +14,9 @@ const api = {
   'contract': {
     'index': '/contract',
     'time': '/contract-time',
-    'status': '/contract-status'
+    'status': '/contract-status',
+    'period': '/contract-period',
+    'process': '/contract-process'
   },
   'workOrder': {
     'index': '/work-order'
@@ -47,6 +49,11 @@ const variable = {
   status: {
     wait: 'รออนุมัติ',
     ip: 'กำลังดำเนินงาน',
+    done: 'เสร็จสิ้น'
+  },
+  workingStatus: {
+    wait: 'รอ',
+    ip: 'ดำเนินงาน',
     done: 'เสร็จสิ้น'
   },
   times: 10,

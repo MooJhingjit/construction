@@ -7,6 +7,7 @@ import Buefy from 'buefy'
 import VeeValidate from 'vee-validate'
 import 'buefy/lib/buefy.css'
 import moment from 'moment'
+Vue.use(moment)
 Vue.use(Buefy, {
   defaultIconPack: 'fa',
   defaultDateFormatter: (dateVal) => {
@@ -15,6 +16,7 @@ Vue.use(Buefy, {
 })
 
 Vue.use(VeeValidate)
+
 // Vue.use(VeeValidate, { inject: true })
 // import Font from 'font-awesome/css/font-awesome.css'
 

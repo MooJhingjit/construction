@@ -31,6 +31,7 @@
                       <table>
                         <thead>
                           <tr>
+                            <td>#</td>
                             <td>รายละเอียดงาน</td>
                             <td width="50"></td>
                             <td width="50"></td>
@@ -38,27 +39,30 @@
                         </thead>
                         <tbody>
                           <tr :key="index" v-for="(item, index) in local.itemLists">
-                              <td>
-                                <my-input
-                                  :value="item.taskName"
-                                  :inputObj="{type: 'text', name: `order_group_${index}`, placeholder: 'ระบุรายละเอียดงาน', validate: 'required'}"
-                                  :validator="$validator"
-                                  @input="value => { item.taskName = value }"
-                                  ></my-input>
-                              </td>
-                              <td>
-                                 <my-tags-selection
-                                :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ', maxtags: '1'}"
-                                :resourceName="materialGroupResource"
-                                :itemSelected="item.postOrder"
-                                @selected="value => { item.postOrder = value }"
-                                ></my-tags-selection>
-                              </td>
-                              <td>
-                                <button @click="deleteTime(index)" class="button is-danger">
-                                  <i class="fa fa-trash"></i>
-                                </button>
-                              </td>
+                            <td>
+                              {{item.order}}
+                            </td>
+                            <td>
+                              <my-input
+                                :value="item.taskName"
+                                :inputObj="{type: 'text', name: `order_group_${index}`, placeholder: 'ระบุรายละเอียดงาน', validate: 'required'}"
+                                :validator="$validator"
+                                @input="value => { item.taskName = value }"
+                                ></my-input>
+                            </td>
+                            <td>
+                                <my-tags-selection
+                              :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ', maxtags: '1'}"
+                              :resourceName="materialGroupResource"
+                              :itemSelected="item.postOrder"
+                              @selected="value => { item.postOrder = value }"
+                              ></my-tags-selection>
+                            </td>
+                            <td>
+                              <button @click="deleteTime(index)" class="button is-danger">
+                                <i class="fa fa-trash"></i>
+                              </button>
+                            </td>
                           </tr>
                         </tbody>
                       </table>
@@ -143,6 +147,7 @@ export default {
           time: this.time,
           preOrder: [],
           lists: [{
+            order: '',
             taskName: '',
             postOrder: []
           }]
@@ -180,6 +185,7 @@ export default {
               this.local.itemPreOrder = [res.data.pre_order]
               this.local.itemLists = res.data.lists.map(item => {
                 return {
+                  order: item.order,
                   taskName: item.name,
                   postOrder: [item.post_order]
                 }
@@ -195,6 +201,7 @@ export default {
     editRow (type) {
       if (type === 'add') {
         this.local.itemLists.push({
+          order: this.local.itemLists.length + 1,
           taskName: '',
           postOrder: []
         })

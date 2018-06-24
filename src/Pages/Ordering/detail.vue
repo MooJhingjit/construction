@@ -80,12 +80,6 @@
                   <td width="20"><input class="input" type="text" value="1"></td>
                   <td width="100"><input class="input" type="text" value="200"></td>
                 </tr>
-                <!-- <tr>
-                  <td>xxxxxxx</td>
-                  <td><input class="input" type="text" placeholder="Text input"></td>
-                  <td width="20"><input class="input" type="text" placeholder="Text input"></td>
-                  <td width="100"><input class="input" type="text" placeholder="Text input"></td>
-                </tr> -->
               </tbody>
             </table>
           </div>

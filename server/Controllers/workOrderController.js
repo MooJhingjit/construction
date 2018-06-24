@@ -1,5 +1,5 @@
 // const util = require('util')
-const helpers = require('../Libraries/helpers')
+// const helpers = require('../Libraries/helpers')
 const workOrderModel = require('../Models/workOrderModel')
 const workOrderDetailModel = require('../Models/workOrderDetailModel')
 
@@ -19,6 +19,7 @@ async function getData (req, res, next) {
       result = {
         id: workOrder.id,
         time: workOrder.time,
+        order: workOrder.order,
         pre_order: workOrder.pre_order,
         lists: orderLists
       }
@@ -41,6 +42,7 @@ async function getAllData (req, res, next) {
         detail = await workOrderDetial.getData()
         return {
           time: item.time,
+          order: item.order,
           pre_order: item.pre_order,
           tasks: detail || [],
           created: item.created_at
@@ -75,6 +77,7 @@ async function updateData (req, res, next) {
     let newItem = new workOrderDetailModel()
     newItem.work_order_time = workOrder.time
     newItem.name = item.taskName
+    newItem.order = item.order
     if (item.postOrder.length) {
       newItem.post_order = item.postOrder[0]
     }
@@ -84,15 +87,13 @@ async function updateData (req, res, next) {
   res.status(200).json({})
 }
 
-
-// async function deleteData (req, res, next) {
-//   let newItem = new projectModel(req.params.id)
-//   let result = await newItem.delete()
-//   res.status(200).json({})
-// }
-
+async function getWorkingTemplate () {
+  let workOrderDetail = new workOrderDetailModel()
+  let result = await workOrderDetail.getAllData()
+  return result
+}
 module.exports.getData = getData
 module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData
-// module.exports.deleteData = deleteData
+module.exports.getWorkingTemplate = getWorkingTemplate

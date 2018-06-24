@@ -103,50 +103,53 @@
               </tr> -->
             </table>
           </div>
-          <div class="block c-body">
+          <div class="block c-body" v-if="local.inputs.contract.status == 'ip'">
             <table class="table rows-table is-hoverable">
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>รายละเอียดงาน</th>
-                  <th>วันที่ตามสัญญา</th>
-                  <th>วันที่ทำจริง</th>
+                  <th width="150">วันที่ตามสัญญา</th>
+                  <th width="150">วันที่ทำจริง</th>
+                  <th width="80">delay</th>
                   <th>สถานะ</th>
-                  <th>งวด</th>
+                  <!-- <th>งวด</th> -->
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>10000 : *Confirm Lay-Out</td>
-                  <td>05/01/61</td>
-                  <td>05/01/61</td>
-                  <td>เสร็จแล้ว</td>
-                  <td>20</td>
-                </tr>
-                <tr>
-                  <td>11000 : ตอกเสาเข็ม</td>
-                  <td>11/01/61</td>
-                  <td>20/03/61</td>
-                  <td>เสร็จแล้ว</td>
-                  <td>20</td>
-                </tr>
-                <tr>
-                  <td>11825 : กำหนด_ติดตั้งทดสอบความสมบูรณ์เสาเข็ม</td>
-                  <td>11/02/61</td>
-                  <td>30/03/61</td>
-                  <td>ยังไม่เสร็จ</td>
-                  <td>20</td>
-                </tr>
-                <tr>
-                  <td>12100 : *ทำสัญญาก่อสร้าง</td>
-                  <td>05/01/61</td>
-                  <td>28/02/61</td>
-                  <td>เสร็จแล้ว</td>
-                  <td>19</td>
+                <tr :key="index" v-for="(item, index) in local.inputs.process">
+                  <td>{{item.order}}</td>
+                  <td>{{item.name}}</td>
+                  <td>
+                    <my-input
+                    :value="item.start_date"
+                    :inputObj="{type: 'datepicker', name: 'contract_datestart', placeholder: 'วันที่ตามสัญญา', validate: ''}"
+                    :validator="$validator"
+                    @input="value => { item.start_date = value }"
+                    ></my-input>
+                  </td>
+                  <td>
+                    <my-input
+                    :value="item.real_date"
+                    :inputObj="{type: 'datepicker', name: 'contract_datestart', placeholder: 'วันที่ทำจริง', validate: ''}"
+                    :validator="$validator"
+                    @input="value => { item.real_date = value }"
+                    ></my-input>
+                  </td>
+                  <td>
+                    <my-input
+                      :value="item.delay"
+                      :inputObj="{type: 'text', name: 'contract_type', placeholder: 'delay', validate: ''}"
+                      :validator="$validator"
+                      @input="value => { item.delay = value }"
+                      ></my-input>
+                  </td>
+                  <td>{{getWorkingStatus(item.status)}}</td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="block c-extend">
+          <div class="block c-extend" v-if="local.inputs.contract.status == 'ip'">
             <div class="container-block period">
               <div class="block container-block" :key="index" v-for="(item, index) in local.inputs.contractTime">
                 <label class="checkbox" >
@@ -170,6 +173,13 @@
             type="update"
             :obj="{title: 'ปิดงาน (เสร็จสิ้น)', color: 'is-success', isConfirm: true}"
             @clickEvent="submitForm('update', 'done')"
+            v-if="local.inputs.contract.status == 'ip'"
+          >
+          </my-action>
+          <my-action
+            type="update"
+            :obj="{title: 'บันทึกข้อมูล', color: 'is-info', isConfirm: true}"
+            @clickEvent="submitForm('updateProcess')"
             v-if="local.inputs.contract.status == 'ip'"
           >
           </my-action>
@@ -208,6 +218,7 @@ import config from '@Config/app.config'
 import service from '@Services/app-service'
 import dataTable from '@Components/DataTable'
 import myAction from '@Components/Form/my-action'
+import myInput from '@Components/Form/my-input'
 export default {
   props: {
     // templateName: {
@@ -219,7 +230,8 @@ export default {
     breadcrumbBar,
     optionDetailTemplate,
     dataTable,
-    myAction
+    myAction,
+    myInput
   },
   name: 'ContractPage',
   data () {
@@ -243,7 +255,8 @@ export default {
         inputs: {
           project: {},
           contractTime: {},
-          contract: {}
+          contract: {},
+          process: null
         }
       }
     }
@@ -269,6 +282,7 @@ export default {
       this.local.inputs.project = contractItem.data.project
       this.local.inputs.contract = contractItem.data.contract
       this.local.inputs.contractTime = contractItem.data.contractTime
+      this.local.inputs.process = contractItem.data.process
     },
     async updateContractTime (id, time) {
       let ele = `time_${time}`
@@ -304,10 +318,10 @@ export default {
           resourceName = `${config.api.contract.status}/${this.local.idSelected}`
           res = await service.putResource({data, resourceName})
           break
-        case 'delete':
-          // resourceName = `${resourceName}/${this.local.idSelected}`
-          // let queryString = []
-          // res = await service.deleteResource({resourceName, queryString})
+        case 'updateProcess':
+          resourceName = `${config.api.contract.process}/${this.local.idSelected}`
+          data = this.local.inputs.process
+          res = await service.putResource({data, resourceName})
           break
         case 'save':
           // if (!isValid) return
@@ -321,6 +335,9 @@ export default {
         return
       }
       this.NOTIFY('error')
+    },
+    getWorkingStatus (code) {
+      return config.variable.workingStatus[code]
     }
   }
 }

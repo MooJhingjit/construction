@@ -107,7 +107,7 @@
                       :value="local.inputs.dateStart || null"
                       :inputObj="{type: 'datepicker', name: 'contract_datestart', placeholder: 'วันที่ออกสัญญา', validate: 'required'}"
                       :validator="$validator"
-                       @input="value => { local.inputs.dateStart = value }"
+                      @input="selectedContractDate"
                       ></my-input>
                     </td>
                     <td>เงินเบิกล่วงหน้า:</td>
@@ -153,7 +153,7 @@
               <table class="transparent-table">
                 <tr>
                   <td>ผู้ว่าจ้าง: บริษัท แลนด์แอนด์เฮ้าส์ จำกัด (มหาชน)</td>
-                  <td>วันที่ 21 มีนาคม 2561 ถึงวันที่ 10 ธันวาคม 2561</td>
+                  <td>วันที่ {{dateStart}} ถึงวันที่ {{dateEnd}}</td>
                 </tr>
                 <tr>
                   <td>จำนวนงวด {{local.inputs.price}} บาท <br/>(หนึ่งพันบาทถ้วน)</td>
@@ -214,6 +214,7 @@ import Helper from '@Libraries/common.helpers'
 import myInput from '@Components/Form/my-input'
 import myAction from '@Components/Form/my-action'
 import myAutoComplete from '@Components/Form/my-autocomp'
+import moment from 'moment'
 export default {
   props: {
     // templateName: {
@@ -252,16 +253,16 @@ export default {
           paid: '',
           status: '',
           times: [
-            {time: '1', priceRate: 15, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
-            {time: '2', priceRate: 10, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
-            {time: '3', priceRate: 5, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
-            {time: '4', priceRate: 5, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
-            {time: '5', priceRate: 20, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
-            {time: '6', priceRate: 5, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
-            {time: '7', priceRate: 5, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
-            {time: '8', priceRate: 10, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
-            {time: '9', priceRate: 10, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'},
-            {time: '10', priceRate: 5, price: 0, dateStart: '2561-12-01', dateEnd: '2561-12-01'}
+            {time: '1', priceRate: 15, price: 0, dateStart: '', dateEnd: ''},
+            {time: '2', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
+            {time: '3', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
+            {time: '4', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
+            {time: '5', priceRate: 20, price: 0, dateStart: '', dateEnd: ''},
+            {time: '6', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
+            {time: '7', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
+            {time: '8', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
+            {time: '9', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
+            {time: '10', priceRate: 5, price: 0, dateStart: '', dateEnd: ''}
           ]
         },
         project: {},
@@ -272,7 +273,8 @@ export default {
         planTemplate: {
           inputs: [],
           selected: null
-        }
+        },
+        contractPreiod: []
       }
     }
   },
@@ -288,6 +290,18 @@ export default {
     },
     resourceName () {
       return config.api.contract.index
+    },
+    dateStart () {
+      let dateObj = this.local.inputs.times.filter((item) => {
+        return item.time === '1'
+      })[0]
+      return dateObj.dateStart
+    },
+    dateEnd () {
+      let dateObj = this.local.inputs.times.filter((item) => {
+        return item.time === '10'
+      })[0]
+      return dateObj.dateEnd
     }
   },
   created () {
@@ -346,12 +360,19 @@ export default {
     },
     houseSelectedHandle (objVal) {
       if (objVal === null) {
-        console.log('te')
         this.local.planTemplate.inputs = []
       } else {
         this.local.inputs.houseId = objVal.key
         this.getPlan()
+        this.getContractPreiod()
       }
+    },
+    async getContractPreiod () {
+      let queryString = []
+      let resourceName = `${config.api.contract.period}/${this.local.inputs.houseId}`
+      let contractPreiod = await service.getResource({resourceName, queryString})
+      this.local.contractPreiod = contractPreiod.data || null
+      this.setContractPreiod()
     },
     async getPlan () {
       let queryString = this.BUILDPARAM({house: this.local.inputs.houseId})
@@ -366,6 +387,35 @@ export default {
         })
         this.local.isTimeStart = true
       }
+    },
+    selectedContractDate (value) {
+      this.local.inputs.dateStart = value
+      this.setContractPreiod()
+    },
+    setContractPreiod () {
+      if (!this.local.inputs.dateStart) {
+        return
+      }
+      let oldDate = ''
+      this.local.inputs.times.map(item => {
+        if (!this.local.contractPreiod) {
+          item.dateStart = ''
+          item.dateEnd = ''
+        } else {
+          if (item.time === '1') {
+            item.dateStart = moment(this.local.inputs.dateStart).format('YYYY/MM/DD')
+            item.dateEnd = this.calculateContractPreiod(this.local.inputs.dateStart, this.local.contractPreiod[item.time])
+            oldDate = item.dateEnd
+          } else {
+            item.dateStart = this.calculateContractPreiod(oldDate, 1)
+            item.dateEnd = this.calculateContractPreiod(item.dateStart, this.local.contractPreiod[item.time])
+            oldDate = item.dateEnd
+          }
+        }
+      })
+    },
+    calculateContractPreiod (start, preiod) {
+      return moment(start).add(preiod, 'days').format('YYYY/MM/DD')
     },
     calculatePrice (priceRate) {
       this.local.inputs.paid = (this.local.inputs.price * 10) / 100

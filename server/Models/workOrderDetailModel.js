@@ -8,6 +8,7 @@ module.exports =  class WorkOrder {
     this.knex = knex(db.config);
     this.id = id
     this.work_order_time
+    this.order
     this.name
     this.post_order
   }
@@ -28,19 +29,28 @@ module.exports =  class WorkOrder {
   async getData () { // with matert
     let result = await this.knex
     .select('work_order_detail.name as name', 'post_order',
+    'work_order_detail.order',
     'work_order_detail.created_at as work_order_detail_date',
     'material_group.name as material_group_name', 'material_group.id as material_group_id'
     )
     .from('work_order_detail')
     .leftJoin('material_group', 'material_group.id', 'work_order_detail.post_order')
     .where({'work_order_detail.work_order_time': this.work_order_time})
-    .orderBy('work_order_detail.id', 'asc')
+    .orderBy('work_order_detail.order', 'asc')
+    return result
+  }
+
+  async getAllData () {
+    let result = await this.knex('work_order_detail')
+    .orderBy('work_order_time', 'asc')
+    .orderBy('order', 'asc')
     return result
   }
 
 
-  async getAllData () {
+  async getPostOrder () {
     let result = await this.knex('work_order_detail')
+    .where({order: this.order})
     return result
   }
 

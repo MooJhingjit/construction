@@ -138,7 +138,6 @@ async function createMaterialGroup (obj, isUpdate) {
   return result
 }
 
-
 async function cleanData (inputs) {
   
   let item = new materialModel()
@@ -184,17 +183,15 @@ async function getDropDown (req, res, next) {
   res.status(200).json(data)
 }
 
-// async function deleteMaterail (req, res, next) {
-//   let inputs = {
-//     houseId: req.query.houseId,
-//     storeId: req.query.storeId,
-//     detail: []
-//   }
-//   await cleanData(inputs)
-//   res.status(200).json({})
-// }
+async function getMaterialDetail (idArr) {
+  let item = new materialModel()
+  let data = await item.getMaterialById(idArr)
+  return data
+}
 
 module.exports.getFullMaterial = getFullMaterial
 module.exports.createData = createData
 module.exports.deleteData = deleteMaterail
 module.exports.getDropDown = getDropDown
+module.exports.getMaterialDetail = getMaterialDetail
+

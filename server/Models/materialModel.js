@@ -128,67 +128,9 @@ module.exports =  class Material {
     .limit(20).offset(0)
     return result
   }
-  
+
+  async getMaterialById (idArr) {
+    let result = await this.knex('material').whereIn('id', idArr)
+    return result
+  }
 }
-
-// module.exports =  class WorkOrder {  
-//   constructor(id = '') {
-//     this.id = id;
-//     this.name
-//     this.amount
-//     this.price
-//     this.left
-//     this.right
-//   }
-
-  
-//   getData () {
-//     // let sql = `SELECT time, pre_order, work_order.created_at as work_order_date, name, post_order, work_order_detail.created_at as work_order_detail_date  FROM work_order left join work_order_detail on work_order.time = work_order_detail.work_order_time WHERE work_order.time = ${this.time}`
-//     // return db.query(sql)
-//   }
-
-//   getAllData () {
-//     // return db.query(`SELECT * FROM work_order`)
-//   }
-
-//   count () {
-//     // let condition = this.getCondition('allData')
-//     // return db.query(`SELECT count(id) as count FROM work_order ${condition}`)
-//   }
-
-//   save () {
-//     this.knex('material').insert({
-//       id: null,
-//       name: this.name,
-//       amount: this.amount,
-//       price: this.price,
-//       l_default: this.left,
-//       r_default: this.right,
-//       titcreated_atle: elpers.getCurrentTime('sql')
-//     })
-//     // return db.query('INSERT INTO material (id, name, amount, price, l_default, r_default, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
-//     // [
-//     //   null,
-//     //   this.name,
-//     //   this.amount,
-//     //   this.price,
-//     //   this.left,
-//     //   this.right,
-//     //   helpers.getCurrentTime('sql')
-//     // ])
-//   }
-
-//   update () {
-//     // var sql = `UPDATE work_order SET 
-//     // time = ?,
-//     // pre_order = ?,
-//     // created_at = ?
-//     // WHERE time = ?
-//     // `;
-//     // return db.query(sql, [this.time, this.pre_order, helpers.getCurrentTime('sql'), this.time],);
-//   }
-
-//   delete () {
-//     // return db.query(`DELETE FROM work_order WHERE id = ?`, [this.id]);
-//   }
-// }

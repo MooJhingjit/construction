@@ -4,7 +4,7 @@
       <thead>
          <tr>
           <th rowspan="2">รายการ</th>
-          <th rowspan="2" width="80">ระยะเวลาจัดส่ง</th>
+          <!-- <th rowspan="2" width="80">ระยะเวลาจัดส่ง</th> -->
           <th rowspan="2" width="80">จำนวนเริ่มต้น</th>
           <th rowspan="2" width="120">หน่วย</th>
           <th rowspan="2" width="120">ราคา/หน่วย</th>
@@ -26,14 +26,14 @@
               @input="value => { item.name = value }"
               ></my-input>
           </td>
-          <td>
+          <!-- <td>
             <my-input
               :value="item.delay"
               :inputObj="{type: 'text', name: `delay_${index}`, placeholder: '', validate: ''}"
               :validator="$validator"
               @input="value => { item.delay = value }"
               ></my-input>
-          </td>
+          </td> -->
           <td>
             <my-input
               :value="item.amount"
@@ -89,6 +89,12 @@
     <div class="item-footer container-block">
       <div class="container-block block right">
         <!-- {{this.local.materialGroupAll}} -->
+        <my-input
+          :value="local.materialDelayAll"
+          :inputObj="{type: 'text', name: `order_delay`, placeholder: 'กำหนดของเข้า', validate: ''}"
+          :validator="$validator"
+          @input="addMaterialDelay"
+        ></my-input>
         <my-tags-selection
           v-if="this.local.items.length"
           ref='materialGroup'
@@ -167,7 +173,8 @@ export default {
           l_default: {},
           r_default: {}
         },
-        materialGroupAll: []
+        materialGroupAll: [],
+        materialDelayAll: ''
       }
     }
   },
@@ -186,6 +193,7 @@ export default {
       // let materialGroup = await service.getResource({resourceName: config.api.materialGroup.index, queryString: [this.BUILDPARAM({type: 'selection'})]})
       this.local.items = items.data
       this.setMaterialGroup()
+      this.setMaterialDelay()
       // this.local.materialGroupItems = materialGroup.data
     },
     editRow (type) {
@@ -210,6 +218,7 @@ export default {
           r_default: rightObj
         })
         this.addMaterialToGroup(this.local.materialGroupAll)
+        this.addMaterialDelay(this.local.materialDelayAll)
       } else {
         this.local.items.pop()
       }
@@ -298,13 +307,24 @@ export default {
     setMaterialGroup () {
       if (this.local.items.length) {
         this.local.materialGroupAll = this.local.items[0].materialGroup
-        this.$refs.materialGroup.getFilterResult()
+        // this.$refs.materialGroup.getFilterResult()
+      }
+    },
+    setMaterialDelay () {
+      if (this.local.items.length) {
+        this.local.materialDelayAll = this.local.items[0].delay
       }
     },
     addMaterialToGroup (value) {
       this.local.materialGroupAll = value
       this.local.items.map((item) => {
         item.materialGroup = value
+      })
+    },
+    addMaterialDelay (value) {
+      this.local.materialDelayAll = value
+      this.local.items.map((item) => {
+        item.delay = value
       })
     }
   }

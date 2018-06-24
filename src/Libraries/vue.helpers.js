@@ -47,6 +47,7 @@ export default {
       return config.variable.status[key]
     },
     SET_DATEFORMAT (date) {
+      console.log(date)
       return moment(date).format('DD-MM-YYYY')
     },
     GOTOPAGE (pageName, key = '') {
