@@ -3,26 +3,24 @@ const knex = require('knex')
 const db = require('../Database/config')
 const helpers = require('../Libraries/helpers')
 
-module.exports =  class Ordering {
+module.exports =  class OrderingDetail {
   constructor(id){
     this.knex = knex(db.config)
     this.id = id
-    this.store_id
-    this.contract_code
-    this.total_price
+    this.order_id
+    this.name
+    this.price
     this.amount
     this.status
-    this.date_start
   }
 
   async save () {
-    let result = await this.knex('ordering').insert({
-      store_id: this.store_id,
-      contract_code: this.contract_code,
-      total_price: this.total_price,
+    let result = await this.knex('ordering_detail').insert({
+      order_id: this.order_id,
+      name: this.name,
+      price: this.price,
       amount: this.amount,
-      status: this.status,
-      date_start: this.date_start
+      status: this.status
     })
     return result
   }

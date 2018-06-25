@@ -28,6 +28,12 @@ module.exports =  class Contract {
     return result
   }
 
+  async getContractDetail () {
+    let result = await this.knex('contract')
+    .where({'contract.code': this.code})
+    return result
+  }
+
   async getAllData () {
     let result = await this.knex('contract').where(this.getCondition())
     .where('code', 'like', `%${this.code || ''}%`)

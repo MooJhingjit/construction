@@ -133,11 +133,12 @@ const updateContractStatus = async (req, res, next) => {
   let newItem = new contractModel()
   newItem.code = req.params.id
   newItem.status = req.body.data.status
-  let result = await newItem.updateStatus()
+  // let result = await newItem.updateStatus()
   switch(newItem.status) {
     case 'ip':
         await setContractProcess(newItem.code, req.body.data.houseId)
-        await reviewContractProcess(newItem.code, req.body.data.houseId, 1)
+        await ordering.prepareOrdering(req.body.data.houseId, 1, 1) // 1 = time
+        // await reviewContractProcess(newItem.code, req.body.data.houseId, 1)
         break
     case 'done':
         // orderMaterial()
@@ -203,9 +204,16 @@ const updateContractProcess = async (req, res, next) => {
   // ordering.prepareOrdering(contractCode, taskOrder)
 }
 
-const reviewContractProcess = async (contractCode = '', houseId, taskOrder) => {
-  // review for checking what is the order
-  ordering.prepareOrdering(houseId, taskOrder)
+// const reviewContractProcess = async (contractCode = '', houseId, taskOrder) => {
+//   // review for checking what is the order
+//   ordering.prepareOrdering(houseId, taskOrder, 1) // 1 = time
+// }
+
+const getContractDetail = async (contractCode, type) => {
+  let item = new contractModel()
+  item.code = contractCode
+  let result = await item.getContractDetail()
+  return result
 }
 
 module.exports.getStat = getStat

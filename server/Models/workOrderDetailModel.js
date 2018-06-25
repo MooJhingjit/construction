@@ -51,6 +51,7 @@ module.exports =  class WorkOrder {
   async getPostOrder () {
     let result = await this.knex('work_order_detail')
     .where({order: this.order})
+    .where({work_order_time: this.work_order_time})
     return result
   }
 
@@ -62,6 +63,7 @@ module.exports =  class WorkOrder {
   async save () {
     let result = await this.knex('work_order_detail').insert({
       work_order_time: this.work_order_time,
+      order: this.order,
       name: this.name,
       post_order: this.post_order,
       created_at: helpers.getCurrentTime('sql')
@@ -74,6 +76,7 @@ module.exports =  class WorkOrder {
     .where({id: this.id})
     .update({
       work_order_time: this.work_order_time,
+      order: this.order,
       name: this.name,
       post_order: this.post_order,
       created_at: helpers.getCurrentTime('sql')
