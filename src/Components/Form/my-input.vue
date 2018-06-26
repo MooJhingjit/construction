@@ -36,7 +36,6 @@
         <b-datepicker
             :placeholder="local.placeholder"
             :name="local.name"
-            :date-formatter="(date) => date.toLocaleDateString('en-GB')"
             v-model="inputVal"
             icon="calendar"
             v-validate="local.validate">

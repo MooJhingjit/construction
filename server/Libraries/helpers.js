@@ -10,6 +10,12 @@
 //   }
 // }
 const jwtDecode = require('jwt-decode')
+const moment = require('moment')
+
+module.exports.getDate = (date) => {
+  if (!date) return null
+  return moment(date).format('YYYY/MM/DD')
+}
 
 module.exports.getUserAuth = (token) => {
   let bearer = token.split(' ');

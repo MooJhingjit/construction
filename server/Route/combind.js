@@ -13,6 +13,7 @@ app.use('/api',
     require('./house'),
     require('./project'),
     require('./material'),
+    require('./ordering'),
     require('./contract'),
     require('./workOrder'),
     require('./materialGroup')

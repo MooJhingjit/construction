@@ -46,9 +46,10 @@ export default {
     GET_STATUSNAME (key) {
       return config.variable.status[key]
     },
-    SET_DATEFORMAT (date) {
-      console.log(date)
-      return moment(date).format('DD-MM-YYYY')
+    SET_DATEFORMAT (dateInput) {
+      if (!dateInput) return null
+      let date = new Date(dateInput)
+      return moment(date).format('YYYY/MM/DD')
     },
     GOTOPAGE (pageName, key = '') {
       this.$router.push({

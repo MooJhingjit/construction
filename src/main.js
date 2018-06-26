@@ -11,7 +11,7 @@ Vue.use(moment)
 Vue.use(Buefy, {
   defaultIconPack: 'fa',
   defaultDateFormatter: (dateVal) => {
-    return moment(dateVal).format('DD-MM-YYYY')
+    return moment(dateVal).format('YYYY/MM/DD')
   }
 })
 

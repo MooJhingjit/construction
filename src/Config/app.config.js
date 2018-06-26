@@ -38,6 +38,9 @@ const api = {
   'material': {
     'index': '/material',
     'dropdown': '/material-selection'
+  },
+  'ordering': {
+    'index': '/ordering',
   }
 }
 
@@ -49,7 +52,11 @@ const variable = {
   status: {
     wait: 'รออนุมัติ',
     ip: 'กำลังดำเนินงาน',
-    done: 'เสร็จสิ้น'
+    done: 'เสร็จสิ้น',
+    confirmed: 'รอสินค้า',
+    received: 'รับของแล้ว',
+    normal: 'ปกติ',
+    extra: 'พิเศษ'
   },
   workingStatus: {
     wait: 'รอ',

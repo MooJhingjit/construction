@@ -12,7 +12,26 @@ module.exports =  class Ordering {
     this.total_price
     this.amount
     this.status
+    this.order_type
     this.date_start
+    this.limit = 5
+    this.offset = 0
+  }
+
+  async getAllData () {
+    let result = await this.knex('ordering').where(this.getCondition())
+    // .where('name', 'like', `%${this.name || ''}%`)
+    // .orWhere('type', 'like', `%${this.name || ''}%`)
+    // .orWhere('type', 'like', `%${this.name || ''}%`)
+    // .orWhere('type', 'like', `%${this.name || ''}%`)
+
+    .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    return result
+  }
+
+  async count () {
+    let result = await this.knex('ordering').count('id as count').where(this.getCondition())
+    return result
   }
 
   async save () {
@@ -22,9 +41,21 @@ module.exports =  class Ordering {
       total_price: this.total_price,
       amount: this.amount,
       status: this.status,
+      order_type: this.order_type,
       date_start: this.date_start
     })
     return result
+  }
+
+  getCondition () {
+    let conditions = {}
+    if (this.status) {
+      conditions.status = this.status
+    }
+    if (this.order_type) {
+      conditions.order_type = this.order_type
+    }
+    return conditions
   }
 
   // async update () {

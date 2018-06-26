@@ -1,20 +1,13 @@
 <template>
     <div class="data-table">
       <div class="search-status">
-        <div v-if="isDemo" class="tags">
-          <span class="tag">ปกติ</span>
-          <span class="tag">พิเศษ</span>
-          <span class="tag is-info">รอสินค้า 5</span>
-          <span class="tag is-warning">รออนุมัติ 5</span>
-          <span class="tag is-success">รับสินค้า 5</span>
-        </div>
-        <div v-else class="tags">
+        <div class="tags">
           <span :class="['tag', {'is-warning': local.statusSelected == item.key}]"
           :key="index" v-for="(item, index) in statusSearch"
           @click="filterByStatus(item.key)">{{item.title}}</span>
         </div>
       </div>
-      <template v-if="isDemo">
+      <!-- <template v-if="isDemo">
         <div class="search-input control has-icons-left">
           <input class="input" type="text" placeholder="ค้นหาโครงการ">
           <span class="icon is-small is-left">
@@ -33,15 +26,23 @@
             <i class="fa fa-search" aria-hidden="true"></i>
           </span>
         </div>
-      </template>
-      <div v-else class="search-input control has-icons-left">
+      </template> -->
+      <!-- <div class="search-input control has-icons-left">
         <input class="input" type="text" @input="searchByText()" v-model="local.textSearch" placeholder="ค้นหา">
         <span class="icon is-small is-left">
           <i class="fa fa-search" aria-hidden="true"></i>
         </span>
+      </div> -->
+
+      <div :key="index" class="search-input control has-icons-left" v-for="(item, index) in inputSearch">
+        <input class="input" type="text" @input="searchByText()" v-model="local.textSearch[item.key]" :placeholder="item.placeholder">
+        <span class="icon is-small is-left">
+          <i :class="item.icon" aria-hidden="true"></i>
+        </span>
       </div>
+
       <div class="search-results">
-        <table v-if="isDemo" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        <!-- <table v-if="isDemo" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
           <thead>
             <tr>
               <th>เลขที่สัญญา</th>
@@ -66,8 +67,8 @@
               <td><span class="tag is-success">รับสินค้า</span></td>
             </tr>
           </tbody>
-        </table>
-        <table v-else class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+        </table> -->
+        <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
           <thead>
               <tr>
                 <th :key="index" v-for="(itemHeader, index) in local.items.header">{{itemHeader.name}}</th>
@@ -76,7 +77,7 @@
             <tbody>
               <tr :class="{'selected': itemBody.key == local.idSelected}" :key="index" v-for="(itemBody, index) in local.items.body" @dblclick="setDataSelected(itemBody.items)">
                 <td :key="index" v-for="(item, index) in itemBody.show">
-                  <template v-if="item == 'status'">
+                  <template v-if="item == 'status' || item == 'order_type'">
                     {{GET_STATUSNAME(itemBody.items[item])}}
                   </template>
                   <template v-else>
@@ -120,19 +121,38 @@ export default {
         items: {},
         idSelected: '',
         queryString: [],
-        textSearch: '',
+        textSearch: {},
         statusSelected: '',
         limitRequest: 5,
         currentPage: 1,
-        totalPage: 0
+        totalPage: 0,
+        inputSearch: {
+          all: [
+            {key: 'main', placeholder: 'ค้นหา', icon: 'fa fa-search'}
+          ],
+          ordering: [
+            {key: 'project', placeholder: 'โครงการ', icon: 'fa fa-search'},
+            {key: 'house', placeholder: 'แบบบ้าน', icon: 'fa fa-search'},
+            {key: 'plan', placeholder: 'แปลน', icon: 'fa fa-search'},
+            {key: 'contract', placeholder: 'เลขที่สัญญา', icon: 'fa fa-search'},
+          ]
+        }
       }
     }
   },
   computed: {
-    // propertyComputed() {
-    //   console.log('I change when this.property changes.')
-    //   return this.property
-    // }
+    inputSearch() {
+      let inputs = null
+      switch(this.resourceName) {
+        case '/ordering':
+          inputs = this.local.inputSearch.ordering
+          break
+        default:
+          inputs = this.local.inputSearch.all
+      }
+      
+      return inputs
+    }
   },
   created () {
     this.fetchData()
@@ -170,7 +190,9 @@ export default {
       this.$emit('selectedData', item)
     },
     searchByText () {
-      this.local.queryString['main_search'] = this.local.textSearch
+      for (let key in this.local.textSearch) {
+        this.local.queryString[`${key}_search`] = this.local.textSearch[key]
+      }
       this.fetchData()
     },
     changePage (action) {

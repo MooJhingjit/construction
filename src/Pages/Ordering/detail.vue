@@ -10,7 +10,6 @@
       :resourceName="resourceName"
       :statusSearch="local.statusSearch"
       @selectedData="selectedDataHandle"
-      :isDemo="true"
       ></data-table>
     </template>
     <template slot="function">
@@ -144,19 +143,19 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'การสั่งซื้อ', route: 'Ordering', key: '', active: false, icon: 'fa fa-object-group'},
-            {name: 'LH120610029', route: 'OrderingDetail', key: 'LH120610029', active: true, icon: ''}
+            {name: 'การสั่งซื้อ', route: 'Ordering', key: '', active: false, icon: 'fa fa-object-group'}
+            // {name: 'LH120610029', route: 'OrderingDetail', key: 'LH120610029', active: true, icon: ''}
           ],
           template: {
             class: 'ordering-detail-page'
           }
         },
         statusSearch: [
-          {title: 'ปกติ', key: ''},
-          {title: 'พิเศษ', key: ''},
-          {title: 'รอสินค้า', key: ''},
-          {title: 'รออนุมัติ', key: ''},
-          {title: 'รับสินค้า', key: ''}
+          {title: 'ปกติ', key: 'normal'},
+          {title: 'พิเศษ', key: 'extra'},
+          {title: 'รออนุมัติ', key: 'wait'},
+          {title: 'รอสินค้า', key: 'confirmed'},
+          {title: 'รับสินค้า', key: 'received'}
         ],
         idSelected: '',
         // items: {},
@@ -166,21 +165,20 @@ export default {
   },
   computed: {
     resourceName () {
-      return config.api.project.index
+      return config.api.ordering.index
     }
   },
   created () {
-    this.submitForm('add')
   },
   methods: {
     selectedDataHandle (item) {
-    //   this.errors.clear()
-    //   this.local.idSelected = item.id
-    //   this.local.inputs.code = item.code
-    //   this.local.inputs.name = item.name
-    //   this.local.inputs.address = item.address
-    //   this.local.inputs.type = item.type
-    //   this.local.submitMode = 'update'
+      this.errors.clear()
+      this.local.idSelected = item.id
+      // this.local.inputs.code = item.code
+      // this.local.inputs.name = item.name
+      // this.local.inputs.address = item.address
+      // this.local.inputs.type = item.type
+      this.local.submitMode = 'update'
     },
     async submitForm (type) {
       let isValid = await this.$validator.validateAll()

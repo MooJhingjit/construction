@@ -133,11 +133,11 @@ const updateContractStatus = async (req, res, next) => {
   let newItem = new contractModel()
   newItem.code = req.params.id
   newItem.status = req.body.data.status
-  // let result = await newItem.updateStatus()
+  let result = await newItem.updateStatus()
   switch(newItem.status) {
     case 'ip':
         await setContractProcess(newItem.code, req.body.data.houseId)
-        await ordering.prepareOrdering(req.body.data.houseId, 1, 1) // 1 = time
+        await ordering.prepareOrdering(newItem.code, req.body.data.houseId, 1, 1) // 1 = time
         // await reviewContractProcess(newItem.code, req.body.data.houseId, 1)
         break
     case 'done':
@@ -182,13 +182,13 @@ const setContractProcess = async (contractCode, houseId) => {
   )
 }
 
-const editContractProcess = async (req, res, next) => {
+const updateContractProcess = async (req, res, next) => {
   let process = req.body.data
   await Promise.all(
     process.map( async (item) => {
       let process = new contractProcessModel()
-      process.start_date = item.start_date
-      process.real_date = item.real_date
+      process.start_date = helpers.getDate(item.start_date)
+      process.real_date = helpers.getDate(item.real_date)
       process.delay = item.delay
       process.id = item.id
       await process.updateDate()
@@ -197,7 +197,7 @@ const editContractProcess = async (req, res, next) => {
   res.status(200).json({})
 }
 
-const updateContractProcess = async (req, res, next) => {
+const updateContractTask = async (req, res, next) => {
   // update from frontsite
   // let contractCode = req.xxx
   // find next taskOrder and send to updateWorkingProcess
@@ -224,4 +224,4 @@ module.exports.updateContractStatus = updateContractStatus
 module.exports.updateTimeData = updateTimeData
 module.exports.deleteData = deleteData
 module.exports.getContractPeriod = getContractPeriod
-module.exports.editContractProcess = editContractProcess
+module.exports.updateContractProcess = updateContractProcess

@@ -121,28 +121,30 @@
                   <td>{{item.order}}</td>
                   <td>{{item.name}}</td>
                   <td>
-                    <my-input
+                    {{SET_DATEFORMAT(item.start_date)}}
+                    <!-- <my-input
                     :value="item.start_date"
                     :inputObj="{type: 'datepicker', name: 'contract_datestart', placeholder: 'วันที่ตามสัญญา', validate: ''}"
                     :validator="$validator"
                     @input="value => { item.start_date = value }"
-                    ></my-input>
+                    ></my-input> -->
                   </td>
                   <td>
-                    <my-input
+                    {{SET_DATEFORMAT(item.real_date)}}
+                    <!-- <my-input
                     :value="item.real_date"
                     :inputObj="{type: 'datepicker', name: 'contract_datestart', placeholder: 'วันที่ทำจริง', validate: ''}"
                     :validator="$validator"
                     @input="value => { item.real_date = value }"
-                    ></my-input>
+                    ></my-input> -->
                   </td>
                   <td>
-                    <my-input
+                    <!-- <my-input
                       :value="item.delay"
                       :inputObj="{type: 'text', name: 'contract_type', placeholder: 'delay', validate: ''}"
                       :validator="$validator"
                       @input="value => { item.delay = value }"
-                      ></my-input>
+                      ></my-input> -->
                   </td>
                   <td>{{getWorkingStatus(item.status)}}</td>
                 </tr>
