@@ -14,6 +14,12 @@ module.exports =  class OrderingDetail {
     this.status
   }
 
+  async getData () {
+    let result = await this.knex('ordering_detail')
+    .where({'order_id': this.order_id})
+    return result
+  }
+
   async save () {
     let result = await this.knex('ordering_detail').insert({
       order_id: this.order_id,

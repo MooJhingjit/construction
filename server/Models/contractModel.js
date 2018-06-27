@@ -23,7 +23,10 @@ module.exports =  class Contract {
   async getData () {
     let result = await this.knex.select('contract.*', 'contract.plan as contractPlan', 'house.*')
     .from('contract')
-    .leftJoin('house', 'contract.house_id', 'house.id')
+    .leftJoin('house', function() {
+      this.on('contract.house_id', '=', 'house.name')
+      .andOn('contract.plan', '=', 'house.plan')
+    })
     .where({'contract.code': this.code})
     return result
   }
@@ -62,25 +65,6 @@ module.exports =  class Contract {
     })
     return result
   }
-
-  // async update () {
-  //   let result = await this.knex('contract')
-  //   .where({id: this.id})
-  //   .update({
-  //     code: this.code,
-  //     project_id: this.project_id,
-  //     contract_type: this.contract_type,
-  //     plan: this.plan,
-  //     house_id: this.house_id,
-  //     price: this.price,
-  //     quarter: this.quarter,
-  //     date_start: this.date_start,
-  //     paid: this.paid,
-  //     status: this.status,
-  //     created_at: helpers.getCurrentTime('sql')
-  //   })
-  //   return result
-  // }
 
   async updateStatus () {
     let result = await this.knex('contract')

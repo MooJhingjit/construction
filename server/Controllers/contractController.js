@@ -137,13 +137,13 @@ const updateContractStatus = async (req, res, next) => {
   switch(newItem.status) {
     case 'ip':
         await setContractProcess(newItem.code, req.body.data.houseId)
-        await ordering.prepareOrdering(newItem.code, req.body.data.houseId, 1, 1) // 1 = time
+        await ordering.prepareOrdering(req.params.id, req.body.data.houseId, 1, 1) // 1 = time
         // await reviewContractProcess(newItem.code, req.body.data.houseId, 1)
         break
     case 'done':
         // orderMaterial()
         break
-} 
+  }
   res.status(200).json({})
 }
 
@@ -216,6 +216,17 @@ const getContractDetail = async (contractCode, type) => {
   return result
 }
 
+const getDetailByContractCode = async (typeSelect, code) => {
+  let contractItem = new contractModel()
+  contractItem.code = code
+  let contract = await contractItem.getData()
+  let project = [null]
+  if (typeSelect.indexOf('project') >= 0) {
+    let projectItem = new projectModel(contract[0].project_id)
+    project = await projectItem.getData()
+  }
+  return {contract: contract[0], project: project[0]}
+}
 module.exports.getStat = getStat
 module.exports.getData = getData
 module.exports.getAllData = getAllData
@@ -225,3 +236,4 @@ module.exports.updateTimeData = updateTimeData
 module.exports.deleteData = deleteData
 module.exports.getContractPeriod = getContractPeriod
 module.exports.updateContractProcess = updateContractProcess
+module.exports.getDetailByContractCode = getDetailByContractCode

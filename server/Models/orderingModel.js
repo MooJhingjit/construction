@@ -18,8 +18,19 @@ module.exports =  class Ordering {
     this.offset = 0
   }
 
+  async getData () {
+    let result = await this.knex.select('ordering.*', 'store.name as storeName')
+    .from('ordering')
+    .leftJoin('store', function() {
+      this.on('store.id', '=', 'ordering.store_id')
+    })
+    .where({'ordering.contract_code': this.contract_code})
+    return result
+  }
+
   async getAllData () {
-    let result = await this.knex('ordering').where(this.getCondition())
+    let result = await this.knex('ordering')
+    .where(this.getCondition())
     // .where('name', 'like', `%${this.name || ''}%`)
     // .orWhere('type', 'like', `%${this.name || ''}%`)
     // .orWhere('type', 'like', `%${this.name || ''}%`)

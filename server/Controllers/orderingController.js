@@ -1,10 +1,17 @@
 const helpers = require('../Libraries/helpers')
+const contract = require('./contractController.js')
 const orderingModel = require('../Models/orderingModel')
-const orderingDetailModel = require('../Models/orderingDetailModel')
 const materialGroup = require('./materialGroupController.js')
-const workOrderDetailModel = require('../Models/workOrderDetailModel.js')
 const materialController = require('./materialController.js')
+const orderingDetailModel = require('../Models/orderingDetailModel')
+const workOrderDetailModel = require('../Models/workOrderDetailModel.js')
 
+async function getData (req, res, next) {
+  let contractRes = await contract.getDetailByContractCode(['project', 'contract'], req.params.contractCode)
+  let ordering = await getDetailByContractCode(req.params.contractCode)
+  contractRes.ordering = ordering
+  res.status(200).json(contractRes)
+}
 
 async function getAllData (req, res, next) {
   let ordering = new orderingModel()
@@ -29,7 +36,6 @@ async function getAllData (req, res, next) {
   }
   res.status(200).json(data)
 }
-
 async function prepareOrdering (contractCode, houseId, taskOrder, time) {
   let orderGroupId = await getOrderGroup(taskOrder, time)
   let materials = await materialGroup.getMaterialByGroup(orderGroupId, houseId)
@@ -81,13 +87,14 @@ async function prepareMaterial (contractCode, materials) {
   }
 }
 async function orderMaterial (order) {
+  console.log(order)
   await Promise.all(
     order.map( async (item) => {
       let newItem = new orderingModel()
       newItem.store_id = item.store_id
       newItem.total_price = item.total_price
       newItem.amount = item.amount
-      newItem.contractCode = item.contractCode
+      newItem.contract_code = item.contractCode
       newItem.dateStart = item.dateStart
       newItem.status = item.status
       newItem.order_type = item.order_type
@@ -112,6 +119,23 @@ function getMaterialIdArr (materials) {
 
   return materialArr
 }
+const getDetailByContractCode = async (code) => {
+  let ordering = new orderingModel()
+  ordering.contract_code = code
+  let orderingRes = await ordering.getData()
+  await Promise.all(
+    orderingRes.map( async (item) => {
+      let orderDetail = new orderingDetailModel()
+      orderDetail.order_id = item.id
+      let orderDetailRes = await orderDetail.getData()
+      item.orderDetail = orderDetailRes
+    })
+  )
+  return orderingRes
+  
+}
+
 module.exports.getAllData = getAllData
+module.exports.getData = getData
 module.exports.prepareOrdering = prepareOrdering
 module.exports.orderMaterial = orderMaterial
