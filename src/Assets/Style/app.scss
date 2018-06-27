@@ -529,9 +529,16 @@ html {
                     }
                     .rows-table{
                       margin-bottom: 0;
-                      tbody tr td{
-                        input{
-                          margin-bottom: 3px;
+                      tbody {
+                        tr {
+                          td{
+                            input{
+                              margin-bottom: 3px;
+                            }
+                          }
+                        }
+                        tr.active {
+                          background: #fffce1
                         }
                       }
                     }

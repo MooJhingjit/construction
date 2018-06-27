@@ -134,23 +134,22 @@ export default {
             {key: 'project', placeholder: 'โครงการ', icon: 'fa fa-search'},
             {key: 'house', placeholder: 'แบบบ้าน', icon: 'fa fa-search'},
             {key: 'plan', placeholder: 'แปลน', icon: 'fa fa-search'},
-            {key: 'contract', placeholder: 'เลขที่สัญญา', icon: 'fa fa-search'},
+            {key: 'contract', placeholder: 'เลขที่สัญญา', icon: 'fa fa-search'}
           ]
         }
       }
     }
   },
   computed: {
-    inputSearch() {
+    inputSearch () {
       let inputs = null
-      switch(this.resourceName) {
+      switch (this.resourceName) {
         case '/ordering':
           inputs = this.local.inputSearch.ordering
           break
         default:
           inputs = this.local.inputSearch.all
       }
-      
       return inputs
     }
   },

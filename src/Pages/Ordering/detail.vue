@@ -15,31 +15,30 @@
     <template slot="function">
       <!-- <button class="button is-link" @click="submitForm('add')">เพิ่มข้อมูลใหม่</button> -->
     </template>
-    <template v-if="local.idSelected != ''">
+    <template v-if="local.idSelected != '' && this.local.inputs != null">
       <template slot="detail">
         <div class="container-block detail-block">
-          <span class="type tag">ปกติ</span>
           <div class="block c-header">
             <table class="transparent-table">
               <tr>
-                <td>โครงการ:<span class="value">รามอินทรา พหลโยธิน 50</span></td>
+                <td>โครงการ:<span class="value">{{project.name}}</span></td>
               </tr>
               <tr>
-                <td>เลขที่สัญญา:<span class="value">LH120243216</span></td>
-                <td>แปลน:<span class="value">C01</span></td>
+                <td>เลขที่สัญญา:<span class="value">{{contract.code}}</span></td>
+                <td>แปลน:<span class="value">{{contract.contractPlan}}</span></td>
               </tr>
               <tr>
-                <td>แบบบ้าน:<span class="value">244CA248C</span></td>
+                <td>แบบบ้าน:<span class="value">{{contract.house_id}}</span></td>
                 <td>ขั้นตอนการตำเนินงาน:<span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
               </tr>
               <tr>
-                <td>ทั้งหมด:<span class="value">5 รายการ</span></td>
+                <td>ทั้งหมด:<span class="value">{{ordering.length}} รายการ</span></td>
                 <td>จำนวนเงินทั้งหมด<span class="value">1,000 บาท</span></td>
               </tr>
-              <tr>
+              <!-- <tr>
                 <td>คงเหลือ:<span class="value">1 รายการ</span></td>
                 <td><span class="value">หนึ่งพันบาทถ้วน</span></td>
-              </tr>
+              </tr> -->
             </table>
           </div>
           <div class="block c-body">
@@ -53,60 +52,78 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td width="100">ฟายด์เวิร์คกรุ๊ป</td>
+                <tr :class="{'active': local.orderIdSelected == item.id}" :key="index" v-for="(item, index) in ordering" @click="selectOrdering(item)">
+                  <td width="100">{{item.storeName}}</td>
                   <td>
-                    <input class="input" type="text" value="EC-HDFCM8  35X800X2000 MM (เปิดขวา)">
+                      <my-input
+                      :key="inputIndex"
+                      v-for="(itemDetail, inputIndex) in item.orderDetail"
+                      :value="itemDetail.name"
+                      :inputObj="{type: 'text', name: `order_name_${itemDetail.id}`, placeholder: '', validate: 'required'}"
+                      :validator="$validator"
+                      @input="value => { itemDetail.name = value }"
+                      ></my-input>
+                    <!-- <input class="input" type="text" value="EC-HDFCM8  35X800X2000 MM (เปิดขวา)">
                     <input class="input" type="text" value="HDFCM71  35X700X2000 MM">
-                    <input class="input" type="text" value="(HDFCMS54)  3.5x54x90 Cm. ห้องเก็บของ (เปิดขวา)">
+                    <input class="input" type="text" value="(HDFCMS54)  3.5x54x90 Cm. ห้องเก็บของ (เปิดขวา)"> -->
                   </td>
                   <td width="20">
-                    <input class="input" type="text" value="1">
-                    <input class="input" type="text" value="2">
-                    <input class="input" type="text" value="1">
+                    <my-input
+                      :key="inputIndex"
+                      v-for="(itemDetail, inputIndex) in item.orderDetail"
+                      :value="itemDetail.amount"
+                      :inputObj="{type: 'text', name: `order_amount_${itemDetail.id}`, placeholder: '', validate: 'required'}"
+                      :validator="$validator"
+                      @input="value => { itemDetail.amount = value }"
+                      ></my-input>
                   </td>
                   <td width="100">
-                    <input class="input" type="text" value="200">
-                    <input class="input" type="text" value="300">
-                    <input class="input" type="text" value="500">
+                    <my-input
+                      :key="inputIndex"
+                      v-for="(itemDetail, inputIndex) in item.orderDetail"
+                      :value="itemDetail.price"
+                      :inputObj="{type: 'text', name: `order_price_${itemDetail.id}`, placeholder: '', validate: 'required'}"
+                      :validator="$validator"
+                      @input="value => { itemDetail.price = value }"
+                      ></my-input>
                   </td>
-                </tr>
-                <tr>
-                  <td>กิจศิริ</td>
-                  <td>
-                    <input class="input" type="text" value="แผ่นสมาร์ทวูดหนา10 mm.">
-                  </td>
-                  <td width="20"><input class="input" type="text" value="1"></td>
-                  <td width="100"><input class="input" type="text" value="200"></td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <div class="container-block explain">
+        <div class="container-block explain" v-if="local.orderSelected != null">
           <div class="block">
             <table class="transparent-table">
               <tr>
-                <td>ร้านค้า: ฟายด์เวิร์คกรุ๊ป</td>
+                <td>ร้านค้า: {{getOrderSelected('store')}}</td>
               </tr>
               <tr>
-                <td>จำนวน: 3 รายการ</td>
+                <td>จำนวน: {{getOrderSelected('amount')}} รายการ</td>
               </tr>
               <tr>
-                <td>ราคา: 20,000</td>
+                <td>ราคา: {{getOrderSelected('price')}}</td>
               </tr>
               <tr>
-                <td>สองหมื่นบาทถ้วน</td>
+                <td>{{getOrderSelected('priceTxt')}}</td>
               </tr>
               <tr>
-                <td>สถานะ: <span class="tag is-warning">รออนุมัติ</span></td>
+                <!-- <td>สถานะ: <span class="tag is-warning">{{getOrderSelected('status')}}</span></td> -->
+                <td>สถานะ: {{getOrderSelected('status')}}</td>
+              </tr>
+              <tr>
+                <td>ประเภทการสั่งซื้อ: {{getOrderSelected('orderType')}}</td>
               </tr>
             </table>
           </div>
           <div class="block function container-block">
-            <button class="button is-outlined">อนุมัติ</button>
-            <button class="button is-outlined">ออกใบสั่งซื้อ</button>
-            <button class="button is-outlined">รับของ</button>
+            <template v-if="this.local.orderSelected.status == 'wait'">
+              <button class="button is-outlined">อนุมัติ</button>
+            </template>
+            <template v-else>
+              <button class="button is-outlined">ออกใบสั่งซื้อ</button>
+              <button class="button is-outlined">รับของ</button>
+            </template>
           </div>
         </div>
       </template>
@@ -159,26 +176,37 @@ export default {
         ],
         idSelected: '',
         // items: {},
-        inputs: {}
+        inputs: null,
+        orderSelected: null,
+        orderIdSelected: null
       }
     }
   },
   computed: {
     resourceName () {
       return config.api.ordering.index
-    }
+    },
+    project () {
+      return this.local.inputs.project
+    },
+    contract () {
+      return this.local.inputs.contract
+    },
+    ordering () {
+      return this.local.inputs.ordering
+    },
+    
   },
   created () {
   },
   methods: {
-    selectedDataHandle (item) {
+    async selectedDataHandle (item) {
+      this.local.idSelected = item.contract_code
+      let order = await this.getFullOrdering(item)
+      this.local.inputs = {}
+      this.local.inputs = Object.assign(this.local.inputs, order);
       this.errors.clear()
-      this.local.idSelected = item.id
-      // this.local.inputs.code = item.code
-      // this.local.inputs.name = item.name
-      // this.local.inputs.address = item.address
-      // this.local.inputs.type = item.type
-      this.local.submitMode = 'update'
+      // this.local.submitMode = 'update'
     },
     async submitForm (type) {
       let isValid = await this.$validator.validateAll()
@@ -220,14 +248,42 @@ export default {
       }
       this.NOTIFY('error')
     },
+    async getFullOrdering (item) {
+      let resourceName = `${config.api.ordering.index}/${item.contract_code}`
+      let queryString = this.BUILDPARAM([])
+      let res = await service.getResource({resourceName, queryString})
+      return res.data
+    },
     // reloadTable () {
     //   this.$refs.dataTable.fetchData()
     // },
-    cleanInput () {
-      // this.local.inputs.code = ''
-      // this.local.inputs.name = ''
-      // this.local.inputs.address = ''
-      // this.local.inputs.type = ''
+    selectOrdering (ordering) {
+      this.local.orderIdSelected = ordering.id
+      this.local.orderSelected = ordering
+    },
+    getOrderSelected (type) {
+      let res = ''
+      switch (type) {
+        case 'store':
+          res = this.local.orderSelected.storeName
+          break
+        case 'amount':
+          res = this.local.orderSelected.orderDetail.length
+          break
+        case 'price':
+          res = this.local.orderSelected.total_price
+          break
+        case 'priceTxt':
+          res = 'xxxxxxxx'
+          break
+        case 'status':
+          res = this.GET_STATUSNAME(this.local.orderSelected.status)
+          break
+        case 'orderType':
+          res = this.GET_STATUSNAME(this.local.orderSelected.order_type)
+          break
+      }
+      return res
     }
   }
 }

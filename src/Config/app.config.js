@@ -41,6 +41,7 @@ const api = {
   },
   'ordering': {
     'index': '/ordering',
+    'fullOrder': '/full-ordering'
   }
 }
 
