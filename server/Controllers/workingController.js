@@ -7,18 +7,18 @@ const updateWorking = async (req, res, next) => {
   // update from frontsite
   // let contractCode = req.xxx
 
-  // find next taskOrder and send to updateWorkingProcess
-  // updateWorkingProcess(contractCode)
+  // find next taskOrder and send to updateWorkingProgress
+  // updateWorkingProgress(contractCode)
 }
 
-// const updateWorkingProcess = async (contractCode, taskOrder) => {
+// const updateWorkingProgress = async (contractCode, taskOrder) => {
   // update status at taskOrder
 
   // order material
   // ordering.prepareOrdering(contractCode, taskOrder)
 // }
 
-const setWorkingProcess = async (contractCode, houseId) => { // update from controller Contract
+const setWorkingProgress = async (contractCode, houseId) => { // update from controller Contract
   let workingTemplate = await workOrder.getWorkingTemplate(contractCode)
   await Promise.all(
     workingTemplate.map( async (item) => {
@@ -36,29 +36,29 @@ const setWorkingProcess = async (contractCode, houseId) => { // update from cont
   )
 }
 
-const getWorkingProcess = async (contractCode) => {
+const getWorkingProgress = async (contractCode) => {
   let item = new workingModel(contractCode)
   let result = []
-  let workProcess = await item.getData()
-  if (workProcess.length) {
-    currentTask = workProcess.filter((item) => {
+  let workProgress = await item.getData()
+  if (workProgress.length) {
+    currentTask = workProgress.filter((item) => {
       return item.status === 'ip'
     })[0]
     currentTask = currentTask.time
-    result = workProcess.filter((item) => {
+    result = workProgress.filter((item) => {
       return item.time === currentTask
     })
   }
   return result
 }
 
-const editWorkingProcess = async (contractCode) => {
+const editWorkingProgress = async (contractCode) => {
   let item = new workingModel()
   
   return result
 }
 
 
-module.exports.getWorkingProcess = getWorkingProcess
-module.exports.setWorkingProcess = setWorkingProcess
-module.exports.editWorkingProcess = editWorkingProcess
+module.exports.getWorkingProgress = getWorkingProgress
+module.exports.setWorkingProgress = setWorkingProgress
+module.exports.editWorkingProgress = editWorkingProgress

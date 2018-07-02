@@ -14,7 +14,7 @@
                     :data="local.sparkLineObj.project"
                     ></spark-line>
                     <div class="value">
-                      <span class="num">4</span>
+                      <span class="num">{{local.sparkLineObj.project.count}}</span>
                       <span class="text">โครงการ</span>
                     </div>
                   </div>
@@ -31,41 +31,22 @@
                     :data="local.sparkLineObj.contract"
                     ></spark-line>
                     <div class="value">
-                      <span class="num">26</span>
+                      <span class="num">{{local.sparkLineObj.contract.count}}</span>
                       <span class="text">สัญญา</span>
                     </div>
                   </div>
                   <div class="block detail container-block">
-                    <!-- <button class="button" @click="goToPage('Contract')">สร้างสัญญาใหม่</button> -->
                     <button class="button" @click="GOTOPAGE('Contract', 'all')">แสดงข้อมูล</button>
-                    <!-- <div class="block alert">
-                      <span class="tag is-warning">รออนุมัติ 5</span>
-                      <span class="tag is-info">ดำเนินงาน 10</span>
-                    </div> -->
                   </div>
                 </div>
               </article>
-              <!-- <article class="tile is-child notification">
-                <div class="container-block stat">
-                  <div class="block chart container-block">
-                    <spark-line :config="chartConfig" :data="item3"></spark-line>
-                    <div class="value">
-                      <span class="num">42</span>
-                      <span class="text">เสร็จสิ้น</span>
-                    </div>
-                  </div>
-                  <div class="block detail container-block">
-                    <button class="button" @click="GOTOPAGE('Contract', 'all-success')">แสดงข้อมูล</button>
-                  </div>
-                </div>
-              </article> -->
             </div>
             <div class="tile is-parent">
               <article class="tile is-child notification">
                 <p class="title">ข้อมูลสูญเสีย</p>
                 <div class="content data-loss container-block">
                   <div class="order block">
-                    <bar-chart :data="local.item4"  :height="150" ></bar-chart>
+                    <bar-chart v-if="local.extraOrdering != null" :data="local.extraOrdering"  :height="150" ></bar-chart>
                   </div>
                   <div class="stipend block">
                     <bar-chart :data="local.item5" :height="150"></bar-chart>
@@ -81,24 +62,20 @@
                 <table class="table is-bordered rows-table">
                   <thead>
                     <tr>
-                      <th>แปลน</th>
                       <th>โครงการ</th>
                       <th>เลขที่สัญญา</th>
+                      <th>แปลน</th>
+                      <th>แบบบ้าน</th>
                       <th>สถานะงาน</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr @dblclick="GOTOPAGE('Contract', 'contract-id')">
-                      <td>00B01</td>
-                      <td>นันทวัน-ศรีนครินทร์</td>
-                      <td>LH120610015</td>
-                      <td>ทำสัญญาก่อสร้าง</td>
-                    </tr>
-                    <tr>
-                      <td>00D03</td>
-                      <td>นันทวัน-ศรีนครินทร์</td>
-                      <td>199CA238C</td>
-                      <td>งานพื้นสำเร็จชั้นล่าง</td>
+                    <tr :key="index" v-for="(item, index) in local.workingProgress" @dblclick="GOTOPAGE('Contract', 'contract-id')">
+                      <td>{{item.projectName}}</td>
+                      <td>{{item.contractCode}}</td>
+                      <td>{{item.plan}}</td>
+                      <td>{{item.houseId}}</td>
+                      <td>{{item.status}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -166,27 +143,29 @@ export default {
           project: {},
           contract: {}
         },
-        item3: {
-          count: 120,
-          class: 'success',
-          name: 'Success',
-          detail: '',
-          dataSets: {
-            label: ['xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx'],
-            values: [2, 4, 2, 3, 2, 3, 2, 2, 3, 2, 1, 2]
-          },
-          barColor: '#7dbe4b'
-        },
-        item4: {
-          labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
-          datasets: [
-            {
-              label: 'การสั่งซื้อ',
-              backgroundColor: 'rgba(255,146,146,.7)',
-              data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-            }
-          ]
-        },
+        workingProgress: [],
+        extraOrdering: null,
+        // item3: {
+        //   count: 120,
+        //   class: 'success',
+        //   name: 'Success',
+        //   detail: '',
+        //   dataSets: {
+        //     label: ['xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx'],
+        //     values: [2, 4, 2, 3, 2, 3, 2, 2, 3, 2, 1, 2]
+        //   },
+        //   barColor: '#7dbe4b'
+        // },
+        // item4: {
+        //   labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        //   datasets: [
+        //     {
+        //       label: 'การสั่งซื้อ',
+        //       backgroundColor: 'rgba(255,146,146,.7)',
+        //       data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+        //     }
+        //   ]
+        // },
         item5: {
           labels: ['มกราคม', 'กุมภาพันธ์', 'March', 'เมษายน', 'พฤษภาคม', 'June', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
           datasets: [
@@ -214,6 +193,8 @@ export default {
           if (res.status === 200) {
             this.local.sparkLineObj.project = res.data.stat.projectStat
             this.local.sparkLineObj.contract = res.data.stat.contractStat
+            this.local.workingProgress = res.data.workingProgress
+            this.local.extraOrdering = res.data.extraOrdering
           }
         })
         .catch(() => {

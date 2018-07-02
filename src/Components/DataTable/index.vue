@@ -7,67 +7,27 @@
           @click="filterByStatus(item.key)">{{item.title}}</span>
         </div>
       </div>
-      <!-- <template v-if="isDemo">
-        <div class="search-input control has-icons-left">
-          <input class="input" type="text" placeholder="ค้นหาโครงการ">
-          <span class="icon is-small is-left">
-            <i class="fa fa-search" aria-hidden="true"></i>
-          </span>
-        </div>
-        <div class="search-input control has-icons-left">
-          <input class="input" type="text" placeholder="ค้นหา" value="LH120610029">
-          <span class="icon is-small is-left">
-            <i class="fa fa-search" aria-hidden="true"></i>
-          </span>
-        </div>
-        <div class="search-input control has-icons-left">
-          <input class="input" type="text" placeholder="ค้นหาแบบบ้าน">
-          <span class="icon is-small is-left">
-            <i class="fa fa-search" aria-hidden="true"></i>
-          </span>
-        </div>
-      </template> -->
-      <!-- <div class="search-input control has-icons-left">
-        <input class="input" type="text" @input="searchByText()" v-model="local.textSearch" placeholder="ค้นหา">
-        <span class="icon is-small is-left">
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </span>
-      </div> -->
-
-      <div :key="index" class="search-input control has-icons-left" v-for="(item, index) in inputSearch">
-        <input class="input" type="text" @input="searchByText()" v-model="local.textSearch[item.key]" :placeholder="item.placeholder">
-        <span class="icon is-small is-left">
-          <i :class="item.icon" aria-hidden="true"></i>
-        </span>
-      </div>
-
+      <template v-for="(item, index) in inputSearch">
+        <template v-if="item.inputType == 'auto'">
+          <my-auto-complete
+          :ref="`${item.key}_autoComplete`"
+          :key="index"
+          @select="objVal => autoCompleteSelected(objVal, item.key) "
+          :arrInputs="local.autoCompleteSearch[item.key].inputs "
+          :placeholder="item.placeholder"
+          label=""
+          ></my-auto-complete>
+        </template>
+        <template v-else>
+          <div :key="index" class="search-input control has-icons-left">
+            <input class="input" type="text" @input="searchByText()" v-model="local.textSearch[item.key]" :placeholder="item.placeholder">
+            <span class="icon is-small is-left">
+              <i :class="item.icon" aria-hidden="true"></i>
+            </span>
+          </div>
+        </template>
+      </template>
       <div class="search-results">
-        <!-- <table v-if="isDemo" class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-          <thead>
-            <tr>
-              <th>เลขที่สัญญา</th>
-              <th>ประเภท</th>
-              <th>สถานะ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>LH120610029</td>
-              <td>ปกติ</td>
-              <td><span class="tag is-link">รอสินค้า</span></td>
-            </tr>
-            <tr>
-              <td>LH120610029</td>
-              <td>พิเศษ</td>
-              <td><span class="tag is-warning">รออนุมัติ</span></td>
-            </tr>
-            <tr>
-              <td>LH120610026</td>
-              <td>ปกติ</td>
-              <td><span class="tag is-success">รับสินค้า</span></td>
-            </tr>
-          </tbody>
-        </table> -->
         <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
           <thead>
               <tr>
@@ -96,6 +56,8 @@
 </template>
 
 <script>
+import myAutoComplete from '@Components/Form/my-autocomp'
+import config from '@Config/app.config'
 import service from '@Services/app-service'
 export default {
   props: {
@@ -113,6 +75,7 @@ export default {
     }
   },
   components: {
+    myAutoComplete
   },
   name: 'DataTable',
   data () {
@@ -126,15 +89,33 @@ export default {
         limitRequest: 5,
         currentPage: 1,
         totalPage: 0,
+        autoCompleteSearch: {
+          project: {
+            inputs: [],
+            selected: null
+          },
+          house: {
+            inputs: [],
+            selected: null
+          },
+          plan: {
+            inputs: [],
+            selected: null
+          },
+          contract: {
+            inputs: [],
+            selected: null
+          }
+        },
         inputSearch: {
           all: [
-            {key: 'main', placeholder: 'ค้นหา', icon: 'fa fa-search'}
+            {key: 'main', placeholder: 'ค้นหา', icon: 'fa fa-search', inputType: 'input'}
           ],
           ordering: [
-            {key: 'project', placeholder: 'โครงการ', icon: 'fa fa-search'},
-            {key: 'house', placeholder: 'แบบบ้าน', icon: 'fa fa-search'},
-            {key: 'plan', placeholder: 'แปลน', icon: 'fa fa-search'},
-            {key: 'contract', placeholder: 'เลขที่สัญญา', icon: 'fa fa-search'}
+            {key: 'project', placeholder: 'โครงการ', icon: 'fa fa-search', inputType: 'auto'},
+            {key: 'house', placeholder: 'แบบบ้าน', icon: 'fa fa-search', inputType: 'auto'},
+            {key: 'plan', placeholder: 'แปลน', icon: 'fa fa-search', inputType: 'auto'},
+            {key: 'contract', placeholder: 'เลขที่สัญญา', icon: 'fa fa-search', inputType: 'auto'}
           ]
         }
       }
@@ -145,6 +126,7 @@ export default {
       let inputs = null
       switch (this.resourceName) {
         case '/ordering':
+          this.getSearchResource(this.local.inputSearch.ordering)
           inputs = this.local.inputSearch.ordering
           break
         default:
@@ -205,6 +187,38 @@ export default {
     },
     setTotalPage () {
       this.local.totalPage = Math.ceil(this.local.items.total / this.local.limitRequest)
+    },
+    autoCompleteSelected (objSelected, key) {
+      this.local.textSearch[key] = objSelected.key
+      this.clearAutoCompleteValue(key)
+      this.searchByText()
+    },
+    clearAutoCompleteValue (key) {
+      switch (key) {
+        case 'project':
+          // xxxxxx
+          break
+        case 'house':
+          // xxxxxx
+          break
+        case 'plan':
+          // xxxxxx
+          break
+        case 'contract':
+          // let refName = `${key}`
+          // this.$refs.contract_autoComplete.name = null
+          // xxxxxx
+          break
+      }
+    },
+    async getSearchResource (inputArr) {
+      let queryString = []
+      let resourceName = ''
+      inputArr.map( async (item) => {
+        resourceName = config.api[item.key].dropdown
+        let res = await service.getResource({resourceName: resourceName, queryString})
+        this.local.autoCompleteSearch[item.key].inputs = res.data
+      })
     }
   }
 }

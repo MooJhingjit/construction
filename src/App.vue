@@ -19,7 +19,6 @@
         </transition>
       </div>
     </div>
-    <!-- <model-panel></model-panel> -->
   </div>
 </template>
 
@@ -29,11 +28,9 @@ import service from '@Services/app-service'
 import config from '@Config/app.config'
 import Helper from '@Libraries/common.helpers'
 import { mapGetters, mapActions } from 'vuex'
-// import ModelPanel from '@Components/Model'
 export default {
   components: {
     MenuBar
-    // ModelPanel
   },
   name: 'app',
   data () {

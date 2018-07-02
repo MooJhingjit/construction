@@ -1,5 +1,6 @@
 // const util = require('util')
 const helpers = require('../Libraries/helpers')
+const contract = require('./contractController.js')
 const materialModel = require('../Models/materialModel')
 const materialGroupDetailModel = require('../Models/materialGroupDetailModel')
 
@@ -172,7 +173,13 @@ async function deleteMaterail (req, res, next) {
 
 async function getDropDown (req, res, next) {
   let item = new materialModel()
-  item.name = req.query.main_search
+  if (req.query.main_search) {
+    item.name = req.query.main_search
+  }
+  if (req.query.contractId) {
+    let contractRes = await contract.getDetailByContractCode(['contract'], req.query.contractId)
+    item.house_id = contractRes.contract.house_id
+  }
   let data = await item.getAllSelection()
   data = data.map(item => {
     return {

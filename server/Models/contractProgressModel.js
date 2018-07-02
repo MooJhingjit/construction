@@ -3,7 +3,7 @@ const knex = require('knex')
 const db = require('../Database/config')
 const helpers = require('../Libraries/helpers')
 
-module.exports =  class contractProcess {
+module.exports =  class contractProgress {
   constructor(code){
     this.knex = knex(db.config)
     this.contract_code = code
@@ -18,7 +18,7 @@ module.exports =  class contractProcess {
   }
 
   async getData () { // with matert
-    let result = await this.knex('contract_process')
+    let result = await this.knex('contract_progress')
     .where({contract_code: this.contract_code})
     .orderBy('time', 'asc')
     .orderBy('order', 'asc')
@@ -34,7 +34,7 @@ module.exports =  class contractProcess {
   }
 
   async save () {
-    let result = await this.knex('contract_process').insert({
+    let result = await this.knex('contract_progress').insert({
       contract_code: this.contract_code,
       time: this.time,
       order: this.order,
@@ -49,7 +49,7 @@ module.exports =  class contractProcess {
   }
 
   async updateDate () {
-    let result = await this.knex('contract_process')
+    let result = await this.knex('contract_progress')
     .update({
       start_date: this.start_date,
       real_date: this.real_date,
@@ -59,7 +59,9 @@ module.exports =  class contractProcess {
     return result
   } 
 
-  async delete () {
-
+  async getLastProgress () {
+    let result = await this.knex('contract_progress')
+    .where({status: 'ip'})
+    return result
   }
 }

@@ -31,18 +31,15 @@ module.exports =  class OrderingDetail {
     return result
   }
 
-  // async update () {
-  //   let result = await this.knex('order')
-  //   .where({id: this.id})
-  //   .update({
-  //     store_id: this.store_id,
-  //     contract_code: this.contract_code,
-  //     total_price: this.total_price,
-  //     amount: this.amount,
-  //     date_start: this.date_start
-  //   })
-  //   return result
-  // }
+  async update () {
+    let result = await this.knex('ordering_detail')
+    .where({id: this.id})
+    .update({
+      amount: this.amount,
+      price: this.price
+    })
+    return result
+  }
 
   // async delete () {
   //   let result = await this.knex('work_order_detail')

@@ -12,9 +12,9 @@
 const jwtDecode = require('jwt-decode')
 const moment = require('moment')
 
-module.exports.getDate = (date) => {
+module.exports.getDate = (date, format = 'YYYY/MM/DD') => {
   if (!date) return null
-  return moment(date).format('YYYY/MM/DD')
+  return moment(date).format(format)
 }
 
 module.exports.getUserAuth = (token) => {

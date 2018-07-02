@@ -4,7 +4,7 @@ const Home = () => import('@Pages/Home')
 const Login = () => import('@Pages/Login')
 const Ordering = () => import('@Pages/Ordering')
 const OrderingDetail = () => import('@Pages/Ordering/detail')
-const OrderingExtra = () => import('@Pages/Ordering/extra')
+// const OrderingExtra = () => import('@Pages/Ordering/extra')
 const OrderingGroup = () => import('@Pages/Ordering/group')
 const Users = () => import('@Pages/User')
 const Authority = () => import('@Pages/Authority')
@@ -43,11 +43,11 @@ export default new VueRouter({
       name: 'Ordering',
       component: Ordering
     },
-    {
-      path: '/ordering/extra',
-      name: 'OrderingExtra',
-      component: OrderingExtra
-    },
+    // {
+    //   path: '/ordering/extra',
+    //   name: 'OrderingExtra',
+    //   component: OrderingExtra
+    // },
     {
       path: '/ordering/group',
       name: 'OrderingGroup',

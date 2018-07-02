@@ -31,10 +31,9 @@ export default {
     // }
   },
   methods: {
-    // NUMBERWITHCOMMAS (number, digit = 0) {
-    //   // return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    //   return parseFloat(number).toFixed(digit).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-    // },
+    NUMBERWITHCOMMAS (number, digit = 0) {
+      return parseFloat(number).toFixed(digit).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+    },
     GET_WORKSTATUS (statusCode) {
       return config.variable.status[statusCode]
     },
@@ -51,7 +50,7 @@ export default {
       let date = new Date(dateInput)
       return moment(date).format('YYYY/MM/DD')
     },
-    GOTOPAGE (pageName, key = '') {
+    GOTOPAGE (pageName, key = '', queryString = []) {
       this.$router.push({
         name: pageName,
         params: {key: key}

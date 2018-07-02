@@ -31,6 +31,12 @@ module.exports =  class Contract {
     return result
   }
 
+  async getAllSelection () {
+    let result = await this.knex.select('code').from('contract').orderBy('created_at', 'desc')
+    // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
+    return result
+  }
+
   async getContractDetail () {
     let result = await this.knex('contract')
     .where({'contract.code': this.code})
@@ -41,6 +47,11 @@ module.exports =  class Contract {
     let result = await this.knex('contract').where(this.getCondition())
     .where('code', 'like', `%${this.code || ''}%`)
     .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    return result
+  }
+
+  async getStat () {
+    let result = await this.knex.select('created_at').from('contract')
     return result
   }
 

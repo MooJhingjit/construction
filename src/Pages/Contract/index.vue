@@ -87,8 +87,8 @@
                 <td>แบบบ้าน:<span class="value">{{local.inputs.contract.house_id}}</span></td>
               </tr>
               <tr>
-                <td>ขั้นตอนการตำเนินงาน: <span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
                 <td>แปลน: <span class="value">{{local.inputs.contract.contractPlan}}</span></td>
+                <td></td>
               </tr>
               <tr>
                 <td>วันที่งวด 9 ตามส/ญ:<span class="value">27/08/61</span></td>
@@ -117,7 +117,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr :key="index" v-for="(item, index) in local.inputs.process">
+                <tr :key="index" v-for="(item, index) in local.inputs.progress">
                   <td>{{item.order}}</td>
                   <td>{{item.name}}</td>
                   <td>
@@ -181,7 +181,7 @@
           <my-action
             type="update"
             :obj="{title: 'บันทึกข้อมูล', color: 'is-info', isConfirm: true}"
-            @clickEvent="submitForm('updateProcess')"
+            @clickEvent="submitForm('updateProgress')"
             v-if="local.inputs.contract.status == 'ip'"
           >
           </my-action>
@@ -258,7 +258,7 @@ export default {
           project: {},
           contractTime: {},
           contract: {},
-          process: null
+          progress: null
         }
       }
     }
@@ -284,7 +284,7 @@ export default {
       this.local.inputs.project = contractItem.data.project
       this.local.inputs.contract = contractItem.data.contract
       this.local.inputs.contractTime = contractItem.data.contractTime
-      this.local.inputs.process = contractItem.data.process
+      this.local.inputs.progress = contractItem.data.progress
     },
     async updateContractTime (id, time) {
       let ele = `time_${time}`
@@ -320,9 +320,9 @@ export default {
           resourceName = `${config.api.contract.status}/${this.local.idSelected}`
           res = await service.putResource({data, resourceName})
           break
-        case 'updateProcess':
-          resourceName = `${config.api.contract.process}/${this.local.idSelected}`
-          data = this.local.inputs.process
+        case 'updateProgress':
+          resourceName = `${config.api.contract.progress}/${this.local.idSelected}`
+          data = this.local.inputs.progress
           res = await service.putResource({data, resourceName})
           break
         case 'save':

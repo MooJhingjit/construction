@@ -63,11 +63,13 @@ module.exports =  class project {
   }
 
   async getStat () {
-    // let result = await this.knex.select(knex.raw('count(*) as count'), knex.raw('DATE_FORMAT(created_at,"%Y-%m-%d") as created_day'))
-    // .from('project')
-    // .whereRaw(`YEAR(created_at) = ${helpers.getCurrentTime('year')}`)
-    // .groupByRaw('MONTH(created_at)')
-    return null
+    let result = await this.knex.select('created_at').from('project')
+    return result
+  }
+
+  async getAllSelection () {
+    let result = await this.knex.select('id', 'name').from('project').orderBy('created_at', 'desc')
+    return result
   }
 
   getCondition () {

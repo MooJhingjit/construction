@@ -1,150 +1,88 @@
 <template>
-  <option-detail-template :templateObj="local.template">
-    <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
-    <template slot="search-status">
-      <!-- <div class="tags">
-        <span class="tag">รอสินค้า 5</span>
-      </div> -->
-    </template>
-    <template slot="search-input">
-      <div class="search-input control has-icons-left">
-        <input class="input" type="text" placeholder="ค้นหาโครงการ">
-        <span class="icon is-small is-left">
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </span>
+  <section class="section-modal ordering-extra">
+    <h4>สั่งซื้อพิเศษ</h4>
+    <div class="content">
+      <div class="field">
+        <label class="label">ค้นหาสัญญา</label>
+        <div class="control">
+          <my-auto-complete
+          @select="contractSelectedHandle"
+          :arrInputs="local.contract.inputs"
+          placeholder="เลขที่สัญญา"
+          label=""
+          ></my-auto-complete>
+        </div>
       </div>
-      <div class="search-input control has-icons-left">
-        <input class="input" type="text" placeholder="ค้นหา" value="LH120610029">
-        <span class="icon is-small is-left">
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </span>
-      </div>
-      <div class="search-input control has-icons-left">
-        <input class="input" type="text" placeholder="ค้นหาแบบบ้าน">
-        <span class="icon is-small is-left">
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </span>
-      </div>
-    </template>
-    <template slot="search-results">
-      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
-        <thead>
-          <tr>
-            <th>เลขที่สัญญา</th>
-            <th>วันที่</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>LH120610029</td>
-            <td>10/02/2561</td>
-          </tr>
-        </tbody>
-      </table>
-      <nav class="pagination" role="navigation" aria-label="pagination">
-        <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
-        <button class="pagination-next">หน้าถัดไป</button>
-      </nav>
-    </template>
-    <template v-if="true">
-      <template slot="detail">
-        <div class="container-block detail-block">
-          <div class="block c-header">
-            <table class="transparent-table">
-              <tr>
-                <td>โครงการ:<span class="value">รามอินทรา พหลโยธิน 50</span></td>
-              </tr>
-              <tr>
-                <td>เลขที่สัญญา:<span class="value">LH120243216</span></td>
-                <td>แปลน:<span class="value">C01</span></td>
-              </tr>
-              <tr>
-                <td>แบบบ้าน:<span class="value">244CA248C</span></td>
-                <td>ขั้นตอนการตำเนินงาน:<span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
-              </tr>
-            </table>
-          </div>
-          <div class="block">
-            <table class="transparent-table">
-              <tr>
-                <td>
-                  <div class="field">
-                    <p class="control has-icons-left">
-                      <span class="select">
-                        <select>
-                          <option selected>ร้านค้า</option>
-                          <option>Select dropdown</option>
-                          <option>With options</option>
-                        </select>
-                      </span>
-                      <span class="icon is-small is-left">
-                        <i class="fa fa-th-large"></i>
-                      </span>
-                    </p>
-                  </div>
+      <div class="field" v-if="this.local.contract.selected != null">
+        <label class="label">ค้นหาวัสดุ</label>
+        <div class="control">
+         <table class="table is-bordered rows-table">
+           <thead>
+             <tr>
+              <th>ชื่อวัสดุ</th>
+              <th width="80">จำนวน</th>
+              <th width="80"></th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr :key="index" v-for="(item, index) in local.material">
+               <td>
+                 <my-auto-complete
+                  @select="objVal => {item.obj = objVal || null}"
+                  :arrInputs="local.materialItems"
+                  :validator="$validator"
+                  placeholder="วัสดุ"
+                  label=""
+                  ></my-auto-complete>
+               </td>
+               <td>
+                 <my-input
+                  :value="item.amount"
+                  :inputObj="{type: 'text', isBlur: true, name: 'amount', placeholder: 'จำนวน', validate: 'required'}"
+                  :validator="$validator"
+                  @input="value => { item.amount = value }"
+                  ></my-input>
                 </td>
-              </tr>
-            </table>
-          </div>
-          <div class="block c-body">
-            <table class="table is-bordered rows-table">
-              <thead>
-                <tr>
-                  <th>วัสดุ</th>
-                  <th>จำนวน</th>
-                  <th>ราคา</th>
-                  <th>หมายเหตุ</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <input class="input" type="text" placeholder="Text input">
-                  </td>
-                  <td width="20"><input class="input" type="text" placeholder="Text input"></td>
-                  <td width="150"><input class="input" type="text" placeholder="Text input"></td>
-                  <td width="150"><input class="input" type="text" placeholder="Text input"></td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="table-options">
-              <button class="button"><i aria-hidden="true" class="fa fa-minus"></i></button>
-              <button class="button"><i aria-hidden="true" class="fa fa-plus"></i></button>
-            </div>
-          </div>
+               <td><button class="button is-danger" @click="deleteTime(index)"><i class="fa fa-trash"></i></button></td>
+             </tr>
+           </tbody>
+         </table>
+         <div class="options">
+           <button class="button" @click="editRow('add')"><i aria-hidden="true" class="fa fa-plus"></i></button>
+         </div>
         </div>
-        <div class="container-block footer-panel">
-          <button class="button">สั่งซื้อ</button>
+      </div>
+      <div class="field"  v-if="this.local.contract.selected != null && this.local.material.length">
+        <label class="label">หมายเหตุ</label>
+        <div class="control">
+           <my-input
+            :value="local.note"
+            :inputObj="{type: 'textarea', isBlur: false, name: 'note', placeholder: 'หมายเหตุ', validate: 'required'}"
+            :validator="$validator"
+            @input="value => { local.note = value }"
+            ></my-input>
+          <!-- <textarea class="textarea" v-model="local.note"  placeholder="หมายเหตุ"></textarea> -->
         </div>
-      </template>
-    </template>
-    <template v-else>
-      <template slot="detail">
-        <div class="container-block empty-panel">
-          <div class="block container-block">
-            <div class="block no-data">
-                ไม่พบข้อมูลที่ต้องการ
-            </div>
-            <div class="block select-data">
-              <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-              <span>เลือกข้อมูลทางซ้ายมือเพื่อแสดง</span>
-            </div>
-            <div class="block or">
-              หรือ
-            </div>
-            <div class="block add-data">
-              <button class="button">เพิ่มข้อมูลใหม่</button>
-            </div>
-          </div>
-        </div>
-      </template>
-    </template>
-  </option-detail-template>
+      </div>
+    </div>
+    <div class="footer">
+      <my-action
+        v-if="this.local.contract.selected != null && this.local.material.length"
+        type="update"
+        :obj="{title: 'บันทึกข้อมูล'}"
+          @clickEvent="submitForm()"
+      >
+      </my-action>
+    </div>
+  </section>
 </template>
 
 <script>
-import optionDetailTemplate from '@Components/Template/option-detail'
-import breadcrumbBar from '@Components/Breadcrumb'
+import myAction from '@Components/Form/my-action'
+import myAutoComplete from '@Components/Form/my-autocomp'
+import config from '@Config/app.config'
+import service from '@Services/app-service'
+import myInput from '@Components/Form/my-input'
 export default {
   props: {
     // templateName: {
@@ -153,22 +91,26 @@ export default {
     // }
   },
   components: {
-    optionDetailTemplate,
-    breadcrumbBar
+    myAction,
+    myInput,
+    myAutoComplete
   },
-  name: 'OrderingDetail',
+  name: 'OrderingExtra',
   data () {
     return {
       local: {
-        pageObj: {
-          items: [
-            {name: 'การสั่งซื้อ', route: 'Ordering', key: '', active: false, icon: 'fa fa-object-group'},
-            {name: 'สั่งซื้อพิเศษ', route: 'OrderingExtra', key: '', active: true, icon: ''}
-          ]
+        contract: {
+          inputs: [],
+          selected: null
         },
-        template: {
-          class: 'ordering-extra-page'
-        }
+        materialItems: [],
+        material: [
+          // {
+          //   obj: null,
+          //   amount: 1
+          // }
+        ],
+        note: ''
       }
     }
   },
@@ -183,36 +125,57 @@ export default {
     // this.property = 'Example property update.'
     // console.log('propertyComputed will update, as this.property is now reactive.')
   },
-  beforeMount () {
-    // console.log('beforeMount')
-    // console.log(`this.$el doesn't exist yet, but it will soon!`)
-  },
-  mounted () {
-    // console.log('mounted')
-    // console.log(this.$el.textContent) // I'm text inside the component.
-  },
-  beforeUpdate () {
-    // console.log('beforeUpdate')
-    // console.log(this.counter) // Logs the counter value every second, before the DOM updates.
-  },
-  updated () {
-    // console.log('updated')
-    // Fired every second, should always be true
-    // console.log(+this.$refs['dom-element'].textContent === this.counter)
-  },
-  beforeDestroy () {
-    // console.log('beforeDestroy')
-    // Perform the teardown procedure for someLeakyProperty.
-    // (In this case, effectively nothing)
-    // this.someLeakyProperty = null
-    // delete this.someLeakyProperty
-  },
-  destroyed () {
-    // console.log('destroyed')
-    // console.log(this) // There's practically nothing here!
-    // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
-  },
   methods: {
+    async fetchData () {
+      let queryString = []
+      let contract = await service.getResource({resourceName: config.api.contract.dropdown, queryString})
+      this.local.contract.inputs = contract.data
+    },
+    contractSelectedHandle (obj) {
+      this.local.contract.selected = obj.key
+      this.getMaterialItems()
+    },
+    async getMaterialItems () {
+      let queryString = this.BUILDPARAM({contractId: this.local.contract.selected})
+      let material = await service.getResource({resourceName: config.api.material.dropdown, queryString})
+      this.local.materialItems = material.data
+    },
+    editRow (type) {
+      if (type === 'add') {
+        this.local.material.push({
+          obj: null,
+          // name: '',
+          amount: 1
+        })
+      }
+    },
+    deleteTime (index) {
+      this.local.material.splice(index, 1)
+    },
+    async submitForm () {
+      this.cleanData()
+      let isValid = await this.$validator.validateAll()
+      if (!isValid) return
+      let resourceName = `${config.api.ordering.extra}`
+      let data = {
+        contract: this.local.contract.selected,
+        materials: this.local.material,
+        note: this.local.note
+      }
+      let res = await service.postResource({data, resourceName})
+      // let res = await service.postResource({data, resourceName})
+      if (res.status === 200) {
+        this.NOTIFY('success')
+        this.GOTOPAGE('OrderingDetail', 'order-id')
+        return
+      }
+      this.NOTIFY('error')
+    },
+    cleanData () {
+      this.local.material = this.local.material.filter((item) => {
+        return item.obj != null
+      })
+    }
   }
 }
 </script>

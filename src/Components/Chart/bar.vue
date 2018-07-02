@@ -13,7 +13,11 @@ export default {
   },
   mounted () {
     // Overwriting base render method with actual data.
-    this.renderChart(this.data, {
+    this.renderChartJs()
+  },
+  methods: {
+    renderChartJs () {
+      this.renderChart(this.data, {
       responsive: true,
       maintainAspectRatio: false,
       legend: {display: false},
@@ -23,6 +27,13 @@ export default {
         }]
       }
     })
+    }
+  },
+  watch: {
+    data () {
+      console.log('dfdf')
+      this.renderChartJs()
+    }
   }
 }
 </script>

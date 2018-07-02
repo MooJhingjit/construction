@@ -6,13 +6,83 @@ const materialController = require('./materialController.js')
 const orderingDetailModel = require('../Models/orderingDetailModel')
 const workOrderDetailModel = require('../Models/workOrderDetailModel.js')
 
+async function getResource (req, res, next) {
+  let orderingNormal = await prepareChartData('normal')
+  let orderingExtra = await prepareChartData('extra')
+  let data = {
+    ordering: {
+      normal: [],
+      extra: []
+    },
+    chart: {
+      normal: {
+        labels: orderingNormal.date,
+        // labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        datasets: [
+          {
+            label: 'การสั่งซื้อ',
+            backgroundColor: '#F7894E',
+            data: orderingNormal.data
+            // data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
+          }
+        ]
+      },
+      extra: {
+        labels: orderingExtra.date,
+        // labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        datasets: [
+          {
+            label: 'การสั่งซื้อ (พิเศษ)',
+            backgroundColor: '#F05858',
+            data: orderingExtra.data
+            // data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
+          }
+        ]
+      }
+    }
+  }
+  data.ordering.normal = await getLastOrder('normal')
+  data.ordering.extra = await getLastOrder('extra')
+  res.status(200).json(data)
+}
+
+const prepareChartData = async (type) => {
+  let ordering = new orderingModel()
+  ordering.order_type = type
+  let orderingRes = await ordering.getStat()
+
+  let stat = []
+  orderingRes.map((item) => {
+    let date = helpers.getDate(item.created_at, 'YYYY-MM-DD')
+    if (stat[date]) {
+      stat[date] +=  1
+    } else {
+      stat[date] = 1
+    }
+  })
+  let dataSets = {
+    date: [],
+    data: []
+  }
+  for (key in stat) {
+    dataSets.date.push(key)
+    dataSets.data.push(stat[key])
+  }
+  return dataSets
+}
+
+const getLastOrder = async (orderType) => {
+  let ordering = new orderingModel()
+  ordering.order_type = orderType
+  let res = await ordering.getLastOrderByType()
+  return res
+}
 async function getData (req, res, next) {
   let contractRes = await contract.getDetailByContractCode(['project', 'contract'], req.params.contractCode)
   let ordering = await getDetailByContractCode(req.params.contractCode)
   contractRes.ordering = ordering
   res.status(200).json(contractRes)
 }
-
 async function getAllData (req, res, next) {
   let ordering = new orderingModel()
   let data = []
@@ -36,6 +106,31 @@ async function getAllData (req, res, next) {
   }
   res.status(200).json(data)
 }
+async function createExtraData (req, res, next) {
+  let materials = req.body.data.materials.map((item) => {
+    return {
+      material_id: item.obj.key,
+      amount: item.amount
+    }
+  })
+  let materialIdArr = getMaterialIdArr(materials)
+  let fullMaterial = await materialController.getMaterialDetail(materialIdArr)
+  await prepareMaterial(req.body.data.contract, fullMaterial, {materials, note: req.body.data.note}) // materials is extra
+  res.status(200).json({})
+}
+async function updateData (req, res, next) {
+  let ordering = req.body.data
+  await Promise.all(
+    ordering.map( async (item) => {
+      let ordering = new orderingModel(item.id)
+      ordering.status = item.status
+      let price = await updateOrderDetail(item.orderDetail)
+      ordering.total_price = price
+      await ordering.update()
+    })
+  )
+  res.status(200).json({})
+}
 async function prepareOrdering (contractCode, houseId, taskOrder, time) {
   let orderGroupId = await getOrderGroup(taskOrder, time)
   let materials = await materialGroup.getMaterialByGroup(orderGroupId, houseId)
@@ -52,7 +147,8 @@ async function getOrderGroup (taskOrder, time) {
   orderGroupId = workOrderDetail[0].post_order
   return orderGroupId
 }
-async function prepareMaterial (contractCode, materials) {
+async function prepareMaterial (contractCode, materials, extraObj = null) {
+  // extraObj = {materials, note}
   if (materials.length) {
     let order = []
     let orderDetail = []
@@ -61,6 +157,13 @@ async function prepareMaterial (contractCode, materials) {
       order = []
     })
     materials.map((item) => {
+      if (extraObj != null) {
+        item.amount = extraObj.materials.map((extraItem) => {
+          if (extraItem.material_id == item.id) {
+            return extraItem.amount
+          }
+        })
+      }
       orderDetail[item.store_id].push({
         name: item.name,
         price: item.price,
@@ -76,9 +179,10 @@ async function prepareMaterial (contractCode, materials) {
       data.contractCode = contractCode
       data.dateStart = null
       data.status = 'wait'
-      data.order_type = 'normal'
+      data.note = (extraObj != null) ? extraObj.note : ''
+      data.order_type = (extraObj != null) ? 'extra' : 'normal'
       storeData.map((materials) => {
-        data.total_price += materials.price
+        data.total_price += materials.price * materials.amount
       })
       data.detail = orderDetail[storeId]
       order.push(data)
@@ -87,7 +191,6 @@ async function prepareMaterial (contractCode, materials) {
   }
 }
 async function orderMaterial (order) {
-  console.log(order)
   await Promise.all(
     order.map( async (item) => {
       let newItem = new orderingModel()
@@ -98,6 +201,7 @@ async function orderMaterial (order) {
       newItem.dateStart = item.dateStart
       newItem.status = item.status
       newItem.order_type = item.order_type
+      newItem.note = item.note
       let orderId = await newItem.save()
       item.detail.map( async (itemDetail) => {
         let detailItem = new orderingDetailModel()
@@ -134,8 +238,25 @@ const getDetailByContractCode = async (code) => {
   return orderingRes
   
 }
+const updateOrderDetail = async (data) => {
+  let price = 0
+  await Promise.all(
+    data.map( async (itemDetail) => {
+      let orderingDetail = new orderingDetailModel(itemDetail.id)
+      orderingDetail.amount = itemDetail.amount
+      orderingDetail.price = itemDetail.price
+      await orderingDetail.update()
+      price += itemDetail.price * itemDetail.amount
+    })
+  ) 
+  return price
+}
 
+module.exports.getResource = getResource
 module.exports.getAllData = getAllData
 module.exports.getData = getData
+module.exports.updateData = updateData
+module.exports.createExtraData = createExtraData
 module.exports.prepareOrdering = prepareOrdering
 module.exports.orderMaterial = orderMaterial
+module.exports.prepareChartData = prepareChartData

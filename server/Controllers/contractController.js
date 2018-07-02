@@ -4,7 +4,7 @@ const helpers = require('../Libraries/helpers')
 const projectModel = require('../Models/projectModel')
 const contractModel = require('../Models/contractModel')
 const contractTimeModel = require('../Models/contractTimeModel')
-const contractProcessModel = require('../Models/contractProcessModel')
+const contractProgressModel = require('../Models/contractProgressModel')
 const workOrder = require('./workOrderController.js')
 const ordering = require('./orderingController.js')
 
@@ -13,19 +13,19 @@ const getData = async (req, res, next) => {
   contract.code = req.params.key
   let contractResult = await contract.getData()
   let projectResult = {}
-  let contractProcess = []
+  let contractProgress = []
   if (req.query.type === 'full') {
     let project = new projectModel(contractResult[0].project_id)
     projectResult = await project.getData()
     let contractTime = new contractTimeModel()
     contractTime.contract_code = req.params.key
     projcontractTimeResult = await contractTime.getData()
-    contractProcess = await getContractProcess(contract.code)
+    contractProgress = await getContractProgress(contract.code)
   }
   let result = {
     contract: contractResult[0],
     contractTime: projcontractTimeResult,
-    process: contractProcess,
+    progress: contractProgress,
     project: projectResult[0],
     status: 'success'
   }
@@ -99,17 +99,34 @@ const deleteData = async (req, res, next) => {
   res.status(200).json({})
 }
 
-function getStat () {
+const getStat = async () => {
   let contract = new contractModel()
+  let contractRes = await contract.getStat()
+  let stat = []
+  contractRes.map((item) => {
+    let date = helpers.getDate(item.created_at, 'YYYY-MM-DD')
+    if (stat[date]) {
+      stat[date] +=  1
+    } else {
+      stat[date] = 1
+    }
+  })
+  let dataSets = {
+    label: [],
+    values: []
+  }
+  let count = 0
+  for (key in stat) {
+    dataSets.label.push(key)
+    dataSets.values.push(stat[key])
+    count += stat[key]
+  } 
   return {
-    count: 120,
+    count: count,
     class: 'contract',
     name: 'Contract',
     detail: '',
-    dataSets: {
-      label: ['xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx'],
-      values: [1, 5, 6, 8, 7, 4, 5, 9, 2, 7, 2, 5]
-    },
+    dataSets,
     barColor: '#4571BB'
   }
 }
@@ -136,9 +153,9 @@ const updateContractStatus = async (req, res, next) => {
   let result = await newItem.updateStatus()
   switch(newItem.status) {
     case 'ip':
-        await setContractProcess(newItem.code, req.body.data.houseId)
+        await setContractProgress(newItem.code, req.body.data.houseId)
         await ordering.prepareOrdering(req.params.id, req.body.data.houseId, 1, 1) // 1 = time
-        // await reviewContractProcess(newItem.code, req.body.data.houseId, 1)
+        // await reviewContractProgress(newItem.code, req.body.data.houseId, 1)
         break
     case 'done':
         // orderMaterial()
@@ -147,28 +164,42 @@ const updateContractStatus = async (req, res, next) => {
   res.status(200).json({})
 }
 
-const getContractProcess = async (contractCode) => {
-  let item = new contractProcessModel(contractCode)
+const getDropDown = async (req, res, next) => {
+  let model = new contractModel()
+  let data = {}
+  data = await model.getAllSelection()
+  data = data.map(item => {
+    return {
+      key: item.code,
+      value: `${item.code}`
+    }
+  })
+  
+  res.status(200).json(data)
+}
+
+const getContractProgress = async (contractCode) => {
+  let item = new contractProgressModel(contractCode)
   let result = []
-  let workProcess = await item.getData()
-  if (workProcess.length) {
-    currentTask = workProcess.filter((item) => {
+  let workProgress = await item.getData()
+  if (workProgress.length) {
+    currentTask = workProgress.filter((item) => {
       return item.status === 'ip'
     })[0]
     currentTask = currentTask.time
-    result = workProcess.filter((item) => {
+    result = workProgress.filter((item) => {
       return item.time === currentTask
     })
   }
   return result
 }
 
-// copy process
-const setContractProcess = async (contractCode, houseId) => {
+// copy progress
+const setContractProgress = async (contractCode, houseId) => {
   let workingTemplate = await workOrder.getWorkingTemplate(contractCode)
   await Promise.all(
     workingTemplate.map( async (item) => {
-      let newItem = new contractProcessModel(contractCode)
+      let newItem = new contractProgressModel(contractCode)
       newItem.time = item.work_order_time
       newItem.order = item.order
       newItem.order_condition = 0
@@ -182,16 +213,16 @@ const setContractProcess = async (contractCode, houseId) => {
   )
 }
 
-const updateContractProcess = async (req, res, next) => {
-  let process = req.body.data
+const updateContractProgress = async (req, res, next) => {
+  let progress = req.body.data
   await Promise.all(
-    process.map( async (item) => {
-      let process = new contractProcessModel()
-      process.start_date = helpers.getDate(item.start_date)
-      process.real_date = helpers.getDate(item.real_date)
-      process.delay = item.delay
-      process.id = item.id
-      await process.updateDate()
+    progress.map( async (item) => {
+      let progress = new contractProgressModel()
+      progress.start_date = helpers.getDate(item.start_date)
+      progress.real_date = helpers.getDate(item.real_date)
+      progress.delay = item.delay
+      progress.id = item.id
+      await progress.updateDate()
     })
   )
   res.status(200).json({})
@@ -200,11 +231,11 @@ const updateContractProcess = async (req, res, next) => {
 const updateContractTask = async (req, res, next) => {
   // update from frontsite
   // let contractCode = req.xxx
-  // find next taskOrder and send to updateWorkingProcess
+  // find next taskOrder and send to updateWorkingProgress
   // ordering.prepareOrdering(contractCode, taskOrder)
 }
 
-// const reviewContractProcess = async (contractCode = '', houseId, taskOrder) => {
+// const reviewContractProgress = async (contractCode = '', houseId, taskOrder) => {
 //   // review for checking what is the order
 //   ordering.prepareOrdering(houseId, taskOrder, 1) // 1 = time
 // }
@@ -227,13 +258,35 @@ const getDetailByContractCode = async (typeSelect, code) => {
   }
   return {contract: contract[0], project: project[0]}
 }
+
+const getLastProgress = async () => {
+  let item = new contractProgressModel()
+  let progressRes = await item.getLastProgress()
+  let obj = []
+  await Promise.all(
+    progressRes.map( async (item) => {
+      let contractData = await getDetailByContractCode(['project'], item.contract_code)
+      obj.push({
+        plan: contractData.contract.plan,
+        houseId: contractData.contract.house_id,
+        projectName: contractData.project.name,
+        contractCode: item.contract_code,
+        status: item.name,
+      })
+    })
+  )
+  return obj
+}
+
 module.exports.getStat = getStat
 module.exports.getData = getData
+module.exports.deleteData = deleteData
 module.exports.getAllData = getAllData
 module.exports.createData = createData
-module.exports.updateContractStatus = updateContractStatus
+module.exports.getDropDown = getDropDown
+module.exports.getLastProgress = getLastProgress
 module.exports.updateTimeData = updateTimeData
-module.exports.deleteData = deleteData
 module.exports.getContractPeriod = getContractPeriod
-module.exports.updateContractProcess = updateContractProcess
+module.exports.updateContractStatus = updateContractStatus
+module.exports.updateContractProgress = updateContractProgress
 module.exports.getDetailByContractCode = getDetailByContractCode

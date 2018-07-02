@@ -9,14 +9,16 @@ const api = {
     'index': '/home'
   },
   'project': {
-    'index': '/project'
+    'index': '/project',
+    'dropdown': '/project-selection'
   },
   'contract': {
     'index': '/contract',
     'time': '/contract-time',
     'status': '/contract-status',
     'period': '/contract-period',
-    'process': '/contract-process'
+    'progress': '/contract-progress',
+    'dropdown': '/contract-selection'
   },
   'workOrder': {
     'index': '/work-order'
@@ -32,6 +34,9 @@ const api = {
     'index': '/house',
     'dropdown': '/house-selection'
   },
+  'plan': {
+    'dropdown': '/plan-selection' // in house
+  },
   'store': {
     'index': '/store'
   },
@@ -40,8 +45,10 @@ const api = {
     'dropdown': '/material-selection'
   },
   'ordering': {
+    'home': '/ordering-home',
     'index': '/ordering',
-    'fullOrder': '/full-ordering'
+    'fullOrder': '/full-ordering',
+    'extra': '/ordering-extra'
   }
 }
 

@@ -32,9 +32,6 @@ html {
                 width: 100%;
                 background: rgba(0,0,0, 0.1);
             }
-            .modal{
-              z-index: 99999;
-            }
             &>.content{
                 position: relative;
                 // padding: 10px;
@@ -631,26 +628,6 @@ html {
                         border-left: none;
                       }
                     }
-                  }
-                }
-                .ordering-extra-page{
-                  .detail-panel{
-                    .detail-block{
-                      .block{
-                        margin-bottom: 0;
-                        table{
-                          margin-bottom: 3px;
-                        }
-                        // .table-options{
-                        //   text-align: right;
-                        //   justify-content: flex-end;
-                        //   button{
-                        //     font-size: 1em;
-                        //   }
-                        // }
-                      }
-                    }
-                    
                   }
                 }
                 .losing-page{
@@ -1405,6 +1382,9 @@ html {
                     }
                     
                   }
+                  section+section{
+                    margin-top: 2px;
+                  }
                   .search-input{
                     margin-bottom: 5px;
                     input:focus { 
@@ -1417,6 +1397,7 @@ html {
                     }
                   }
                   .search-results{
+                    margin-top: 2px;
                   }
                 }
                 .tags-select{
@@ -1450,6 +1431,32 @@ html {
         .dialog.modal{
           position: absolute;
           z-index: 9999;
+        }
+        .modal{
+          z-index: 99999;
+          .modal-content{
+            background: $white;
+          }
+          .section-modal{
+            h4{
+              padding:  15px 15px 0 15px;
+            }
+            .content{
+              padding: 0 15px;
+            }
+          }
+          .section-modal.ordering-extra{
+            .table{
+              margin-bottom: 3px;
+            }
+            .options{
+              text-align: right;
+            }
+          }
+          .footer{
+            padding: 1em;
+            text-align: center;
+          }
         }
         .notices{
           z-index: 10000;

@@ -56,22 +56,69 @@ async function deleteData (req, res, next) {
   res.status(200).json({})
 }
 
-function getStat () {
+// function getStat () {
+//   let project = new projectModel()
+//   return {
+//     count: 120,
+//     class: 'project',
+//     name: 'Project',
+//     detail: '',
+//     dataSets: {
+//       label: ['xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx'],
+//       values: [1, 5, 6, 8, 7, 4, 5, 9, 2, 7, 2, 5]
+//     },
+//     barColor: '#4571BB'
+//   }
+// }
+
+const getStat = async () => {
   let project = new projectModel()
+  let projectRes = await project.getStat()
+  let stat = []
+  projectRes.map((item) => {
+    let date = helpers.getDate(item.created_at, 'YYYY-MM-DD')
+    if (stat[date]) {
+      stat[date] +=  1
+    } else {
+      stat[date] = 1
+    }
+  })
+  let dataSets = {
+    label: [],
+    values: []
+  }
+  let count = 0
+  for (key in stat) {
+    dataSets.label.push(key)
+    dataSets.values.push(stat[key])
+    count += stat[key]
+  } 
   return {
-    count: 120,
+    count: count,
     class: 'project',
     name: 'Project',
     detail: '',
-    dataSets: {
-      label: ['xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx'],
-      values: [1, 5, 6, 8, 7, 4, 5, 9, 2, 7, 2, 5]
-    },
+    dataSets,
     barColor: '#4571BB'
   }
 }
+
+const getDropDown = async (req, res, next) => {
+  let model = new projectModel()
+  let data = {}
+  data = await model.getAllSelection()
+  data = data.map(item => {
+    return {
+      key: item.id,
+      value: `${item.name}`
+    }
+  })
+  
+  res.status(200).json(data)
+}
 module.exports.getStat = getStat
 module.exports.getData = getData
+module.exports.getDropDown = getDropDown
 module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData

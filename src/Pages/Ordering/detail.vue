@@ -29,15 +29,11 @@
               </tr>
               <tr>
                 <td>แบบบ้าน:<span class="value">{{contract.house_id}}</span></td>
-                <td>ขั้นตอนการตำเนินงาน:<span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
-              </tr>
-              <tr>
                 <td>ทั้งหมด:<span class="value">{{ordering.length}} รายการ</span></td>
-                <td>จำนวนเงินทั้งหมด<span class="value">1,000 บาท</span></td>
               </tr>
               <!-- <tr>
-                <td>คงเหลือ:<span class="value">1 รายการ</span></td>
-                <td><span class="value">หนึ่งพันบาทถ้วน</span></td>
+                <td>ขั้นตอนการตำเนินงาน:<span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
+                <td>จำนวนเงินทั้งหมด<span class="value">1,000 บาท</span></td>
               </tr> -->
             </table>
           </div>
@@ -49,12 +45,14 @@
                   <th>วัสดุ</th>
                   <th>จำนวน</th>
                   <th>ราคา</th>
+                  <th>สถานะ</th>
                 </tr>
               </thead>
               <tbody>
                 <tr :class="{'active': local.orderIdSelected == item.id}" :key="index" v-for="(item, index) in ordering" @click="selectOrdering(item)">
                   <td width="100">{{item.storeName}}</td>
                   <td>
+                    <template v-if="item.status === 'wait' ">
                       <my-input
                       :key="inputIndex"
                       v-for="(itemDetail, inputIndex) in item.orderDetail"
@@ -63,12 +61,14 @@
                       :validator="$validator"
                       @input="value => { itemDetail.name = value }"
                       ></my-input>
-                    <!-- <input class="input" type="text" value="EC-HDFCM8  35X800X2000 MM (เปิดขวา)">
-                    <input class="input" type="text" value="HDFCM71  35X700X2000 MM">
-                    <input class="input" type="text" value="(HDFCMS54)  3.5x54x90 Cm. ห้องเก็บของ (เปิดขวา)"> -->
+                    </template>
+                    <template v-else>
+                      <p :key="inputIndex" v-for="(itemDetail, inputIndex) in item.orderDetail">{{itemDetail.name}}</p>
+                    </template>
                   </td>
                   <td width="20">
-                    <my-input
+                    <template v-if="item.status === 'wait' ">
+                      <my-input
                       :key="inputIndex"
                       v-for="(itemDetail, inputIndex) in item.orderDetail"
                       :value="itemDetail.amount"
@@ -76,9 +76,14 @@
                       :validator="$validator"
                       @input="value => { itemDetail.amount = value }"
                       ></my-input>
+                    </template>
+                    <template v-else>
+                      <p :key="inputIndex" v-for="(itemDetail, inputIndex) in item.orderDetail">{{itemDetail.amount}}</p>
+                    </template>
                   </td>
                   <td width="100">
-                    <my-input
+                    <template v-if="item.status === 'wait' ">
+                      <my-input
                       :key="inputIndex"
                       v-for="(itemDetail, inputIndex) in item.orderDetail"
                       :value="itemDetail.price"
@@ -86,7 +91,12 @@
                       :validator="$validator"
                       @input="value => { itemDetail.price = value }"
                       ></my-input>
+                    </template>
+                    <template v-else>
+                      <p :key="inputIndex" v-for="(itemDetail, inputIndex) in item.orderDetail">{{itemDetail.price}}</p>
+                    </template>
                   </td>
+                  <td width="100">{{GET_STATUSNAME(item.status)}}</td>
                 </tr>
               </tbody>
             </table>
@@ -104,9 +114,9 @@
               <tr>
                 <td>ราคา: {{getOrderSelected('price')}}</td>
               </tr>
-              <tr>
+              <!-- <tr>
                 <td>{{getOrderSelected('priceTxt')}}</td>
-              </tr>
+              </tr> -->
               <tr>
                 <!-- <td>สถานะ: <span class="tag is-warning">{{getOrderSelected('status')}}</span></td> -->
                 <td>สถานะ: {{getOrderSelected('status')}}</td>
@@ -117,13 +127,9 @@
             </table>
           </div>
           <div class="block function container-block">
-            <template v-if="this.local.orderSelected.status == 'wait'">
-              <button class="button is-outlined">อนุมัติ</button>
-            </template>
-            <template v-else>
-              <button class="button is-outlined">ออกใบสั่งซื้อ</button>
-              <button class="button is-outlined">รับของ</button>
-            </template>
+            <button class="button is-outlined" @click="submitForm('confirmed')" v-if="this.local.orderSelected.status == 'wait'">อนุมัติ</button>
+            <button class="button is-outlined" v-if="this.local.orderSelected.status != 'wait'">ออกใบสั่งซื้อ</button>
+            <button class="button is-outlined" @click="submitForm('received')" v-if="this.local.orderSelected.status == 'confirmed'">รับของ</button>
           </div>
         </div>
       </template>
@@ -174,6 +180,12 @@ export default {
           {title: 'รอสินค้า', key: 'confirmed'},
           {title: 'รับสินค้า', key: 'received'}
         ],
+        // mainInputSearch: [
+        //   {key: 'project'},
+        //   {key: 'house'},
+        //   {key: 'plan'},
+        //   {key: 'contract'}
+        // ],
         idSelected: '',
         // items: {},
         inputs: null,
@@ -194,8 +206,7 @@ export default {
     },
     ordering () {
       return this.local.inputs.ordering
-    },
-    
+    }
   },
   created () {
   },
@@ -204,7 +215,7 @@ export default {
       this.local.idSelected = item.contract_code
       let order = await this.getFullOrdering(item)
       this.local.inputs = {}
-      this.local.inputs = Object.assign(this.local.inputs, order);
+      this.local.inputs = Object.assign(this.local.inputs, order)
       this.errors.clear()
       // this.local.submitMode = 'update'
     },
@@ -215,34 +226,29 @@ export default {
       let data = {}
       let res = null
       switch (type) {
-        case 'add':
-          this.local.idSelected = 'new'
-          this.cleanInput()
-          return
+        case 'confirmed':
+        case 'received':
+          if (!isValid) return
+          await this.updateOrderingStatus(type)
+          resourceName = `${resourceName}/${this.local.orderIdSelected}`
+          data = this.local.inputs.ordering.filter((item) => {
+            return item.id === this.local.orderIdSelected
+          })
+          res = await service.putResource({data, resourceName})
+          break
         case 'cancel':
           this.local.idSelected = null
           return
-        case 'update':
-          if (!isValid) return
-          data = this.local.inputs
-          resourceName = `${resourceName}/${this.local.idSelected}`
-          res = await service.putResource({data, resourceName})
-          break
-        case 'delete':
-          resourceName = `${resourceName}/${this.local.idSelected}`
-          let queryString = []
-          res = await service.deleteResource({resourceName, queryString})
-          break
-        case 'save':
-          if (!isValid) return
-          data = this.local.inputs
-          res = await service.postResource({data, resourceName})
-          break
+        // case 'save':
+        //   if (!isValid) return
+        //   data = this.local.inputs
+        //   res = await service.postResource({data, resourceName})
+        //   break
       }
       if (res.status === 200) {
         this.reloadTable()
-        this.cleanInput()
-        this.local.idSelected = ''
+        // this.cleanInput()
+        // this.local.idSelected = ''
         this.NOTIFY('success')
         return
       }
@@ -254,9 +260,6 @@ export default {
       let res = await service.getResource({resourceName, queryString})
       return res.data
     },
-    // reloadTable () {
-    //   this.$refs.dataTable.fetchData()
-    // },
     selectOrdering (ordering) {
       this.local.orderIdSelected = ordering.id
       this.local.orderSelected = ordering
@@ -284,6 +287,16 @@ export default {
           break
       }
       return res
+    },
+    async updateOrderingStatus (status) {
+      this.local.inputs.ordering.map((item) => {
+        if (item.id === this.local.orderIdSelected) {
+          item.status = status
+        }
+      })
+    },
+    reloadTable () {
+      this.$refs.dataTable.fetchData()
     }
   }
 }
