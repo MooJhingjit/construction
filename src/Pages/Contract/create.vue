@@ -15,7 +15,6 @@
                   <tr>
                     <td>เลขที่สัญญา:</td>
                     <td>
-                      <!-- <input class="input" v-model="local.inputs.code" type="text" placeholder="เลขที่สัญญา"> -->
                       <my-input
                       :value="local.inputs.code"
                       :inputObj="{type: 'text', name: 'contract_code', placeholder: 'เลขที่สัญญา', validate: 'required'}"
@@ -25,7 +24,6 @@
                     </td>
                     <td>ที่ตั้ง:</td>
                     <td>
-                      <!-- <input class="input" v-model="local.project.address" type="text" placeholder="ที่ตั้ง"> -->
                       <my-input
                       :value="local.project.address"
                       :inputObj="{type: 'text', name: 'project_address', placeholder: 'ที่ตั้ง', validate: ''}"
@@ -36,7 +34,6 @@
                   <tr>
                     <td>โครงการ:</td>
                     <td>
-                      <!-- <input class="input" type="text" v-model="local.project.name" placeholder="โครงการ"> -->
                       <my-input
                       :value="local.project.name"
                       :inputObj="{type: 'text', name: 'project_name', placeholder: 'โครงการ', validate: 'required'}"
@@ -46,7 +43,6 @@
                     </td>
                     <td>ประเภทสัญญา:</td>
                     <td>
-                      <!-- <input class="input" type="text" v-model="local.inputs.contractType" placeholder="ประเภทสัญญา"> -->
                       <my-input
                       :value="local.inputs.contractType"
                       :inputObj="{type: 'text', name: 'contract_type', placeholder: 'ประเภทสัญญา', validate: 'required'}"
@@ -64,11 +60,9 @@
                       placeholder="แบบบ้าน"
                       label=""
                       ></my-auto-complete>
-                      <!-- <input class="input" type="text" v-model="local.inputs.houseTemp" placeholder="แบบบ้าน"> -->
                     </td>
                     <td>แปลง:</td>
                     <td>
-                      <!-- <input class="input" type="text" v-model="local.inputs.plan" placeholder="แปลง"> -->
                       <my-auto-complete
                       @select="objVal => {local.inputs.plan = objVal.key}"
                       :arrInputs="local.planTemplate.inputs"
@@ -80,7 +74,6 @@
                   <tr>
                     <td>ราคา:</td>
                     <td>
-                      <!-- <input class="input" type="text"  v-model="local.inputs.price" placeholder="ราคา"> -->
                       <my-input
                       @onBlur="runContractLists()"
                       :value="local.inputs.price"
@@ -90,19 +83,11 @@
                       ></my-input>
                     </td>
                     <td></td>
-                    <td>
-                      <!-- <my-input
-                      :value="local.inputs.quarter"
-                      :inputObj="{type: 'text', name: 'contract_quarter', placeholder: 'Quarter', validate: 'required'}"
-                      :validator="$validator"
-                      @input="value => { local.inputs.quarter = value }"
-                      ></my-input> -->
-                    </td>
+                    <td></td>
                   </tr>
                   <tr>
                     <td>วันที่ออกสัญญา:</td>
                     <td>
-                      <!-- <input class="input" type="text" v-model="local.inputs.dateStart" placeholder="วันที่ออกสัญญา"> -->
                       <my-input
                       :value="local.inputs.dateStart || null"
                       :inputObj="{type: 'datepicker', name: 'contract_datestart', placeholder: 'วันที่ออกสัญญา', validate: 'required'}"
@@ -112,7 +97,6 @@
                     </td>
                     <td>เงินเบิกล่วงหน้า:</td>
                     <td>
-                      <!-- <input class="input" type="text" v-model="local.inputs.paid" placeholder="เงินเบิกล่วงหน้า"> -->
                       <my-input
                       :value="local.inputs.paid"
                       :inputObj="{type: 'text', name: 'contract_paid', placeholder: 'เงินเบิกล่วงหน้า', validate: ''}"
@@ -132,7 +116,6 @@
                     <th>จำนวนเงิน</th>
                     <th>วันที่เริ่ม</th>
                     <th>วันกำหนดเสร็จ</th>
-                    <!-- <th>วัสดุนอกสัญญา ( * ยกเว้นค่าของ, ** ยกเว้นค่าของและค่าแรง )</th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -144,10 +127,6 @@
                   </tr>
                 </tbody>
               </table>
-              <!-- <div class="table-options">
-                <button class="button"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                <button class="button"><i class="fa fa-plus" aria-hidden="true"></i></button>
-              </div> -->
             </div>
             <div class="c-footer container-block block" v-if="this.local.isTimeStart">
               <table class="transparent-table">
@@ -156,8 +135,8 @@
                   <td>วันที่ {{dateStart}} ถึงวันที่ {{dateEnd}}</td>
                 </tr>
                 <tr>
-                  <td>จำนวนงวด {{local.inputs.price}} บาท <br/>(หนึ่งพันบาทถ้วน)</td>
-                  <td>เบิกเงินล่วงหน้าจำนวน {{local.inputs.paid}} บาท <br/>(หนึ่งพันบาทถ้วน)</td>
+                  <td>จำนวนเงิน {{NUMBERWITHCOMMAS(local.inputs.price)}} บาท</td>
+                  <td>เบิกเงินล่วงหน้าจำนวน {{NUMBERWITHCOMMAS(local.inputs.paid)}} บาท</td>
                 </tr>
               </table>
 
@@ -176,8 +155,6 @@
               @clickEvent="submitForm('save', 'ip')"
             >
             </my-action>
-            <!-- <button class="button is-warning" @click="submitForm('save', 'wait')">รออนุมัติ</button>
-            <button class="button is-success" @click="submitForm('save', 'ip')">เริ่มดำเนินงาน</button> -->
           </div>
         </template>
         <template v-else>
@@ -217,10 +194,6 @@ import myAutoComplete from '@Components/Form/my-autocomp'
 import moment from 'moment'
 export default {
   props: {
-    // templateName: {
-    //   type: String,
-    //   required: true
-    // }
   },
   components: {
     breadcrumbBar,

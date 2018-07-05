@@ -45,32 +45,6 @@ async function getResource (req, res, next) {
   data.ordering.extra = await getLastOrder('extra')
   res.status(200).json(data)
 }
-
-const prepareChartData = async (type) => {
-  let ordering = new orderingModel()
-  ordering.order_type = type
-  let orderingRes = await ordering.getStat()
-
-  let stat = []
-  orderingRes.map((item) => {
-    let date = helpers.getDate(item.created_at, 'YYYY-MM-DD')
-    if (stat[date]) {
-      stat[date] +=  1
-    } else {
-      stat[date] = 1
-    }
-  })
-  let dataSets = {
-    date: [],
-    data: []
-  }
-  for (key in stat) {
-    dataSets.date.push(key)
-    dataSets.data.push(stat[key])
-  }
-  return dataSets
-}
-
 const getLastOrder = async (orderType) => {
   let ordering = new orderingModel()
   ordering.order_type = orderType
@@ -207,7 +181,8 @@ async function orderMaterial (order) {
         let detailItem = new orderingDetailModel()
         detailItem.order_id = orderId[0]
         detailItem.name = itemDetail.name
-        detailItem.price = itemDetail.price
+        detailItem.price = itemDetail.price * itemDetail.amount
+        detailItem.unit_price = itemDetail.price
         detailItem.amount = itemDetail.amount
         detailItem.status = itemDetail.status
         await detailItem.save()
@@ -215,7 +190,7 @@ async function orderMaterial (order) {
     })
   )
 }
-function getMaterialIdArr (materials) {
+const getMaterialIdArr = (materials) => {
   let materialArr = []
   materials.map(item => {
     materialArr.push(item.material_id)
@@ -244,12 +219,36 @@ const updateOrderDetail = async (data) => {
     data.map( async (itemDetail) => {
       let orderingDetail = new orderingDetailModel(itemDetail.id)
       orderingDetail.amount = itemDetail.amount
-      orderingDetail.price = itemDetail.price
+      orderingDetail.price = parseFloat(itemDetail.price)
       await orderingDetail.update()
-      price += itemDetail.price * itemDetail.amount
+      price += parseFloat(itemDetail.price)
     })
   ) 
   return price
+}
+const prepareChartData = async (type) => {
+  let ordering = new orderingModel()
+  ordering.order_type = type
+  let orderingRes = await ordering.getStat()
+
+  let stat = []
+  orderingRes.map((item) => {
+    let date = helpers.getDate(item.created_at, 'YYYY-MM-DD')
+    if (stat[date]) {
+      stat[date] +=  1
+    } else {
+      stat[date] = 1
+    }
+  })
+  let dataSets = {
+    date: [],
+    data: []
+  }
+  for (key in stat) {
+    dataSets.date.push(key)
+    dataSets.data.push(stat[key])
+  }
+  return dataSets
 }
 
 module.exports.getResource = getResource

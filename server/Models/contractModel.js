@@ -44,7 +44,8 @@ module.exports =  class Contract {
   }
 
   async getAllData () {
-    let result = await this.knex('contract').where(this.getCondition())
+    let result = await this.knex('contract')
+    .where(this.getCondition())
     .where('code', 'like', `%${this.code || ''}%`)
     .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
     return result

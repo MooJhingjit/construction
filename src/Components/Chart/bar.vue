@@ -18,15 +18,15 @@ export default {
   methods: {
     renderChartJs () {
       this.renderChart(this.data, {
-      responsive: true,
-      maintainAspectRatio: false,
-      legend: {display: false},
-      scales: {
-        xAxes: [{
-          display: false
-        }]
-      }
-    })
+        responsive: true,
+        maintainAspectRatio: false,
+        legend: {display: false},
+        scales: {
+          xAxes: [{
+            display: false
+          }]
+        }
+      })
     }
   },
   watch: {

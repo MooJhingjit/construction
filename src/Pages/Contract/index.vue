@@ -8,71 +8,6 @@
       @selectedData="selectedDataHandle"
       ></data-table>
     </template>
-    <!-- <template slot="search-status">
-      <div class="tags">
-        <span class="tag is-success">เสร็จสิ้น 42</span>
-        <span class="tag is-warning">รออนุมัติ 5</span>
-        <span class="tag is-link">ดำเนินการ 3</span>
-        <span class="tag">ทั้งหมด</span>
-      </div>
-    </template>
-    <template slot="search-input">
-      <div class="search-input control has-icons-left">
-        <input class="input" type="text" placeholder="ค้นหาโครงการ">
-        <span class="icon is-small is-left">
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </span>
-      </div>
-      <div class="search-input control has-icons-left">
-        <input class="input" type="text" placeholder="ค้นหาสัญญา">
-        <span class="icon is-small is-left">
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </span>
-      </div>
-      <div class="search-input control has-icons-left">
-        <input class="input" type="text" placeholder="ค้นหาแบบบ้าน">
-        <span class="icon is-small is-left">
-          <i class="fa fa-search" aria-hidden="true"></i>
-        </span>
-      </div>
-    </template>
-    <template slot="search-results">
-      <table class="table is-hoverable">
-        <thead>
-          <tr>
-            <th>ชื่อสัญญา</th>
-            <th>แบบบ้าน</th>
-            <th>สถานะ</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>LH120610015</td>
-            <td>098SW319I</td>
-            <td><span class="tag is-link">ดำเนินการ</span></td>
-          </tr>
-          <tr>
-            <td>LH120243216</td>
-            <td>098SW319I</td>
-            <td><span class="tag is-warning">รออนุมัติ</span></td>
-          </tr>
-          <tr>
-            <td>LH122950016</td>
-            <td>119PWY22T</td>
-            <td><span class="tag is-link">ดำเนินการ</span></td>
-          </tr>
-          <tr>
-            <td>LH120610397</td>
-            <td>198PWY32T</td>
-            <td><span class="tag is-link">ดำเนินการ</span></td>
-          </tr>
-        </tbody>
-      </table>
-      <nav class="pagination" role="navigation" aria-label="pagination">
-        <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
-        <button class="pagination-next">หน้าถัดไป</button>
-      </nav>
-    </template> -->
     <template v-if="local.idSelected">
       <template slot="detail">
         <div class="container-block  detail-block">
@@ -98,9 +33,6 @@
                 <td>วันที่ End Prod.ตามส/ญ:<span class="value">16/09/61</span></td>
                 <td>วันที่ทำสัญญา:<span class="value">27/08/61</span></td>
               </tr>
-              <!-- <tr>
-                <td colspan="2">งานปัจจุบัน:<span class="value">ทำสัญญาก่อสร้าง</span></td>
-              </tr> -->
             </table>
           </div>
           <div class="block c-body" v-if="local.inputs.contract.status == 'ip'">
@@ -155,7 +87,6 @@
             <div class="container-block period">
               <div class="block container-block" :key="index" v-for="(item, index) in local.inputs.contractTime">
                 <label class="checkbox" >
-                  <!-- @click="updateContractTime($event, item.id, item.is_success)" -->
                   <input type="checkbox" @change="updateContractTime(item.id, item.time)" :ref="`time_${item.time}`" :checked="item.is_success">
                   งวดที่ {{item.time}}
                 </label>
@@ -188,34 +119,12 @@
         </div>
       </template>
     </template>
-    <!-- <template v-else>
-      <template slot="detail">
-        <div class="container-block empty-panel">
-          <div class="block container-block">
-            <div class="block no-data">
-                ไม่พบข้อมูลที่ต้องการ
-            </div>
-            <div class="block select-data">
-              <i class="fa fa-hand-o-left" aria-hidden="true"></i>
-              <span>เลือกข้อมูลทางซ้ายมือเพื่อแสดง</span>
-            </div>
-            <div class="block or">
-              หรือ
-            </div>
-            <div class="block add-data">
-              <button class="button">เพิ่มข้อมูลใหม่</button>
-            </div>
-          </div>
-        </div>
-      </template>
-    </template> -->
   </option-detail-template>
 </template>
 
 <script>
 import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
-// import service from '@Services/app-service'
 import config from '@Config/app.config'
 import service from '@Services/app-service'
 import dataTable from '@Components/DataTable'
@@ -223,10 +132,6 @@ import myAction from '@Components/Form/my-action'
 import myInput from '@Components/Form/my-input'
 export default {
   props: {
-    // templateName: {
-    //   type: String,
-    //   required: true
-    // }
   },
   components: {
     breadcrumbBar,
@@ -269,9 +174,12 @@ export default {
     }
   },
   created () {
-    // console.log('created')
-    // this.property = 'Example property update.'
-    // console.log('propertyComputed will update, as this.property is now reactive.')
+  },
+  mounted () {
+    if (this.$route.params.key !== undefined && this.$route.params.key !== 'all') {
+      this.$refs.dataTable.searchByText({value: this.$route.params.key})
+    }
+    // this.$refs.dataTable[0].searchByText({value: this.$route.params.key})
   },
   methods: {
     async selectedDataHandle (item) {

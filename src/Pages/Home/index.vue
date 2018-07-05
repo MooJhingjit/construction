@@ -70,7 +70,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr :key="index" v-for="(item, index) in local.workingProgress" @dblclick="GOTOPAGE('Contract', 'contract-id')">
+                    <tr :key="index" v-for="(item, index) in local.workingProgress" @dblclick="GOTOPAGE('Contract', item.contractCode)">
                       <td>{{item.projectName}}</td>
                       <td>{{item.contractCode}}</td>
                       <td>{{item.plan}}</td>

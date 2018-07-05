@@ -26,7 +26,7 @@
                     <div class="title">คำขอสั่งซื้อใหม่ {{local.ordering.normal.length}} รายการ</div>
                   </div>
                   <div class="title-right">
-                    <span class="tag is-light" @click="GOTOPAGE('OrderingDetail', item.contract_code)">ดูข้อมูล</span>
+                    <span class="tag is-light" @click="GOTOPAGE('OrderingDetail', 'all')">ดูข้อมูล</span>
                   </div>
                 </div>
                 <table class="table is-narrow rows-table">

@@ -10,6 +10,7 @@ module.exports =  class OrderingDetail {
     this.order_id
     this.name
     this.price
+    this.unit_price
     this.amount
     this.status
   }
@@ -25,6 +26,7 @@ module.exports =  class OrderingDetail {
       order_id: this.order_id,
       name: this.name,
       price: this.price,
+      unit_price: this.unit_price,
       amount: this.amount,
       status: this.status
     })

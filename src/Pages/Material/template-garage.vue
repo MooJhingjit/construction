@@ -3,16 +3,12 @@
     <table class="table is-hoverable">
       <thead>
         <tr>
-          <th rowspan="2">รายการ</th>
-          <!-- <th rowspan="2" width="80">ระยะเวลาจัดส่ง</th> -->
-          <th rowspan="2" width="80">จำนวนเริ่มต้น</th>
-          <th rowspan="2" width="120">หน่วย</th>
-          <th rowspan="2" width="120">ราคา/หน่วย</th>
-          <th colspan="6">{{obj.houseTemplate.value}}</th>
-          <!-- <th rowspan="2" width="80">กลุ่มวัสดุ</th> -->
-        </tr>
-        <tr>
-          <th width="80" colspan="3">โรงรถซ้าย
+          <th>รายการ</th>
+          <th width="80">จำนวนเริ่มต้น</th>
+          <th width="80">หน่วย</th>
+          <th width="80">ราคา/หน่วย</th>
+          <!-- <th colspan="4">{{obj.houseTemplate.value}}</th> -->
+          <th width="120">โรงรถซ้าย
             <br />
             <div class="select">
               <my-input
@@ -24,7 +20,7 @@
               ></my-input>
             </div>
           </th>
-          <th width="80" colspan="3">โรงรถขวา
+          <th width="120">โรงรถขวา
             <br />
             <div class="select">
               <my-input
@@ -66,10 +62,10 @@
           </td>
           <td>
             <my-input
-              :value="item.amount"
-              :inputObj="{type: 'text', name: `amount_${index}`, placeholder: 'หน่วย', validate: 'required'}"
+              :value="item.unit"
+              :inputObj="{type: 'text', name: `unit_${index}`, placeholder: '', validate: 'required'}"
               :validator="$validator"
-              @input="value => { item.amount = value }"
+              @input="value => { item.unit = value }"
               ></my-input>
           </td>
           <td>
@@ -80,7 +76,7 @@
               @input="value => { item.price = value }"
               ></my-input>
           </td>
-          <td colspan="3">
+          <td>
             <my-input
               :value="item.l_default[local.colorSelected.leftColor]"
               :inputObj="{type: 'text', name: `left_${index}`, placeholder: 'ซ้าย', validate: 'required'}"
@@ -88,7 +84,7 @@
               @input="value => { item.l_default[local.colorSelected.leftColor] = value }"
               ></my-input>
           </td>
-          <td colspan="3">
+          <td>
             <my-input
               :value="item.r_default[local.colorSelected.rightColor]"
               :inputObj="{type: 'text', name: `right_${index}`, placeholder: 'ขวา', validate: 'required'}"
@@ -111,7 +107,7 @@
       <div class="container-block block right">
           <my-input
             :value="local.materialDelayAll"
-            :inputObj="{type: 'text', name: `order_delay`, placeholder: 'กำหนดของเข้า', validate: ''}"
+            :inputObj="{type: 'text', name: `order_delay`, placeholder: 'กำหนดของเข้า', validate: 'required'}"
             :validator="$validator"
             @input="addMaterialDelay"
          ></my-input>

@@ -63,18 +63,18 @@
                       ></my-input>
                     </template>
                     <template v-else>
-                      <p :key="inputIndex" v-for="(itemDetail, inputIndex) in item.orderDetail">{{itemDetail.name}}</p>
+                      <p class="material-name" :key="inputIndex" v-for="(itemDetail, inputIndex) in item.orderDetail">{{itemDetail.name}}</p>
                     </template>
                   </td>
                   <td width="20">
-                    <template v-if="item.status === 'wait' ">
+                    <template v-if="item.status === 'wait'">
                       <my-input
                       :key="inputIndex"
                       v-for="(itemDetail, inputIndex) in item.orderDetail"
                       :value="itemDetail.amount"
                       :inputObj="{type: 'text', name: `order_amount_${itemDetail.id}`, placeholder: '', validate: 'required'}"
                       :validator="$validator"
-                      @input="value => { itemDetail.amount = value }"
+                      @input="value => updateValue(index, inputIndex, value, 'amount')"
                       ></my-input>
                     </template>
                     <template v-else>
@@ -89,11 +89,11 @@
                       :value="itemDetail.price"
                       :inputObj="{type: 'text', name: `order_price_${itemDetail.id}`, placeholder: '', validate: 'required'}"
                       :validator="$validator"
-                      @input="value => { itemDetail.price = value }"
+                       @input="value => updateValue(index, inputIndex, value, 'price')"
                       ></my-input>
                     </template>
                     <template v-else>
-                      <p :key="inputIndex" v-for="(itemDetail, inputIndex) in item.orderDetail">{{itemDetail.price}}</p>
+                      <p :key="inputIndex" v-for="(itemDetail, inputIndex) in item.orderDetail">{{NUMBERWITHCOMMAS(itemDetail.price, 2)}}</p>
                     </template>
                   </td>
                   <td width="100">{{GET_STATUSNAME(item.status)}}</td>
@@ -217,7 +217,6 @@ export default {
       this.local.inputs = {}
       this.local.inputs = Object.assign(this.local.inputs, order)
       this.errors.clear()
-      // this.local.submitMode = 'update'
     },
     async submitForm (type) {
       let isValid = await this.$validator.validateAll()
@@ -274,7 +273,7 @@ export default {
           res = this.local.orderSelected.orderDetail.length
           break
         case 'price':
-          res = this.local.orderSelected.total_price
+          res = this.NUMBERWITHCOMMAS(this.local.orderSelected.total_price, 2)
           break
         case 'priceTxt':
           res = 'xxxxxxxx'
@@ -297,10 +296,34 @@ export default {
     },
     reloadTable () {
       this.$refs.dataTable.fetchData()
+    },
+    updateValue (orderingIndex, valueIndex, value, type) {
+      switch (type) {
+        case 'amount':
+          let unitPrice = this.ordering[orderingIndex].orderDetail[valueIndex].unit_price
+          this.ordering[orderingIndex].orderDetail[valueIndex][type] = value
+          this.ordering[orderingIndex].orderDetail[valueIndex].price = (value * unitPrice).toFixed(2)
+          break
+        case 'price':
+          this.ordering[orderingIndex].orderDetail[valueIndex].price = value
+          break
+      }
+      let totalPrice = 0
+      this.ordering[orderingIndex].orderDetail.map((item) => {
+        totalPrice += parseFloat(item.price)
+      })
+      this.ordering[orderingIndex].total_price = totalPrice
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+table tbody tr td p.material-name {
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  width: 100%; 
+  white-space: nowrap;
+}
+
 </style>

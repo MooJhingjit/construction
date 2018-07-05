@@ -170,9 +170,15 @@ export default {
     setDataSelected (item) {
       this.$emit('selectedData', item)
     },
-    searchByText () {
-      for (let key in this.local.textSearch) {
+    searchByText (directSearch = null) {
+      if (directSearch !== null) {
+        let key = 'main'
+        this.local.textSearch[key] = directSearch.value
         this.local.queryString[`${key}_search`] = this.local.textSearch[key]
+      } else {
+        for (let key in this.local.textSearch) {
+          this.local.queryString[`${key}_search`] = this.local.textSearch[key]
+        }
       }
       this.fetchData()
     },
@@ -214,7 +220,7 @@ export default {
     async getSearchResource (inputArr) {
       let queryString = []
       let resourceName = ''
-      inputArr.map( async (item) => {
+      inputArr.map(async (item) => {
         resourceName = config.api[item.key].dropdown
         let res = await service.getResource({resourceName: resourceName, queryString})
         this.local.autoCompleteSearch[item.key].inputs = res.data

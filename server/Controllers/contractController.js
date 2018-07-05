@@ -36,7 +36,7 @@ const getData = async (req, res, next) => {
 const getAllData = async (req, res, next) => {
   let contract = new contractModel()
   contract.status = req.query.status
-  contract.name = req.query.main_search
+  contract.code = req.query.main_search
   let total = await contract.count()
   contract.limit = req.query.limit
   contract.offset = helpers.getTableoffset(req.query.limit, req.query.currentPage)

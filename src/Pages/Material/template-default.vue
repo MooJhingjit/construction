@@ -3,18 +3,18 @@
     <table class="table is-hoverable">
       <thead>
          <tr>
-          <th rowspan="2">รายการ</th>
-          <!-- <th rowspan="2" width="80">ระยะเวลาจัดส่ง</th> -->
-          <th rowspan="2" width="80">จำนวนเริ่มต้น</th>
-          <th rowspan="2" width="120">หน่วย</th>
-          <th rowspan="2" width="120">ราคา/หน่วย</th>
-          <th colspan="2">{{obj.houseTemplate.value}}</th>
-        </tr>
-        <tr>
+          <th>รายการ</th>
+          <!-- <th width="80">ระยะเวลาจัดส่ง</th> -->
+          <th width="80">จำนวนเริ่มต้น</th>
+          <th width="80">หน่วย</th>
+          <th width="80">ราคา/หน่วย</th>
           <th width="80">ซ้าย</th>
           <th width="80">ขวา</th>
-          <!-- <th width="80">กลุ่มวัสดุ</th> -->
         </tr>
+        <!-- <tr>
+          <th width="80">ซ้าย</th>
+          <th width="80">ขวา</th>
+        </tr> -->
       </thead>
       <tbody>
         <tr :key="index" v-for="(item, index) in inputsItem">
