@@ -41,13 +41,14 @@ async function getResource (req, res, next) {
       }
     }
   }
-  data.ordering.normal = await getLastOrder('normal')
-  data.ordering.extra = await getLastOrder('extra')
+  data.ordering.normal = await getLastOrder('normal', 5)
+  data.ordering.extra = await getLastOrder('extra', 5)
   res.status(200).json(data)
 }
-const getLastOrder = async (orderType) => {
+const getLastOrder = async (orderType, limit = '') => {
   let ordering = new orderingModel()
   ordering.order_type = orderType
+  ordering.limit = limit
   let res = await ordering.getLastOrderByType()
   return res
 }
@@ -67,14 +68,15 @@ async function getAllData (req, res, next) {
       ordering.status = req.query.status
     }
   }
+  ordering.contract_code = req.query.contract_search
   let total = await ordering.count()
   ordering.limit = req.query.limit
   ordering.offset = helpers.getTableoffset(req.query.limit, req.query.currentPage)
   let result = await ordering.getAllData()
   if (result) {
     let config = {
-      header: [{name: 'เลขที่สัญญา'}, {name: 'ประเภท'}, {name: 'สถานะ'}],
-      show: ['contract_code', 'order_type', 'status']
+      header: [{name: 'เลขที่สัญญา'}, {name: 'จำนวนรายการ'}],
+      show: ['contract_code', 'amount']
     }
     data = helpers.prepareDataTable(result, total, config)
   }
@@ -90,7 +92,17 @@ async function createExtraData (req, res, next) {
   let materialIdArr = getMaterialIdArr(materials)
   let fullMaterial = await materialController.getMaterialDetail(materialIdArr)
   await prepareMaterial(req.body.data.contract, fullMaterial, {materials, note: req.body.data.note}) // materials is extra
-  res.status(200).json({})
+  let orderingData = await countOrdering()
+  res.status(200).json({orderingData})
+}
+async function deleteData (req, res, next) {
+  let item = new orderingModel(req.params.id)
+  await item.delete()
+  let detailItem = new orderingDetailModel()
+  detailItem.order_id = req.params.id
+  await detailItem.delete()
+  let orderingData = await countOrdering()
+  res.status(200).json({orderingData})
 }
 async function updateData (req, res, next) {
   let ordering = req.body.data
@@ -100,10 +112,12 @@ async function updateData (req, res, next) {
       ordering.status = item.status
       let price = await updateOrderDetail(item.orderDetail)
       ordering.total_price = price
+      ordering.date_start = helpers.getCurrentDate('YYYY-MM-DD')
       await ordering.update()
     })
   )
-  res.status(200).json({})
+  let orderingData = await countOrdering()
+  res.status(200).json({orderingData})
 }
 async function prepareOrdering (contractCode, houseId, taskOrder, time) {
   let orderGroupId = await getOrderGroup(taskOrder, time)
@@ -132,9 +146,9 @@ async function prepareMaterial (contractCode, materials, extraObj = null) {
     })
     materials.map((item) => {
       if (extraObj != null) {
-        item.amount = extraObj.materials.map((extraItem) => {
+        extraObj.materials.map((extraItem) => {
           if (extraItem.material_id == item.id) {
-            return extraItem.amount
+            item.amount = extraItem.amount
           }
         })
       }
@@ -142,25 +156,39 @@ async function prepareMaterial (contractCode, materials, extraObj = null) {
         name: item.name,
         price: item.price,
         amount: item.amount,
-        status: 'wait'
+        delay: item.delay
       })
     })
+    
+    let currentDate = helpers.getCurrentDate('YYYY-MM-DD')
     orderDetail.map((storeData, storeId) => {
+      startDate = currentDate
       let data = {}
+      let status = 'wait'
+      if (storeData[0].delay) {
+        status = 'pending'
+        // console.log(startDate)
+        startDate = helpers.addDate(startDate, storeData[0].delay, 'YYYY-MM-DD')
+        // console.log('add ' + storeData[0].delay + 'day = ' + startDate)
+      }
       data.store_id = storeId
-      data.total_price = 0
+      data.total_price = parseFloat(0)
       data.amount = storeData.length
       data.contractCode = contractCode
-      data.dateStart = null
-      data.status = 'wait'
+      data.dateStart = startDate
+      data.status = status
       data.note = (extraObj != null) ? extraObj.note : ''
       data.order_type = (extraObj != null) ? 'extra' : 'normal'
+      
       storeData.map((materials) => {
-        data.total_price += materials.price * materials.amount
+        let price = parseFloat(materials.price)
+        let amount = parseFloat(materials.amount)
+        data.total_price += price * amount
       })
       data.detail = orderDetail[storeId]
       order.push(data)
     })
+   
     orderMaterial(order)
   }
 }
@@ -172,7 +200,7 @@ async function orderMaterial (order) {
       newItem.total_price = item.total_price
       newItem.amount = item.amount
       newItem.contract_code = item.contractCode
-      newItem.dateStart = item.dateStart
+      newItem.date_start = item.dateStart
       newItem.status = item.status
       newItem.order_type = item.order_type
       newItem.note = item.note
@@ -250,6 +278,11 @@ const prepareChartData = async (type) => {
   }
   return dataSets
 }
+const countOrdering = async () => {
+  let extra = await getLastOrder('extra')
+  let normal = await getLastOrder('normal')
+  return {extra: extra.length, normal: normal.length}
+}
 
 module.exports.getResource = getResource
 module.exports.getAllData = getAllData
@@ -259,3 +292,8 @@ module.exports.createExtraData = createExtraData
 module.exports.prepareOrdering = prepareOrdering
 module.exports.orderMaterial = orderMaterial
 module.exports.prepareChartData = prepareChartData
+module.exports.getLastOrder = getLastOrder
+module.exports.countOrdering = countOrdering
+module.exports.deleteData = deleteData
+
+

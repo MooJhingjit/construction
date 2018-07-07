@@ -45,6 +45,9 @@ export default {
     GET_STATUSNAME (key) {
       return config.variable.status[key]
     },
+    GET_CURRENTDATE (format = 'YYYY-MM-DD')  {
+      return moment().format(format)
+    },
     SET_DATEFORMAT (dateInput) {
       if (!dateInput) return null
       let date = new Date(dateInput)

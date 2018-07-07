@@ -17,6 +17,15 @@ module.exports.getDate = (date, format = 'YYYY/MM/DD') => {
   return moment(date).format(format)
 }
 
+module.exports.addDate = (date, day, format = 'YYYY/MM/DD') => {
+  if (!date) return null
+  return moment(date).add(day, 'day').format(format)
+}
+
+module.exports.getCurrentDate = (format = 'YYYY/MM/DD') => {
+  return moment().format(format)
+}
+
 module.exports.getUserAuth = (token) => {
   let bearer = token.split(' ');
   let decoded = jwtDecode(bearer[1]);

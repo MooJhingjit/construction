@@ -22,6 +22,7 @@ Vue.use(VeeValidate)
 
 Vue.mixin(helper)
 Vue.config.productionTip = false
+export const bus = new Vue()
 // Vue.use(Font)
 /* eslint-disable no-new */
 new Vue({

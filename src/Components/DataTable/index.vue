@@ -112,9 +112,9 @@ export default {
             {key: 'main', placeholder: 'ค้นหา', icon: 'fa fa-search', inputType: 'input'}
           ],
           ordering: [
-            {key: 'project', placeholder: 'โครงการ', icon: 'fa fa-search', inputType: 'auto'},
-            {key: 'house', placeholder: 'แบบบ้าน', icon: 'fa fa-search', inputType: 'auto'},
-            {key: 'plan', placeholder: 'แปลน', icon: 'fa fa-search', inputType: 'auto'},
+            // {key: 'project', placeholder: 'โครงการ', icon: 'fa fa-search', inputType: 'auto'},
+            // {key: 'house', placeholder: 'แบบบ้าน', icon: 'fa fa-search', inputType: 'auto'},
+            // {key: 'plan', placeholder: 'แปลน', icon: 'fa fa-search', inputType: 'auto'},
             {key: 'contract', placeholder: 'เลขที่สัญญา', icon: 'fa fa-search', inputType: 'auto'}
           ]
         }
@@ -128,6 +128,7 @@ export default {
         case '/ordering':
           this.getSearchResource(this.local.inputSearch.ordering)
           inputs = this.local.inputSearch.ordering
+          // inputs = this.local.inputSearch.all
           break
         default:
           inputs = this.local.inputSearch.all
@@ -140,6 +141,9 @@ export default {
     // console.log('created')
     // this.property = 'Example property update.'
     // console.log('propertyComputed will update, as this.property is now reactive.')
+  },
+  updated () {
+    // console.log(this.$refs.contract_autoComplete[0])
   },
   methods: {
     fetchData () {
@@ -196,27 +200,27 @@ export default {
     },
     autoCompleteSelected (objSelected, key) {
       this.local.textSearch[key] = objSelected.key
-      this.clearAutoCompleteValue(key)
+      // this.clearAutoCompleteValue(key)
       this.searchByText()
     },
-    clearAutoCompleteValue (key) {
-      switch (key) {
-        case 'project':
-          // xxxxxx
-          break
-        case 'house':
-          // xxxxxx
-          break
-        case 'plan':
-          // xxxxxx
-          break
-        case 'contract':
-          // let refName = `${key}`
-          // this.$refs.contract_autoComplete.name = null
-          // xxxxxx
-          break
-      }
-    },
+    // clearAutoCompleteValue (key) {
+    //   switch (key) {
+    //     case 'project':
+    //       // xxxxxx
+    //       break
+    //     case 'house':
+    //       // xxxxxx
+    //       break
+    //     case 'plan':
+    //       // xxxxxx
+    //       break
+    //     case 'contract':
+    //       // let refName = `${key}`
+    //       // this.$refs.contract_autoComplete.name = null
+    //       // xxxxxx
+    //       break
+    //   }
+    // },
     async getSearchResource (inputArr) {
       let queryString = []
       let resourceName = ''
@@ -225,6 +229,15 @@ export default {
         let res = await service.getResource({resourceName: resourceName, queryString})
         this.local.autoCompleteSearch[item.key].inputs = res.data
       })
+    },
+    setSearch (type, value) {
+      switch (type) {
+        case 'ordering':
+          this.$refs.contract_autoComplete[0].setValue({key: value, value: value})
+          // this.$refs.contract_autoComplete[0].value = 'COT0001'
+          // this.$refs.contract_autoComplete[0].selected = {key: 'COT0001', value: 'COT0001'}
+          break
+      }
     }
   }
 }

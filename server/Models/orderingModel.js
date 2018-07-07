@@ -26,6 +26,7 @@ module.exports =  class Ordering {
       this.on('store.id', '=', 'ordering.store_id')
     })
     .where({'ordering.contract_code': this.contract_code})
+    .where('ordering.status', '!=', 'pending')
     return result
   }
 
@@ -33,18 +34,20 @@ module.exports =  class Ordering {
     let result = await this.knex.select('created_at')
     .from('ordering')
     .where({'order_type': this.order_type})
+    .where('status', '!=', 'pending')
     return result
   }
 
   async getAllData () {
-    let result = await this.knex('ordering')
-    .where(this.getCondition())
-    // .where('name', 'like', `%${this.name || ''}%`)
-    // .orWhere('type', 'like', `%${this.name || ''}%`)
-    // .orWhere('type', 'like', `%${this.name || ''}%`)
-    // .orWhere('type', 'like', `%${this.name || ''}%`)
-
-    .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    let result = await this.knex
+    .select('contract_code')
+    .count('contract_code as amount')
+    .from('ordering')
+    // .where(this.getCondition())
+    .where('contract_code', 'like', `%${this.contract_code || ''}%`)
+    .where('status', '!=', 'pending')
+    .groupBy('contract_code')
+    // .orderBy('contract_code', 'desc').limit(this.limit).offset(this.offset)
     return result
   }
 
@@ -52,7 +55,7 @@ module.exports =  class Ordering {
     let result = await this.knex('ordering')
     .where('order_type', this.order_type)
     .where('status', 'wait')
-    .orderBy('id', 'desc').limit(5)
+    .orderBy('id', 'desc').limit(this.limit)
     return result
   }
 
@@ -91,15 +94,16 @@ module.exports =  class Ordering {
     .where({id: this.id})
     .update({
       total_price: this.total_price,
+      date_start: this.date_start,
       status: this.status
     })
     return result
   }
 
-  // async delete () {
-  //   let result = await this.knex('work_order_detail')
-  //   .where({work_order_time: this.work_order_time})
-  //   .del()
-  //   return result
-  // }
+  async delete () {
+    let result = await this.knex('ordering')
+    .where({id: this.id})
+    .del()
+    return result
+  }
 }

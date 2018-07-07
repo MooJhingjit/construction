@@ -64,6 +64,7 @@
                     <td>แปลง:</td>
                     <td>
                       <my-auto-complete
+                      ref="planAutoComplete"
                       @select="objVal => {local.inputs.plan = objVal.key}"
                       :arrInputs="local.planTemplate.inputs"
                       placeholder="แปลง"
@@ -184,6 +185,7 @@
 </template>
 
 <script>
+import {bus} from '@/main'
 import breadcrumbBar from '@Components/Breadcrumb'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
@@ -227,15 +229,15 @@ export default {
           status: '',
           times: [
             {time: '1', priceRate: 15, price: 0, dateStart: '', dateEnd: ''},
-            {time: '2', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
-            {time: '3', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
-            {time: '4', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
-            {time: '5', priceRate: 20, price: 0, dateStart: '', dateEnd: ''},
-            {time: '6', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
-            {time: '7', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
-            {time: '8', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
-            {time: '9', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
-            {time: '10', priceRate: 5, price: 0, dateStart: '', dateEnd: ''}
+            {time: '2', priceRate: 5, price: 0, dateStart: '', dateEnd: ''},
+            {time: '3', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
+            {time: '4', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
+            {time: '5', priceRate: 10, price: 0, dateStart: '', dateEnd: ''},
+            {time: '6', priceRate: 15, price: 0, dateStart: '', dateEnd: ''},
+            {time: '7', priceRate: 9, price: 0, dateStart: '', dateEnd: ''},
+            {time: '8', priceRate: 20, price: 0, dateStart: '', dateEnd: ''},
+            {time: '9', priceRate: 3, price: 0, dateStart: '', dateEnd: ''},
+            {time: '10', priceRate: 3, price: 0, dateStart: '', dateEnd: ''}
           ]
         },
         project: {},
@@ -306,6 +308,8 @@ export default {
           break
       }
       if (res.status === 200) {
+        let obj = res.data.orderingData
+        bus.$emit('setNotification', {type: 'ordering', value: obj})
         this.NOTIFY('success')
         this.GOTOPAGE('Contract', this.local.inputs.code)
         return
@@ -332,6 +336,7 @@ export default {
       // })
     },
     houseSelectedHandle (objVal) {
+      this.$refs.planAutoComplete.setValue({key: '', value: ''})
       if (objVal === null) {
         this.local.planTemplate.inputs = []
       } else {
@@ -392,7 +397,8 @@ export default {
     },
     calculatePrice (priceRate) {
       this.local.inputs.paid = (this.local.inputs.price * 10) / 100
-      let totalPrice = this.local.inputs.price - this.local.inputs.paid
+      // let totalPrice = this.local.inputs.price - this.local.inputs.paid
+      let totalPrice = this.local.inputs.price
       return priceRate * totalPrice / 100
     },
     setDateVal (date) {

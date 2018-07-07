@@ -7,5 +7,5 @@ router.get('/ordering', orderingController.getAllData);
 router.get('/ordering/:contractCode', orderingController.getData);
 router.post('/ordering-extra', orderingController.createExtraData);
 router.put('/ordering/:id', orderingController.updateData);
-// router.delete('/project/:id', projectController.deleteData);
+router.delete('/ordering/:id', orderingController.deleteData);
 module.exports = router;

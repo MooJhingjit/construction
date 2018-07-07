@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import {bus} from '@/main'
 import MenuBar from '@Components/MenuBar'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
@@ -50,6 +51,7 @@ export default {
     ])
   },
   created () {
+    bus.$on('setNotification', this.setNotification)
     this.checkAuth()
     this.fetchData()
     // if (this.$route.name !== 'Login') {
@@ -66,7 +68,8 @@ export default {
   methods: {
     ...mapActions([
       'setUserData',
-      'setAuth'
+      'setAuth',
+      'setOrderingNotification'
     ]),
     fetchData () {
       let resourceName = config.api.app.resource
@@ -76,6 +79,7 @@ export default {
           if (res.status === 200) {
             this.server = res.data
             this.setUserData(this.server.userData)
+            this.setNotification({type: 'ordering', value: this.server.orderingData})
           }
         })
         .catch(() => {
@@ -92,7 +96,17 @@ export default {
     },
     pageClick (tf = true) {
       this.local.isDisableMenu = tf
+    },
+    setNotification (obj) {
+      switch (obj.type) {
+        case 'ordering':
+          this.setOrderingNotification(obj.value)
+          break
+      }
     }
+  },
+  beforeDestroy () {
+    bus.$off('setNotification', this.setNotification)
   },
   watch: {
     $route (to, from) {

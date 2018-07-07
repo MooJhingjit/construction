@@ -56,7 +56,7 @@
                     <div class="title extar">คำขอสั่งซื้อใหม่ (พิเศษ) {{local.ordering.extra.length}} รายการ</div>
                   </div>
                   <div class="title-right">
-                    <span class="tag is-light" @click="GOTOPAGE('OrderingDetail', 'order-id')">ดูข้อมูล</span>
+                    <span class="tag is-light" @click="GOTOPAGE('OrderingDetail', 'all')">ดูข้อมูล</span>
                   </div>
                 </div>
                 <table class="table is-narrow rows-table">

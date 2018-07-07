@@ -14,7 +14,12 @@
         <p class="heading" @click="GOTOPAGE('Ordering', '')">
           <!-- <router-link to="./ordering">การสั่งซื้อ</router-link> -->
           การสั่งซื้อ
-          <span class="tag is-danger is-rounded">1</span>
+          <span class="tag is-warning is-rounded"
+            v-if="normalOrdering"
+          >{{normalOrdering}}</span>
+          <span class="tag is-danger is-rounded"
+            v-if="extraOrdering"
+          >{{extraOrdering}}</span>
         </p>
       <!-- <p class="title">123</p> -->
       </div>
@@ -67,6 +72,7 @@
 <script>
 import OptionsMenu from './options'
 import ProfileMenu from './profile'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     OptionsMenu,
@@ -78,6 +84,21 @@ export default {
       type: Boolean,
       required: true
     }
+  },
+  computed: {
+    normalOrdering () {
+      if (this.orderingData !== null) {
+        return this.orderingData.normal
+      }
+    },
+    extraOrdering () {
+      if (this.orderingData !== null) {
+        return this.orderingData.extra
+      }
+    },
+    ...mapGetters([
+      'orderingData'
+    ])
   },
   data () {
     return {
@@ -106,3 +127,14 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.tag.is-warning{
+  background-color: #f7894e !important;
+  color: #fff;
+}
+.tag.is-danger{
+  background-color: #fa6854 !important;
+  color: #fff;
+}
+</style>

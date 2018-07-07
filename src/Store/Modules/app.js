@@ -1,7 +1,10 @@
 const state = {
   app: {
     auth: true,
-    user: {}
+    user: {},
+    notification: {
+      ordering: null
+    }
   }
 }
 
@@ -11,6 +14,9 @@ const mutations = {
   },
   SET_USERDATA (state, payload) {
     state.app.user = payload
+  },
+  SET_ORDERINGNOTIFICATION (state, payload) {
+    state.app.notification.ordering = payload
   }
 }
 
@@ -20,12 +26,16 @@ const actions = {
   },
   setUserData: ({ commit }, obj) => {
     commit('SET_USERDATA', obj)
+  },
+  setOrderingNotification: ({ commit }, obj) => {
+    commit('SET_ORDERINGNOTIFICATION', obj)
   }
 }
 
 const getters = {
   userData: state => state.app.user,
-  auth: state => state.app.auth
+  auth: state => state.app.auth,
+  orderingData: state => state.app.notification.ordering
 }
 
 export default {

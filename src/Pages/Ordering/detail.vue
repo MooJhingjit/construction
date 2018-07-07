@@ -31,13 +31,16 @@
                 <td>แบบบ้าน:<span class="value">{{contract.house_id}}</span></td>
                 <td>ทั้งหมด:<span class="value">{{ordering.length}} รายการ</span></td>
               </tr>
-              <!-- <tr>
-                <td>ขั้นตอนการตำเนินงาน:<span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
-                <td>จำนวนเงินทั้งหมด<span class="value">1,000 บาท</span></td>
-              </tr> -->
             </table>
           </div>
           <div class="block c-body">
+            <div class="filter">
+              <div class="search-status">
+                <div class="tags">
+                  <span :class="['tag', {'is-warning': local.filterKey === item.key}]" @click="filterItems(item.key)" :key="index" v-for="(item, index) in local.filterItem">{{item.title}}</span>
+                </div>
+              </div>
+            </div>
             <table class="table is-bordered rows-table">
               <thead>
                 <tr>
@@ -96,7 +99,7 @@
                       <p :key="inputIndex" v-for="(itemDetail, inputIndex) in item.orderDetail">{{NUMBERWITHCOMMAS(itemDetail.price, 2)}}</p>
                     </template>
                   </td>
-                  <td width="100">{{GET_STATUSNAME(item.status)}}</td>
+                  <td width="100">{{GET_STATUSNAME(item.status)}}<br/>{{SET_DATEFORMAT(item.created_at)}}</td>
                 </tr>
               </tbody>
             </table>
@@ -114,23 +117,28 @@
               <tr>
                 <td>ราคา: {{getOrderSelected('price')}}</td>
               </tr>
-              <!-- <tr>
-                <td>{{getOrderSelected('priceTxt')}}</td>
-              </tr> -->
               <tr>
-                <!-- <td>สถานะ: <span class="tag is-warning">{{getOrderSelected('status')}}</span></td> -->
                 <td>สถานะ: {{getOrderSelected('status')}}</td>
               </tr>
               <tr>
                 <td>ประเภทการสั่งซื้อ: {{getOrderSelected('orderType')}}</td>
               </tr>
+              <tr v-if="local.orderSelected.status === 'confirmed'">
+                <td>วันที่อนุมัติ: {{getOrderSelected('date_start')}}</td>
+              </tr>
+              <!-- 
+              <tr>
+                <td>วันที่บันทึก: {{getOrderSelected('created_at')}}</td>
+              </tr> -->
             </table>
           </div>
           <div class="block function container-block">
             <button class="button is-outlined" @click="submitForm('confirmed')" v-if="this.local.orderSelected.status == 'wait'">อนุมัติ</button>
-            <button class="button is-outlined" v-if="this.local.orderSelected.status != 'wait'">ออกใบสั่งซื้อ</button>
+            <button class="button is-outlined" @click="submitForm('delete')" v-if="this.local.orderSelected.status == 'wait'">ลบ</button>
+            <button class="button is-outlined" @click="doReceipt()" v-if="this.local.orderSelected.status != 'wait'">ออกใบสั่งซื้อ</button>
             <button class="button is-outlined" @click="submitForm('received')" v-if="this.local.orderSelected.status == 'confirmed'">รับของ</button>
           </div>
+          <receipt-template class="receipt-template" ref="receiptTemplate" :dataObj="local.orderSelected"></receipt-template>
         </div>
       </template>
     </template>
@@ -141,6 +149,7 @@
 </template>
 
 <script>
+import {bus} from '@/main'
 import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
 import noResultTemplate from '@Components/Template/no-result'
@@ -149,6 +158,8 @@ import config from '@Config/app.config'
 import dataTable from '@Components/DataTable'
 import myInput from '@Components/Form/my-input'
 import myAction from '@Components/Form/my-action'
+import myPdf from '@Libraries/pdf'
+import receiptTemplate from './receipt-template'
 export default {
   props: {
   },
@@ -158,7 +169,8 @@ export default {
     noResultTemplate,
     dataTable,
     myInput,
-    myAction
+    myAction,
+    receiptTemplate
   },
   name: 'OrderingDetail',
   data () {
@@ -173,7 +185,9 @@ export default {
             class: 'ordering-detail-page'
           }
         },
-        statusSearch: [
+        statusSearch: [],
+        filterItem: [
+          {title: 'ทั้งหมด', key: 'all'},
           {title: 'ปกติ', key: 'normal'},
           {title: 'พิเศษ', key: 'extra'},
           {title: 'รออนุมัติ', key: 'wait'},
@@ -189,8 +203,11 @@ export default {
         idSelected: '',
         // items: {},
         inputs: null,
+        orderingForShowing: [],
+        filterKey: 'all',
         orderSelected: null,
-        orderIdSelected: null
+        orderIdSelected: null,
+        orderConfirmDate: null,
       }
     }
   },
@@ -205,10 +222,13 @@ export default {
       return this.local.inputs.contract
     },
     ordering () {
-      return this.local.inputs.ordering
+      return this.local.orderingForShowing
     }
   },
-  created () {
+  mounted () {
+    if (this.$route.params.key && this.$route.params.key !== 'all') {
+      this.$refs.dataTable.setSearch('ordering', this.$route.params.key)
+    }
   },
   methods: {
     async selectedDataHandle (item) {
@@ -216,6 +236,7 @@ export default {
       let order = await this.getFullOrdering(item)
       this.local.inputs = {}
       this.local.inputs = Object.assign(this.local.inputs, order)
+      this.filterItems('all')
       this.errors.clear()
     },
     async submitForm (type) {
@@ -227,6 +248,9 @@ export default {
       switch (type) {
         case 'confirmed':
         case 'received':
+          if (type === 'confirmed') {
+            this.local.orderConfirmDate = this.GET_CURRENTDATE()
+          }
           if (!isValid) return
           await this.updateOrderingStatus(type)
           resourceName = `${resourceName}/${this.local.orderIdSelected}`
@@ -234,15 +258,20 @@ export default {
             return item.id === this.local.orderIdSelected
           })
           res = await service.putResource({data, resourceName})
+          bus.$emit('setNotification', {type: 'ordering', value: res.data.orderingData})
           break
         case 'cancel':
           this.local.idSelected = null
           return
-        // case 'save':
-        //   if (!isValid) return
-        //   data = this.local.inputs
-        //   res = await service.postResource({data, resourceName})
-        //   break
+        case 'delete':
+          if (!isValid) return
+          await this.updateOrderingStatus(type)
+          resourceName = `${resourceName}/${this.local.orderIdSelected}`
+          let queryString = []
+          res = await service.deleteResource({resourceName, queryString})
+          bus.$emit('setNotification', {type: 'ordering', value: res.data.orderingData})
+
+          break
       }
       if (res.status === 200) {
         this.reloadTable()
@@ -253,6 +282,10 @@ export default {
       }
       this.NOTIFY('error')
     },
+    doReceipt () {
+      let html = this.$refs.receiptTemplate.getHtm()
+      myPdf.CREATE_PDF(html)
+    },
     async getFullOrdering (item) {
       let resourceName = `${config.api.ordering.index}/${item.contract_code}`
       let queryString = this.BUILDPARAM([])
@@ -262,6 +295,7 @@ export default {
     selectOrdering (ordering) {
       this.local.orderIdSelected = ordering.id
       this.local.orderSelected = ordering
+      this.local.orderConfirmDate = null
     },
     getOrderSelected (type) {
       let res = ''
@@ -283,6 +317,14 @@ export default {
           break
         case 'orderType':
           res = this.GET_STATUSNAME(this.local.orderSelected.order_type)
+          break
+        case 'date_start':
+        // case 'created_at':
+          let date = this.local.orderSelected[type]
+          if (this.local.orderConfirmDate !== null) {
+            date = this.local.orderConfirmDate
+          }
+          res = this.SET_DATEFORMAT(date)
           break
       }
       return res
@@ -313,6 +355,22 @@ export default {
         totalPrice += parseFloat(item.price)
       })
       this.ordering[orderingIndex].total_price = totalPrice
+    },
+    filterItems (key) {
+      this.local.filterKey = key
+      if (key === 'all') {
+        this.local.orderingForShowing = this.local.inputs.ordering
+        return
+      }
+      if (key === 'normal' || key === 'extra') {
+        this.local.orderingForShowing = this.local.inputs.ordering.filter((item) => {
+          return item.order_type === key
+        })
+      } else {
+        this.local.orderingForShowing = this.local.inputs.ordering.filter((item) => {
+          return item.status === key
+        })
+      }
     }
   }
 }
@@ -321,9 +379,28 @@ export default {
 <style lang="scss" scoped>
 table tbody tr td p.material-name {
   text-overflow: ellipsis;
-  overflow: hidden; 
-  width: 100%; 
+  overflow: hidden;
+  width: 100%;
   white-space: nowrap;
+}
+.receipt-template{
+  display: none;
+}
+.filter{
+  margin-bottom: 5px;
+  .search-status{
+    text-align: center;
+    .tags{
+      justify-content: flex-end;
+      .tag{
+        cursor: pointer;
+        &:hover{
+          background: #ffe500;
+          color: #000;
+        }
+      }
+    }
+  }
 }
 
 </style>

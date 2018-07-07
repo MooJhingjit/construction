@@ -16,6 +16,8 @@
     "chart.js": "^2.7.2",
     "jquery": "^3.2.1",
     "jquery-sparkline": "^2.4.0",
+    "jspdf": "^1.4.1",
+    "jspdf-customfonts": "0.0.4-rc.4",
     "knex": "^0.14.6",
     "mariasql": "^0.2.6",
     "moment": "^2.22.1",

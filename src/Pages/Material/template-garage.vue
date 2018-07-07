@@ -104,20 +104,27 @@
       </tbody>
     </table>
     <div class="item-footer container-block">
-      <div class="container-block block right">
-          <my-input
+      <div class="container-block block right options">
+        <div class="delay container-block">
+          <label for="">กำหนดสั่ง</label>
+          <div class="delay-input">
+            <my-input
             :value="local.materialDelayAll"
-            :inputObj="{type: 'text', name: `order_delay`, placeholder: 'กำหนดของเข้า', validate: 'required'}"
+            :inputObj="{type: 'text', name: `order_delay`, placeholder: 'กำหนดสั่ง', validate: 'required'}"
             :validator="$validator"
             @input="addMaterialDelay"
          ></my-input>
-         <my-tags-selection
+          </div>
+        </div>
+        <div class="material-group">
+          <my-tags-selection
           v-if="this.local.items.length"
           :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ'}"
           :resourceName="materialGroupResource"
           :itemSelected="local.materialGroupAll"
           @selected="addMaterialToGroup"
           ></my-tags-selection>
+        </div>
         <button class="button" @click="editRow('remove')"><i class="fa fa-minus" aria-hidden="true"></i></button>
         <button class="button" @click="editRow('add')"><i class="fa fa-plus" aria-hidden="true"></i></button>
       </div>
@@ -335,3 +342,23 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+
+.right.options{
+  .delay{
+    justify-content: center;
+    align-items: center;
+    .delay-input{
+      margin-left: 3px;
+      width: 36px !important;
+    }
+     margin: 0 3px;
+  }
+  .material-group{
+    width: 37px !important;
+  }
+}
+</style>
+
+

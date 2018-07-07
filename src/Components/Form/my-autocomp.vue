@@ -54,11 +54,19 @@ export default {
   methods: {
     searchValue (val) {
       this.$emit('searchValue', val)
+    },
+    selectedValue (val) {
+      // console.log(val)
+      this.$emit('select', val)
+    },
+    setValue (obj) {
+      this.name = obj.key
+      this.selected = obj
     }
   },
   watch: {
     selected (val) {
-      this.$emit('select', val)
+      this.selectedValue(val)
     },
     arrInputs () {
       this.data = this.arrInputs

@@ -43,10 +43,10 @@ module.exports =  class OrderingDetail {
     return result
   }
 
-  // async delete () {
-  //   let result = await this.knex('work_order_detail')
-  //   .where({work_order_time: this.work_order_time})
-  //   .del()
-  //   return result
-  // }
+  async delete () {
+    let result = await this.knex('ordering_detail')
+    .where({order_id: this.order_id})
+    .del()
+    return result
+  }
 }

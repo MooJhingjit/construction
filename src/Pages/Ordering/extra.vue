@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import {bus} from '@/main'
 import myAction from '@Components/Form/my-action'
 import myAutoComplete from '@Components/Form/my-autocomp'
 import config from '@Config/app.config'
@@ -85,10 +86,6 @@ import service from '@Services/app-service'
 import myInput from '@Components/Form/my-input'
 export default {
   props: {
-    // templateName: {
-    //   type: String,
-    //   required: true
-    // }
   },
   components: {
     myAction,
@@ -104,26 +101,10 @@ export default {
           selected: null
         },
         materialItems: [],
-        material: [
-          // {
-          //   obj: null,
-          //   amount: 1
-          // }
-        ],
+        material: [],
         note: ''
       }
     }
-  },
-  computed: {
-    // propertyComputed() {
-    //   console.log('I change when this.property changes.')
-    //   return this.property
-    // }
-  },
-  created () {
-    // console.log('created')
-    // this.property = 'Example property update.'
-    // console.log('propertyComputed will update, as this.property is now reactive.')
   },
   methods: {
     async fetchData () {
@@ -144,7 +125,6 @@ export default {
       if (type === 'add') {
         this.local.material.push({
           obj: null,
-          // name: '',
           amount: 1
         })
       }
@@ -163,10 +143,11 @@ export default {
         note: this.local.note
       }
       let res = await service.postResource({data, resourceName})
-      // let res = await service.postResource({data, resourceName})
       if (res.status === 200) {
+        let obj = res.data.orderingData
+        bus.$emit('setNotification', {type: 'ordering', value: obj})
         this.NOTIFY('success')
-        this.GOTOPAGE('OrderingDetail', 'order-id')
+        this.GOTOPAGE('OrderingDetail', 'all')
         return
       }
       this.NOTIFY('error')

@@ -64,7 +64,8 @@ const variable = {
     confirmed: 'รอสินค้า',
     received: 'รับของแล้ว',
     normal: 'ปกติ',
-    extra: 'พิเศษ'
+    extra: 'พิเศษ',
+    delete: 'ลบข้อมูล'
   },
   workingStatus: {
     wait: 'รอ',

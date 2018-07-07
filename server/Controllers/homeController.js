@@ -10,7 +10,6 @@ async function getData (req, res, next) {
   let contractStat = await contractController.getStat()
   let workingProgress = await contractController.getLastProgress()
   let orderingExtra = await orderingController.prepareChartData('extra')
-  console.log(orderingExtra)
   let resObj = {
     stat: {
       projectStat,
@@ -22,7 +21,7 @@ async function getData (req, res, next) {
       labels: orderingExtra.date,
       datasets: [
         {
-          label: 'การจ่ายค่างวด',
+          label: 'สั่งซื้อพิเศษ',
           backgroundColor: 'rgba(255,146,146,.7)',
           // data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
           data: orderingExtra.data

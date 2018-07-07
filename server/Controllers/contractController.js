@@ -66,11 +66,12 @@ const createData = async (req, res, next) => {
   newItem.status = req.body.data.status
   let result = await newItem.save() // this will return result.insertId
   if (newItem.status === 'ip') {
-    startWorking(result.insertId, newItem.house_id)
+    await startWorking(newItem.code, newItem.house_id)
   }
   await createContractTime(req.body.data.code, req.body.data.times)
 
-  res.status(200).json({status: 'success'})
+  let orderingData = await ordering.countOrdering()
+  res.status(200).json({status: 'success', orderingData})
 }
 
 const createContractTime = (contractCode, dataArr) => {
@@ -150,20 +151,25 @@ const updateContractStatus = async (req, res, next) => {
   let newItem = new contractModel()
   newItem.code = req.params.id
   newItem.status = req.body.data.status
-  let result = await newItem.updateStatus()
+  await newItem.updateStatus()
   switch(newItem.status) {
     case 'ip':
-        await setContractProgress(newItem.code, req.body.data.houseId)
-        await ordering.prepareOrdering(req.params.id, req.body.data.houseId, 1, 1) // 1 = time
+      await startWorking(newItem.code, req.body.data.houseId)
         // await reviewContractProgress(newItem.code, req.body.data.houseId, 1)
         break
     case 'done':
         // orderMaterial()
         break
   }
-  res.status(200).json({})
+  let orderingData = await ordering.countOrdering()
+  res.status(200).json({orderingData})
 }
 
+const startWorking = async (contractCode, houseId) => {
+  console.log(contractCode, houseId)
+  await setContractProgress(contractCode, houseId)
+  await ordering.prepareOrdering(contractCode, houseId, 1, 1) // 1 = time
+}
 const getDropDown = async (req, res, next) => {
   let model = new contractModel()
   let data = {}

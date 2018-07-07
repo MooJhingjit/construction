@@ -26,12 +26,12 @@
                 <td></td>
               </tr>
               <tr>
-                <td>วันที่งวด 9 ตามส/ญ:<span class="value">27/08/61</span></td>
-                <td>วันที่งวด 9 ตามปมก.:<span class="value">27/08/61</span></td>
+                <td>วันที่งวด 9 ตามส/ญ:<span class="value">{{getDateFromContract(9)}}</span></td>
+                <td>วันที่งวด 9 ตามปมก.:<span class="value">{{getDateFromContract(9)}}</span></td>
               </tr>
               <tr>
-                <td>วันที่ End Prod.ตามส/ญ:<span class="value">16/09/61</span></td>
-                <td>วันที่ทำสัญญา:<span class="value">27/08/61</span></td>
+                <td>วันที่ End Prod.ตามส/ญ:<span class="value">{{getDateFromContract(10)}}</span></td>
+                <td>วันที่ทำสัญญา:<span class="value">{{SET_DATEFORMAT(local.inputs.contract.date_start)}}</span></td>
               </tr>
             </table>
           </div>
@@ -123,6 +123,7 @@
 </template>
 
 <script>
+import {bus} from '@/main'
 import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
 import config from '@Config/app.config'
@@ -227,6 +228,8 @@ export default {
           data.houseId = this.local.inputs.contract.house_id
           resourceName = `${config.api.contract.status}/${this.local.idSelected}`
           res = await service.putResource({data, resourceName})
+          let obj = res.data.orderingData
+          bus.$emit('setNotification', {type: 'ordering', value: obj})
           break
         case 'updateProgress':
           resourceName = `${config.api.contract.progress}/${this.local.idSelected}`
@@ -248,6 +251,12 @@ export default {
     },
     getWorkingStatus (code) {
       return config.variable.workingStatus[code]
+    },
+    getDateFromContract (time) {
+      if (this.local.inputs.contractTime[0] !== undefined) {
+        return this.SET_DATEFORMAT(this.local.inputs.contractTime[time-1].date_start)
+      }
+      return null
     }
   }
 }
