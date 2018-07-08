@@ -3,7 +3,7 @@ const knex = require('knex')
 const db = require('../Database/config')
 const helpers = require('../Libraries/helpers')
 
-module.exports =  class WorkOrder {
+module.exports =  class WorkOrderDetail {
   constructor(id){
     this.knex = knex(db.config);
     this.id = id
@@ -29,6 +29,7 @@ module.exports =  class WorkOrder {
   async getData () { // with matert
     let result = await this.knex
     .select('work_order_detail.name as name', 'post_order',
+    'work_order_detail.work_order_time',
     'work_order_detail.order',
     'work_order_detail.created_at as work_order_detail_date',
     'material_group.name as material_group_name', 'material_group.id as material_group_id'
@@ -42,8 +43,8 @@ module.exports =  class WorkOrder {
 
   async getAllData () {
     let result = await this.knex('work_order_detail')
-    .orderBy('work_order_time', 'asc')
-    .orderBy('order', 'asc')
+    .orderBy('work_order_time', 'asc') // don't change order by !!!! important
+    .orderBy('order', 'asc') // don't change order by !!!! important
     return result
   }
 

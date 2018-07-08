@@ -31,10 +31,11 @@ module.exports =  class Ordering {
   }
 
   async getStat () {
-    let result = await this.knex.select('created_at')
+    let result = await this.knex.select('*')
     .from('ordering')
     .where({'order_type': this.order_type})
     .where('status', '!=', 'pending')
+    .orderBy('date_start', 'asc')
     return result
   }
 
@@ -104,6 +105,17 @@ module.exports =  class Ordering {
     let result = await this.knex('ordering')
     .where({id: this.id})
     .del()
+    return result
+  }
+
+  async checkUpdateOrdering () {
+    let result = await this.knex('ordering')
+    .update({
+      date_start: this.date_start,
+      status: this.status
+    })
+    .where('date_start', '<=', this.date_start)
+    .where('status', 'pending')
     return result
   }
 }

@@ -7,7 +7,6 @@ const contractTimeModel = require('../Models/contractTimeModel')
 const contractProgressModel = require('../Models/contractProgressModel')
 const workOrder = require('./workOrderController.js')
 const ordering = require('./orderingController.js')
-
 const getData = async (req, res, next) => {
   let contract = new contractModel()
   contract.code = req.params.key
@@ -60,7 +59,6 @@ const createData = async (req, res, next) => {
   newItem.plan = req.body.data.plan
   newItem.house_id = req.body.data.houseId
   newItem.price = req.body.data.price
-  // newItem.quarter = req.body.data.quarter
   newItem.date_start = helpers.getCurrentTime('date', req.body.data.dateStart)
   newItem.paid = req.body.data.paid || 0
   newItem.status = req.body.data.status
@@ -151,7 +149,7 @@ const updateContractStatus = async (req, res, next) => {
   let newItem = new contractModel()
   newItem.code = req.params.id
   newItem.status = req.body.data.status
-  await newItem.updateStatus()
+  await newItem.updateStatus() // on
   switch(newItem.status) {
     case 'ip':
       await startWorking(newItem.code, req.body.data.houseId)
@@ -166,10 +164,11 @@ const updateContractStatus = async (req, res, next) => {
 }
 
 const startWorking = async (contractCode, houseId) => {
-  console.log(contractCode, houseId)
+  // console.log(contractCode, houseId)
   await setContractProgress(contractCode, houseId)
-  await ordering.prepareOrdering(contractCode, houseId, 1, 1) // 1 = time
+  await ordering.prepareOrdering(contractCode, houseId, 1, 1) // 1 = time // on
 }
+
 const getDropDown = async (req, res, next) => {
   let model = new contractModel()
   let data = {}
@@ -202,21 +201,67 @@ const getContractProgress = async (contractCode) => {
 
 // copy progress
 const setContractProgress = async (contractCode, houseId) => {
+  let workOrderPreiod = await workOrder.getWorkOrderPreiod(houseId)
   let workingTemplate = await workOrder.getWorkingTemplate(contractCode)
+  let startDate = helpers.getCurrentDate('YYYY-MM-DD')
+  let endDate = ''
+  let orderNumber = 1
+  let tempEndDate = []
+  let tempStartDate = []
+  tempStartDate[0] = startDate
+  tempEndDate[0] = startDate
   await Promise.all(
     workingTemplate.map( async (item) => {
+      let workOrder = await matchWorkOrderPreiod(workOrderPreiod, item.work_order_time, item.order)
+      let condition = workOrder.condition
+      if (tempEndDate.length == 1) { // for frist round
+        console.log(workOrder.preiod_end)
+        tempStartDate[orderNumber] = startDate
+        tempEndDate[orderNumber] = helpers.addDate(startDate, workOrder.preiod_end, format = 'YYYY-MM-DD')
+        endDate = tempEndDate[orderNumber]
+      } else {
+        startDate = helpers.addDate(tempEndDate[condition], workOrder.preiod, format = 'YYYY-MM-DD')
+        tempEndDate[orderNumber] = helpers.addDate(startDate, workOrder.preiod_end, format = 'YYYY-MM-DD')
+        endDate = tempEndDate[orderNumber]
+      }
+      
       let newItem = new contractProgressModel(contractCode)
       newItem.time = item.work_order_time
       newItem.order = item.order
-      newItem.order_condition = 0
+      // newItem.order_condition = 0
+      newItem.order_all = orderNumber
       newItem.name = item.name
-      newItem.start_date = null
+      newItem.start_date = startDate
+      newItem.end_date = endDate
       newItem.real_date = null
+      newItem.condition = condition
       newItem.delay = 0
       newItem.status = item.work_order_time == 1 && item.order == 1 ? 'ip' : 'wait'
+      orderNumber = parseInt(orderNumber) + 1
       await newItem.save()
+      
     })
   )
+}
+
+const matchWorkOrderPreiod = async (workOrderPreiod, time, order) => {
+  let preiod = 0
+  let preiod_end = 0
+  let condition = 0
+  await Promise.all(
+    workOrderPreiod.map(async (item) => {
+      if (item.work_order_time === time && item.order === order) {
+        preiod = item.preiod
+        preiod_end = item.preiod_end
+        condition = item.condition
+      }
+    })
+  )
+  return {
+    preiod,
+    preiod_end,
+    condition
+  }
 }
 
 const updateContractProgress = async (req, res, next) => {

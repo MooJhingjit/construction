@@ -2,7 +2,7 @@
 // const helpers = require('../Libraries/helpers')
 const workOrderModel = require('../Models/workOrderModel')
 const workOrderDetailModel = require('../Models/workOrderDetailModel')
-
+const workOrderPreiodModel = require('../Models/workOrderPreiodModel')
 async function getData (req, res, next) {
   let id = req.params.key
   let workOrder = new workOrderModel()
@@ -15,6 +15,15 @@ async function getData (req, res, next) {
       let workOrderDetail = new workOrderDetailModel()
       workOrderDetail.work_order_time = workOrder[0].time
       let orderLists = await workOrderDetail.getData()
+      let workOrderPreiod = new workOrderPreiodModel()
+      await Promise.all(
+        orderLists.map( async (item) => {
+          workOrderPreiod.work_order_time = item.work_order_time
+          workOrderPreiod.order = item.order
+          item.condition = await workOrderPreiod.getData()
+        })
+      )
+      
       workOrder = workOrder[0]
       result = {
         id: workOrder.id,
@@ -73,27 +82,66 @@ async function updateData (req, res, next) {
   oldItem.work_order_time = workOrder.time
   await oldItem.delete()
   let workOrderLists = req.body.data.workOrderLists
-  workOrderLists.map(item => {
-    let newItem = new workOrderDetailModel()
-    newItem.work_order_time = workOrder.time
-    newItem.name = item.taskName
-    newItem.order = item.order
-    if (item.postOrder.length) {
-      newItem.post_order = item.postOrder[0]
-    }
-    // // newItem.delay = item.delay
-    newItem.save()
-  })
+
+  await Promise.all(
+    workOrderLists.map( async (item) => {
+      let newItem = new workOrderDetailModel()
+      newItem.work_order_time = workOrder.time
+      newItem.name = item.taskName
+      newItem.order = item.order
+      if (item.postOrder.length) {
+        newItem.post_order = item.postOrder[0]
+      }
+      await updateCondition(item, workOrder.time, item.order)
+      newItem.save()
+    })
+  )
+  
   res.status(200).json({})
+}
+
+async function updateCondition (obj, time, order) {
+  let condition = obj.condition
+  await Promise.all(
+    condition.map( async (item) => {
+      if (item.house_id !== null) {
+        let workOrderPreiod = new workOrderPreiodModel()
+        if (item.id !== undefined) { // update
+          workOrderPreiod.id = item.id
+          workOrderPreiod.preiod = item.preiod
+          workOrderPreiod.preiod_end = item.preiod_end
+          workOrderPreiod.condition = item.condition
+          await workOrderPreiod.update()
+        } else { // insert
+          workOrderPreiod.work_order_time = time
+          workOrderPreiod.order = order
+          workOrderPreiod.house_id = item.house_id
+          workOrderPreiod.preiod = item.preiod
+          workOrderPreiod.preiod_end = item.preiod_end
+          workOrderPreiod.condition = item.condition
+          await workOrderPreiod.save()
+        }
+      }
+    })
+  )
 }
 
 async function getWorkingTemplate () {
   let workOrderDetail = new workOrderDetailModel()
-  let result = await workOrderDetail.getAllData()
+  let result = await workOrderDetail.getAllData() // order by is important
   return result
 }
+
+async function getWorkOrderPreiod (houseId) {
+  let workOrderPreiod = new workOrderPreiodModel()
+  workOrderPreiod.house_id = houseId
+  let result = await workOrderPreiod.getDataByHouseId()
+  return result
+}
+
 module.exports.getData = getData
 module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.getWorkingTemplate = getWorkingTemplate
+module.exports.getWorkOrderPreiod = getWorkOrderPreiod

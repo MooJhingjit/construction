@@ -41,8 +41,9 @@
                 <tr>
                   <th>#</th>
                   <th>รายละเอียดงาน</th>
-                  <th width="150">วันที่ตามสัญญา</th>
-                  <th width="150">วันที่ทำจริง</th>
+                  <th width="150">กำหนดเริ่มงาน</th>
+                  <th width="150">กำหนดเสร็จงาน</th>
+                  <th width="150">วันที่เสร็จจริง</th>
                   <th width="80">delay</th>
                   <th>สถานะ</th>
                   <!-- <th>งวด</th> -->
@@ -54,23 +55,19 @@
                   <td>{{item.name}}</td>
                   <td>
                     {{SET_DATEFORMAT(item.start_date)}}
-                    <!-- <my-input
-                    :value="item.start_date"
-                    :inputObj="{type: 'datepicker', name: 'contract_datestart', placeholder: 'วันที่ตามสัญญา', validate: ''}"
+                  </td>
+                  <td>{{SET_DATEFORMAT(item.end_date)}}</td>
+                  <td>
+                    <!-- {{SET_DATEFORMAT(item.real_date)}} -->
+                    <my-input
+                    :value="GET_DATE(item.real_date)"
+                    :inputObj="{type: 'datepicker', name: 'contract_datestart', placeholder: 'วันที่เสร็จจริง', validate: ''}"
                     :validator="$validator"
-                    @input="value => { item.start_date = value }"
-                    ></my-input> -->
+                    @input="value => setRealDate(value, index)"
+                    ></my-input>
                   </td>
                   <td>
-                    {{SET_DATEFORMAT(item.real_date)}}
-                    <!-- <my-input
-                    :value="item.real_date"
-                    :inputObj="{type: 'datepicker', name: 'contract_datestart', placeholder: 'วันที่ทำจริง', validate: ''}"
-                    :validator="$validator"
-                    @input="value => { item.real_date = value }"
-                    ></my-input> -->
-                  </td>
-                  <td>
+                    {{item.delay}}
                     <!-- <my-input
                       :value="item.delay"
                       :inputObj="{type: 'text', name: 'contract_type', placeholder: 'delay', validate: ''}"
@@ -96,23 +93,23 @@
         </div>
         <div class="container-block footer-panel">
           <my-action
-              type="update"
+              type="updateStatus"
               :obj="{title: 'เริ่มดำเนินงาน', color: 'is-warning', isConfirm: true}"
-              @clickEvent="submitForm('update', 'ip')"
+              @clickEvent="submitForm('updateStatus', 'ip')"
               v-if="local.inputs.contract.status == 'wait'"
             >
             </my-action>
           <my-action
             type="update"
             :obj="{title: 'ปิดงาน (เสร็จสิ้น)', color: 'is-success', isConfirm: true}"
-            @clickEvent="submitForm('update', 'done')"
+            @clickEvent="submitForm('updateStatus', 'done')"
             v-if="local.inputs.contract.status == 'ip'"
           >
           </my-action>
           <my-action
             type="update"
             :obj="{title: 'บันทึกข้อมูล', color: 'is-info', isConfirm: true}"
-            @clickEvent="submitForm('updateProgress')"
+            @clickEvent="submitForm('update')"
             v-if="local.inputs.contract.status == 'ip'"
           >
           </my-action>
@@ -211,7 +208,7 @@ export default {
     async submitForm (type, value = '') {
       let isValid = await this.$validator.validateAll()
       let resourceName = this.resourceName
-      if (type === 'update' && this.local.idSelected === 'new') type = 'save'
+      // if (type === 'update' && this.local.idSelected === 'new') type = 'save'
       let data = {}
       let res = null
       switch (type) {
@@ -222,7 +219,7 @@ export default {
         case 'cancel':
           this.local.idSelected = null
           return
-        case 'update':
+        case 'updateStatus':
           if (!isValid) return
           data.status = value
           data.houseId = this.local.inputs.contract.house_id
@@ -230,6 +227,10 @@ export default {
           res = await service.putResource({data, resourceName})
           let obj = res.data.orderingData
           bus.$emit('setNotification', {type: 'ordering', value: obj})
+          break
+        case 'update':
+          if (!isValid) return
+          console.log(this.local.inputs.progress)
           break
         case 'updateProgress':
           resourceName = `${config.api.contract.progress}/${this.local.idSelected}`
@@ -257,6 +258,13 @@ export default {
         return this.SET_DATEFORMAT(this.local.inputs.contractTime[time-1].date_start)
       }
       return null
+    },
+    setRealDate (value, index) {
+      let newFormat = this.SET_DATEFORMAT(value)
+      let dateDiff = this.GET_DATEDIFF(newFormat, this.local.inputs.progress[index].end_date)
+      this.local.inputs.progress[index].delay = Math.ceil(dateDiff)
+      // this.local.inputs.progress[index].real_date = value
+      // console.log(dateDiff)
     }
   }
 }

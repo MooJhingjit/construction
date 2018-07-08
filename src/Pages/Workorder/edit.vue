@@ -11,33 +11,38 @@
                     <div class="item-header container-block">
                       <div class="time block">งวดที่ {{local.time}}</div>
                       <div class="order-name container-block block">
-                        <span class="name">รายการสั่งซื้อก่อนหน้างวดที่ {{local.time}} </span>
-                        <!-- <div class="control has-icons-right">
-                          <input class="input" type="text" v-model="local.pre_order" placeholder="">
-                          <span class="icon is-right">
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                          </span>
-                        </div> -->
+                        <span class="name">แบบบ้าน</span>
+                        <my-auto-complete
+                        @select="houseSelectedHandle"
+                        :arrInputs="local.houseTemplate.inputs"
+                        placeholder="ค้นหาแบบบ้าน"
+                        label=""
+                        ></my-auto-complete>
+                        <!-- <span class="name">รายการสั่งซื้อก่อนหน้างวดที่ {{local.time}} </span>
                         <my-tags-selection
                         v-if="local.itemTime"
                         :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ', maxtags: '1'}"
                         :resourceName="materialGroupResource"
                         :itemSelected="local.itemPreOrder"
                         @selected="value => { local.itemPreOrder = value }"
-                        ></my-tags-selection>
+                        ></my-tags-selection> -->
                       </div>
                     </div>
-                    <div class="item-body">
+                    <div class="item-body" v-if="local.houseTemplate.selected !== null">
                       <table>
                         <thead>
                           <tr>
                             <td>#</td>
                             <td>รายละเอียดงาน</td>
+                            <td width="80">เงื่อนไขการเริ่ม</td>
+                            <td width="80">ระยะเวลา (ก่อน)</td>
+                            <td width="80">ระยะเวลา (หลัง)</td>
                             <td width="50"></td>
                             <td width="50"></td>
                           </tr>
                         </thead>
                         <tbody>
+                          
                           <tr :key="index" v-for="(item, index) in local.itemLists">
                             <td>
                               {{item.order}}
@@ -51,7 +56,31 @@
                                 ></my-input>
                             </td>
                             <td>
-                                <my-tags-selection
+                              <my-input
+                                :value="getCondition(item.condition, 'condition')"
+                                :inputObj="{type: 'text', name: `order_condition_${index}`, placeholder: '', validate: 'required'}"
+                                :validator="$validator"
+                                @input="value => setCondition(index, value, 'condition', item)"
+                                ></my-input>
+                            </td>
+                            <td>
+                              <my-input
+                                :value="getCondition(item.condition, 'preiod')"
+                                :inputObj="{type: 'text', name: `order_preiod_${index}`, placeholder: '', validate: 'required'}"
+                                :validator="$validator"
+                                @input="value => setCondition(index, value, 'preiod', item)"
+                                ></my-input>
+                            </td>
+                            <td>
+                              <my-input
+                                :value="getCondition(item.condition, 'preiod_end')"
+                                :inputObj="{type: 'text', name: `order_preiod_end_${index}`, placeholder: '', validate: 'required'}"
+                                :validator="$validator"
+                                @input="value => setCondition(index, value, 'preiod_end', item)"
+                                ></my-input>
+                            </td>
+                            <td>
+                              <my-tags-selection
                               :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ', maxtags: '1'}"
                               :resourceName="materialGroupResource"
                               :itemSelected="item.postOrder"
@@ -67,7 +96,7 @@
                         </tbody>
                       </table>
                     </div>
-                    <div class="item-footer container-block">
+                    <div class="item-footer container-block" v-if="local.houseTemplate.selected !== null">
                       <div class="container-block block right">
                         <!-- <button class="button" @click="editRow('remove')"><i class="fa fa-minus" aria-hidden="true"></i></button> -->
                         <button class="button" @click="editRow('add')"><i class="fa fa-plus" aria-hidden="true"></i></button>
@@ -120,6 +149,7 @@ import config from '@Config/app.config'
 import myInput from '@Components/Form/my-input'
 import myAction from '@Components/Form/my-action'
 import myTagsSelection from '@Components/Form/my-tags-selection'
+import myAutoComplete from '@Components/Form/my-autocomp'
 export default {
   props: {
   },
@@ -127,7 +157,8 @@ export default {
     breadcrumbBar,
     myInput,
     myAction,
-    myTagsSelection
+    myTagsSelection,
+    myAutoComplete
   },
   name: 'EditWorkOrderPage',
   data () {
@@ -158,6 +189,10 @@ export default {
         itemLists: [],
         materialGroup: {
           mainSearch: ''
+        },
+        houseTemplate: {
+          inputs: [],
+          selected: null
         }
       }
     }
@@ -174,9 +209,12 @@ export default {
     this.fetchData()
   },
   methods: {
-    fetchData () {
+    async fetchData () {
+      let queryString = {}
+      let houseTemplate = await service.getResource({resourceName: config.api.house.dropdown, queryString})
+      this.local.houseTemplate.inputs = houseTemplate.data
       let resourceName = `${config.api.workOrder.index}/${this.$route.params.key}`
-      let queryString = this.BUILDPARAM({type: 'full'})
+      queryString = this.BUILDPARAM({type: 'full'})
       service.getResource({resourceName, queryString})
         .then((res) => {
           if (res.status === 200) {
@@ -187,7 +225,8 @@ export default {
                 return {
                   order: item.order,
                   taskName: item.name,
-                  postOrder: [item.post_order]
+                  postOrder: [item.post_order],
+                  condition: item.condition
                 }
               })
             } else {
@@ -235,10 +274,47 @@ export default {
           break
       }
       if (res.status === 200) {
+        this.fetchData()
         this.NOTIFY('success')
         return
       }
       this.NOTIFY('error')
+    },
+    houseSelectedHandle (objVal) {
+      if (objVal === null) {
+        return
+      }
+      this.local.houseTemplate.selected = objVal.key
+    },
+    setCondition (index, value, type, fullItem) {
+      let houseId = this.local.houseTemplate.selected
+      let exist = false
+      this.local.itemLists[index].condition.map((item) => {
+        if (item.house_id === houseId) {
+          exist = true
+          item[type] = value
+        }
+      })
+      if (!exist) {
+        let obj = {
+          house_id: houseId,
+          order: fullItem.order,
+          work_order_time: this.local.time,
+          preiod: null,
+          preiod_end: null,
+          condition: null
+        }
+        obj[type] = value
+        this.local.itemLists[index].condition.push(obj)
+      }
+    },
+    getCondition (condition, type) {
+      if (this.local.houseTemplate.selected === null) return ''
+      let obj = condition.filter((item) => {
+        return item.house_id === this.local.houseTemplate.selected
+      })[0]
+      if (obj === undefined) return ''  
+      return obj[type]
     }
   }
 }

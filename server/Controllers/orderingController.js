@@ -45,13 +45,6 @@ async function getResource (req, res, next) {
   data.ordering.extra = await getLastOrder('extra', 5)
   res.status(200).json(data)
 }
-const getLastOrder = async (orderType, limit = '') => {
-  let ordering = new orderingModel()
-  ordering.order_type = orderType
-  ordering.limit = limit
-  let res = await ordering.getLastOrderByType()
-  return res
-}
 async function getData (req, res, next) {
   let contractRes = await contract.getDetailByContractCode(['project', 'contract'], req.params.contractCode)
   let ordering = await getDetailByContractCode(req.params.contractCode)
@@ -258,10 +251,10 @@ const prepareChartData = async (type) => {
   let ordering = new orderingModel()
   ordering.order_type = type
   let orderingRes = await ordering.getStat()
-
   let stat = []
   orderingRes.map((item) => {
-    let date = helpers.getDate(item.created_at, 'YYYY-MM-DD')
+    let date = helpers.getDate(item.date_start, 'YYYY-MM-DD')
+    
     if (stat[date]) {
       stat[date] +=  1
     } else {
@@ -278,12 +271,25 @@ const prepareChartData = async (type) => {
   }
   return dataSets
 }
+const checkOrdering = async () => {
+  let today = helpers.getCurrentDate()
+  let ordering = new orderingModel()
+  ordering.date_start = today
+  ordering.status = 'wait'
+  return await ordering.checkUpdateOrdering()
+}
 const countOrdering = async () => {
   let extra = await getLastOrder('extra')
   let normal = await getLastOrder('normal')
   return {extra: extra.length, normal: normal.length}
 }
-
+const getLastOrder = async (orderType, limit = '') => {
+  let ordering = new orderingModel()
+  ordering.order_type = orderType
+  ordering.limit = limit
+  let res = await ordering.getLastOrderByType()
+  return res
+}
 module.exports.getResource = getResource
 module.exports.getAllData = getAllData
 module.exports.getData = getData
@@ -295,5 +301,5 @@ module.exports.prepareChartData = prepareChartData
 module.exports.getLastOrder = getLastOrder
 module.exports.countOrdering = countOrdering
 module.exports.deleteData = deleteData
-
+module.exports.checkOrdering = checkOrdering
 

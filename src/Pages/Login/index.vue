@@ -7,14 +7,16 @@
         </div>
         <div class="block container-block login-form">
           <div class="input-form block">
+            <span class="alert">{{ errors.has('username') || local.inValid ? 'โปรดตรวจสอบข้อมมูลข้างต้น' : '' }}</span>
             <div class="control has-icons-left">
-              <input class="input" type="text" placeholder="ชื่อผู้ใช้">
+              <input class="input" name="username" v-validate="'required'"  v-model="local.username" type="text" placeholder="ชื่อผู้ใช้">
               <span class="icon is-small is-left">
                 <i class="fa fa-user" aria-hidden="true"></i>
               </span>
             </div>
+            <span class="alert">{{ errors.has('password') || local.inValid ? 'โปรดตรวจสอบข้อมมูลข้างต้น' : '' }}</span>
             <div class="control has-icons-left">
-              <input class="input" type="password" placeholder="รหัสผ่าน">
+              <input class="input" name="password" v-validate="'required'" v-model="local.password" type="password" placeholder="รหัสผ่าน">
               <span class="icon is-small is-left">
                 <i class="fa fa-key" aria-hidden="true"></i>
               </span>
@@ -46,7 +48,11 @@ export default {
   name: 'LoginPage',
   data () {
     return {
-      property: 'Blank'
+      local: {
+        username: null,
+        password: null,
+        inValid: false
+      }
     }
   },
   methods: {
@@ -55,16 +61,14 @@ export default {
     ]),
     submit () {
       this.login()
-      // this.$router.push({
-      //   name: 'Home',
-      //   params: {id: 'id'}
-      // })
     },
-    login () {
+    async login () {
+      let isValid = await this.$validator.validateAll()
+      if (!isValid) return
       let resourceName = config.api.login
       let data = {
-        username: 'pokkrong',
-        password: '1234'
+        username: this.local.username,
+        password: this.local.password
       }
       service.postResource({resourceName, data})
         .then((res) => {
@@ -73,12 +77,26 @@ export default {
             Helper.SET_STORAGEITEM('app_token', res.data.token)
             this.setAuth(true)
             this.GOTOPAGE('Home', '')
+          } else {
+            this.local.inValid = true
           }
         })
         .catch((err) => {
+          this.local.inValid = true
           console.log(err)
         })
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.control{
+  margin-bottom: 20px !important;
+}
+.alert{
+  color: #d48383;
+  font-size: 0.8em;
+}
+</style>
+

@@ -53,6 +53,18 @@
                 <!-- <input class="input" type="text" v-model="local.inputs.username" placeholder="ชื่อผู้ใช้" required /> -->
               </div>
             </div>
+            <div class="container-block" v-if="local.idSelected == 'new'">
+              <div class="text-title">รหัสผ่าน</div>
+              <div class="value">
+                <my-input
+                  :value="local.inputs.password"
+                  :inputObj="{type: 'text', name: 'user_password', placeholder: 'รหัสผ่าน', validate: 'required'}"
+                  :validator="$validator"
+                  @input="value => { local.inputs.password = value }"
+                  ></my-input>
+                <!-- <input class="input" type="text" v-model="local.inputs.username" placeholder="ชื่อผู้ใช้" required /> -->
+              </div>
+            </div>
             <div class="container-block">
               <div class="text-title">ตำแหน่ง</div>
               <div class="value">

@@ -27,14 +27,14 @@ function verifyToken(req, res, next) {
       const token = bearer[1];
       jwt.verify(token, 'secretkey', (err, authData) => {
         if (err) {
-          res.status(401).send('Forbidden')
+          res.status(401).send('Forbiddens')
         } else {
           req.token = token;
           next();
         }
       })
     } else {
-      res.status(403).send('Forbidden')
+      res.status(403).send('Forbiddens')
     }
   }
   

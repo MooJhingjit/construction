@@ -1,26 +1,37 @@
-// const express = require('express');
-// const app = express();
-// const bodyParser = require('body-parser');
-// app.use(bodyParser.json());
 const helpers = require('../Libraries/helpers')
 const userModel = require('../Models/userModel')
-const getData = (req, res, next) => {
+const auth = require('./authController.js')
+
+const getData = async (req, res, next) => {
   let userData = helpers.getUserAuth(req.headers['authorization'])
   let id = req.params.key
   if (req.params.key == 'profile') {
     id = userData.id
   }
   let user = new userModel(id)
-  user.getUser((result) => {
-    res.status(200).json(result[0])
-  })
+  let result = await user.getUser()
+  res.status(200).json(result[0])
 }
 
+const getUserDetail = async (userId) => {
+  let user = new userModel(userId)
+  let userData = await user.getUser()
+  if (!userData) {
+    return false
+  }
+  return {
+    'id': userData[0].id,
+    'name': userData[0].name,
+    'email': userData[0].email,
+    'username': userData[0].username,
+    'phone': userData[0].phone,
+    'address': userData[0].address,
+    'position': userData[0].position
+ }
+}
+
+
 async function getAllData (req, res, next) {
-  // let user = new userModel()
-  // user.getAllUsers((result) => {
-  //   res.status(200).json(result)
-  // })
   let user = new userModel()
   let data = []
   user.status = req.query.status
@@ -40,11 +51,10 @@ async function getAllData (req, res, next) {
 }
 
 async function createData (req, res, next) {
-  // console.log(req.body.na)
   let newItem = new userModel()
   newItem.name= req.body.data.name
   newItem.username = req.body.data.username
-  newItem.password = '123456'
+  newItem.password = await auth.hashPassword(req.body.data.password)
   newItem.email = req.body.data.email
   newItem.phone = req.body.data.phone
   newItem.address = req.body.data.address
@@ -79,3 +89,4 @@ module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.deleteData = deleteData
+module.exports.getUserDetail = getUserDetail

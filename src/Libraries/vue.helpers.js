@@ -31,6 +31,18 @@ export default {
     // }
   },
   methods: {
+    GET_DATE (date) { // this for buefy
+      if (date === undefined || date === null) {
+        return null
+      }
+      return new Date(date)
+    },
+    GET_DATEDIFF (dateStart, dateEnd) { // this for buefy
+      dateStart = new moment(dateStart)
+      dateEnd = new moment(dateEnd)
+      let duration = moment.duration(dateStart.diff(dateEnd))
+      return duration.asDays()
+    },
     NUMBERWITHCOMMAS (number, digit = 0) {
       return parseFloat(number).toFixed(digit).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     },

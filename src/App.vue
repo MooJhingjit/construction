@@ -52,6 +52,7 @@ export default {
   },
   created () {
     bus.$on('setNotification', this.setNotification)
+    bus.$on('logout', this.logout)
     this.checkAuth()
     this.fetchData()
     // if (this.$route.name !== 'Login') {
@@ -103,10 +104,15 @@ export default {
           this.setOrderingNotification(obj.value)
           break
       }
+    },
+    logout () {
+      Helper.REMOVE_STORAGEITEM('isAuth')
+      Helper.REMOVE_STORAGEITEM('app_token')
     }
   },
   beforeDestroy () {
     bus.$off('setNotification', this.setNotification)
+    bus.$off('logout', this.logout)
   },
   watch: {
     $route (to, from) {

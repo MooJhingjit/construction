@@ -9,11 +9,14 @@ module.exports =  class contractProgress {
     this.contract_code = code
     this.time
     this.order
-    this.order_condition
+    this.order_all
+    // this.order_condition
     this.name
     this.start_date
+    this.end_date
     this.real_date
     this.delay
+    this.condition
     this.status
   }
 
@@ -37,12 +40,15 @@ module.exports =  class contractProgress {
     let result = await this.knex('contract_progress').insert({
       contract_code: this.contract_code,
       time: this.time,
+      order_all: this.order_all,
       order: this.order,
-      order_condition: this.order_condition,
+      // order_condition: this.order_condition,
       name: this.name,
       start_date: this.start_date,
+      end_date: this.end_date,
       real_date: this.real_date,
       delay: this.delay,
+      condition: this.condition,
       status: this.status
     })
     return result
@@ -51,7 +57,7 @@ module.exports =  class contractProgress {
   async updateDate () {
     let result = await this.knex('contract_progress')
     .update({
-      start_date: this.start_date,
+      // start_date: this.start_date,
       real_date: this.real_date,
       delay: this.delay
     })

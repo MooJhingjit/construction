@@ -1,24 +1,25 @@
 const helpers = require('../Libraries/helpers')
-const userModel = require('../Models/userModel')
 const ordering = require('./orderingController.js')
+const user = require('./userController.js')
 const getAppResource = async (req, res, next) => {
-  let userData = helpers.getUserAuth(req.headers['authorization'])
-  let user = new userModel(userData.id)
-  let result = await user.getUser()
-  let orderingData = await ordering.countOrdering()
+  let userAuth = helpers.getUserAuth(req.headers['authorization'])
+  let userData = await user.getUserDetail(userAuth.id)
+  if (!userData) {
+    res.status(401).json({})
+  }
+
+  await runTasks()
+  let orderingData = await ordering.countOrdering() // alert ordering
   let obj = {
-    userData: {
-       'id': result[0].id,
-       'name': result[0].name,
-       'email': result[0].email,
-       'username': result[0].username,
-       'phone': result[0].phone,
-       'address': result[0].address,
-       'position': result[0].position
-    },
+    userData,
     orderingData
   }
   res.status(200).json(obj)
+}
+const runTasks = async () => {
+  // check ordering
+  await ordering.checkOrdering()
+  return
 }
 
 module.exports.getAppResource = getAppResource

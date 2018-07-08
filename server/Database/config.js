@@ -4,7 +4,8 @@ module.exports.config = {
     host: 'localhost',
     user: 'root',
     password: '1234',
-    database : 'construction'
+    database : 'construction',
+    timezone: 'UTC',
   },
   pool: { min: 0, max: 7 }
 }
