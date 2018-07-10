@@ -58,7 +58,12 @@ const editWorkingProgress = async (contractCode) => {
   return result
 }
 
+// const getWorkStarting = async () => {
+
+// }
+
 
 module.exports.getWorkingProgress = getWorkingProgress
 module.exports.setWorkingProgress = setWorkingProgress
 module.exports.editWorkingProgress = editWorkingProgress
+module.exports.getWorkStarting = getWorkStarting

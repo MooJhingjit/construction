@@ -85,13 +85,19 @@ async function createData (req, res, next) {
 }
 
 async function updateData (req, res, next) {
+  // frist update name of group
   let item = new materialGroupModel(req.body.data.id)
   item.name = req.body.data.name
   let result = await item.update()
 
+  // secound clear the old data
   let oldItem = new materialGroupDetailModel()
   oldItem.material_group_id = req.body.data.id
+  if (req.body.data.houseId !== null) {
+    oldItem.house_id = req.body.data.houseId
+  }
   await oldItem.delete()
+  
   let newItem = req.body.data.lists
   newItem.map(item => {
     let newItem = new materialGroupDetailModel()

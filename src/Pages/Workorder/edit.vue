@@ -58,7 +58,7 @@
                             <td>
                               <my-input
                                 :value="getCondition(item.condition, 'condition')"
-                                :inputObj="{type: 'text', name: `order_condition_${index}`, placeholder: '', validate: 'required'}"
+                                :inputObj="{type: 'text', name: `order_condition_${index}`, placeholder: '', validate: ''}"
                                 :validator="$validator"
                                 @input="value => setCondition(index, value, 'condition', item)"
                                 ></my-input>

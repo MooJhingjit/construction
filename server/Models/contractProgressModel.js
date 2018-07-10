@@ -32,8 +32,11 @@ module.exports =  class contractProgress {
     
   }
 
-  async count () {
-
+  async startWorking () {
+    let result = await this.knex('contract_progress')
+    .where({contract_code: this.contract_code})
+    .where({condition: this.condition})
+    return result
   }
 
   async save () {

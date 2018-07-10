@@ -110,7 +110,7 @@ async function updateCondition (obj, time, order) {
           workOrderPreiod.id = item.id
           workOrderPreiod.preiod = item.preiod
           workOrderPreiod.preiod_end = item.preiod_end
-          workOrderPreiod.condition = item.condition
+          workOrderPreiod.condition = item.condition === '' || item.condition === null ? null : item.condition
           await workOrderPreiod.update()
         } else { // insert
           workOrderPreiod.work_order_time = time
@@ -118,7 +118,7 @@ async function updateCondition (obj, time, order) {
           workOrderPreiod.house_id = item.house_id
           workOrderPreiod.preiod = item.preiod
           workOrderPreiod.preiod_end = item.preiod_end
-          workOrderPreiod.condition = item.condition
+          workOrderPreiod.condition = item.condition === '' || item.condition === null ? null : item.condition
           await workOrderPreiod.save()
         }
       }

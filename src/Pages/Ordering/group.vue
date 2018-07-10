@@ -25,7 +25,7 @@
                 ></my-input>
             </div>
             <div class="items" >
-              <table class="transparent-table" v-if="local.inputs.lists.length">
+              <table class="transparent-table">
                 <thead>
                   <tr>
                     <td width="200">
@@ -41,7 +41,7 @@
                     <td></td>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="local.inputs.lists.length">
                   <tr :key="index" v-for="(item, index) in local.inputs.lists">
                     <td>{{item.houseId}}</td>
                     <td>{{item.materialName}}</td>
@@ -50,9 +50,6 @@
                   </tr>
                 </tbody>
               </table>
-              <div v-else>
-                <!-- <label for="">ไม่มีข้อมูล</label> -->
-              </div>
             </div>
           </div>
         </div>
@@ -71,6 +68,7 @@
           </my-action>
           <!-- <button class="button" @click="submitForm('update')">บันทึกข้อมูล</button>
           <button class="button is-danger" @click="submitForm('delete')">ลบข้อมูล</button> -->
+          <!-- {{this.local.inputs}} -->
         </div>
       </template>
     </template>
@@ -123,6 +121,7 @@ export default {
         inputs: {
           id: null,
           name: null,
+          houseId: null,
           lists: []
         },
         lists: [],
@@ -165,6 +164,7 @@ export default {
         return
       }
       this.local.houseTemplate.selected = objVal
+      this.local.inputs.houseId = objVal.key
       this.local.inputs.lists = this.local.lists.filter(item => {
         return item.houseId === objVal.key
       })

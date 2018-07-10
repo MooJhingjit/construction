@@ -146,14 +146,14 @@ const getContractPeriod = async (req, res, next) => {
 }
 
 const updateContractStatus = async (req, res, next) => {
-  let newItem = new contractModel()
-  newItem.code = req.params.id
-  newItem.status = req.body.data.status
-  await newItem.updateStatus() // on
-  switch(newItem.status) {
+  let item = new contractModel()
+  item.code = req.params.id
+  item.status = req.body.data.status
+  await item.updateStatus() // on
+  switch(item.status) {
     case 'ip':
-      await startWorking(newItem.code, req.body.data.houseId)
-        // await reviewContractProgress(newItem.code, req.body.data.houseId, 1)
+      await startWorking(item.code, req.body.data.houseId)
+        // await reviewContractProgress(item.code, req.body.data.houseId, 1)
         break
     case 'done':
         // orderMaterial()
@@ -166,7 +166,15 @@ const updateContractStatus = async (req, res, next) => {
 const startWorking = async (contractCode, houseId) => {
   // console.log(contractCode, houseId)
   await setContractProgress(contractCode, houseId)
-  await ordering.prepareOrdering(contractCode, houseId, 1, 1) // 1 = time // on
+  let startWorking = new contractProgressModel(contractCode)
+  startWorking.condition = 0
+  let res = await startWorking.startWorking()
+  
+  await Promise.all(
+    res.map( async (item) => {
+      await ordering.prepareOrdering(contractCode, houseId, item.order, item.time)
+    })
+  )
 }
 
 const getDropDown = async (req, res, next) => {
@@ -213,30 +221,34 @@ const setContractProgress = async (contractCode, houseId) => {
   await Promise.all(
     workingTemplate.map( async (item) => {
       let workOrder = await matchWorkOrderPreiod(workOrderPreiod, item.work_order_time, item.order)
-      let condition = workOrder.condition
+      let condition = workOrder.condition !== null ? workOrder.condition : null
       if (tempEndDate.length == 1) { // for frist round
-        console.log(workOrder.preiod_end)
+        // console.log(workOrder.preiod_end)
         tempStartDate[orderNumber] = startDate
         tempEndDate[orderNumber] = helpers.addDate(startDate, workOrder.preiod_end, format = 'YYYY-MM-DD')
         endDate = tempEndDate[orderNumber]
       } else {
-        startDate = helpers.addDate(tempEndDate[condition], workOrder.preiod, format = 'YYYY-MM-DD')
+        let indexCondition = condition
+        if (indexCondition === null) {
+          indexCondition = 0
+        }
+        startDate = helpers.addDate(tempEndDate[indexCondition], workOrder.preiod, format = 'YYYY-MM-DD')
         tempEndDate[orderNumber] = helpers.addDate(startDate, workOrder.preiod_end, format = 'YYYY-MM-DD')
         endDate = tempEndDate[orderNumber]
       }
-      
       let newItem = new contractProgressModel(contractCode)
       newItem.time = item.work_order_time
       newItem.order = item.order
       // newItem.order_condition = 0
       newItem.order_all = orderNumber
       newItem.name = item.name
-      newItem.start_date = startDate
-      newItem.end_date = endDate
+      newItem.start_date = condition === null ? null : startDate
+      newItem.end_date = condition === null ? null : endDate
       newItem.real_date = null
       newItem.condition = condition
       newItem.delay = 0
-      newItem.status = item.work_order_time == 1 && item.order == 1 ? 'ip' : 'wait'
+      // newItem.status = item.work_order_time == 1 && item.order == 1 ? 'ip' : 'wait'
+      newItem.status = condition === 0 ? 'ip' : 'wait' 
       orderNumber = parseInt(orderNumber) + 1
       await newItem.save()
       
@@ -269,7 +281,7 @@ const updateContractProgress = async (req, res, next) => {
   await Promise.all(
     progress.map( async (item) => {
       let progress = new contractProgressModel()
-      progress.start_date = helpers.getDate(item.start_date)
+      // progress.start_date = helpers.getDate(item.start_date)
       progress.real_date = helpers.getDate(item.real_date)
       progress.delay = item.delay
       progress.id = item.id

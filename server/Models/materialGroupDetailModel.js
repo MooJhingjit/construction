@@ -78,7 +78,7 @@ module.exports =  class MaterialGroupDetail {
 
   async delete () {
     let result = await this.knex('material_group_detail')
-    .where({material_group_id: this.material_group_id})
+    .where(this.getCondition())
     .del()
     return result
   }
@@ -104,6 +104,12 @@ module.exports =  class MaterialGroupDetail {
     let conditions = {}
     if (this.status) {
       conditions.status = this.status
+    }
+    if (this.material_group_id) {
+      conditions.material_group_id = this.material_group_id
+    }
+    if (this.house_id) {
+      conditions.house_id = this.house_id
     }
     return conditions
   }

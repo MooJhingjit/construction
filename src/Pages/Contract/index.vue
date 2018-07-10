@@ -60,8 +60,8 @@
                   <td>
                     <!-- {{SET_DATEFORMAT(item.real_date)}} -->
                     <my-input
-                    :value="GET_DATE(item.real_date)"
-                    :inputObj="{type: 'datepicker', name: 'contract_datestart', placeholder: 'วันที่เสร็จจริง', validate: ''}"
+                    :value="SET_DATEFORMAT(item.real_date)"
+                    :inputObj="{type: 'text', name: 'contract_datestart', placeholder: 'วันที่เสร็จจริง', validate: ''}"
                     :validator="$validator"
                     @input="value => setRealDate(value, index)"
                     ></my-input>
@@ -109,7 +109,7 @@
           <my-action
             type="update"
             :obj="{title: 'บันทึกข้อมูล', color: 'is-info', isConfirm: true}"
-            @clickEvent="submitForm('update')"
+            @clickEvent="submitForm('updateProgress')"
             v-if="local.inputs.contract.status == 'ip'"
           >
           </my-action>
@@ -228,10 +228,12 @@ export default {
           let obj = res.data.orderingData
           bus.$emit('setNotification', {type: 'ordering', value: obj})
           break
-        case 'update':
-          if (!isValid) return
-          console.log(this.local.inputs.progress)
-          break
+        // case 'update':
+        //   if (!isValid) return
+        //   resourceName = `${config.api.contract.index}/${this.local.idSelected}`
+        //   data = this.local.inputs.progress
+        //   res = await service.putResource({data, resourceName})
+        //   break
         case 'updateProgress':
           resourceName = `${config.api.contract.progress}/${this.local.idSelected}`
           data = this.local.inputs.progress
@@ -261,10 +263,9 @@ export default {
     },
     setRealDate (value, index) {
       let newFormat = this.SET_DATEFORMAT(value)
-      let dateDiff = this.GET_DATEDIFF(newFormat, this.local.inputs.progress[index].end_date)
+      let dateDiff = this.GET_DATEDIFF(this.local.inputs.progress[index].end_date, newFormat)
       this.local.inputs.progress[index].delay = Math.ceil(dateDiff)
-      // this.local.inputs.progress[index].real_date = value
-      // console.log(dateDiff)
+      this.local.inputs.progress[index].real_date = value
     }
   }
 }
