@@ -116,6 +116,12 @@ const getDropDown = async (req, res, next) => {
   
   res.status(200).json(data)
 }
+
+const getDetailById = async (projectId) => {
+  let projectItem = new projectModel(projectId)
+  project = await projectItem.getData()
+  return project[0]
+}
 module.exports.getStat = getStat
 module.exports.getData = getData
 module.exports.getDropDown = getDropDown
@@ -123,3 +129,4 @@ module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.deleteData = deleteData
+module.exports.getDetailById = getDetailById

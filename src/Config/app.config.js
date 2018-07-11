@@ -49,6 +49,9 @@ const api = {
     'index': '/ordering',
     'fullOrder': '/full-ordering',
     'extra': '/ordering-extra'
+  },
+  'frontSite': {
+    'index': '/front-site'
   }
 }
 

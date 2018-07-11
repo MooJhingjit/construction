@@ -30,6 +30,11 @@ module.exports =  class Contract {
     .where({'contract.code': this.code})
     return result
   }
+  async getAllData () {
+    let result = await this.knex('contract')
+    .where(this.getCondition())
+    return result
+  }
 
   async getAllSelection () {
     let result = await this.knex.select('code').from('contract').orderBy('created_at', 'desc')
@@ -43,7 +48,7 @@ module.exports =  class Contract {
     return result
   }
 
-  async getAllData () {
+  async getSelectedData () {
     let result = await this.knex('contract')
     .where(this.getCondition())
     .where('code', 'like', `%${this.code || ''}%`)

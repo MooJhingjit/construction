@@ -1,5 +1,5 @@
 const helpers = require('../Libraries/helpers')
-// const working = require('./workingController.js')
+const project = require('./projectController.js')
 // const {startOrdering} = require('./orderingController.js')
 const projectModel = require('../Models/projectModel')
 const contractModel = require('../Models/contractModel')
@@ -7,6 +7,7 @@ const contractTimeModel = require('../Models/contractTimeModel')
 const contractProgressModel = require('../Models/contractProgressModel')
 const workOrder = require('./workOrderController.js')
 const ordering = require('./orderingController.js')
+const store = require('./storeController.js')
 const getData = async (req, res, next) => {
   let contract = new contractModel()
   contract.code = req.params.key
@@ -39,7 +40,7 @@ const getAllData = async (req, res, next) => {
   let total = await contract.count()
   contract.limit = req.query.limit
   contract.offset = helpers.getTableoffset(req.query.limit, req.query.currentPage)
-  let result = await contract.getAllData()
+  let result = await contract.getSelectedData()
   let data = []
   if (result) {
     let config = {
@@ -341,6 +342,20 @@ const getLastProgress = async () => {
   return obj
 }
 
+const getShortCutContract = async () => { // this for front site
+  let contract = new contractModel()
+  contract.status = 'ip'
+  let contractData = await contract.getAllData()
+  await Promise.all(
+    contractData.map( async (item) => {
+      item.project = await project.getDetailById(item.project_id)
+      item.ordering = await ordering.getDetailByContractCode(item.code, false) // false == don't get ordering detail
+    })
+  )
+  
+  return contractData
+}
+
 module.exports.getStat = getStat
 module.exports.getData = getData
 module.exports.deleteData = deleteData
@@ -349,6 +364,7 @@ module.exports.createData = createData
 module.exports.getDropDown = getDropDown
 module.exports.getLastProgress = getLastProgress
 module.exports.updateTimeData = updateTimeData
+module.exports.getShortCutContract = getShortCutContract
 module.exports.getContractPeriod = getContractPeriod
 module.exports.updateContractStatus = updateContractStatus
 module.exports.updateContractProgress = updateContractProgress

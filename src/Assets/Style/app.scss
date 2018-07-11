@@ -439,6 +439,9 @@ html {
                       font-size: 1.3em;
                       color: $frist-text-black-color;
                     }
+                    .project-detail{
+                      flex-direction: row;
+                    }
                     .current-task{
                       span{
                         font-size: 1em;

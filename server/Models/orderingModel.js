@@ -20,7 +20,7 @@ module.exports =  class Ordering {
   }
 
   async getData () {
-    let result = await this.knex.select('ordering.*', 'store.name as storeName')
+    let result = await this.knex.select('ordering.*', 'store.name as storeName', 'store.type as storeType')
     .from('ordering')
     .leftJoin('store', function() {
       this.on('store.id', '=', 'ordering.store_id')

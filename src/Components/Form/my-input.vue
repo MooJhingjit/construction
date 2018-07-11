@@ -98,7 +98,7 @@ export default {
   methods: {
     blurEvent () {
       if (this.local.isBlur) {
-        this.$emit('onBlur')
+        this.$emit('onBlur', this.inputVal)
       }
     }
   },

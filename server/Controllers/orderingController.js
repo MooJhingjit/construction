@@ -158,7 +158,7 @@ async function prepareMaterial (contractCode, materials, extraObj = null) {
       startDate = currentDate
       let data = {}
       let status = 'wait'
-      if (storeData[0].delay) {
+      if (storeData[0].delay && extraObj === null) {
         status = 'pending'
         // console.log(startDate)
         startDate = helpers.addDate(startDate, storeData[0].delay, 'YYYY-MM-DD')
@@ -219,18 +219,20 @@ const getMaterialIdArr = (materials) => {
 
   return materialArr
 }
-const getDetailByContractCode = async (code) => {
+const getDetailByContractCode = async (code, withDetail = true) => {
   let ordering = new orderingModel()
   ordering.contract_code = code
   let orderingRes = await ordering.getData()
-  await Promise.all(
-    orderingRes.map( async (item) => {
-      let orderDetail = new orderingDetailModel()
-      orderDetail.order_id = item.id
-      let orderDetailRes = await orderDetail.getData()
-      item.orderDetail = orderDetailRes
-    })
-  )
+  if (withDetail) {
+    await Promise.all(
+      orderingRes.map( async (item) => {
+        let orderDetail = new orderingDetailModel()
+        orderDetail.order_id = item.id
+        let orderDetailRes = await orderDetail.getData()
+        item.orderDetail = orderDetailRes
+      })
+    )
+  }
   return orderingRes
   
 }
@@ -302,4 +304,6 @@ module.exports.getLastOrder = getLastOrder
 module.exports.countOrdering = countOrdering
 module.exports.deleteData = deleteData
 module.exports.checkOrdering = checkOrdering
+module.exports.getDetailByContractCode = getDetailByContractCode
+
 

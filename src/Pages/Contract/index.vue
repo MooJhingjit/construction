@@ -61,9 +61,9 @@
                     <!-- {{SET_DATEFORMAT(item.real_date)}} -->
                     <my-input
                     :value="SET_DATEFORMAT(item.real_date)"
-                    :inputObj="{type: 'text', name: 'contract_datestart', placeholder: 'วันที่เสร็จจริง', validate: ''}"
+                    :inputObj="{type: 'text', isBlur: true, name: 'contract_datestart', placeholder: 'YYYY/MM/DD', validate: ''}"
                     :validator="$validator"
-                    @input="value => setRealDate(value, index)"
+                    @onBlur="value => setRealDate(value, index)"
                     ></my-input>
                   </td>
                   <td>
@@ -256,6 +256,7 @@ export default {
       return config.variable.workingStatus[code]
     },
     getDateFromContract (time) {
+      console.log(this.local.inputs.contractTime)
       if (this.local.inputs.contractTime[0] !== undefined) {
         return this.SET_DATEFORMAT(this.local.inputs.contractTime[time - 1].date_start)
       }
@@ -264,6 +265,9 @@ export default {
     setRealDate (value, index) {
       let newFormat = this.SET_DATEFORMAT(value)
       let dateDiff = this.GET_DATEDIFF(this.local.inputs.progress[index].end_date, newFormat)
+      if (isNaN(dateDiff)) {
+        dateDiff = 0
+      }
       this.local.inputs.progress[index].delay = Math.ceil(dateDiff)
       this.local.inputs.progress[index].real_date = value
     }

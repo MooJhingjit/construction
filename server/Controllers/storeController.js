@@ -73,8 +73,15 @@ async function deleteData (req, res, next) {
   res.status(200).json({})
 }
 
+const getDetailById = async (storeId) => {
+  let store = new storeModel(storeId)
+  store = await store.getData()
+  return store[0]
+}
+
 module.exports.getData = getData
 module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.deleteData = deleteData
+module.exports.getDetailById = getDetailById
