@@ -57,7 +57,7 @@ export default {
     GET_STATUSNAME (key) {
       return config.variable.status[key]
     },
-    GET_CURRENTDATE (format = 'YYYY-MM-DD')  {
+    GET_CURRENTDATE (format = 'YYYY-MM-DD') {
       return moment().format(format)
     },
     SET_DATEFORMAT (dateInput) {

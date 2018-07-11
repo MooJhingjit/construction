@@ -360,5 +360,3 @@ export default {
   }
 }
 </style>
-
-

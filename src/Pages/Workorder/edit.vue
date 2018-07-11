@@ -42,7 +42,6 @@
                           </tr>
                         </thead>
                         <tbody>
-                          
                           <tr :key="index" v-for="(item, index) in local.itemLists">
                             <td>
                               {{item.order}}
@@ -313,7 +312,7 @@ export default {
       let obj = condition.filter((item) => {
         return item.house_id === this.local.houseTemplate.selected
       })[0]
-      if (obj === undefined) return ''  
+      if (obj === undefined) return ''
       return obj[type]
     }
   }

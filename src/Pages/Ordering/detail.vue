@@ -126,10 +126,6 @@
               <tr v-if="local.orderSelected.status === 'confirmed'">
                 <td>วันที่อนุมัติ: {{getOrderSelected('date_start')}}</td>
               </tr>
-              <!-- 
-              <tr>
-                <td>วันที่บันทึก: {{getOrderSelected('created_at')}}</td>
-              </tr> -->
             </table>
           </div>
           <div class="block function container-block">
@@ -207,7 +203,7 @@ export default {
         filterKey: 'all',
         orderSelected: null,
         orderIdSelected: null,
-        orderConfirmDate: null,
+        orderConfirmDate: null
       }
     }
   },

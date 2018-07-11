@@ -257,7 +257,7 @@ export default {
     },
     getDateFromContract (time) {
       if (this.local.inputs.contractTime[0] !== undefined) {
-        return this.SET_DATEFORMAT(this.local.inputs.contractTime[time-1].date_start)
+        return this.SET_DATEFORMAT(this.local.inputs.contractTime[time - 1].date_start)
       }
       return null
     },
