@@ -3,7 +3,7 @@ const router = express.Router();
 const frontSiteController = require('../Controllers/frontSiteController.js')
 
 router.get('/front-site', frontSiteController.getAllData)
-// router.get('/contract/:key', contractController.getData);
+router.get('/front-site/:key', frontSiteController.getData);
 // router.get('/contract-period/:house_id', contractController.getContractPeriod);
 // router.post('/contract', contractController.createData);
 // router.put('/contract-status/:id', contractController.updateContractStatus);

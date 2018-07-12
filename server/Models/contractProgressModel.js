@@ -21,8 +21,13 @@ module.exports =  class contractProgress {
   }
 
   async getData () { // with matert
+    let condition = {}
+    condition.contract_code = this.contract_code
+    if (this.time) {
+      condition.time = this.time
+    }
     let result = await this.knex('contract_progress')
-    .where({contract_code: this.contract_code})
+    .where(condition)
     .orderBy('time', 'asc')
     .orderBy('order', 'asc')
     return result

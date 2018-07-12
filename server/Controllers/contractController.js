@@ -8,6 +8,7 @@ const contractProgressModel = require('../Models/contractProgressModel')
 const workOrder = require('./workOrderController.js')
 const ordering = require('./orderingController.js')
 const store = require('./storeController.js')
+
 const getData = async (req, res, next) => {
   let contract = new contractModel()
   contract.code = req.params.key
@@ -20,7 +21,7 @@ const getData = async (req, res, next) => {
     let contractTime = new contractTimeModel()
     contractTime.contract_code = req.params.key
     projcontractTimeResult = await contractTime.getData()
-    contractProgress = await getContractProgress(contract.code)
+    contractProgress = await getContractAllProgress(contract.code)
   }
   let result = {
     contract: contractResult[0],
@@ -192,20 +193,45 @@ const getDropDown = async (req, res, next) => {
   res.status(200).json(data)
 }
 
-const getContractProgress = async (contractCode) => {
+const getContractAllProgress = async (contractCode, getCurrentTask = true) => {
   let item = new contractProgressModel(contractCode)
   let result = []
   let workProgress = await item.getData()
-  if (workProgress.length) {
-    currentTask = workProgress.filter((item) => {
-      return item.status === 'ip'
-    })[0]
-    currentTask = currentTask.time
-    result = workProgress.filter((item) => {
-      return item.time === currentTask
-    })
+  if (getCurrentTask) {
+    if (workProgress.length) {
+      currentTask = workProgress.filter((item) => {
+        return item.status === 'ip'
+      })[0]
+      currentTask = currentTask.time
+      result = workProgress.filter((item) => {
+        return item.time === currentTask
+      })
+    }
+  } else {
+    result = workProgress
   }
+  
   return result
+}
+
+const getContractProgress = async (contractCode, time) => {
+  let item = new contractProgressModel(contractCode)
+  item.time = time
+  let progress = await item.getData()
+  return progress
+}
+
+const getContractTime = async (contractCode) => {
+  let contractTime = new contractTimeModel()
+  contractTime.contract_code = contractCode
+  contractTimeResult = await contractTime.getData()
+  await Promise.all(
+    contractTimeResult.map( async (item) => {
+      console.log(item.time)
+      item.progress = await getContractProgress(contractCode, item.time)
+    })
+  )
+  return contractTimeResult
 }
 
 // copy progress
@@ -369,3 +395,5 @@ module.exports.getContractPeriod = getContractPeriod
 module.exports.updateContractStatus = updateContractStatus
 module.exports.updateContractProgress = updateContractProgress
 module.exports.getDetailByContractCode = getDetailByContractCode
+module.exports.getContractAllProgress = getContractAllProgress
+module.exports.getContractTime = getContractTime

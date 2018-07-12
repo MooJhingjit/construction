@@ -112,7 +112,6 @@ export default {
         .then((res) => {
           if (res.status === 200) {
             this.local.contracts = res.data
-            // 
           }
         })
         .catch((err) => {

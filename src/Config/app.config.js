@@ -52,6 +52,7 @@ const api = {
   },
   'frontSite': {
     'index': '/front-site'
+    // 'update': '/'
   }
 }
 
