@@ -11,5 +11,20 @@ async function getData (req, res, next) {
   data.time = await contract.getContractTime(req.params.key) // false = get all task
   res.status(200).json(data)
 }
+
+async function updateTask (req, res, next) { // <---------------------
+  // checkTaskPermission(contractCode)
+  // contract.updateContractTask(contractCode, time, order, status)
+  res.status(200).json({})
+}
+
+
+const checkTaskPermission = async (contractCode) => { // <---------------------
+  // add column assign in contract table 
+
+  // check premission
+
+}
 module.exports.getAllData = getAllData
 module.exports.getData = getData
+module.exports.updateTask = updateTask

@@ -32,7 +32,7 @@
                       <i class="fa fa-check-square-o" aria-hidden="true"></i>
                     </template>
                     <template v-else>
-                      <button class="button">อัพเดท</button>
+                      <button class="button" @click="updateTask(task)">อัพเดท</button>
                     </template>
                     
                     <!-- <div class="detail">detail</div> -->
@@ -123,6 +123,15 @@ export default {
     showTaskDetail (task) {
       this.$refs.modelPanel.isActive = true
       this.local.modelData = task
+    },
+    updateTask (task) {
+      let resourceName = `${config.api.frontSite.index}/${this.$route.params.key}`
+      let data = task
+      res = await service.putResource({data, resourceName})
+      if (res.status === 200) {
+        this.NOTIFY('success')
+        this.fetchData()
+      }
     }
   }
 }

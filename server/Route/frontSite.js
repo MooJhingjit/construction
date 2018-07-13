@@ -6,7 +6,7 @@ router.get('/front-site', frontSiteController.getAllData)
 router.get('/front-site/:key', frontSiteController.getData);
 // router.get('/contract-period/:house_id', contractController.getContractPeriod);
 // router.post('/contract', contractController.createData);
-// router.put('/contract-status/:id', contractController.updateContractStatus);
+router.put('/front-site/:id', frontSiteController.updateTask);
 // router.put('/contract-time/:id', contractController.updateTimeData);
 // router.put('/contract-progress/:id', contractController.updateContractProgress);
 // router.delete('/contract/:id', contractController.deleteData);

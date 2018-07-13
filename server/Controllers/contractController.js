@@ -302,7 +302,7 @@ const matchWorkOrderPreiod = async (workOrderPreiod, time, order) => {
     condition
   }
 }
-
+// update only date and delay from contract page
 const updateContractProgress = async (req, res, next) => {
   let progress = req.body.data
   await Promise.all(
@@ -317,8 +317,8 @@ const updateContractProgress = async (req, res, next) => {
   )
   res.status(200).json({})
 }
-
-const updateContractTask = async (req, res, next) => {
+// update task from frontsite this one just update status
+const updateContractTask = async (contractCode, time, order, status) => { // <---------------------
   // update from frontsite
   // let contractCode = req.xxx
   // find next taskOrder and send to updateWorkingProgress
@@ -330,12 +330,12 @@ const updateContractTask = async (req, res, next) => {
 //   ordering.prepareOrdering(houseId, taskOrder, 1) // 1 = time
 // }
 
-const getContractDetail = async (contractCode, type) => {
-  let item = new contractModel()
-  item.code = contractCode
-  let result = await item.getContractDetail()
-  return result
-}
+// const getContractDetail = async (contractCode, type) => {
+//   let item = new contractModel()
+//   item.code = contractCode
+//   let result = await item.getContractDetail()
+//   return result
+// }
 
 const getDetailByContractCode = async (typeSelect, code) => {
   let contractItem = new contractModel()
