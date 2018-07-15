@@ -9,7 +9,7 @@
 export default {
   props: {
     type: {
-      type: String,
+      type: [String],
       required: true
     },
     obj: {

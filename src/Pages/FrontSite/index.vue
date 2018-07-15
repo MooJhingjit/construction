@@ -28,7 +28,7 @@
           </table>
         </div>
         <div class="actions container-block">
-          <button class="button block" @click="GOTOPAGE('FrontSiteUpdate', item.code)">สถานะงาน</button>
+          <button class="button is-info block" @click="GOTOPAGE('FrontSiteUpdate', item.code)">สถานะงาน</button>
         </div>
        </article>
        <!-- <article class="tile is-child notification">
@@ -130,5 +130,48 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+@import '~@Styles/var.scss';
+.front-site-page{
+  article{
+    margin-bottom: 15px !important;
+    text-align: center;
+    font-size: 1em;
+    &>div{
+      flex: 1;
+      min-height: 40px;
+    }
+    .project-name{
+      font-size: 1.3em;
+      color: $frist-text-black-color;
+    }
+    .project-detail{
+      flex-direction: row;
+      &>.block:not(:last-child){
+        margin-bottom: 5px;
+      }
+    }
+    .current-task{
+      span{
+        font-size: 1em;
+      }
+      color: $second-text-black-color;
+    }
+    .next-task{
+      .name, .date{
+        color: $frist-text-black-color;
+        margin-bottom: 5px;
+        text-align: left;
+      }
+    }
+    .actions{
+      button{
+        // background: #e0e0e0;
+      }
+    }
+   @media (min-width: $computerBreakpoint) {
+      margin: 15px !important;
+    }
+  }
+}
 </style>

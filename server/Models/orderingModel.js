@@ -7,6 +7,7 @@ module.exports =  class Ordering {
   constructor(id){
     this.knex = knex(db.config)
     this.id = id
+    this.progress_id
     this.store_id
     this.contract_code
     this.total_price
@@ -20,7 +21,14 @@ module.exports =  class Ordering {
   }
 
   async getData () {
-    let result = await this.knex.select('ordering.*', 'store.name as storeName', 'store.type as storeType')
+    let result = await this.knex.select(
+      'ordering.*',
+      'store.name as storeName',
+      'store.type as storeType',
+      'store.tel as storeTel',
+      'store.fax as storeFax',
+      'store.contact as storeContact'
+    )
     .from('ordering')
     .leftJoin('store', function() {
       this.on('store.id', '=', 'ordering.store_id')
@@ -67,6 +75,7 @@ module.exports =  class Ordering {
 
   async save () {
     let result = await this.knex('ordering').insert({
+      progress_id: this.progress_id,
       store_id: this.store_id,
       contract_code: this.contract_code,
       total_price: this.total_price,
@@ -116,6 +125,19 @@ module.exports =  class Ordering {
     })
     .where('date_start', '<=', this.date_start)
     .where('status', 'pending')
+    return result
+  }
+
+  async getDataByContractCode () {
+    let result = await this.knex('ordering')
+    .where({contract_code: this.contract_code})
+    return result
+  }
+
+  async deleteByContractCode () {
+    let result = await this.knex('ordering')
+    .where({contract_code: this.contract_code})
+    .del()
     return result
   }
 }

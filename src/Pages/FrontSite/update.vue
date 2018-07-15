@@ -10,7 +10,6 @@
             <thead>
               <th>งวด</th>
               <th>งาน</th>
-              <!-- <th>เริ่ม</th> -->
               <th>เสร็จสิ้น</th>
             </thead>
             <tbody>
@@ -19,33 +18,28 @@
                 <td class="list">
                   <div :key="taskIndex" v-for="(task, taskIndex) in time.progress">
                     <div class="task">{{task.order}}. {{task.name}} <span @click="showTaskDetail(task)" class="detail">[รายละเอียด]</span> </div>
-                    <!-- <div class="detail">detail</div> -->
-                    <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
                   </div>
                 </td>
-                <!-- <td class="status" width="70"><i class="fa fa-check-square-o" aria-hidden="true"></i></td> -->
                 <td class="status" width="70">
-                  <!-- <i class="fa fa-check-square-o" aria-hidden="true"></i> -->
-                  
                   <div :key="taskIndex" v-for="(task, taskIndex) in time.progress">
                     <template v-if="task.status === 'done'">
                       <i class="fa fa-check-square-o" aria-hidden="true"></i>
                     </template>
                     <template v-else>
-                      <button class="button" @click="updateTask(task)">อัพเดท</button>
+                      <my-action
+                      :type="'null'"
+                        :obj="{title: 'อัพเดท', color: 'is-light', isConfirm: true}"
+                        @clickEvent="updateTask(task)"
+                      >
+                      </my-action>
+                      <!-- <button class="button" @click="updateTask(task)"></button> -->
                     </template>
-                    
-                    <!-- <div class="detail">detail</div> -->
-                    <!-- <div class="date">xx-xx-xxxx นายxxxxx xxxxxx</div> -->
                   </div>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
-       <!-- <div class="actions container-block">
-          <button class="button block">อัพเดทสถานะ</button>
-        </div> -->
        </article>
     </div>
     <model-panel ref="modelPanel">
@@ -55,7 +49,7 @@
         <div>งาน: <span></span> {{local.modelData.order_all}} <span>{{local.modelData.name}}</span></div>
         <div>กำหนดเริ่ม (ตามสัญญา): <span>{{SET_DATEFORMAT(local.modelData.start_date)}}</span></div>
         <div>กำหนดเสร็จ (ตามสัญญา): <span>{{SET_DATEFORMAT(local.modelData.end_date)}}</span></div>
-        <div>เสร็จจริง: <span>{{local.modelData.real_date}}</span></div>
+        <div>เสร็จจริง: <span>{{SET_DATEFORMAT(local.modelData.real_date)}}</span></div>
         <div>ล่าช้า: <span>{{local.modelData.delay}} (วัน)</span> </div>
         <div>สถานะ: <span>{{GET_STATUSNAME(local.modelData.status)}}</span></div>
       </div>
@@ -69,6 +63,7 @@ import optionDetailTemplate from '@Components/Template/option-detail'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
 import ModelPanel from '@Components/Model'
+import myAction from '@Components/Form/my-action'
 export default {
   props: {
     // templateName: {
@@ -77,6 +72,7 @@ export default {
     // }
   },
   components: {
+    myAction,
     ModelPanel,
     breadcrumbBar,
     optionDetailTemplate
@@ -99,17 +95,9 @@ export default {
     }
   },
   computed: {
-    // propertyComputed() {
-    //   console.log('I change when this.property changes.')
-    //   return this.property
-    // }
   },
   created () {
-    // console.log(this.$route.params.key)
     this.fetchData()
-    // console.log('created')
-    // this.property = 'Example property update.'
-    // console.log('propertyComputed will update, as this.property is now reactive.')
   },
   methods: {
     async fetchData () {
@@ -124,10 +112,11 @@ export default {
       this.$refs.modelPanel.isActive = true
       this.local.modelData = task
     },
-    updateTask (task) {
+    async updateTask (task) {
       let resourceName = `${config.api.frontSite.index}/${this.$route.params.key}`
       let data = task
-      res = await service.putResource({data, resourceName})
+      data.houseId = this.local.contract.house_id
+      let res = await service.putResource({data, resourceName})
       if (res.status === 200) {
         this.NOTIFY('success')
         this.fetchData()
@@ -138,6 +127,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '~@Styles/var.scss';
+section {
+  padding: 0 !important;
+  article{
+    padding: 0px !important;
+  }
+  @media (min-width: $computerBreakpoint) {
+    padding: 10 !important;
+  }
+}
 .table tbody {
   // display: flex;
   // flex-direction: row;
@@ -161,6 +160,7 @@ export default {
       .task{
         .detail{
           color: #666;
+          cursor: pointer;
         }
       }
     }
@@ -176,12 +176,56 @@ export default {
   tr.success{
     background: #fffce1;
   }
-  
 }
 .model{
   padding: 10px;
   span{
     font-weight: bold;
+  }
+}
+.front-site-update-page{
+  article{
+    font-size: 1em;
+    @media (min-width: $computerBreakpoint) {
+      font-size: 1.2em;
+    }
+    .project-name{
+      font-size: 1.2em;
+      // margin-bottom: 5px;
+      padding: 10px;
+      text-align: center;
+    }
+    .todo-lists{
+      table{
+        font-size: 1em;
+        tbody{
+          tr td.list{
+            .task{
+              font-size: 0.95em;
+              color: $frist-text-black-color;
+            }
+            .detail{
+              font-size: 0.85em;
+              color: $second-text-black-color;
+            }
+            .date{
+              font-size: 0.8em;
+              color: $second-text-black-color;
+            }
+          }
+          tr td.status{
+            padding: 0;
+            margin: 0;
+            vertical-align: middle;
+            text-align: center;
+            i{
+              font-size: 1.2em;
+              color: $second-text-green-color;
+            }
+          }
+        }
+      }
+    }
   }
 }
 </style>

@@ -51,7 +51,7 @@
     </div>
     <div class="level-item has-text-centered options-panel on-mobile">
       <div class="block alert">
-        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+        <i  v-if="normalOrdering || extraOrdering" class="fa fa-exclamation-circle" aria-hidden="true"></i>
         <div class="icon-menu" @click="openSubMenu('options', 'profile')">
             <i class="fa fa-th" aria-hidden="true"></i>
         </div>

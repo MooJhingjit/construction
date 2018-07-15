@@ -1,5 +1,5 @@
 <template>
-  <section class="section ordering-page">
+  <section class="section ordering-page" v-if="local.ordering != null">
     <breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar>
     <div class="container-block">
       <div class="tile is-ancestor">

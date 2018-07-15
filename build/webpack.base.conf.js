@@ -42,7 +42,8 @@ module.exports = {
       '@Components': resolve('src/Components'),
       '@Libraries': resolve('src/Libraries'),
       '@Services': resolve('src/Services'),
-      '@Config': resolve('src/Config')
+      '@Config': resolve('src/Config'),
+      '@Styles': resolve('src/Assets/Style')
     }
   },
   module: {

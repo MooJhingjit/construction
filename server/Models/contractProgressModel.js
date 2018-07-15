@@ -33,14 +33,21 @@ module.exports =  class contractProgress {
     return result
   }
 
-  async getAllData () {
-    
+  async getCurrentProgress () {
+    let condition = {}
+    condition.contract_code = this.contract_code
+    condition.time = this.time,
+    condition.order_all = this.order_all
+
+    let result = await this.knex('contract_progress')
+    .where(condition)
+    return result
   }
 
   async startWorking () {
     let result = await this.knex('contract_progress')
     .where({contract_code: this.contract_code})
-    .where({condition: this.condition})
+    .where({order_all: this.order_all})
     return result
   }
 
@@ -73,9 +80,37 @@ module.exports =  class contractProgress {
     return result
   } 
 
+  async updateProgress () {
+    let result = await this.knex('contract_progress')
+    .update({
+      status: this.status,
+      real_date: this.real_date,
+      delay: this.delay
+    })
+    .where({contract_code: this.contract_code, order_all: this.order_all, time: this.time})
+    .where('status', '!=', 'done')
+    return result
+  }
+
+  async updateStatus () { // set status
+    let result = await this.knex('contract_progress')
+    .update({
+      status: this.status
+    })
+    .where({contract_code: this.contract_code, condition: this.condition})
+    return result
+  }
+
   async getLastProgress () {
     let result = await this.knex('contract_progress')
     .where({status: 'ip'})
+    return result
+  }
+
+  async delete () {
+    let result = await this.knex('contract_progress')
+    .where({contract_code: this.contract_code})
+    .del()
     return result
   }
 }

@@ -7,7 +7,7 @@ const contractTimeModel = require('../Models/contractTimeModel')
 const contractProgressModel = require('../Models/contractProgressModel')
 const workOrder = require('./workOrderController.js')
 const ordering = require('./orderingController.js')
-const store = require('./storeController.js')
+// const store = require('./storeController.js')
 
 const getData = async (req, res, next) => {
   let contract = new contractModel()
@@ -21,7 +21,7 @@ const getData = async (req, res, next) => {
     let contractTime = new contractTimeModel()
     contractTime.contract_code = req.params.key
     projcontractTimeResult = await contractTime.getData()
-    contractProgress = await getContractAllProgress(contract.code)
+    contractProgress = await getContractAllProgress(contract.code, false)
   }
   let result = {
     contract: contractResult[0],
@@ -137,7 +137,7 @@ const getContractPeriod = async (req, res, next) => {
   item.house_id = req.params.house_id
   let result = await item.getPreiod()
   let obj = null
-  console.log(result.length)
+  // console.log(result.length)
   if (result.length) {
     obj = {}
     result.map((item) => {
@@ -148,13 +148,13 @@ const getContractPeriod = async (req, res, next) => {
 }
 
 const updateContractStatus = async (req, res, next) => {
-  let item = new contractModel()
-  item.code = req.params.id
-  item.status = req.body.data.status
-  await item.updateStatus() // on
-  switch(item.status) {
+  let contractCode = req.params.id
+  let status = req.body.data.status
+  let houseId = req.body.data.houseId
+  await updateStatus(contractCode, status)
+  switch(status) {
     case 'ip':
-      await startWorking(item.code, req.body.data.houseId)
+      await startWorking(contractCode, houseId)
         // await reviewContractProgress(item.code, req.body.data.houseId, 1)
         break
     case 'done':
@@ -166,17 +166,10 @@ const updateContractStatus = async (req, res, next) => {
 }
 
 const startWorking = async (contractCode, houseId) => {
-  // console.log(contractCode, houseId)
+  // this from frist created
   await setContractProgress(contractCode, houseId)
-  let startWorking = new contractProgressModel(contractCode)
-  startWorking.condition = 0
-  let res = await startWorking.startWorking()
-  
-  await Promise.all(
-    res.map( async (item) => {
-      await ordering.prepareOrdering(contractCode, houseId, item.order, item.time)
-    })
-  )
+  await updateContractTask(contractCode, houseId, 1, 1, 'done')
+  // await findTaskAndOrderMaterial(contractCode, houseId, 0)
 }
 
 const getDropDown = async (req, res, next) => {
@@ -210,7 +203,7 @@ const getContractAllProgress = async (contractCode, getCurrentTask = true) => {
   } else {
     result = workProgress
   }
-  
+  // console.log(result)
   return result
 }
 
@@ -227,7 +220,7 @@ const getContractTime = async (contractCode) => {
   contractTimeResult = await contractTime.getData()
   await Promise.all(
     contractTimeResult.map( async (item) => {
-      console.log(item.time)
+      // console.log(item.time)
       item.progress = await getContractProgress(contractCode, item.time)
     })
   )
@@ -274,8 +267,8 @@ const setContractProgress = async (contractCode, houseId) => {
       newItem.real_date = null
       newItem.condition = condition
       newItem.delay = 0
-      // newItem.status = item.work_order_time == 1 && item.order == 1 ? 'ip' : 'wait'
-      newItem.status = condition === 0 ? 'ip' : 'wait' 
+      // newItem.status = condition === 0 ? 'ip' : 'wait'
+      newItem.status = 'wait' 
       orderNumber = parseInt(orderNumber) + 1
       await newItem.save()
       
@@ -317,25 +310,13 @@ const updateContractProgress = async (req, res, next) => {
   )
   res.status(200).json({})
 }
-// update task from frontsite this one just update status
-const updateContractTask = async (contractCode, time, order, status) => { // <---------------------
-  // update from frontsite
-  // let contractCode = req.xxx
-  // find next taskOrder and send to updateWorkingProgress
-  // ordering.prepareOrdering(contractCode, taskOrder)
+// update task and order material
+const updateContractTask = async (contractCode, houseId, time, order_all, status) => { // <---------------------
+  let progressId = await updateTask(contractCode, time, order_all, status)
+  if (progressId) { //task updated
+    await findTaskAndOrderMaterial(contractCode, houseId, order_all, progressId)
+  }
 }
-
-// const reviewContractProgress = async (contractCode = '', houseId, taskOrder) => {
-//   // review for checking what is the order
-//   ordering.prepareOrdering(houseId, taskOrder, 1) // 1 = time
-// }
-
-// const getContractDetail = async (contractCode, type) => {
-//   let item = new contractModel()
-//   item.code = contractCode
-//   let result = await item.getContractDetail()
-//   return result
-// }
 
 const getDetailByContractCode = async (typeSelect, code) => {
   let contractItem = new contractModel()
@@ -382,6 +363,65 @@ const getShortCutContract = async () => { // this for front site
   return contractData
 }
 
+const updateStatus = async (contractCode, status) => {
+  let item = new contractModel()
+  item.code = contractCode
+  item.status = status
+  await item.updateStatus() // on
+  return true
+}
+
+const updateTask = async (contractCode, time, order_all, status) => {
+  let currentProgress = new contractProgressModel(contractCode)
+  currentProgress.time = time,
+  currentProgress.order_all = order_all
+  currentProgress = await currentProgress.getCurrentProgress()
+  let currentEndDate = currentProgress[0].end_date
+  // console.log(helpers.getCurrentDate(), currentEndDate)
+  // console.log(helpers.getDateDiff(currentEndDate, helpers.getCurrentDate()))
+  // return false
+  let progress = new contractProgressModel(contractCode)
+  progress.time = time
+  progress.order_all = order_all
+  progress.status = status
+  progress.real_date = helpers.getCurrentDate('YYYY-MM-DD') // set date for starting order and plus with delay
+  progress.delay = helpers.getDateDiff(currentEndDate, helpers.getCurrentDate())
+  await progress.updateProgress()
+  return currentProgress[0].id
+}
+
+const findTaskAndOrderMaterial = async (contractCode, houseId, orderProcress, progressId) => { // orderProcress is order_all
+  // update next task to in process
+  let nextTesk = new contractProgressModel(contractCode)
+  nextTesk.condition = orderProcress
+  nextTesk.status = 'ip'
+  await nextTesk.updateStatus()
+
+  let startWorking = new contractProgressModel(contractCode)
+  startWorking.order_all = orderProcress
+  let res = await startWorking.startWorking()
+  await Promise.all(
+    res.map( async (item) => {
+      await ordering.prepareOrdering(contractCode, houseId, item.order, item.time, progressId)
+    })
+  )
+}
+
+const resetData = async (req, res, next) => {
+  // console.log(req.params.key)
+  let contractCode = req.params.key
+  let contract = new contractModel()
+  contract.code = contractCode
+  contract.status = 'wait'
+  await contract.updateStatus()
+
+  let progress = new contractProgressModel(contractCode)
+  await progress.delete()
+
+  await ordering.reset(contractCode)
+  res.status(200).json({})
+}
+
 module.exports.getStat = getStat
 module.exports.getData = getData
 module.exports.deleteData = deleteData
@@ -397,3 +437,5 @@ module.exports.updateContractProgress = updateContractProgress
 module.exports.getDetailByContractCode = getDetailByContractCode
 module.exports.getContractAllProgress = getContractAllProgress
 module.exports.getContractTime = getContractTime
+module.exports.updateContractTask = updateContractTask
+module.exports.resetData = resetData

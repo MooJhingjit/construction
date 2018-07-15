@@ -13,8 +13,9 @@ async function getData (req, res, next) {
 }
 
 async function updateTask (req, res, next) { // <---------------------
+  let contractData = req.body.data
   // checkTaskPermission(contractCode)
-  // contract.updateContractTask(contractCode, time, order, status)
+  contract.updateContractTask(contractData.contract_code, contractData.houseId, contractData.time, contractData.order_all, 'done')
   res.status(200).json({})
 }
 

@@ -107,7 +107,7 @@
         </div>
         <div class="container-block explain" v-if="local.orderSelected != null">
           <div class="block">
-            <table class="transparent-table">
+            <table class="table">
               <tr>
                 <td>ร้านค้า: {{getOrderSelected('store')}}</td>
               </tr>
@@ -129,12 +129,40 @@
             </table>
           </div>
           <div class="block function container-block">
-            <button class="button is-outlined" @click="submitForm('confirmed')" v-if="this.local.orderSelected.status == 'wait'">อนุมัติ</button>
-            <button class="button is-outlined" @click="submitForm('delete')" v-if="this.local.orderSelected.status == 'wait'">ลบ</button>
-            <button class="button is-outlined" @click="doReceipt()" v-if="this.local.orderSelected.status != 'wait'">ออกใบสั่งซื้อ</button>
-            <button class="button is-outlined" @click="submitForm('received')" v-if="this.local.orderSelected.status == 'confirmed'">รับของ</button>
+            <my-action
+             :type="'null'"
+              :obj="{title: 'อนุมัติ', color: 'is-warning', isConfirm: true}"
+              @clickEvent="submitForm('confirmed')"
+              v-if="this.local.orderSelected.status == 'wait'"
+            >
+            </my-action>
+            <my-action
+             :type="'null'"
+              :obj="{title: 'ลบ', color: 'is-danger', isConfirm: true}"
+              @clickEvent="submitForm('delete')"
+              v-if="this.local.orderSelected.status == 'wait'"
+            >
+            </my-action>
+            <my-action
+             :type="'null'"
+              :obj="{title: 'รับของ', color: 'is-success', isConfirm: true}"
+              @clickEvent="submitForm('received')"
+              v-if="this.local.orderSelected.status == 'confirmed'"
+            >
+            </my-action>
+             <my-action
+              :type="'null'"
+              :obj="{title: 'ออกใบสั่งซื้อ', color: 'is-info', isConfirm: false}"
+              @clickEvent="doReceipt()"
+              v-if="this.local.orderSelected.status != 'wait'"
+            >
+            </my-action>
+            <!-- <button class="button is-outlined" @click="submitForm('confirmed')" v-if="this.local.orderSelected.status == 'wait'">อนุมัติ</button> -->
+            <!-- <button class="button is-outlined" @click="submitForm('delete')" v-if="this.local.orderSelected.status == 'wait'">ลบ</button> -->
+            <!-- <button class="button is-outlined" @click="doReceipt()" v-if="this.local.orderSelected.status != 'wait'">ออกใบสั่งซื้อ</button> -->
+            <!-- <button class="button is-outlined" @click="submitForm('received')" v-if="this.local.orderSelected.status == 'confirmed'">รับของ</button> -->
           </div>
-          <receipt-template class="receipt-template" ref="receiptTemplate" :dataObj="local.orderSelected"></receipt-template>
+          <receipt-template class="receipt-template" ref="receiptTemplate" :dataObj="local.receiptObj"></receipt-template>
         </div>
       </template>
     </template>
@@ -154,7 +182,7 @@ import config from '@Config/app.config'
 import dataTable from '@Components/DataTable'
 import myInput from '@Components/Form/my-input'
 import myAction from '@Components/Form/my-action'
-import myPdf from '@Libraries/pdf'
+// import myPdf from '@Libraries/pdf'
 import receiptTemplate from './receipt-template'
 export default {
   props: {
@@ -203,7 +231,8 @@ export default {
         filterKey: 'all',
         orderSelected: null,
         orderIdSelected: null,
-        orderConfirmDate: null
+        orderConfirmDate: null,
+        receiptObj: {}
       }
     }
   },
@@ -280,7 +309,7 @@ export default {
     },
     doReceipt () {
       let html = this.$refs.receiptTemplate.getHtm()
-      var win = window.open('', 'Title', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=780,height=500,top=0,left=0')
+      var win = window.open('', 'Title', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500,top=0,left=0')
       let style = document.createElement('style')
       style.type = 'text/css'
       let css = '@media print {@page { margin: 0; }body { margin: 1.5cm 1cm; }}'
@@ -300,10 +329,31 @@ export default {
       let res = await service.getResource({resourceName, queryString})
       return res.data
     },
+    unSelectOrdering () {
+      this.local.orderSelected = null
+      this.local.orderIdSelected = null
+      this.local.orderConfirmDate = null
+      this.local.receiptObj = {}
+    },
     selectOrdering (ordering) {
       this.local.orderIdSelected = ordering.id
       this.local.orderSelected = ordering
       this.local.orderConfirmDate = null
+      let store = {
+        contact: ordering.storeContact,
+        fax: ordering.storeFax,
+        name: ordering.storeName,
+        tel: ordering.storeTel,
+        type: ordering.storeType,
+        id: ordering.storeId,
+      }
+      this.local.receiptObj = {
+        project: this.local.inputs.project,
+        contract: this.local.inputs.contract,
+        ordering,
+        store
+      }
+      // console.log(this.local.receiptObj)
     },
     getOrderSelected (type) {
       let res = ''
@@ -365,6 +415,7 @@ export default {
       this.ordering[orderingIndex].total_price = totalPrice
     },
     filterItems (key) {
+      this.unSelectOrdering()
       this.local.filterKey = key
       if (key === 'all') {
         this.local.orderingForShowing = this.local.inputs.ordering

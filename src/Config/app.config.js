@@ -18,7 +18,8 @@ const api = {
     'status': '/contract-status',
     'period': '/contract-period',
     'progress': '/contract-progress',
-    'dropdown': '/contract-selection'
+    'dropdown': '/contract-selection',
+    'reset': '/contract-reset'
   },
   'workOrder': {
     'index': '/work-order'

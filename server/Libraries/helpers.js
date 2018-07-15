@@ -75,3 +75,9 @@ module.exports.prepareDataTable = (result, total, config) => {
 module.exports.getTableoffset = (limit, currentPage) => {
   return ((currentPage - 1) * limit)
 }
+
+module.exports.getDateDiff = (date1, date2) => {
+  let dateStart = moment(date1, 'YYYY/MM/DD')
+  let dateEnd = moment(date2, 'YYYY/MM/DD')
+  return dateEnd.diff(dateStart, 'days')
+}

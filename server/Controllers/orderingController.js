@@ -84,7 +84,7 @@ async function createExtraData (req, res, next) {
   })
   let materialIdArr = getMaterialIdArr(materials)
   let fullMaterial = await materialController.getMaterialDetail(materialIdArr)
-  await prepareMaterial(req.body.data.contract, fullMaterial, {materials, note: req.body.data.note}) // materials is extra
+  await prepareMaterial(req.body.data.contract, fullMaterial, null,  {materials, note: req.body.data.note}) // materials is extra
   let orderingData = await countOrdering()
   res.status(200).json({orderingData})
 }
@@ -112,12 +112,12 @@ async function updateData (req, res, next) {
   let orderingData = await countOrdering()
   res.status(200).json({orderingData})
 }
-async function prepareOrdering (contractCode, houseId, taskOrder, time) {
+async function prepareOrdering (contractCode, houseId, taskOrder, time, progressId) {
   let orderGroupId = await getOrderGroup(taskOrder, time)
   let materials = await materialGroup.getMaterialByGroup(orderGroupId, houseId)
   let materialIdArr = getMaterialIdArr(materials)
   let fullMaterial = await materialController.getMaterialDetail(materialIdArr)
-  await prepareMaterial(contractCode, fullMaterial)
+  await prepareMaterial(contractCode, fullMaterial, progressId)
 }
 async function getOrderGroup (taskOrder, time) {
   let workOrderDetail = new workOrderDetailModel()
@@ -128,7 +128,7 @@ async function getOrderGroup (taskOrder, time) {
   orderGroupId = workOrderDetail[0].post_order
   return orderGroupId
 }
-async function prepareMaterial (contractCode, materials, extraObj = null) {
+async function prepareMaterial (contractCode, materials, progressId, extraObj = null) {
   // extraObj = {materials, note}
   if (materials.length) {
     let order = []
@@ -145,9 +145,10 @@ async function prepareMaterial (contractCode, materials, extraObj = null) {
           }
         })
       }
-      orderDetail[item.store_id].push({
+      orderDetail[item.store_id].push({ // <--- 1 push something here if want to edit orderDetail
         name: item.name,
         price: item.price,
+        unitText: item.unit,
         amount: item.amount,
         delay: item.delay
       })
@@ -182,14 +183,15 @@ async function prepareMaterial (contractCode, materials, extraObj = null) {
       order.push(data)
     })
    
-    orderMaterial(order)
+    orderMaterial(order, progressId)
   }
 }
-async function orderMaterial (order) {
+async function orderMaterial (order, progress_id) {
   await Promise.all(
     order.map( async (item) => {
       let newItem = new orderingModel()
       newItem.store_id = item.store_id
+      newItem.progress_id = progress_id
       newItem.total_price = item.total_price
       newItem.amount = item.amount
       newItem.contract_code = item.contractCode
@@ -198,12 +200,13 @@ async function orderMaterial (order) {
       newItem.order_type = item.order_type
       newItem.note = item.note
       let orderId = await newItem.save()
-      item.detail.map( async (itemDetail) => {
+      item.detail.map( async (itemDetail) => { // <--- 2 push something here if want to edit orderDetail
         let detailItem = new orderingDetailModel()
         detailItem.order_id = orderId[0]
         detailItem.name = itemDetail.name
         detailItem.price = itemDetail.price * itemDetail.amount
         detailItem.unit_price = itemDetail.price
+        detailItem.unit_text = itemDetail.unitText
         detailItem.amount = itemDetail.amount
         detailItem.status = itemDetail.status
         await detailItem.save()
@@ -292,6 +295,20 @@ const getLastOrder = async (orderType, limit = '') => {
   let res = await ordering.getLastOrderByType()
   return res
 }
+const reset = async (contractCode) => {
+  let items = new orderingModel()
+  items.contract_code = contractCode
+  let ordering = await items.getDataByContractCode()
+  await Promise.all(
+    ordering.map( async (item) => {
+      let detailItem = new orderingDetailModel()
+      detailItem.order_id = item.id
+      await detailItem.delete()
+    })
+  )
+  await items.deleteByContractCode()
+
+}
 module.exports.getResource = getResource
 module.exports.getAllData = getAllData
 module.exports.getData = getData
@@ -305,5 +322,7 @@ module.exports.countOrdering = countOrdering
 module.exports.deleteData = deleteData
 module.exports.checkOrdering = checkOrdering
 module.exports.getDetailByContractCode = getDetailByContractCode
+module.exports.reset = reset
+
 
 

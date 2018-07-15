@@ -11,4 +11,5 @@ router.put('/contract-time/:id', contractController.updateTimeData);
 router.put('/contract-progress/:id', contractController.updateContractProgress);
 router.delete('/contract/:id', contractController.deleteData);
 router.get('/contract-selection', contractController.getDropDown);
+router.get('/contract-reset/:key', contractController.resetData);
 module.exports = router;

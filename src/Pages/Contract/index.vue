@@ -15,7 +15,10 @@
           <div class="block c-header">
             <table class="transparent-table">
               <tr>
-              <td>โครงการ:<span class="value">{{local.inputs.project.name}}</span></td>
+              <td>
+                โครงการ:<span class="value">{{local.inputs.project.name}}</span>
+                <button @click="resetContract()">reset</button>
+              </td>
               </tr>
               <tr>
                 <td>เลขที่สัญญา:<span class="value">{{local.inputs.contract.code}}</span></td>
@@ -39,19 +42,19 @@
             <table class="table rows-table is-hoverable">
               <thead>
                 <tr>
-                  <th>#</th>
+                  <th>งวด/ลำดับงาน</th>
                   <th>รายละเอียดงาน</th>
-                  <th width="150">กำหนดเริ่มงาน</th>
-                  <th width="150">กำหนดเสร็จงาน</th>
-                  <th width="150">วันที่เสร็จจริง</th>
-                  <th width="80">delay</th>
+                  <th width="120">กำหนดเริ่มงาน</th>
+                  <th width="120">กำหนดเสร็จงาน</th>
+                  <th width="120">วันที่เสร็จจริง</th>
+                  <th width="50">delay</th>
                   <th>สถานะ</th>
                   <!-- <th>งวด</th> -->
                 </tr>
               </thead>
               <tbody>
                 <tr :key="index" v-for="(item, index) in local.inputs.progress">
-                  <td>{{item.order}}</td>
+                  <td>{{item.time}}/{{item.order}}</td>
                   <td>{{item.name}}</td>
                   <td>
                     {{SET_DATEFORMAT(item.start_date)}}
@@ -67,15 +70,11 @@
                     ></my-input>
                   </td>
                   <td>
-                    {{item.delay}}
-                    <!-- <my-input
-                      :value="item.delay"
-                      :inputObj="{type: 'text', name: 'contract_type', placeholder: 'delay', validate: ''}"
-                      :validator="$validator"
-                      @input="value => { item.delay = value }"
-                      ></my-input> -->
+                    <span :class="getDelayClass(item.delay, item.status)">{{item.delay}}</span>
                   </td>
-                  <td>{{getWorkingStatus(item.status)}}</td>
+                  <td>
+                    <span :class="getStatusClass(item.status)">{{getWorkingStatus(item.status)}}</span>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -94,7 +93,7 @@
         <div class="container-block footer-panel">
           <my-action
               type="updateStatus"
-              :obj="{title: 'เริ่มดำเนินงาน', color: 'is-warning', isConfirm: true}"
+              :obj="{title: 'เริ่มดำเนินงาน (ทำสัญญาเสร็จสิ้น)', color: 'is-warning', isConfirm: true}"
               @clickEvent="submitForm('updateStatus', 'ip')"
               v-if="local.inputs.contract.status == 'wait'"
             >
@@ -256,7 +255,7 @@ export default {
       return config.variable.workingStatus[code]
     },
     getDateFromContract (time) {
-      console.log(this.local.inputs.contractTime)
+      // console.log(this.local.inputs.contractTime)
       if (this.local.inputs.contractTime[0] !== undefined) {
         return this.SET_DATEFORMAT(this.local.inputs.contractTime[time - 1].date_start)
       }
@@ -270,6 +269,30 @@ export default {
       }
       this.local.inputs.progress[index].delay = Math.ceil(dateDiff)
       this.local.inputs.progress[index].real_date = value
+    },
+    getStatusClass (status) {
+      return [
+        'tag',
+        {'is-white': status === 'wait'},
+        {'is-warning': status === 'ip'},
+        {'is-success': status === 'done'}
+      ]
+    },
+    getDelayClass (delay, status) {
+      return [
+        'tag',
+        {'is-success': delay <= 0 && status === 'done'},
+        {'is-danger': delay > 0 && status === 'done'}
+      ]
+    },
+    async resetContract () {
+      let res = await service.getResource({
+        resourceName: `${config.api.contract.reset}/${this.local.idSelected}`,
+        queryString: []
+      })
+      if (res.status === 200) {
+        this.NOTIFY('success')
+      }
     }
   }
 }
