@@ -151,7 +151,8 @@ const updateContractStatus = async (req, res, next) => {
   let contractCode = req.params.id
   let status = req.body.data.status
   let houseId = req.body.data.houseId
-  await updateStatus(contractCode, status)
+  let assign = req.body.data.assign
+  await updateStatus(contractCode, status, assign)
   switch(status) {
     case 'ip':
       await startWorking(contractCode, houseId)
@@ -297,7 +298,10 @@ const matchWorkOrderPreiod = async (workOrderPreiod, time, order) => {
 }
 // update only date and delay from contract page
 const updateContractProgress = async (req, res, next) => {
-  let progress = req.body.data
+  let contractCode = req.params.id
+  let assign = req.body.data.assign
+  await updateStatus(contractCode, null, assign)
+  let progress = req.body.data.progress
   await Promise.all(
     progress.map( async (item) => {
       let progress = new contractProgressModel()
@@ -363,10 +367,13 @@ const getShortCutContract = async () => { // this for front site
   return contractData
 }
 
-const updateStatus = async (contractCode, status) => {
+const updateStatus = async (contractCode, status, assign) => {
   let item = new contractModel()
   item.code = contractCode
-  item.status = status
+  item.assign = assign
+  if (status != null) {
+    item.status = status
+  }
   await item.updateStatus() // on
   return true
 }
@@ -422,6 +429,17 @@ const resetData = async (req, res, next) => {
   res.status(200).json({})
 }
 
+const checkContractPermission = async (contractCode, userId) => {
+  let contract = new contractModel()
+  contract.code = contractCode
+  contract.assign = userId
+  let result = await contract.checkPermission()
+  if (result.length === 0) {
+    return false
+  }
+  return true
+}
+
 module.exports.getStat = getStat
 module.exports.getData = getData
 module.exports.deleteData = deleteData
@@ -439,3 +457,4 @@ module.exports.getContractAllProgress = getContractAllProgress
 module.exports.getContractTime = getContractTime
 module.exports.updateContractTask = updateContractTask
 module.exports.resetData = resetData
+module.exports.checkContractPermission = checkContractPermission

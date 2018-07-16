@@ -13,21 +13,20 @@ async function getData (req, res, next) {
 }
 
 async function updateTask (req, res, next) {
+  let userAuth = helpers.getUserAuth(req.headers['authorization'])
   let contractData = req.body.data
   //
-  if (checkTaskPermission(contractCode)) {
+  if (await checkTaskPermission(contractData.contract_code, userAuth.id)) {
     contract.updateContractTask(contractData.contract_code, contractData.houseId, contractData.time, contractData.order_all, 'done')
+    res.status(200).json({})
+  } else {
+    res.status(301).json({})
   }
-  
-  res.status(200).json({})
 }
 
-
-const checkTaskPermission = async (contractCode) => { // <----------------------
-  // add column assign in contract table 
-  
-  // check premission
-  return true
+const checkTaskPermission = async (contractCode, userId) => { // <----------------------
+  let result = await contract.checkContractPermission(contractCode, userId)
+  return result
 }
 module.exports.getAllData = getAllData
 module.exports.getData = getData

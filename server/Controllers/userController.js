@@ -84,9 +84,17 @@ async function deleteData (req, res, next) {
   res.status(200).json({})
 }
 
+async function getUserDropdown (req, res, next) {
+  let user = new userModel()
+  user.position = req.query.type
+  let result = await user.getUserDropdown()
+  res.status(200).json(result)
+}
+
 module.exports.getData = getData
 module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.deleteData = deleteData
 module.exports.getUserDetail = getUserDetail
+module.exports.getUserDropdown = getUserDropdown

@@ -22,6 +22,13 @@ module.exports =  class User {
     return result
   }
 
+  async getUserDropdown () {
+    let result = await this.knex.select('id as key', 'name as name')
+    .from('user')
+    .where({position: this.position})
+    return result
+  }
+
   async getUserByUsername () {
     let result = await this.knex.select('id', 'username', 'password')
     .from('user')

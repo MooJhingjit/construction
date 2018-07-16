@@ -7,4 +7,5 @@ router.get('/users/:key', userController.getData);
 router.post('/users', userController.createData);
 router.put('/users/:id', userController.updateData);
 router.delete('/users/:id', userController.deleteData);
+router.get('/users-dropdown', userController.getUserDropdown);
 module.exports = router;

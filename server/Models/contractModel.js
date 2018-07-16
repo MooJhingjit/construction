@@ -16,6 +16,7 @@ module.exports =  class Contract {
     this.date_start
     this.paid
     this.status
+    this.assign
     this.limit = 5
     this.offset = 0
   }
@@ -33,6 +34,13 @@ module.exports =  class Contract {
   async getAllData () {
     let result = await this.knex('contract')
     .where(this.getCondition())
+    return result
+  }
+  
+  async checkPermission () {
+    let result = await this.knex.select('id')
+    .from('contract')
+    .where({'code': this.code, assign: this.assign})
     return result
   }
 
@@ -88,6 +96,7 @@ module.exports =  class Contract {
     .where({code: this.code})
     .update({
       status: this.status,
+      assign: this.assign
     })
     return result
   }
