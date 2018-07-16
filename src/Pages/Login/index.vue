@@ -57,6 +57,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      'setUserData',
       'setAuth'
     ]),
     submit () {
@@ -76,8 +77,7 @@ export default {
             Helper.SET_STORAGEITEM('isAuth', 1)
             Helper.SET_STORAGEITEM('app_token', res.data.token)
             this.setAuth(true)
-            this.REDIRECTTOHOME()
-            // this.GOTOPAGE('Home', '')
+            this.getUserData()
           } else {
             this.local.inValid = true
           }
@@ -85,6 +85,20 @@ export default {
         .catch((err) => {
           this.local.inValid = true
           console.log(err)
+        })
+    },
+    getUserData () {
+      let resourceName = config.api.app.resource
+      let queryString = this.BUILDPARAM([])
+      service.getResource({resourceName, queryString})
+        .then((res) => {
+          if (res.status === 200) {
+            this.setUserData(res.data.userData)
+            this.REDIRECTTOHOME()
+          }
+        })
+        .catch(() => {
+          this.GOTOPAGE('Login', '')
         })
     }
   }

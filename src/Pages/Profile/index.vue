@@ -5,7 +5,7 @@
       <template slot="detail">
         <!-- <form @submit="onSubmit()" id="userForm"> -->
         <div class="container-block  detail-block">
-          <div class="profile-img container-block">
+          <!-- <div class="profile-img container-block">
             <div class="block">
               <div class="img">
                 <img src="../../../static/img/avatar2.png">
@@ -13,9 +13,9 @@
               </div>
               <div class="options"></div>
             </div>
-          </div>
+          </div> -->
           <div class="form-detail">
-            <div class="name">{{local.inputs.name}}</div>
+            <!-- <div class="name">{{local.inputs.name}}</div> -->
             <div class="container-block">
               <div class="text-title">ชื่อ-นามสกุล</div>
               <div class="value">
@@ -40,7 +40,7 @@
                 <!-- <input class="input" type="text" v-model="local.inputs.username" placeholder="ชื่อผู้ใช้" required /> -->
               </div>
             </div>
-            <div class="container-block">
+            <!-- <div class="container-block">
               <div class="text-title">ตำแหน่ง</div>
               <div class="value">
                 <my-input
@@ -49,9 +49,8 @@
                   :validator="$validator"
                   @input="value => { local.inputs.position = value }"
                   ></my-input>
-                <!-- <input class="input" type="text" v-model="local.inputs.position" placeholder="ตำแหน่ง" required /> -->
-              </div>
-            </div>
+               </div>
+            </div> -->
             <div class="container-block">
               <div class="text-title">อีเมล์</div>
               <div class="value">
@@ -162,28 +161,6 @@ export default {
         .catch(() => {
         })
     },
-    // submitForm (type) {
-    //   let data = {}
-    //   let resourceName = config.api.users.index
-    //   switch (type) {
-    //     case 'edit':
-    //       data = this.local.inputs
-    //       resourceName = `${resourceName}/${this.local.inputs.id}`
-    //       service.putResource({data, resourceName})
-    //         .then((res) => {
-    //           if (res.status === 200) {
-    //             this.fetchData()
-    //             this.NOTIFY('success')
-    //           } else {
-    //             this.NOTIFY('error')
-    //           }
-    //         })
-    //         .catch((err) => {
-    //           console.log(err)
-    //         })
-    //       break
-    //   }
-    // },
     async submitForm (type) {
       let isValid = await this.$validator.validateAll()
       let resourceName = this.resourceName

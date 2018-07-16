@@ -18,7 +18,7 @@
     <template v-if="local.idSelected != ''">
       <template slot="detail">
         <div class="container-block  detail-block">
-          <div class="profile-img container-block">
+          <!-- <div class="profile-img container-block">
             <div class="block">
               <div class="img">
                 <img src="../../../static/img/avatar2.png">
@@ -26,7 +26,7 @@
               </div>
               <div class="options"></div>
             </div>
-          </div>
+          </div> -->
           <div class="form-detail">
             <div class="name">{{local.inputs.name}}</div>
             <div class="container-block">
@@ -68,10 +68,9 @@
             <div class="container-block">
               <div class="text-title">ตำแหน่ง</div>
               <div class="value">
-                <!-- <input class="input" type="text" v-model="local.inputs.position" placeholder="ตำแหน่ง" required /> -->
-                <my-input
-                  :value="local.inputs.position"
-                  :inputObj="{type: 'text', name: 'user_position', placeholder: 'ตำแหน่ง', validate: 'required'}"
+                  <my-input
+                  :value="local.inputs.position.toLowerCase()"
+                  :inputObj="{type: 'select', icon: 'home', inputValue: USERPOSITION, name: 'user_position', placeholder: 'ตำแหน่ง', validate: 'required'}"
                   :validator="$validator"
                   @input="value => { local.inputs.position = value }"
                   ></my-input>

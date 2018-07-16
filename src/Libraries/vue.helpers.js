@@ -1,4 +1,4 @@
-// import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 // import Hepler from '@Libraries/common.helpers'
 // import Config from '@AppConfig/app.config'
 // import moment from 'moment'
@@ -7,6 +7,9 @@ import config from '@Config/app.config'
 import moment from 'moment'
 export default {
   computed: {
+    ...mapGetters([
+      'userData'
+    ]),
     PROJECT_TYPE () {
       return config.variable.projectType
     },
@@ -15,6 +18,22 @@ export default {
     },
     HOUSECOLOR () {
       return config.variable.housecolor
+    },
+    USERPOSITION () {
+      let position = config.variable.userPermission
+      position = position.map((item) => {
+        return {
+          key: item.key,
+          name: item.name
+        }
+      })
+      return position
+    },
+    USERTYPE () {
+      if (this.userData !== undefined && this.userData.position !== undefined) {
+        return this.userData.position.toLowerCase()
+      }
+      return null
     }
   },
   filters: {
@@ -121,8 +140,8 @@ export default {
     },
     REDIRECTTOHOME () { // <---------------
       // GET USER TYPE FRIST
-      let userType = 'admin'
-      switch(userType) {
+      let userType = this.USERTYPE
+      switch (userType) {
         case 'admin':
         case 'purchasing':
           this.GOTOPAGE('Home', '')
@@ -131,22 +150,46 @@ export default {
           this.GOTOPAGE('FrontSite', '')
           break
         default:
-        this.GOTOPAGE('Login', '')
+         this.GOTOPAGE('Home', '')
       }
     },
-    CHECK_PERMISSIONS () { // <---------------
-      let routeName = this.$route.name
-      let isLogin = (routeName === 'Login') ? true : false
-      let userType = 'admin'
-      let allow = config.variable.userPermission[userType].allow // result can be string => * and array => ['route name']
-      if (allow === '*') {
+    IS_ADMIN () {
+      if (this.USERTYPE !== null && this.USERTYPE === 'admin') {
         return true
-      } else if (allow.indexOf(routeName) || isLogin) {
-        return true
-      } else {
-        this.REDIRECTTOHOME()
-        return false
       }
+      return false
+    },
+    IS_PURCHASING () {
+      if (this.USERTYPE !== null && this.USERTYPE === 'purchasing') {
+        return true
+      }
+      return false
+    },
+    IS_TECHNICIAN () {
+      if (this.USERTYPE !== null && this.USERTYPE === 'technician') {
+        return true
+      }
+      return false
+    },
+    ROUTE_PERMISSIONS () { // <---------------
+      let routeName = this.$route.name
+      let isLogin = (routeName === 'Login')
+      let userType = this.USERTYPE
+      if (userType !== undefined && userType !== null ) {
+        let permission = config.variable.userPermission.filter((item) => {
+          return item.key === userType
+        })
+        let allow = permission[0].allow // result can be string => * and array => ['route name']
+        if (allow === '*') {
+          return true
+        } else if (allow.indexOf(routeName) >= 0 || isLogin) {
+          return true
+        } else {
+          this.REDIRECTTOHOME()
+          return false
+        }
+      }
+      this.REDIRECTTOHOME()
     }
   }
 }

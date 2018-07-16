@@ -36,6 +36,22 @@
                 <td>วันที่ End Prod.ตามส/ญ:<span class="value">{{getDateFromContract(10)}}</span></td>
                 <td>วันที่ทำสัญญา:<span class="value">{{SET_DATEFORMAT(local.inputs.contract.date_start)}}</span></td>
               </tr>
+              <tr>
+                <td>
+                  <div class="container-block technician">
+                    <div class="block title-name">ผู้รับมอบหมาย:</div>
+                    <div class="block">
+                      <my-input
+                      :value="local.technician.selected"
+                      :inputObj="{type: 'select', icon: 'user', inputValue: local.technician.inputs, name: 'technician', placeholder: 'ผู้รับมอบหมาย', validate: 'required'}"
+                      :validator="$validator"
+                      @input="value => { local.technician.selected = value }"
+                      ></my-input>
+                    </div>
+                  </div>
+                </td>
+                <td></td>
+              </tr>
             </table>
           </div>
           <div class="block c-body" v-if="local.inputs.contract.status == 'ip'">
@@ -91,6 +107,12 @@
           </div>
         </div>
         <div class="container-block footer-panel">
+         <!-- <my-input
+          :value="local.technician.selected"
+          :inputObj="{type: 'select', icon: 'user', inputValue: local.technician.inputs, name: 'technician', placeholder: 'ผู้รับมอบหมาย', validate: 'required'}"
+          :validator="$validator"
+          @input="value => { local.technician.selected = value }"
+          ></my-input> -->
           <my-action
               type="updateStatus"
               :obj="{title: 'เริ่มดำเนินงาน (ทำสัญญาเสร็จสิ้น)', color: 'is-warning', isConfirm: true}"
@@ -127,6 +149,7 @@ import service from '@Services/app-service'
 import dataTable from '@Components/DataTable'
 import myAction from '@Components/Form/my-action'
 import myInput from '@Components/Form/my-input'
+import myAutoComplete from '@Components/Form/my-autocomp'
 export default {
   props: {
   },
@@ -135,7 +158,8 @@ export default {
     optionDetailTemplate,
     dataTable,
     myAction,
-    myInput
+    myInput,
+    myAutoComplete
   },
   name: 'ContractPage',
   data () {
@@ -161,6 +185,10 @@ export default {
           contractTime: {},
           contract: {},
           progress: null
+        },
+        technician: {
+          inputs: [],
+          selected: null
         }
       }
     }
@@ -171,6 +199,7 @@ export default {
     }
   },
   created () {
+    this.getTechnicianData()
   },
   mounted () {
     if (this.$route.params.key !== undefined && this.$route.params.key !== 'all') {
@@ -179,6 +208,14 @@ export default {
     // this.$refs.dataTable[0].searchByText({value: this.$route.params.key})
   },
   methods: {
+    async getTechnicianData () {
+      let queryString = this.BUILDPARAM({type: 'technician'})
+      let obj = await service.getResource({resourceName: config.api.users.dropdown, queryString})
+      this.local.technician.inputs = obj.data
+    },
+    // technicianSelectedHandle (objVal) {
+    //   this.local.technician.selected = objVal.key
+    // },
     async selectedDataHandle (item) {
       this.local.idSelected = item.code
       let queryString = this.BUILDPARAM({type: 'full'})
@@ -190,6 +227,11 @@ export default {
       this.local.inputs.contract = contractItem.data.contract
       this.local.inputs.contractTime = contractItem.data.contractTime
       this.local.inputs.progress = contractItem.data.progress
+      if (this.local.inputs.contract.assign) {
+        this.local.technician.selected = this.local.inputs.contract.assign
+      } else {
+        this.local.technician.selected = ''
+      }
     },
     async updateContractTime (id, time) {
       let ele = `time_${time}`
@@ -221,6 +263,7 @@ export default {
         case 'updateStatus':
           if (!isValid) return
           data.status = value
+          data.assign = this.local.technician.selected
           data.houseId = this.local.inputs.contract.house_id
           resourceName = `${config.api.contract.status}/${this.local.idSelected}`
           res = await service.putResource({data, resourceName})
@@ -235,7 +278,8 @@ export default {
         //   break
         case 'updateProgress':
           resourceName = `${config.api.contract.progress}/${this.local.idSelected}`
-          data = this.local.inputs.progress
+          data.progress = this.local.inputs.progress
+          data.assign = this.local.technician.selected
           res = await service.putResource({data, resourceName})
           break
         case 'save':
@@ -298,5 +342,12 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.technician {
+  .title-name{
+    flex: 0;
+    min-width: 100px;
+    margin-right: 5px;
+  }
+}
 </style>

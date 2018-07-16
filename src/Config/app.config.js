@@ -29,7 +29,8 @@ const api = {
     'dropdown': '/material-group-selection'
   },
   'users': {
-    'index': '/users'
+    'index': '/users',
+    'dropdown': '/users-dropdown'
   },
   'house': {
     'index': '/house',
@@ -92,18 +93,11 @@ const variable = {
     {key: 'B22', name: 'B2-2'},
     {key: 'B23', name: 'B2-2'}
   ],
-  userPermission: { // <---------
-    admin: {
-      key: 'admin', title: 'ผู้ดูแลระบบ', allow: '*'
-    },
-    purchasing: {
-      key: 'purchasing', title: 'จัดซื้อ', allow: '*'
-    },
-    technician: {
-      key: 'technician', title: 'หัวหน้างาน', allow: ['FrontSite', 'FrontSiteUpdate']
-    }
-  }
-  
+  userPermission: [
+    {key: 'admin', name: 'ผู้ดูแลระบบ', allow: '*'},
+    {key: 'purchasing', name: 'จัดซื้อ', allow: '*'},
+    {key: 'technician', name: 'หัวหน้างาน', allow: ['FrontSite', 'FrontSiteUpdate', 'Profile']}
+  ]
 
 }
 

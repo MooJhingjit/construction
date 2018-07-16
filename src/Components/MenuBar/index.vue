@@ -9,7 +9,7 @@
       <!-- <p class="title">3,456</p> -->
       </div>
     </div>
-    <div class="level-item has-text-centered">
+    <div class="level-item has-text-centered" v-if="IS_ADMIN() || IS_PURCHASING()">
       <div>
         <p class="heading" @click="GOTOPAGE('Ordering', '')">
           <!-- <router-link to="./ordering">การสั่งซื้อ</router-link> -->
@@ -24,7 +24,7 @@
       <!-- <p class="title">123</p> -->
       </div>
     </div>
-    <div class="level-item has-text-centered">
+    <div class="level-item has-text-centered" v-if="IS_ADMIN() || IS_PURCHASING()">
       <div>
         <p class="heading">
           <!-- <router-link to="./foo">จ่ายค่างวด</router-link> -->
@@ -33,7 +33,7 @@
       <!-- <p class="title">456K</p> -->
       </div>
     </div>
-    <div class="level-item has-text-centered">
+    <div class="level-item has-text-centered" v-if="IS_ADMIN() || IS_PURCHASING()">
       <div>
         <p class="heading" @click="GOTOPAGE('Losing', '')">
           <!-- <router-link to="./losing">ข้อมูลสูญเสีย</router-link> -->
@@ -50,7 +50,7 @@
       </div>
     </div>
     <div class="level-item has-text-centered options-panel on-mobile">
-      <div class="block alert">
+      <div class="block alert" v-if="IS_ADMIN() || IS_PURCHASING()">
         <i  v-if="normalOrdering || extraOrdering" class="fa fa-exclamation-circle" aria-hidden="true"></i>
         <div class="icon-menu" @click="openSubMenu('options', 'profile')">
             <i class="fa fa-th" aria-hidden="true"></i>

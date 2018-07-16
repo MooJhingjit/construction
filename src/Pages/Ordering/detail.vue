@@ -345,7 +345,7 @@ export default {
         name: ordering.storeName,
         tel: ordering.storeTel,
         type: ordering.storeType,
-        id: ordering.storeId,
+        id: ordering.storeId
       }
       this.local.receiptObj = {
         project: this.local.inputs.project,

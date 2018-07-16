@@ -20,7 +20,7 @@
                           <td class="text-right" style="width:20%;text-align:right !important;padding:5px;"></td>
                         </tr>
                         <tr>
-                          <td style="width:80%;padding:5px;">เขตมีนบุรี กรุงเทพ๚ โทร 02-0003093 FAX 02-0003093	</td>
+                          <td style="width:80%;padding:5px;">เขตมีนบุรี กรุงเทพ๚ โทร 02-0003093 FAX 02-0003093</td>
                           <td class="text-right" style="width:20%;text-align:right !important;padding:5px;"></td>
                         </tr>
                     </tbody>

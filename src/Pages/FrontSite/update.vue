@@ -28,7 +28,7 @@
                     <template v-else>
                       <my-action
                       :type="'null'"
-                        :obj="{title: 'อัพเดท', color: 'is-light', isConfirm: true}"
+                        :obj="{title: 'อัพเดท', color: 'button is-outlined', isConfirm: true}"
                         @clickEvent="updateTask(task)"
                       >
                       </my-action>
@@ -117,6 +117,7 @@ export default {
       let data = task
       data.houseId = this.local.contract.house_id
       let res = await service.putResource({data, resourceName})
+      console.log(res.status)
       if (res.status === 200) {
         this.NOTIFY('success')
         this.fetchData()
