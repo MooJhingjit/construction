@@ -73,6 +73,7 @@ export default {
       'setOrderingNotification'
     ]),
     fetchData () {
+      this.CHECK_PERMISSIONS()
       let resourceName = config.api.app.resource
       let queryString = this.BUILDPARAM([])
       service.getResource({resourceName, queryString})
@@ -116,6 +117,7 @@ export default {
   },
   watch: {
     $route (to, from) {
+      this.CHECK_PERMISSIONS() // <----------------
       this.pageClick()
     }
   }

@@ -311,7 +311,7 @@ const updateContractProgress = async (req, res, next) => {
   res.status(200).json({})
 }
 // update task and order material
-const updateContractTask = async (contractCode, houseId, time, order_all, status) => { // <---------------------
+const updateContractTask = async (contractCode, houseId, time, order_all, status) => {
   let progressId = await updateTask(contractCode, time, order_all, status)
   if (progressId) { //task updated
     await findTaskAndOrderMaterial(contractCode, houseId, order_all, progressId)

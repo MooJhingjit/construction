@@ -76,7 +76,8 @@ export default {
             Helper.SET_STORAGEITEM('isAuth', 1)
             Helper.SET_STORAGEITEM('app_token', res.data.token)
             this.setAuth(true)
-            this.GOTOPAGE('Home', '')
+            this.REDIRECTTOHOME()
+            // this.GOTOPAGE('Home', '')
           } else {
             this.local.inValid = true
           }

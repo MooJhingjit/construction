@@ -91,10 +91,26 @@ const variable = {
     {key: 'B21', name: 'B2-1'},
     {key: 'B22', name: 'B2-2'},
     {key: 'B23', name: 'B2-2'}
-  ]
+  ],
+  userPermission: { // <---------
+    admin: {
+      key: 'admin', title: 'ผู้ดูแลระบบ', allow: '*'
+    },
+    purchasing: {
+      key: 'purchasing', title: 'จัดซื้อ', allow: '*'
+    },
+    technician: {
+      key: 'technician', title: 'หัวหน้างาน', allow: ['FrontSite', 'FrontSiteUpdate']
+    }
+  }
+  
+
 }
 
 export default {
   api,
   variable
 }
+
+// user position
+// loseing data of ordering

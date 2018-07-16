@@ -43,11 +43,6 @@ export default new VueRouter({
       name: 'Ordering',
       component: Ordering
     },
-    // {
-    //   path: '/ordering/extra',
-    //   name: 'OrderingExtra',
-    //   component: OrderingExtra
-    // },
     {
       path: '/ordering/group',
       name: 'OrderingGroup',

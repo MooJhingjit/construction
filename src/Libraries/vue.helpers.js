@@ -118,41 +118,35 @@ export default {
           })
           break
       }
+    },
+    REDIRECTTOHOME () { // <---------------
+      // GET USER TYPE FRIST
+      let userType = 'admin'
+      switch(userType) {
+        case 'admin':
+        case 'purchasing':
+          this.GOTOPAGE('Home', '')
+          break
+        case 'technician':
+          this.GOTOPAGE('FrontSite', '')
+          break
+        default:
+        this.GOTOPAGE('Login', '')
+      }
+    },
+    CHECK_PERMISSIONS () { // <---------------
+      let routeName = this.$route.name
+      let isLogin = (routeName === 'Login') ? true : false
+      let userType = 'admin'
+      let allow = config.variable.userPermission[userType].allow // result can be string => * and array => ['route name']
+      if (allow === '*') {
+        return true
+      } else if (allow.indexOf(routeName) || isLogin) {
+        return true
+      } else {
+        this.REDIRECTTOHOME()
+        return false
+      }
     }
-    // BUILDPARAM (params = []) {
-    //   let queryString = ''
-    //   // console.log(params)
-    //   // console.log()
-    //   // console.log('-----------------')
-    //   if (Object.keys(params).length) {
-    //     Object.keys(params).forEach(function (key) {
-    //       queryString += key + '=' + params[key] + '&'
-    //     })
-    //     return queryString.slice(0, -1)
-    //   }
-    //   return
-    // },
-    // GETALERTBOX (type, config) {
-    //   if (type === 'confirm') {
-    //     // return true
-    //     return swal({
-    //       title: config.title,
-    //       text: config.text,
-    //       icon: config.icon,
-    //       buttons: true
-    //     })
-    //     .then((willDelete) => {
-    //       // return willDelete
-    //       return willDelete
-    //     })
-    //   }
-    // },
-    // CHECK_MULTILANG () {
-    //   let isMultiLang = true
-    //   if (!this.appData.isMultilanguage) {
-    //     isMultiLang = false
-    //   }
-    //   return isMultiLang
-    // }
   }
 }

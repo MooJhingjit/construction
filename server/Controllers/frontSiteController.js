@@ -12,19 +12,22 @@ async function getData (req, res, next) {
   res.status(200).json(data)
 }
 
-async function updateTask (req, res, next) { // <---------------------
+async function updateTask (req, res, next) {
   let contractData = req.body.data
-  // checkTaskPermission(contractCode)
-  contract.updateContractTask(contractData.contract_code, contractData.houseId, contractData.time, contractData.order_all, 'done')
+  //
+  if (checkTaskPermission(contractCode)) {
+    contract.updateContractTask(contractData.contract_code, contractData.houseId, contractData.time, contractData.order_all, 'done')
+  }
+  
   res.status(200).json({})
 }
 
 
-const checkTaskPermission = async (contractCode) => { // <---------------------
+const checkTaskPermission = async (contractCode) => { // <----------------------
   // add column assign in contract table 
-
+  
   // check premission
-
+  return true
 }
 module.exports.getAllData = getAllData
 module.exports.getData = getData
