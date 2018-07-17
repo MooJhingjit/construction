@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import {bus} from '@/main'
+// import {bus} from '@/main'
 export default {
   props: {
     isActive: {
@@ -44,8 +44,7 @@ export default {
   },
   methods: {
     doLogout () {
-      bus.$emit('logout')
-      this.GOTOPAGE('Login')
+      this.LOGOUT()
     }
   }
 }

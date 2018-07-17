@@ -27,7 +27,7 @@ import {bus} from '@/main'
 import MenuBar from '@Components/MenuBar'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
-import Helper from '@Libraries/common.helpers'
+// import Helper from '@Libraries/common.helpers'
 import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
@@ -51,20 +51,14 @@ export default {
     ])
   },
   created () {
+    this.ROUTE_PERMISSIONS()
     bus.$on('setNotification', this.setNotification)
     bus.$on('logout', this.logout)
-    this.checkAuth()
+    // this.checkAuth()
     this.fetchData()
-    // if (this.$route.name !== 'Login') {
-    //   console.log(this.$route.name)
-    //   this.local.showMenubar = true
-    // } else {
-    //   console.log(111)
-    //   this.local.showMenubar = false
-    // }
   },
   updated () {
-    this.checkAuth()
+    // this.checkAuth()
   },
   methods: {
     ...mapActions([
@@ -73,7 +67,6 @@ export default {
       'setOrderingNotification'
     ]),
     fetchData () {
-      this.ROUTE_PERMISSIONS()
       let resourceName = config.api.app.resource
       let queryString = this.BUILDPARAM([])
       service.getResource({resourceName, queryString})
@@ -88,14 +81,16 @@ export default {
           this.GOTOPAGE('Login', '')
         })
     },
-    checkAuth () {
-      let isAuth = Helper.GET_STORAGEITEM('isAuth')
-      let token = Helper.GET_STORAGEITEM('app_token')
-      if (!isAuth || !token) {
-        this.setAuth(false)
-        this.GOTOPAGE('Login', '')
-      }
-    },
+    // hasAuth () {
+    //   let isAuth = Helper.GET_STORAGEITEM('isAuth')
+    //   let token = Helper.GET_STORAGEITEM('app_token')
+    //   if (!isAuth || !token) {
+    //     this.setAuth(false)
+    //     return false
+    //     // this.GOTOPAGE('Login', '')
+    //   }
+    //   return true
+    // },
     pageClick (tf = true) {
       this.local.isDisableMenu = tf
     },
@@ -105,10 +100,6 @@ export default {
           this.setOrderingNotification(obj.value)
           break
       }
-    },
-    logout () {
-      Helper.REMOVE_STORAGEITEM('isAuth')
-      Helper.REMOVE_STORAGEITEM('app_token')
     }
   },
   beforeDestroy () {
@@ -117,7 +108,13 @@ export default {
   },
   watch: {
     $route (to, from) {
-      this.ROUTE_PERMISSIONS()
+      if (this.$route.name === 'Login') {
+        if (this.HASAUTH()) {
+          this.REDIRECTTOHOME()
+        }
+      } else {
+        this.ROUTE_PERMISSIONS()
+      }
       this.pageClick()
     }
   }

@@ -7,14 +7,14 @@
         </div>
         <div class="block container-block login-form">
           <div class="input-form block">
-            <span class="alert">{{ errors.has('username') || local.inValid ? 'โปรดตรวจสอบข้อมมูลข้างต้น' : '' }}</span>
+            <span class="alert">{{ errors.has('username') || local.inValid ? 'โปรดตรวจสอบข้อมูลข้างต้น' : '' }}</span>
             <div class="control has-icons-left">
               <input class="input" name="username" v-validate="'required'"  v-model="local.username" type="text" placeholder="ชื่อผู้ใช้">
               <span class="icon is-small is-left">
                 <i class="fa fa-user" aria-hidden="true"></i>
               </span>
             </div>
-            <span class="alert">{{ errors.has('password') || local.inValid ? 'โปรดตรวจสอบข้อมมูลข้างต้น' : '' }}</span>
+            <span class="alert">{{ errors.has('password') || local.inValid ? 'โปรดตรวจสอบข้อมูลข้างต้น' : '' }}</span>
             <div class="control has-icons-left">
               <input class="input" name="password" v-validate="'required'" v-model="local.password" type="password" placeholder="รหัสผ่าน">
               <span class="icon is-small is-left">
@@ -34,7 +34,7 @@
 <script>
 import service from '@Services/app-service'
 import config from '@Config/app.config'
-import Helper from '@Libraries/common.helpers'
+// import Helper from '@Libraries/common.helpers'
 import { mapActions } from 'vuex'
 export default {
   props: {
@@ -57,8 +57,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'setUserData',
-      'setAuth'
+      'setUserData'
     ]),
     submit () {
       this.login()
@@ -71,35 +70,23 @@ export default {
         username: this.local.username,
         password: this.local.password
       }
-      service.postResource({resourceName, data})
-        .then((res) => {
-          if (res.status === 200) {
-            Helper.SET_STORAGEITEM('isAuth', 1)
-            Helper.SET_STORAGEITEM('app_token', res.data.token)
-            this.setAuth(true)
-            this.getUserData()
-          } else {
-            this.local.inValid = true
-          }
-        })
-        .catch((err) => {
-          this.local.inValid = true
-          console.log(err)
-        })
+      let res = await service.postResource({resourceName, data})
+      if (res.status === 200) {
+        this.SETAUTH(res.data.token)
+        this.getUserData()
+      } else {
+        this.local.inValid = true
+      }
     },
-    getUserData () {
+    async getUserData () {
       let resourceName = config.api.app.resource
       let queryString = this.BUILDPARAM([])
-      service.getResource({resourceName, queryString})
-        .then((res) => {
-          if (res.status === 200) {
-            this.setUserData(res.data.userData)
-            this.REDIRECTTOHOME()
-          }
-        })
-        .catch(() => {
-          this.GOTOPAGE('Login', '')
-        })
+      let res = await service.getResource({resourceName, queryString})
+      if (res.status === 200) {
+        this.setUserData(res.data.userData)
+        this.SERUSERDATA(res.data.userData)
+        this.REDIRECTTOHOME()
+      }
     }
   }
 }

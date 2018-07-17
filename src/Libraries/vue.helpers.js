@@ -1,5 +1,5 @@
-import { mapGetters } from 'vuex'
-// import Hepler from '@Libraries/common.helpers'
+import { mapGetters, mapActions } from 'vuex'
+import Helper from '@Libraries/common.helpers'
 // import Config from '@AppConfig/app.config'
 // import moment from 'moment'
 // import swal from 'sweetalert'
@@ -50,6 +50,9 @@ export default {
     // }
   },
   methods: {
+    ...mapActions([
+      'setAuth'
+    ]),
     GET_DATE (date) { // this for buefy
       if (date === undefined || date === null) {
         return null
@@ -150,7 +153,7 @@ export default {
           this.GOTOPAGE('FrontSite', '')
           break
         default:
-         this.GOTOPAGE('Home', '')
+          this.GOTOPAGE('Home', '')
       }
     },
     IS_ADMIN () {
@@ -171,11 +174,16 @@ export default {
       }
       return false
     },
-    ROUTE_PERMISSIONS () { // <---------------
+    ROUTE_PERMISSIONS () {
+      if (!this.HASAUTH()) {
+        this.GOTOPAGE('Login', '')
+        return false
+      }
       let routeName = this.$route.name
       let isLogin = (routeName === 'Login')
-      let userType = this.USERTYPE
-      if (userType !== undefined && userType !== null ) {
+      let userData = JSON.parse(Helper.GET_STORAGEITEM('userData'))
+      let userType = this.USERTYPE !== null ? this.USERTYPE : userData.position.toLowerCase()
+      if (userType !== undefined && userType !== null) {
         let permission = config.variable.userPermission.filter((item) => {
           return item.key === userType
         })
@@ -190,6 +198,29 @@ export default {
         }
       }
       this.REDIRECTTOHOME()
+    },
+    LOGOUT () {
+      Helper.REMOVE_STORAGEITEM('isAuth')
+      Helper.REMOVE_STORAGEITEM('app_token')
+      Helper.REMOVE_STORAGEITEM('userData')
+      this.GOTOPAGE('Login')
+    },
+    SETAUTH (token) {
+      Helper.SET_STORAGEITEM('isAuth', 1)
+      Helper.SET_STORAGEITEM('app_token', token)
+      this.setAuth(true)
+    },
+    SERUSERDATA (userData) {
+      Helper.SET_STORAGEITEM('userData', userData)
+    },
+    HASAUTH () {
+      let isAuth = Helper.GET_STORAGEITEM('isAuth')
+      let token = Helper.GET_STORAGEITEM('app_token')
+      if (!isAuth || !token) {
+        this.setAuth(false)
+        return false
+      }
+      return true
     }
   }
 }
