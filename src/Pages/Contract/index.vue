@@ -42,11 +42,13 @@
                     <div class="block title-name">ผู้รับมอบหมาย:</div>
                     <div class="block">
                       <my-input
+                      v-if="local.inputs.contract.status == 'ip'"
                       :value="local.technician.selected"
                       :inputObj="{type: 'select', icon: 'user', inputValue: local.technician.inputs, name: 'technician', placeholder: 'ผู้รับมอบหมาย', validate: 'required'}"
                       :validator="$validator"
                       @input="value => { local.technician.selected = value }"
                       ></my-input>
+                      <p v-else>{{getTechnicianName()}}</p>
                     </div>
                   </div>
                 </td>
@@ -54,7 +56,7 @@
               </tr>
             </table>
           </div>
-          <div class="block c-body" v-if="local.inputs.contract.status == 'ip'">
+          <div class="block c-body">
             <table class="table rows-table is-hoverable">
               <thead>
                 <tr>
@@ -79,11 +81,13 @@
                   <td>
                     <!-- {{SET_DATEFORMAT(item.real_date)}} -->
                     <my-input
+                    v-if="local.inputs.contract.status == 'ip'"
                     :value="SET_DATEFORMAT(item.real_date)"
                     :inputObj="{type: 'text', isBlur: true, name: 'contract_datestart', placeholder: 'YYYY/MM/DD', validate: ''}"
                     :validator="$validator"
                     @onBlur="value => setRealDate(value, index)"
                     ></my-input>
+                    <p v-else>{{SET_DATEFORMAT(item.real_date)}}</p>
                   </td>
                   <td>
                     <span :class="getDelayClass(item.delay, item.status)">{{item.delay}}</span>
@@ -106,20 +110,14 @@
             </div>
           </div>
         </div>
-        <div class="container-block footer-panel">
-         <!-- <my-input
-          :value="local.technician.selected"
-          :inputObj="{type: 'select', icon: 'user', inputValue: local.technician.inputs, name: 'technician', placeholder: 'ผู้รับมอบหมาย', validate: 'required'}"
-          :validator="$validator"
-          @input="value => { local.technician.selected = value }"
-          ></my-input> -->
+        <div class="container-block footer-panel" v-if="local.inputs.contract.status !== 'done'">
           <my-action
-              type="updateStatus"
-              :obj="{title: 'เริ่มดำเนินงาน (ทำสัญญาเสร็จสิ้น)', color: 'is-warning', isConfirm: true}"
-              @clickEvent="submitForm('updateStatus', 'ip')"
-              v-if="local.inputs.contract.status == 'wait'"
-            >
-            </my-action>
+            type="updateStatus"
+            :obj="{title: 'เริ่มดำเนินงาน (ทำสัญญาเสร็จสิ้น)', color: 'is-warning', isConfirm: true}"
+            @clickEvent="submitForm('updateStatus', 'ip')"
+            v-if="local.inputs.contract.status == 'wait'"
+          >
+          </my-action>
           <my-action
             type="update"
             :obj="{title: 'ปิดงาน (เสร็จสิ้น)', color: 'is-success', isConfirm: true}"
@@ -337,6 +335,12 @@ export default {
       if (res.status === 200) {
         this.NOTIFY('success')
       }
+    },
+    getTechnicianName () {
+      let obj = this.local.technician.inputs.filter((item) => {
+        return item.key == this.local.technician.selected
+      })[0]
+      return obj.name
     }
   }
 }

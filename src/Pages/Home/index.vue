@@ -66,7 +66,7 @@
                       <th>เลขที่สัญญา</th>
                       <th>แปลน</th>
                       <th>แบบบ้าน</th>
-                      <th>สถานะงาน</th>
+                      <th>กำลังเดินงาน</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -82,7 +82,7 @@
               </div>
             </article>
           </div>
-          <div class="tile function">
+          <!-- <div class="tile function">
             <div class="tile is-parent is-vertical is-4">
               <article class="tile is-child notification container-block">
                 <span class="block title"><i class="fa fa-print" aria-hidden="true"></i> ออกรายงาน</span>
@@ -98,7 +98,7 @@
                 <span class="block title"><i class="fa fa-print" aria-hidden="true"></i> ออกรายงาน</span>
               </article>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>

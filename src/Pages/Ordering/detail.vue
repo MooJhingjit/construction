@@ -322,6 +322,8 @@ export default {
       }
       win.document.getElementsByTagName('head')[0].appendChild(style)
       win.document.body.innerHTML = html.innerHTML
+      win.focus()
+      win.print()
     },
     async getFullOrdering (item) {
       let resourceName = `${config.api.ordering.index}/${item.contract_code}`

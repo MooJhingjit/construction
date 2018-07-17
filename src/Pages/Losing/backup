@@ -1,0 +1,242 @@
+<option-detail-template :templateObj="local.template">
+    <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
+    <template slot="search-status"></template>
+    <template slot="search-input">
+      <div class="search-input control has-icons-left">
+        <input class="input" type="text" placeholder="ค้นหา">
+        <span class="icon is-small is-left">
+          <i class="fa fa-search" aria-hidden="true"></i>
+        </span>
+      </div>
+    </template>
+    <template slot="search-results">
+      <table class="table is-bordered rows-table">
+        <thead>
+            <tr>
+              <th>โครงการ</th>
+              <th>จำนวนเงิน</th>
+              <th>สัญญา</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>มัณฑนา บางนา กม.7</td>
+              <td>63915</td>
+              <td>5</td>
+            </tr>
+            <tr>
+              <td>นันทวัน บางนา กม.7</td>
+              <td>17224</td>
+              <td>3</td>
+            </tr>
+            <tr>
+              <td>มัณฑนา อ่อนนุช - วงแหวน 5</td>
+              <td>14392</td>
+              <td>15</td>
+            </tr>
+            <tr>
+              <td>มัณฑนา ศรีนครินทร์ ร่มเกล้า</td>
+              <td>8527</td>
+              <td>2</td>
+            </tr>
+            <tr>
+              <td>นันทวัน รามอินทรา พหลโยธิน 50</td>
+              <td>2070</td>
+              <td>5</td>
+            </tr>
+          </tbody>
+      </table>
+      <nav class="pagination" role="navigation" aria-label="pagination">
+        <button class="pagination-previous" title="This is the first page" disabled>ก่อนหน้า</button>
+        <button class="pagination-next">หน้าถัดไป</button>
+      </nav>
+      <div class="chart-option">
+        <doughnut-chart :data="local.allProjectItem" :width="150"></doughnut-chart>
+      </div>
+    </template>
+    <template v-if="true" slot="detail">
+      <div class="container-block  detail-block">
+        <div class="block c-header">
+          <table class="transparent-table">
+            <tr>
+              <td>โครงการ:<span class="value">รามอินทรา พหลโยธิน 50</span></td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <div class="tags tags-select">
+                  <span class="tag active">00C05 (244CA248C)</span>
+                  <span class="tag">00C06 (199CA238C)</span>
+                  <span class="tag">00C07 (199CA238C)</span>
+                  <span class="tag">00D03 (199CA238C)</span>
+                  <span class="tag">00D04 (244CA248C)</span>
+                  <span class="tag">00D05 (244CA248C)</span>
+                  <span class="tag">00F02 (199CA238C)</span>
+                  <span class="tag">00B01 (244CA248C)</span>
+                  <span class="tag">00H01 (244CA248C)</span>
+                  <span class="tag">00H02 (199CA238C)</span>
+                </div>
+              </td>
+            </tr>
+            <!-- <tr>
+              <td>เลขที่สัญญา:<span class="value">LH120243216</span></td>
+              <td>แปลน:<span class="value">C01</span></td>
+            </tr>
+            <tr>
+              <td>แบบบ้าน:<span class="value">244CA248C</span></td>
+              <td>ขั้นตอนการตำเนินงาน:<span class="value">งานพื้นสำเร็จชั้นล่าง</span></td>
+            </tr> -->
+          </table>
+        </div>
+        <div class="block c-body">
+          <div class="card">
+            <div class="card-name">00C05 (244CA248C)</div>
+            <div class="card-content">
+              <div class="detail">
+                  <table class="transparent-table">
+                    <tr>
+                      <td>ทำสัญญา: <span class="value">20/9/2015</span></td>
+                      <td>วันที่ผ่านEP: <span class="value">24/6/2016</span></td>
+                    </tr>
+                    <tr>
+                      <td>ยอดรับงาน: <span class="value">2,187,700</span></td>
+                      <td>ยอดสูญเสีย: <span class="value">34,292 (1.56%)</span></td>
+                    </tr>
+                  </table>
+                </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-name">รายการวัสดุ</div>
+            <div class="card-content">
+              <table class="table is-bordered rows-table">
+                <thead>
+                  <tr>
+                    <th>หมวดงาน</th>
+                    <th>รายการ</th>
+                    <th>จำนวน</th>
+                    <th>หน่วย</th>
+                    <th>ราคา</th>
+                    <th>ราคารวม + ค่าแรง</th>
+                    <th>หมายเหตุ</th>
+                    <th>วันที่</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>หมวดงานประตู-หน้าต่าง</td>
+                    <td>กุญแจเขาควาย K-7/B0312/SN ห้องน้ำ (เปิดซ้าย )</td>
+                    <td>1</td>
+                    <td>ชุด</td>
+                    <td>620.8</td>
+                    <td>620.8</td>
+                    <td>เสียหายหน้างาน</td>
+                    <td>24/6/2016</td>
+                  </tr>
+                  <tr>
+                    <td>หมวดงานหินอ่อน-แกรนิต</td>
+                    <td>หินแกรนิตดำซานซีขนาด 60 X 91 cm.</td>
+                    <td>1</td>
+                    <td>ชิ้น</td>
+                    <td>1595</td>
+                    <td>1595</td>
+                    <td>ไม่ผ่าน QC.</td>
+                    <td>26/6/2016</td>
+                  </tr>
+                  <tr>
+                    <td>หมวดงานหินอ่อน-แกรนิต</td>
+                    <td>หินแกรนิตดำซานซี ขนาด 20x 180 cm</td>
+                    <td>1</td>
+                    <td>ชิ้น</td>
+                    <td>1044</td>
+                    <td>1044  </td>
+                    <td>ไม่ผ่าน QC.</td>
+                    <td>27/6/2016</td>
+                  </tr>
+                  <tr>
+                    <td>หมวดงานพื้นผิว</td>
+                    <td>กระเบื้องพื้น GRAND VIVA 60x60 cm</td>
+                    <td>4</td>
+                    <td>แผ่น</td>
+                    <td>179</td>
+                    <td>716</td>
+                    <td>เสียหายหน้างาน</td>
+                    <td>28/6/2016</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="chart">
+                <bar-chart :data="local.materialItem" :width="150" :height="150"></bar-chart>
+                <div class="chart-name">
+                  ยอดสูญเสีย: 34,292 (1.56%)
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="card">
+            <div class="card-name">รายการจ่ายค่างวด</div>
+            <div class="card-content">
+              <table class="table is-bordered rows-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>วัสดุ</th>
+                    <th>จำนวน</th>
+                    <th>ราคารวม</th>
+                    <th>หมายเหตุ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>วงกบประตู (UPVC)</td>
+                    <td>1</td>
+                    <td>100</td>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>เชิงชาย/ผนังไม้ประดับ/ไม้บัว</td>
+                    <td>1</td>
+                    <td>500</td>
+                    <td>-</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="chart">
+                <bar-chart :data="local.item" :width="150" :height="150"></bar-chart>
+                <div class="chart-name">
+                  สรุปรายการจ่ายค่างวด สัญญา (แปลง)
+                </div>
+              </div>
+          </div>
+          </div>-->
+           <div class="card">
+            <!-- <div class="card-name">สรุปข้อมูลสูญเสียโครงการ รามอินทรา พหลโยธิน 50</div> -->
+            <div class="card-content">
+              <div class="chart two-column container-block">
+                <div class="block">
+                   <doughnut-chart :data="local.allContractItem" :width="250" :height="250"></doughnut-chart>
+                  <div class="chart-name">
+                    สรุปข้อมูลสูญเสียโครงการ รามอินทรา พหลโยธิน 50
+                  </div>
+                </div>
+                <!-- <div class="block">
+                   <doughnut-chart :data="local.allContractItem" :width="250" :height="250"></doughnut-chart>
+                  <div class="chart-name">
+                    สรุปรายการจ่ายค่างวด
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template v-else slot="detail">
+      <no-result-template>
+        <template slot="options">
+          <button class="button">เพิ่มข้อมูลใหม่</button>
+        </template>
+      </no-result-template>
+    </template>
+  </option-detail-template>
