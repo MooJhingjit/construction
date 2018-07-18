@@ -338,7 +338,7 @@ export default {
     },
     getTechnicianName () {
       let obj = this.local.technician.inputs.filter((item) => {
-        return item.key == this.local.technician.selected
+        return item.key === this.local.technician.selected
       })[0]
       return obj.name
     }

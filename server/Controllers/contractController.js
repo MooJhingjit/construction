@@ -322,18 +322,6 @@ const updateContractTask = async (contractCode, houseId, time, order_all, status
   }
 }
 
-const getDetailByContractCode = async (typeSelect, code) => {
-  let contractItem = new contractModel()
-  contractItem.code = code
-  let contract = await contractItem.getData()
-  let project = [null]
-  if (typeSelect.indexOf('project') >= 0) {
-    let projectItem = new projectModel(contract[0].project_id)
-    project = await projectItem.getData()
-  }
-  return {contract: contract[0], project: project[0]}
-}
-
 const getLastProgress = async () => {
   let item = new contractProgressModel()
   let progressRes = await item.getLastProgress()
@@ -440,6 +428,36 @@ const checkContractPermission = async (contractCode, userId) => {
   return true
 }
 
+const countItemByProject = async (projectId) => {
+  let contract = new contractModel()
+  contract.project_id = projectId
+  let result = await contract.count()
+  return result
+}
+
+async function getAllDataFromLosing (projectId) {
+  let contract = new contractModel()
+  contract.project_id = projectId
+  let result = await contract.getAllData()
+  return result
+}
+
+const getDetailByContractCode = async (typeSelect, code) => {
+  let contractItem = new contractModel()
+  contractItem.code = code
+  let contract = await contractItem.getData()
+  let project = [null]
+  if (typeSelect.indexOf('project') >= 0) {
+    let projectItem = new projectModel(contract[0].project_id)
+    project = await projectItem.getData()
+  }
+  // if (typeSelect.indexOf('project') >= 0) {
+  //   let projectItem = new projectModel(contract[0].project_id)
+  //   project = await projectItem.getData()
+  // }
+  return {contract: contract[0], project: project[0]}
+}
+
 module.exports.getStat = getStat
 module.exports.getData = getData
 module.exports.deleteData = deleteData
@@ -458,3 +476,6 @@ module.exports.getContractTime = getContractTime
 module.exports.updateContractTask = updateContractTask
 module.exports.resetData = resetData
 module.exports.checkContractPermission = checkContractPermission
+module.exports.countItemByProject = countItemByProject
+module.exports.getAllDataFromLosing = getAllDataFromLosing
+

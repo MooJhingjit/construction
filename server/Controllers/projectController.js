@@ -30,6 +30,16 @@ async function getAllData (req, res, next) {
   res.status(200).json(data)
 }
 
+async function getAllDataFromLosing (limit, currentPage, main_search) {
+  let project = new projectModel()
+  project.name = main_search
+  let total = await project.count()
+  project.limit = limit
+  project.offset = helpers.getTableoffset(limit, currentPage)
+  let result = await project.getAllData()
+  return {result, total}
+}
+
 async function createData (req, res, next) {
   let newItem = new projectModel()
   newItem.code= req.body.data.code
@@ -130,3 +140,4 @@ module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.deleteData = deleteData
 module.exports.getDetailById = getDetailById
+module.exports.getAllDataFromLosing = getAllDataFromLosing

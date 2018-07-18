@@ -1,15 +1,15 @@
 <template>
   <option-detail-template ref="template"
   :templateObj="local.pageObj.template"
-  :isSelected="true"
+  :isSelected="local.idSelected"
   >
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="data-table">
-      <!-- <data-table ref="dataTable"
+      <data-table ref="dataTable"
       :resourceName="resourceName"
       :statusSearch="local.statusSearch"
       @selectedData="selectedDataHandle"
-      ></data-table> -->
+      ></data-table>
     </template>
     <template slot="function">
       <!-- <button class="button is-link" @click="submitForm('add')">เพิ่มข้อมูลใหม่</button> -->
@@ -24,33 +24,25 @@
               <tr>
                 <td colspan="2">
                   <div class="tags tags-select">
-                    <span class="tag active">00C05 (244CA248C)</span>
-                    <span class="tag">00C06 (199CA238C)</span>
-                    <span class="tag">00C07 (199CA238C)</span>
-                    <span class="tag">00D03 (199CA238C)</span>
-                    <span class="tag">00D04 (244CA248C)</span>
-                    <span class="tag">00D05 (244CA248C)</span>
-                    <span class="tag">00F02 (199CA238C)</span>
-                    <span class="tag">00B01 (244CA248C)</span>
-                    <span class="tag">00H01 (244CA248C)</span>
-                    <span class="tag">00H02 (199CA238C)</span>
+                    <!-- <span class="tag active">00C05 (244CA248C)</span>-->
+                    <span class="tag" :key="contractIndex" v-for="(contract, contractIndex) in local.contractAll" @click="getLosingData(contract)">{{`${contract.code} (${contract.house_id})`}}</span>
                   </div>
                 </td>
               </tr>
             </table>
           </div>
-          <div class="block c-body">
+          <div class="block c-body" v-if="local.detailObj.contractSelected != null">
             <div class="card">
-              <div class="card-name">00C05 (244CA248C)</div>
+              <div class="card-name">{{`${local.detailObj.contractSelected.code} (${local.detailObj.contractSelected.house_id})`}}</div>
               <div class="card-content">
                 <div class="detail">
                     <table class="transparent-table">
                       <tr>
-                        <td>ทำสัญญา: <span class="value">20/9/2015</span></td>
-                        <td>วันที่ผ่านEP: <span class="value">24/6/2016</span></td>
+                        <td>ทำสัญญา: <span class="value">{{SET_DATEFORMAT(local.detailObj.contractSelected.created_at)}}</span></td>
+                        <td>วันที่ผ่านEP: <span class="value"></span></td>
                       </tr>
                       <tr>
-                        <td>ยอดรับงาน: <span class="value">2,187,700</span></td>
+                        <td>ยอดรับงาน: <span class="value">{{NUMBERWITHCOMMAS(local.detailObj.contractSelected.paid, 2)}}</span></td>
                         <td>ยอดสูญเสีย: <span class="value">34,292 (1.56%)</span></td>
                       </tr>
                     </table>
@@ -148,6 +140,9 @@ import optionDetailTemplate from '@Components/Template/option-detail'
 import noResultTemplate from '@Components/Template/no-result'
 import doughnutChart from '@Components/Chart/doughnut'
 import barChart from '@Components/Chart/bar'
+import config from '@Config/app.config'
+import dataTable from '@Components/DataTable'
+import service from '@Services/app-service'
 export default {
   props: {
     // templateName: {
@@ -160,7 +155,8 @@ export default {
     optionDetailTemplate,
     noResultTemplate,
     doughnutChart,
-    barChart
+    barChart,
+    dataTable
   },
   name: 'UserPage',
   data () {
@@ -173,6 +169,18 @@ export default {
           ],
           template: {
             class: 'losing-detail-page'
+          }
+        },
+        statusSearch: [],
+        idSelected: null,
+        contractAll: null,
+        detailObj: {
+          contractSelected: null,
+          losingTotal: null,
+          ordering: null,
+          chart: {
+            bar: null,
+            donuth: null
           }
         },
         allProjectItem: {
@@ -221,47 +229,35 @@ export default {
       }
     }
   },
-  computed: {
-    // propertyComputed() {
-    //   console.log('I change when this.property changes.')
-    //   return this.property
-    // }
-  },
   created () {
     // console.log('created')
     // this.property = 'Example property update.'
     // console.log('propertyComputed will update, as this.property is now reactive.')
   },
-  beforeMount () {
-    // console.log('beforeMount')
-    // console.log(`this.$el doesn't exist yet, but it will soon!`)
-  },
-  mounted () {
-    // console.log('mounted')
-    // console.log(this.$el.textContent) // I'm text inside the component.
-  },
-  beforeUpdate () {
-    // console.log('beforeUpdate')
-    // console.log(this.counter) // Logs the counter value every second, before the DOM updates.
-  },
-  updated () {
-    // console.log('updated')
-    // Fired every second, should always be true
-    // console.log(+this.$refs['dom-element'].textContent === this.counter)
-  },
-  beforeDestroy () {
-    // console.log('beforeDestroy')
-    // Perform the teardown procedure for someLeakyProperty.
-    // (In this case, effectively nothing)
-    // this.someLeakyProperty = null
-    // delete this.someLeakyProperty
-  },
-  destroyed () {
-    // console.log('destroyed')
-    // console.log(this) // There's practically nothing here!
-    // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
+  computed: {
+    resourceName () {
+      return config.api.losing.index
+    }
   },
   methods: {
+    selectedDataHandle (item) {
+      this.local.idSelected = item.projectId
+      this.getFullData()
+    },
+    async getFullData () {
+      let resourceName = `${config.api.losing.index}/${this.local.idSelected}`
+      let queryString = []
+      let res = await service.getResource({resourceName, queryString})
+      this.local.contractAll = res.data
+    },
+    async getLosingData (contractObj) {
+      let resourceName = `${config.api.losing.fullObj}/${contractObj.code}`
+      let queryString = []
+      let res = await service.getResource({resourceName, queryString})
+      this.local.detailObj.losingTotal = res.data.losingTotal
+      this.local.detailObj.ordering = res.data.ordering
+      this.local.detailObj.chart = res.data.chart
+    }
   }
 }
 </script>

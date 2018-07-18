@@ -145,27 +145,6 @@ export default {
         },
         workingProgress: [],
         extraOrdering: null,
-        // item3: {
-        //   count: 120,
-        //   class: 'success',
-        //   name: 'Success',
-        //   detail: '',
-        //   dataSets: {
-        //     label: ['xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx', 'xx-xx-xxxx'],
-        //     values: [2, 4, 2, 3, 2, 3, 2, 2, 3, 2, 1, 2]
-        //   },
-        //   barColor: '#7dbe4b'
-        // },
-        // item4: {
-        //   labels: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
-        //   datasets: [
-        //     {
-        //       label: 'การสั่งซื้อ',
-        //       backgroundColor: 'rgba(255,146,146,.7)',
-        //       data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
-        //     }
-        //   ]
-        // },
         item5: {
           labels: ['มกราคม', 'กุมภาพันธ์', 'March', 'เมษายน', 'พฤษภาคม', 'June', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
           datasets: [

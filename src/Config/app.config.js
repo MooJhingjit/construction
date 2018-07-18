@@ -55,6 +55,11 @@ const api = {
   'frontSite': {
     'index': '/front-site'
     // 'update': '/'
+  },
+  'losing': {
+    'home': '/losing-home',
+    'index': '/losing',
+    'fullObj': '/losing-full'
   }
 }
 

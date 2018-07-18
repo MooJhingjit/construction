@@ -4,17 +4,6 @@
     <div class="container-block">
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-12">
-          <!-- <div class="tile">
-            <div class="tile is-parent is-vertical is-12">
-              <article class="tile is-child notification">
-                <div class="tile">
-                  <div class="tile is-parent is-vertical is-12">
-                    <bar-chart :data="item6"  :height="150" ></bar-chart>
-                  </div>
-                </div>
-              </article>
-            </div>
-          </div> -->
           <div class="tile">
             <div class="tile is-parent is-vertical is-9">
               <article class="tile is-child notification">
@@ -28,16 +17,11 @@
             <div class="tile is-parent is-vertical">
               <article class="tile is-child notification">
                 <div class="search-box container-block">
-                  <!-- <h6>ค้นหา</h6> -->
                   <div class="block">
-                    <!-- <span>ปี : </span>  -->
                     <input type="text" class="input" placeholder="ปี"/>
                     <br/>
                     <input type="text" class="input" placeholder="เดือน"/>
                   </div>
-                  <!-- <div class="block">
-                    <span>เดือน : </span> <input type="text" class="input" />
-                  </div> -->
                   <div class="block">
                     <div class="field is-grouped is-grouped-multiline">
                       <div class="control">
@@ -66,7 +50,8 @@
               <article class="tile is-child notification">
                 <div class="tile">
                   <div class="tile is-parent is-vertical is-12">
-                    <bar-chart :data="item4"  :height="150" ></bar-chart>
+                    <bar-chart v-if="local.extraOrdering != null" :data="local.extraOrdering"  :height="150" ></bar-chart>
+                    <!-- <bar-chart :data="item4"  :height="150" ></bar-chart> -->
                   </div>
                 </div>
               </article>
@@ -107,6 +92,8 @@
 <script>
 import barChart from '@Components/Chart/line'
 import breadcrumbBar from '@Components/Breadcrumb'
+import service from '@Services/app-service'
+import config from '@Config/app.config'
 export default {
   props: {
     // templateName: {
@@ -126,7 +113,8 @@ export default {
           items: [
             {name: 'ข้อมูลสูญเสีย', route: 'Losing', key: '', active: true, icon: 'fa fa-thumbs-o-down'}
           ]
-        }
+        },
+        extraOrdering: null
       },
       config: {
         type: 'bar',
@@ -168,46 +156,17 @@ export default {
     }
   },
   computed: {
-    // propertyComputed() {
-    //   console.log('I change when this.property changes.')
-    //   return this.property
-    // }
   },
   created () {
-    // console.log('created')
-    // this.property = 'Example property update.'
-    // console.log('propertyComputed will update, as this.property is now reactive.')
-  },
-  beforeMount () {
-    // console.log('beforeMount')
-    // console.log(`this.$el doesn't exist yet, but it will soon!`)
-  },
-  mounted () {
-    // console.log('mounted')
-    // console.log(this.$el.textContent) // I'm text inside the component.
-  },
-  beforeUpdate () {
-    // console.log('beforeUpdate')
-    // console.log(this.counter) // Logs the counter value every second, before the DOM updates.
-  },
-  updated () {
-    // console.log('updated')
-    // Fired every second, should always be true
-    // console.log(+this.$refs['dom-element'].textContent === this.counter)
-  },
-  beforeDestroy () {
-    // console.log('beforeDestroy')
-    // Perform the teardown procedure for someLeakyProperty.
-    // (In this case, effectively nothing)
-    // this.someLeakyProperty = null
-    // delete this.someLeakyProperty
-  },
-  destroyed () {
-    // console.log('destroyed')
-    // console.log(this) // There's practically nothing here!
-    // MyCreepyAnalyticsService.informService('Component destroyed. All assets move in on target on my mark.')
+    this.fetchData()
   },
   methods: {
+    async fetchData () {
+      let resourceName = config.api.losing.home
+      let queryString = []
+      let res = await service.getResource({resourceName, queryString})
+      this.local.extraOrdering = res.data.extraOrdering
+    }
   }
 }
 </script>

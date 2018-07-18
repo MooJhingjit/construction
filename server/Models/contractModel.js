@@ -119,6 +119,9 @@ module.exports =  class Contract {
     if (this.status) {
       conditions.status = this.status
     }
+    if (this.project_id) {
+      conditions.project_id = this.project_id
+    }
     return conditions
   }
 }
