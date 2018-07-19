@@ -15,7 +15,6 @@ const getData = (req, res, next) => {
 async function getAllData (req, res, next) {
   let materialGroup = new materialGroupModel()
   let data = []
-  // project.name = req.query.main_search
   if (req.query.type === 'selection') {
     data = await materialGroup.getDropdownData()
     data = data.map(item => {
@@ -26,6 +25,7 @@ async function getAllData (req, res, next) {
     })
   } else {
     let total = await materialGroup.count()
+    materialGroup.name = req.query.main_search
     materialGroup.limit = req.query.limit
     materialGroup.offset = helpers.getTableoffset(req.query.limit, req.query.currentPage)
     let result = await materialGroup.getAllData()

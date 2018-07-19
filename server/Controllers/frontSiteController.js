@@ -2,7 +2,8 @@ const helpers = require('../Libraries/helpers')
 const contract = require('./contractController.js')
 
 async function getAllData (req, res, next) {
-  let data = await contract.getShortCutContract()
+  let userAuth = helpers.getUserAuth(req.headers['authorization'])
+  let data = await contract.getShortCutContract(userAuth.id)
   res.status(200).json(data)
 }
 

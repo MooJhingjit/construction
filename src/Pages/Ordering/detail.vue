@@ -21,10 +21,10 @@
           <div class="block c-header">
             <table class="transparent-table">
               <tr>
-                <td>โครงการ:<span class="value">{{project.name}}</span></td>
+                <td>โครงการ:<span class="value is-linkpage" @click="GOTOPAGE('Project', project.name)">{{project.name}}</span></td>
               </tr>
               <tr>
-                <td>เลขที่สัญญา:<span class="value">{{contract.code}}</span></td>
+                <td>เลขที่สัญญา:<span class="value is-linkpage" @click="GOTOPAGE('Contract', contract.code)">{{contract.code}}</span></td>
                 <td>แปลน:<span class="value">{{contract.contractPlan}}</span></td>
               </tr>
               <tr>
@@ -162,7 +162,7 @@
             <!-- <button class="button is-outlined" @click="doReceipt()" v-if="this.local.orderSelected.status != 'wait'">ออกใบสั่งซื้อ</button> -->
             <!-- <button class="button is-outlined" @click="submitForm('received')" v-if="this.local.orderSelected.status == 'confirmed'">รับของ</button> -->
           </div>
-          <receipt-template class="receipt-template" ref="receiptTemplate" :dataObj="local.receiptObj"></receipt-template>
+          <receipt-template class="receipt-template" ref="receiptTemplate" :dataObj="local.receiptObj" ></receipt-template>
         </div>
       </template>
     </template>

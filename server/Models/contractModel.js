@@ -122,6 +122,9 @@ module.exports =  class Contract {
     if (this.project_id) {
       conditions.project_id = this.project_id
     }
+    if (this.assign) {
+      conditions.assign = this.assign
+    }
     return conditions
   }
 }

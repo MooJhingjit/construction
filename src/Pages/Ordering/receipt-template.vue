@@ -8,7 +8,9 @@
                     <table width="100%" class="header-table">
                     <tbody>
                         <tr>
-                          <td style="width:80%;padding:5px;">logo</td>
+                          <td style="width:80%;padding:5px;">
+                            <img src="../../../static/img/logo.png" width="200" height="80" alt="">
+                          </td>
                           <td class="text-right" style="width:20%;text-align:right !important;padding:5px;">ใบสั่งซื้อ</td>
                         </tr>
                         <tr>

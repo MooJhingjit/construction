@@ -51,13 +51,40 @@ async function getData (req, res, next) {
 }
 
 async function getFullLosing (req, res, next) {
-  let projectId = req.params.key
+  let contractCode = req.params.key
+  // let allContract = await contractController.getContractByProject(projectId)
   let data = {
-    losingTotal: 'res.data.losingTotal',
-    ordering: 'res.data.ordering',
-    chart: 'res.data.chart'
+    losingTotal: 0,
+    ordering: [],
+    chart: {
+      materialItem: {
+        // labels: ['กุญแจเขาควาย K-7/B0312/SN ห้องน้ำ (เปิดซ้าย )', 'หินแกรนิตดำซานซีขนาด 60 X 91 cm.', 'หินแกรนิตดำซานซี ขนาด 20x 180 cm', 'กระเบื้องพื้น GRAND VIVA 60x60 cm'],
+        labels: [],
+        datasets: [
+          {
+            backgroundColor: '#40A5EF',
+            // data: [620.8, 1595, 1044, 716]
+            data: []
+          }
+        ]
+      }
+    }
   }
-
+  let orderingItems = await orderingController.getOrderingByContract(contractCode, 'extra')
+  await Promise.all(
+    orderingItems.map( async (orderingItem) => {
+      data.losingTotal += orderingItem.total_price
+      let orderingDetails = await orderingController.getOrderingDetailByOrderingId(orderingItem.id)
+      orderingDetails.map((orderingDetail) => {
+        orderingDetail.note = orderingItem.note
+        data.ordering.push(orderingDetail)
+        data.chart.materialItem.labels.push(orderingDetail.name)
+        let price = orderingDetail.unit_price * orderingDetail.amount
+        data.chart.materialItem.datasets[0].data.push(price)
+      })
+    })
+  )
+  
   res.status(200).json(data)
 }
 

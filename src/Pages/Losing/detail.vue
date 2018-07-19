@@ -19,7 +19,7 @@
           <div class="block c-header">
             <table class="transparent-table">
               <tr>
-                <td>โครงการ:<span class="value">รามอินทรา พหลโยธิน 50</span></td>
+                <td>โครงการ:<span class="value is-linkpage" @click="GOTOPAGE('Project', local.projectName)">{{local.projectName}}</span></td>
               </tr>
               <tr>
                 <td colspan="2">
@@ -43,7 +43,7 @@
                       </tr>
                       <tr>
                         <td>ยอดรับงาน: <span class="value">{{NUMBERWITHCOMMAS(local.detailObj.contractSelected.paid, 2)}}</span></td>
-                        <td>ยอดสูญเสีย: <span class="value">34,292 (1.56%)</span></td>
+                        <td>ยอดสูญเสีย: <span class="value">{{NUMBERWITHCOMMAS(local.detailObj.losingTotal)}} ({{losingPercent}})</span></td>
                       </tr>
                     </table>
                   </div>
@@ -55,7 +55,7 @@
                 <table class="table is-bordered rows-table">
                   <thead>
                     <tr>
-                      <th>หมวดงาน</th>
+                      <!-- <th>หมวดงาน</th> -->
                       <th>รายการ</th>
                       <th>จำนวน</th>
                       <th>หน่วย</th>
@@ -66,52 +66,22 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>หมวดงานประตู-หน้าต่าง</td>
-                      <td>กุญแจเขาควาย K-7/B0312/SN ห้องน้ำ (เปิดซ้าย )</td>
-                      <td>1</td>
-                      <td>ชุด</td>
-                      <td>620.8</td>
-                      <td>620.8</td>
-                      <td>เสียหายหน้างาน</td>
-                      <td>24/6/2016</td>
-                    </tr>
-                    <tr>
-                      <td>หมวดงานหินอ่อน-แกรนิต</td>
-                      <td>หินแกรนิตดำซานซีขนาด 60 X 91 cm.</td>
-                      <td>1</td>
-                      <td>ชิ้น</td>
-                      <td>1595</td>
-                      <td>1595</td>
-                      <td>ไม่ผ่าน QC.</td>
-                      <td>26/6/2016</td>
-                    </tr>
-                    <tr>
-                      <td>หมวดงานหินอ่อน-แกรนิต</td>
-                      <td>หินแกรนิตดำซานซี ขนาด 20x 180 cm</td>
-                      <td>1</td>
-                      <td>ชิ้น</td>
-                      <td>1044</td>
-                      <td>1044  </td>
-                      <td>ไม่ผ่าน QC.</td>
-                      <td>27/6/2016</td>
-                    </tr>
-                    <tr>
-                      <td>หมวดงานพื้นผิว</td>
-                      <td>กระเบื้องพื้น GRAND VIVA 60x60 cm</td>
-                      <td>4</td>
-                      <td>แผ่น</td>
-                      <td>179</td>
-                      <td>716</td>
-                      <td>เสียหายหน้างาน</td>
-                      <td>28/6/2016</td>
+                    <tr :key="index" v-for="(item, index) in local.detailObj.ordering">
+                      <!-- <td>หมวดงานประตู-หน้าต่าง</td> -->
+                      <td>{{item.name}}</td>
+                      <td>{{item.amount}}</td>
+                      <td>{{item.unit_text}}</td>
+                      <td>{{NUMBERWITHCOMMAS(item.price, 2)}}</td>
+                      <td>{{NUMBERWITHCOMMAS(item.price, 2)}}</td>
+                      <td>{{item.note}}</td>
+                      <td>{{SET_DATEFORMAT(item.created_at)}}</td>
                     </tr>
                   </tbody>
                 </table>
                 <div class="chart">
-                  <bar-chart :data="local.materialItem" :width="150" :height="150"></bar-chart>
+                  <bar-chart :data="local.detailObj.chart.materialItem" :width="150" :height="150"></bar-chart>
                   <div class="chart-name">
-                    ยอดสูญเสีย: 34,292 (1.56%)
+                    ยอดสูญเสีย: {{NUMBERWITHCOMMAS(local.detailObj.losingTotal)}} ({{losingPercent}})
                   </div>
                 </div>
               </div>
@@ -173,13 +143,14 @@ export default {
         },
         statusSearch: [],
         idSelected: null,
+        projectName: null,
         contractAll: null,
         detailObj: {
           contractSelected: null,
           losingTotal: null,
           ordering: null,
           chart: {
-            bar: null,
+            materialItem: null,
             donuth: null
           }
         },
@@ -237,10 +208,21 @@ export default {
   computed: {
     resourceName () {
       return config.api.losing.index
+    },
+    losingPercent () {
+      if (this.local.detailObj.losingTotal === null) {
+        return 0
+      }
+      let losingTotal = this.local.detailObj.losingTotal
+      let paid = this.local.detailObj.contractSelected.paid
+      let percent = (losingTotal * 100) / paid
+      return `${this.NUMBERWITHCOMMAS(percent, 2)} %`
     }
   },
   methods: {
     selectedDataHandle (item) {
+      console.log(item)
+      this.local.projectName = item.name
       this.local.idSelected = item.projectId
       this.getFullData()
     },
@@ -251,12 +233,20 @@ export default {
       this.local.contractAll = res.data
     },
     async getLosingData (contractObj) {
+      this.cleanData()
       let resourceName = `${config.api.losing.fullObj}/${contractObj.code}`
       let queryString = []
       let res = await service.getResource({resourceName, queryString})
+      this.local.detailObj.contractSelected = contractObj
       this.local.detailObj.losingTotal = res.data.losingTotal
       this.local.detailObj.ordering = res.data.ordering
       this.local.detailObj.chart = res.data.chart
+    },
+    cleanData () {
+      this.local.detailObj.contractSelected = null
+      this.local.detailObj.losingTotal = null
+      this.local.detailObj.ordering = null
+      this.local.detailObj.chart = null
     }
   }
 }

@@ -13,6 +13,10 @@ html {
         .block{
             flex: 1;
         }
+        .is-linkpage{
+          cursor: pointer !important;
+          color: #1284cc !important;
+        }
         .transparent-table{
           background-color: transparent !important;
           border: none;

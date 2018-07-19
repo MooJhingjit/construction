@@ -37,12 +37,24 @@ module.exports =  class Ordering {
     .where('ordering.status', '!=', 'pending')
     return result
   }
+  async geDataByType () { // for losing page
+    let result = await this.knex('ordering')
+    .where({'contract_code': this.contract_code})
+    .where({'order_type': this.order_type})
+    .where(function() {
+      this.where('status', 'confirmed').orWhere('status', 'received')
+    })
+    return result
+  }
 
   async getStat () {
     let result = await this.knex.select('*')
     .from('ordering')
     .where({'order_type': this.order_type})
-    .where('status', '!=', 'pending')
+    .where(function() {
+      this.where('status', 'confirmed').orWhere('status', 'received')
+    })
+    // .where('status', 'confirmed').orWhere('status', 'received')
     .orderBy('date_start', 'asc')
     return result
   }

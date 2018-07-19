@@ -16,8 +16,8 @@
             <table class="transparent-table">
               <tr>
               <td>
-                โครงการ:<span class="value">{{local.inputs.project.name}}</span>
-                <button @click="resetContract()">reset</button>
+                โครงการ:<span class="value is-linkpage" @click="GOTOPAGE('Project', local.inputs.project.name)">{{local.inputs.project.name}}</span>
+                <!-- <button @click="resetContract()">reset</button> -->
               </td>
               </tr>
               <tr>
@@ -42,7 +42,7 @@
                     <div class="block title-name">ผู้รับมอบหมาย:</div>
                     <div class="block">
                       <my-input
-                      v-if="local.inputs.contract.status == 'ip'"
+                      v-if="local.inputs.contract.status !== 'done'"
                       :value="local.technician.selected"
                       :inputObj="{type: 'select', icon: 'user', inputValue: local.technician.inputs, name: 'technician', placeholder: 'ผู้รับมอบหมาย', validate: 'required'}"
                       :validator="$validator"
@@ -81,7 +81,7 @@
                   <td>
                     <!-- {{SET_DATEFORMAT(item.real_date)}} -->
                     <my-input
-                    v-if="local.inputs.contract.status == 'ip'"
+                    v-if="local.inputs.contract.status == 'ip' && item.condition !== null"
                     :value="SET_DATEFORMAT(item.real_date)"
                     :inputObj="{type: 'text', isBlur: true, name: 'contract_datestart', placeholder: 'YYYY/MM/DD', validate: ''}"
                     :validator="$validator"
@@ -90,10 +90,10 @@
                     <p v-else>{{SET_DATEFORMAT(item.real_date)}}</p>
                   </td>
                   <td>
-                    <span :class="getDelayClass(item.delay, item.status)">{{item.delay}}</span>
+                    <span v-if="item.condition !== null" :class="getDelayClass(item.delay, item.status)">{{item.delay}}</span>
                   </td>
                   <td>
-                    <span :class="getStatusClass(item.status)">{{getWorkingStatus(item.status)}}</span>
+                    <span v-if="item.condition !== null" :class="getStatusClass(item.status)">{{getWorkingStatus(item.status)}}</span>
                   </td>
                 </tr>
               </tbody>

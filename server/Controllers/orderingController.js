@@ -33,7 +33,7 @@ async function getResource (req, res, next) {
         datasets: [
           {
             label: 'การสั่งซื้อ (พิเศษ)',
-            backgroundColor: '#F05858',
+            backgroundColor: 'rgba(255,146,146,.7)',
             data: orderingExtra.data
             // data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
           }
@@ -309,6 +309,20 @@ const reset = async (contractCode) => {
   await items.deleteByContractCode()
 
 }
+const getOrderingByContract = async (contractCode, type) => {
+  let items = new orderingModel()
+  items.contract_code = contractCode
+  items.order_type = type
+  let result = await items.geDataByType()
+  return result
+}
+const getOrderingDetailByOrderingId = async (orderId) => {
+  let items = new orderingDetailModel()
+  items.order_id = orderId
+  let result = await items.getData()
+  return result
+}
+
 module.exports.getResource = getResource
 module.exports.getAllData = getAllData
 module.exports.getData = getData
@@ -323,6 +337,8 @@ module.exports.deleteData = deleteData
 module.exports.checkOrdering = checkOrdering
 module.exports.getDetailByContractCode = getDetailByContractCode
 module.exports.reset = reset
+module.exports.getOrderingByContract = getOrderingByContract
+module.exports.getOrderingDetailByOrderingId = getOrderingDetailByOrderingId
 
 
 

@@ -162,6 +162,11 @@ export default {
   },
   created () {
   },
+  mounted () {
+    if (this.$route.params.key !== undefined && this.$route.params.key !== 'all') {
+      this.$refs.dataTable.searchByText({value: this.$route.params.key})
+    }
+  },
   methods: {
     selectedDataHandle (item) {
       this.errors.clear()

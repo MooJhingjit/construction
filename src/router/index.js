@@ -63,8 +63,13 @@ export default new VueRouter({
       name: 'Authority',
       component: Authority
     },
+    // {
+    //   path: '/project',
+    //   name: 'Project',
+    //   component: Project
+    // },
     {
-      path: '/project',
+      path: '/project/:key',
       name: 'Project',
       component: Project
     },

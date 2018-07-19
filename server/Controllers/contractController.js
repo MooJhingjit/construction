@@ -316,6 +316,7 @@ const updateContractProgress = async (req, res, next) => {
 }
 // update task and order material
 const updateContractTask = async (contractCode, houseId, time, order_all, status) => {
+  // console.log(contractCode, houseId, time, order_all, status)
   let progressId = await updateTask(contractCode, time, order_all, status)
   if (progressId) { //task updated
     await findTaskAndOrderMaterial(contractCode, houseId, order_all, progressId)
@@ -341,9 +342,10 @@ const getLastProgress = async () => {
   return obj
 }
 
-const getShortCutContract = async () => { // this for front site
+const getShortCutContract = async (userId) => { // this for front site
   let contract = new contractModel()
   contract.status = 'ip'
+  contract.assign = userId
   let contractData = await contract.getAllData()
   await Promise.all(
     contractData.map( async (item) => {
@@ -368,13 +370,15 @@ const updateStatus = async (contractCode, status, assign) => {
 
 const updateTask = async (contractCode, time, order_all, status) => {
   let currentProgress = new contractProgressModel(contractCode)
-  currentProgress.time = time,
+  currentProgress.time = time
   currentProgress.order_all = order_all
   currentProgress = await currentProgress.getCurrentProgress()
   let currentEndDate = currentProgress[0].end_date
+  // console.log(currentEndDate)
   // console.log(helpers.getCurrentDate(), currentEndDate)
   // console.log(helpers.getDateDiff(currentEndDate, helpers.getCurrentDate()))
   // return false
+  // console.log(helpers.getDateDiff(currentEndDate, helpers.getCurrentDate()))
   let progress = new contractProgressModel(contractCode)
   progress.time = time
   progress.order_all = order_all
@@ -458,6 +462,13 @@ const getDetailByContractCode = async (typeSelect, code) => {
   return {contract: contract[0], project: project[0]}
 }
 
+const getContractByProject = async (projectId) => {
+  let contractItem = new contractModel()
+  contractItem.project_id = projectId
+  let result = await contractItem.getAllData()
+  return result
+}
+
 module.exports.getStat = getStat
 module.exports.getData = getData
 module.exports.deleteData = deleteData
@@ -478,4 +489,6 @@ module.exports.resetData = resetData
 module.exports.checkContractPermission = checkContractPermission
 module.exports.countItemByProject = countItemByProject
 module.exports.getAllDataFromLosing = getAllDataFromLosing
+module.exports.getContractByProject = getContractByProject
+
 
