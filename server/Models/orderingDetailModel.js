@@ -19,6 +19,7 @@ module.exports =  class OrderingDetail {
   async getData () {
     let result = await this.knex('ordering_detail')
     .where({'order_id': this.order_id})
+    await this.knex.destroy()
     return result
   }
 
@@ -32,6 +33,7 @@ module.exports =  class OrderingDetail {
       amount: this.amount,
       status: this.status
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -42,6 +44,7 @@ module.exports =  class OrderingDetail {
       amount: this.amount,
       price: this.price
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -49,6 +52,7 @@ module.exports =  class OrderingDetail {
     let result = await this.knex('ordering_detail')
     .where({order_id: this.order_id})
     .del()
+    await this.knex.destroy()
     return result
   }
 }

@@ -20,23 +20,27 @@ module.exports =  class WorkOrder {
   //   .leftJoin('material_group', 'material_group .id', 'work_order_detail.post_order')
   //   .where({'work_order.time': this.time})
   //   .orderBy('work_order_detail.id', 'asc')
-  //   return result
+  // await this.knex.destroy()
+  // return result
   // }
 
   async getData () {
     let result = await this.knex('work_order')
     .where({'time': this.time})
+    await this.knex.destroy()
     return result
   }
 
 
   async getAllData () {
     let result = await this.knex('work_order')
+    await this.knex.destroy()
     return result
   }
 
   async count () {
     let result = await this.knex('work_order').count('id as count').where(this.getCondition())
+    // await this.knex.destroy()
     return result
   }
 
@@ -46,6 +50,7 @@ module.exports =  class WorkOrder {
       pre_order: this.pre_order,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -57,6 +62,7 @@ module.exports =  class WorkOrder {
       pre_order: this.pre_order,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -64,6 +70,7 @@ module.exports =  class WorkOrder {
     let result = await this.knex('work_order')
     .where({id: this.id})
     .del()
+    await this.knex.destroy()
     return result
   }
 

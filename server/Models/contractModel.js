@@ -12,7 +12,6 @@ module.exports =  class Contract {
     this.plan
     this.house_id
     this.price
-    // this.quarter
     this.date_start
     this.paid
     this.status
@@ -29,11 +28,13 @@ module.exports =  class Contract {
       .andOn('contract.plan', '=', 'house.plan')
     })
     .where({'contract.code': this.code})
+    await this.knex.destroy()
     return result
   }
   async getAllData () {
     let result = await this.knex('contract')
     .where(this.getCondition())
+    await this.knex.destroy()
     return result
   }
   
@@ -41,18 +42,21 @@ module.exports =  class Contract {
     let result = await this.knex.select('id')
     .from('contract')
     .where({'code': this.code, assign: this.assign})
+    await this.knex.destroy()
     return result
   }
 
   async getAllSelection () {
     let result = await this.knex.select('code').from('contract').orderBy('created_at', 'desc')
     // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
+    await this.knex.destroy()
     return result
   }
 
   async getContractDetail () {
     let result = await this.knex('contract')
     .where({'contract.code': this.code})
+    await this.knex.destroy()
     return result
   }
 
@@ -61,16 +65,19 @@ module.exports =  class Contract {
     .where(this.getCondition())
     .where('code', 'like', `%${this.code || ''}%`)
     .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    await this.knex.destroy()
     return result
   }
 
   async getStat () {
     let result = await this.knex.select('created_at').from('contract')
+    await this.knex.destroy()
     return result
   }
 
   async count () {
     let result = await this.knex('contract').count('id as count').where(this.getCondition())
+    // await this.knex.destroy()
     return result
   }
 
@@ -88,6 +95,7 @@ module.exports =  class Contract {
       status: this.status,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -98,6 +106,7 @@ module.exports =  class Contract {
       status: this.status,
       assign: this.assign
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -105,12 +114,14 @@ module.exports =  class Contract {
     let result = await this.knex('contract')
     .where({id: this.id})
     .del()
+    await this.knex.destroy()
     return result
   }
 
   async getPreiod () {
     let result = await this.knex('contract_preiod')
     .where({house_id: this.house_id})
+    await this.knex.destroy()
     return result
   }
 

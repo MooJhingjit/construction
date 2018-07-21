@@ -16,6 +16,7 @@ module.exports =  class project {
 
   async getData () {
     let result = await this.knex('project').where({id: this.id})
+    await this.knex.destroy()
     return result
   }
 
@@ -23,11 +24,13 @@ module.exports =  class project {
     let result = await this.knex('project').where(this.getCondition())
     .where('name', 'like', `%${this.name || ''}%`)
     .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    await this.knex.destroy()
     return result
   }
 
   async count () {
     let result = await this.knex('project').count('id as count').where(this.getCondition())
+    // await this.knex.destroy()
     return result
   }
 
@@ -39,6 +42,7 @@ module.exports =  class project {
       type: this.type,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -52,6 +56,7 @@ module.exports =  class project {
       type: this.type,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -59,16 +64,19 @@ module.exports =  class project {
     let result = await this.knex('project')
     .where({id: this.id})
     .del()
+    await this.knex.destroy()
     return result
   }
 
   async getStat () {
     let result = await this.knex.select('created_at').from('project')
+    await this.knex.destroy()
     return result
   }
 
   async getAllSelection () {
     let result = await this.knex.select('id', 'name').from('project').orderBy('created_at', 'desc')
+    await this.knex.destroy()
     return result
   }
 

@@ -18,6 +18,7 @@ module.exports =  class MaterialGroupDetail {
     .where({
       material_group_id: this.material_group_id
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -27,6 +28,7 @@ module.exports =  class MaterialGroupDetail {
     .where({
       material_id: this.material_id
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -36,6 +38,7 @@ module.exports =  class MaterialGroupDetail {
     .where('name', 'like', `%${this.name || ''}%`)
     .orderBy('id', 'desc')
     .limit(20).offset(0)
+    await this.knex.destroy()
     return result
   }
 
@@ -44,11 +47,13 @@ module.exports =  class MaterialGroupDetail {
     .where(this.getCondition())
     .where('name', 'like', `%${this.name || ''}%`)
     .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    await this.knex.destroy()
     return result
   }
 
   async count () {
     let result = await this.knex('material_group_detail').count('id as count').where(this.getCondition())
+    // await this.knex.destroy()
     return result
   }
 
@@ -60,6 +65,7 @@ module.exports =  class MaterialGroupDetail {
       amount: this.amount,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -73,6 +79,7 @@ module.exports =  class MaterialGroupDetail {
       amount: this.amount,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -80,6 +87,7 @@ module.exports =  class MaterialGroupDetail {
     let result = await this.knex('material_group_detail')
     .where(this.getCondition())
     .del()
+    await this.knex.destroy()
     return result
   }
 
@@ -87,6 +95,7 @@ module.exports =  class MaterialGroupDetail {
     let result = await this.knex('material_group_detail')
     .whereIn('material_id', idArr)
     .del()
+    await this.knex.destroy()
     return result
   }
 
@@ -96,6 +105,7 @@ module.exports =  class MaterialGroupDetail {
       material_group_id: this.material_group_id,
       house_id: this.house_id
     })
+    await this.knex.destroy()
     return result
   }
   

@@ -25,7 +25,7 @@
                 <td>แบบบ้าน:<span class="value">{{local.inputs.contract.house_id}}</span></td>
               </tr>
               <tr>
-                <td>แปลน: <span class="value">{{local.inputs.contract.contractPlan}}</span></td>
+                <td>แปลง: <span class="value">{{local.inputs.contract.contractPlan}}</span></td>
                 <td></td>
               </tr>
               <tr>

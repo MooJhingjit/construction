@@ -17,6 +17,7 @@ module.exports =  class MaterialGroup {
   async getData () {
     let result = await this.knex('material_group')
     .where({id: this.id})
+    await this.knex.destroy()
     return result
   }
 
@@ -29,6 +30,7 @@ module.exports =  class MaterialGroup {
     .where(this.getCondition())
     .where('name', 'like', `%${this.name || ''}%`)
     .orderBy('id', 'asc').limit(this.limit).offset(this.offset)
+    await this.knex.destroy()
     return result
   }
 
@@ -39,6 +41,7 @@ module.exports =  class MaterialGroup {
   async count () {
     let result = await this.knex('material_group').count('id as count').where(this.getCondition())
     .where('name', 'like', `%${this.name || ''}%`)
+    // await this.knex.destroy()
     return result
   }
 
@@ -54,6 +57,7 @@ module.exports =  class MaterialGroup {
     let result = await this.knex('material_group').insert({
       name: this.name
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -72,6 +76,7 @@ module.exports =  class MaterialGroup {
     .update({
       name: this.name
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -82,6 +87,7 @@ module.exports =  class MaterialGroup {
     let result = await this.knex('material_group')
     .where({id: this.id})
     .del()
+    await this.knex.destroy()
     return result
   }
 
@@ -92,6 +98,7 @@ module.exports =  class MaterialGroup {
   async getDropdownData () {
     let result = await this.knex('material_group')
     .orderBy('id', 'asc')
+    await this.knex.destroy()
     return result
   }
 

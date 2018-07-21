@@ -30,6 +30,7 @@ module.exports =  class contractProgress {
     .where(condition)
     .orderBy('time', 'asc')
     .orderBy('order', 'asc')
+    await this.knex.destroy()
     return result
   }
 
@@ -41,6 +42,7 @@ module.exports =  class contractProgress {
 
     let result = await this.knex('contract_progress')
     .where(condition)
+    await this.knex.destroy()
     return result
   }
 
@@ -48,6 +50,7 @@ module.exports =  class contractProgress {
     let result = await this.knex('contract_progress')
     .where({contract_code: this.contract_code})
     .where({order_all: this.order_all})
+    await this.knex.destroy()
     return result
   }
 
@@ -66,6 +69,7 @@ module.exports =  class contractProgress {
       condition: this.condition,
       status: this.status
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -77,6 +81,7 @@ module.exports =  class contractProgress {
       delay: this.delay
     })
     .where({id: this.id})
+    await this.knex.destroy()
     return result
   } 
 
@@ -89,6 +94,7 @@ module.exports =  class contractProgress {
     })
     .where({contract_code: this.contract_code, order_all: this.order_all, time: this.time})
     .where('status', '!=', 'done')
+    await this.knex.destroy()
     return result
   }
 
@@ -98,12 +104,14 @@ module.exports =  class contractProgress {
       status: this.status
     })
     .where({contract_code: this.contract_code, condition: this.condition})
+    await this.knex.destroy()
     return result
   }
 
   async getLastProgress () {
     let result = await this.knex('contract_progress')
     .where({status: 'ip'})
+    await this.knex.destroy()
     return result
   }
 
@@ -111,6 +119,7 @@ module.exports =  class contractProgress {
     let result = await this.knex('contract_progress')
     .where({contract_code: this.contract_code})
     .del()
+    await this.knex.destroy()
     return result
   }
 }

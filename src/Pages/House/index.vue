@@ -19,11 +19,11 @@
             <div class="form-detail">
             <div class="name">{{local.inputs.plan}}  {{local.inputs.name}}</div>
               <div class="container-block">
-                <div class="text-title">แปลน</div>
+                <div class="text-title">แปลง</div>
                 <div class="value">
                    <my-input
                     :value="local.inputs.plan"
-                    :inputObj="{type: 'text', name: 'house_plan', placeholder: 'แปลน', validate: ''}"
+                    :inputObj="{type: 'text', name: 'house_plan', placeholder: 'แปลง', validate: ''}"
                     :validator="$validator"
                     @input="value => { local.inputs.plan = value }"
                     ></my-input>

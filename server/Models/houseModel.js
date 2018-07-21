@@ -20,28 +20,33 @@ module.exports =  class House {
     let result = await this.knex('house').where(this.getCondition())
     .where('name', 'like', `%${this.name || ''}%`)
     .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    await this.knex.destroy()
     return result
   }
 
   async getAllSelection () {
     let result = await this.knex.select('name').from('house').groupBy('name').orderBy('name', 'desc')
     // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
+    await this.knex.destroy()
     return result
   }
   async getAllPlanSelection () {
     let result = await this.knex.select('plan').from('house').orderBy('plan', 'desc')
     // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
+    await this.knex.destroy()
     return result
   }
 
   async getPlanSelection () {
     let result = await this.knex.select('plan').from('house').where({name: this.name}).orderBy('plan', 'desc')
     // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
+    await this.knex.destroy()
     return result
   }
 
   async count () {
     let result = await this.knex('house').count('id as count').where(this.getCondition())
+    // await this.knex.destroy()
     return result
   }
 
@@ -56,6 +61,7 @@ module.exports =  class House {
       color: this.color,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -72,6 +78,7 @@ module.exports =  class House {
       color: this.color,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -79,6 +86,7 @@ module.exports =  class House {
     let result = await this.knex('house')
     .where({id: this.id})
     .del()
+    await this.knex.destroy()
     return result
   }
 

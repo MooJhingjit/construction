@@ -23,7 +23,8 @@ module.exports =  class WorkOrderDetail {
   //   .leftJoin('material_group', 'material_group .id', 'work_order_detail.post_order')
   //   .where({'work_order.time': this.time})
   //   .orderBy('work_order_detail.id', 'asc')
-  //   return result
+  // await this.knex.destroy()
+  // return result
   // }
 
   async getData () { // with matert
@@ -38,6 +39,7 @@ module.exports =  class WorkOrderDetail {
     .leftJoin('material_group', 'material_group.id', 'work_order_detail.post_order')
     .where({'work_order_detail.work_order_time': this.work_order_time})
     .orderBy('work_order_detail.order', 'asc')
+    await this.knex.destroy()
     return result
   }
 
@@ -45,6 +47,7 @@ module.exports =  class WorkOrderDetail {
     let result = await this.knex('work_order_detail')
     .orderBy('work_order_time', 'asc') // don't change order by !!!! important
     .orderBy('order', 'asc') // don't change order by !!!! important
+    await this.knex.destroy()
     return result
   }
 
@@ -53,11 +56,13 @@ module.exports =  class WorkOrderDetail {
     let result = await this.knex('work_order_detail')
     .where({order: this.order})
     .where({work_order_time: this.work_order_time})
+    await this.knex.destroy()
     return result
   }
 
   async count () {
     let result = await this.knex('work_order_detail').count('id as count')
+    // await this.knex.destroy()
     return result
   }
 
@@ -69,6 +74,7 @@ module.exports =  class WorkOrderDetail {
       post_order: this.post_order,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -82,6 +88,7 @@ module.exports =  class WorkOrderDetail {
       post_order: this.post_order,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -89,6 +96,7 @@ module.exports =  class WorkOrderDetail {
     let result = await this.knex('work_order_detail')
     .where({work_order_time: this.work_order_time})
     .del()
+    await this.knex.destroy()
     return result
   }
 }

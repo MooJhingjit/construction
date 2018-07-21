@@ -25,7 +25,7 @@ async function updateTask (req, res, next) {
   }
 }
 
-const checkTaskPermission = async (contractCode, userId) => { // <----------------------
+const checkTaskPermission = async (contractCode, userId) => {
   let result = await contract.checkContractPermission(contractCode, userId)
   return result
 }

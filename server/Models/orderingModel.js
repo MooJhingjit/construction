@@ -35,6 +35,7 @@ module.exports =  class Ordering {
     })
     .where({'ordering.contract_code': this.contract_code})
     .where('ordering.status', '!=', 'pending')
+    await this.knex.destroy()
     return result
   }
   async geDataByType () { // for losing page
@@ -44,6 +45,7 @@ module.exports =  class Ordering {
     .where(function() {
       this.where('status', 'confirmed').orWhere('status', 'received')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -56,6 +58,7 @@ module.exports =  class Ordering {
     })
     // .where('status', 'confirmed').orWhere('status', 'received')
     .orderBy('date_start', 'asc')
+    await this.knex.destroy()
     return result
   }
 
@@ -69,6 +72,7 @@ module.exports =  class Ordering {
     .where('status', '!=', 'pending')
     .groupBy('contract_code')
     // .orderBy('contract_code', 'desc').limit(this.limit).offset(this.offset)
+    await this.knex.destroy()
     return result
   }
 
@@ -77,11 +81,13 @@ module.exports =  class Ordering {
     .where('order_type', this.order_type)
     .where('status', 'wait')
     .orderBy('id', 'desc').limit(this.limit)
+    await this.knex.destroy()
     return result
   }
 
   async count () {
     let result = await this.knex('ordering').count('id as count').where(this.getCondition())
+    // await this.knex.destroy()
     return result
   }
 
@@ -97,6 +103,7 @@ module.exports =  class Ordering {
       note: this.note,
       date_start: this.date_start
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -119,6 +126,7 @@ module.exports =  class Ordering {
       date_start: this.date_start,
       status: this.status
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -126,6 +134,7 @@ module.exports =  class Ordering {
     let result = await this.knex('ordering')
     .where({id: this.id})
     .del()
+    await this.knex.destroy()
     return result
   }
 
@@ -137,12 +146,14 @@ module.exports =  class Ordering {
     })
     .where('date_start', '<=', this.date_start)
     .where('status', 'pending')
+    await this.knex.destroy()
     return result
   }
 
   async getDataByContractCode () {
     let result = await this.knex('ordering')
     .where({contract_code: this.contract_code})
+    await this.knex.destroy()
     return result
   }
 
@@ -150,6 +161,7 @@ module.exports =  class Ordering {
     let result = await this.knex('ordering')
     .where({contract_code: this.contract_code})
     .del()
+    await this.knex.destroy()
     return result
   }
 }

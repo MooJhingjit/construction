@@ -18,6 +18,7 @@ module.exports =  class Store {
 
   async getData () {
     let result = await this.knex('store').where({id: this.id})
+    await this.knex.destroy()
     return result
   }
 
@@ -26,11 +27,13 @@ module.exports =  class Store {
     .where('name', 'like', `%${this.name || ''}%`)
     .orWhere('type', 'like', `%${this.name || ''}%`)
     .orderBy('id', 'desc').limit(this.limit).offset(this.offset)
+    await this.knex.destroy()
     return result
   }
 
   async count () {
     let result = await this.knex('store').count('id as count').where(this.getCondition())
+    // await this.knex.destroy()
     return result
   }
 
@@ -44,6 +47,7 @@ module.exports =  class Store {
       address: this.address,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -59,6 +63,7 @@ module.exports =  class Store {
       address: this.address,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -66,6 +71,7 @@ module.exports =  class Store {
     let result = await this.knex('store')
     .where({id: this.id})
     .del()
+    await this.knex.destroy()
     return result
   }
   

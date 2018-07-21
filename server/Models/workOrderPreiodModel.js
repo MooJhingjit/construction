@@ -20,26 +20,16 @@ module.exports =  class WorkOrderPreiod {
     .where('work_order_time', this.work_order_time)
     .where('order', this.order)
     // .where('house_id', this.house_id)
+    await this.knex.destroy()
     return result
   }
 
   async getDataByHouseId () {
     let result = await this.knex('work_order_preiod')
     .where('house_id', this.house_id)
+    await this.knex.destroy()
     return result
   }
-
-  // async getPostOrder () {
-  //   let result = await this.knex('work_order_detail')
-  //   .where({order: this.order})
-  //   .where({work_order_time: this.work_order_time})
-  //   return result
-  // }
-
-  // async count () {
-  //   let result = await this.knex('work_order_detail').count('id as count')
-  //   return result
-  // }
 
   async save () {
     let result = await this.knex('work_order_preiod').insert({
@@ -50,6 +40,7 @@ module.exports =  class WorkOrderPreiod {
       preiod_end: this.preiod_end,
       condition: this.condition
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -64,6 +55,7 @@ module.exports =  class WorkOrderPreiod {
       preiod_end: this.preiod_end,
       condition: this.condition
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -71,6 +63,7 @@ module.exports =  class WorkOrderPreiod {
   //   let result = await this.knex('work_order_detail')
   //   .where({work_order_time: this.work_order_time})
   //   .del()
-  //   return result
+  // await this.knex.destroy()
+  // return result
   // }
 }

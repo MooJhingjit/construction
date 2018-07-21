@@ -19,6 +19,7 @@ module.exports =  class User {
 
   async getUser () {
     let result = await this.knex('user').where({id: this.id})
+    await this.knex.destroy()
     return result
   }
 
@@ -26,6 +27,7 @@ module.exports =  class User {
     let result = await this.knex.select('id as key', 'name as name')
     .from('user')
     .where({position: this.position})
+    await this.knex.destroy()
     return result
   }
 
@@ -34,6 +36,7 @@ module.exports =  class User {
     .from('user')
     .where({username: this.username})
     .limit(1)
+    await this.knex.destroy()
     return result
     // return db.query(`SELECT username, pa FROM user WHERE username = ${this.username}`)
   }
@@ -44,6 +47,7 @@ module.exports =  class User {
     .where(this.getCondition())
     .orderBy('id', 'desc')
     .limit(this.limit).offset(this.offset)
+    await this.knex.destroy()
     return result
     // return db.query(`SELECT * FROM user ${condition} ORDER BY id LIMIT ${this.limit} OFFSET ${this.offset} `)
   }
@@ -53,6 +57,7 @@ module.exports =  class User {
     .count('id as count')
     .where(this.getCondition())
     
+    // await this.knex.destroy()
     return result
   }
 
@@ -66,6 +71,7 @@ module.exports =  class User {
       address: this.address,
       position: this.position
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -80,6 +86,7 @@ module.exports =  class User {
       address: this.address,
       position: this.position
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -87,6 +94,7 @@ module.exports =  class User {
     let result = await this.knex('user')
     .where({id: this.id})
     .del()
+    await this.knex.destroy()
     return result
   }
 

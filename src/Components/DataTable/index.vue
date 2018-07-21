@@ -114,7 +114,7 @@ export default {
           ordering: [
             // {key: 'project', placeholder: 'โครงการ', icon: 'fa fa-search', inputType: 'auto'},
             // {key: 'house', placeholder: 'แบบบ้าน', icon: 'fa fa-search', inputType: 'auto'},
-            // {key: 'plan', placeholder: 'แปลน', icon: 'fa fa-search', inputType: 'auto'},
+            // {key: 'plan', placeholder: 'แปลง', icon: 'fa fa-search', inputType: 'auto'},
             {key: 'contract', placeholder: 'เลขที่สัญญา', icon: 'fa fa-search', inputType: 'auto'}
           ]
         }

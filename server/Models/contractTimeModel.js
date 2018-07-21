@@ -18,6 +18,7 @@ module.exports =  class Contract {
     let result = await this.knex('contract_times')
     .where({contract_code: this.contract_code})
     .orderBy('time', 'asc')
+    await this.knex.destroy()
     return result
   }
 
@@ -31,6 +32,7 @@ module.exports =  class Contract {
       date_end: this.date_end,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -40,6 +42,7 @@ module.exports =  class Contract {
     .update({
       is_success: this.is_success
     })
+    await this.knex.destroy()
     return result
   }
 

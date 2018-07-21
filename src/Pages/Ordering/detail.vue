@@ -25,7 +25,7 @@
               </tr>
               <tr>
                 <td>เลขที่สัญญา:<span class="value is-linkpage" @click="GOTOPAGE('Contract', contract.code)">{{contract.code}}</span></td>
-                <td>แปลน:<span class="value">{{contract.contractPlan}}</span></td>
+                <td>แปลง:<span class="value">{{contract.contractPlan}}</span></td>
               </tr>
               <tr>
                 <td>แบบบ้าน:<span class="value">{{contract.house_id}}</span></td>

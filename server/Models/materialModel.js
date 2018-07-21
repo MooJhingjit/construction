@@ -17,6 +17,7 @@ module.exports =  class Material {
   async getData () {
     let result = await this.knex('material')
     // .join('material_price', 'material.id', '=', 'material_price.material_id').select()
+    await this.knex.destroy()
     return result
   }
 
@@ -24,12 +25,14 @@ module.exports =  class Material {
     let result = await this.knex.select().from('material').where({
       id: this.id
     })
+    await this.knex.destroy()
     return result
   }
 
   async getDataPrice (id) {
     let result = await this.knex('material_price')
     .where({'material_id': id})
+    await this.knex.destroy()
     return result
   }
 
@@ -41,6 +44,7 @@ module.exports =  class Material {
       conditions.house_id = this.house_id
     }
     let result = await this.knex.select().from('material').where(conditions)
+    await this.knex.destroy()
     return result
   }
 
@@ -55,6 +59,7 @@ module.exports =  class Material {
       price: this.price,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
@@ -71,6 +76,7 @@ module.exports =  class Material {
       price: this.price,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
   
@@ -82,10 +88,12 @@ module.exports =  class Material {
       price: obj.price,
       created_at: helpers.getCurrentTime('sql')
     })
+    await this.knex.destroy()
     return result
   }
 
   async updatePrice (obj) {
+    await this.knex.destroy()
     return result
   }
 
@@ -96,6 +104,7 @@ module.exports =  class Material {
       store_id: this.store_id
     })
     .del()
+    await this.knex.destroy()
     return result
   }
 
@@ -110,6 +119,7 @@ module.exports =  class Material {
     .where(conditions)
     .whereNotIn('id', idArr)
     .del()
+    await this.knex.destroy()
     return result
   }
 
@@ -117,6 +127,7 @@ module.exports =  class Material {
     let result = await this.knex('material_price')
     .whereIn('material_id', idArr)
     .del()
+    await this.knex.destroy()
     return result
   }
 
@@ -127,11 +138,13 @@ module.exports =  class Material {
     .where('house_id', this.house_id)
     .orderBy('id', 'desc')
     .limit(20).offset(0)
+    await this.knex.destroy()
     return result
   }
 
   async getMaterialById (idArr) {
     let result = await this.knex('material').whereIn('id', idArr)
+    await this.knex.destroy()
     return result
   }
 }

@@ -22,7 +22,7 @@ async function getAllData (req, res, next) {
   let result = await house.getAllData()
   if (result) {
     let config = {
-      header: [{name: 'แปลน'}, {name: 'แบบบ้าน'}],
+      header: [{name: 'แปลง'}, {name: 'แบบบ้าน'}],
       show: ['plan', 'name']
     }
     data = helpers.prepareDataTable(result, total, config)
