@@ -27,7 +27,6 @@
                     </template>
                     <template v-else>
                       <my-action
-                      v-if="task.condition != null"
                       :type="'null'"
                         :obj="{title: 'อัพเดท', color: 'button is-outlined', isConfirm: true}"
                         @clickEvent="updateTask(task)"

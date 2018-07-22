@@ -135,7 +135,7 @@ module.exports =  class Material {
     let result = await this.knex.select('id', 'name')
     .from('material')
     .where('name', 'like', `%${this.name || ''}%`)
-    .where('house_id', this.house_id)
+    .where(this.getCondition())
     .orderBy('id', 'desc')
     .limit(20).offset(0)
     await this.knex.destroy()
@@ -146,5 +146,16 @@ module.exports =  class Material {
     let result = await this.knex('material').whereIn('id', idArr)
     await this.knex.destroy()
     return result
+  }
+
+  getCondition () {
+    let conditions = {}
+    if (this.house_id) {
+      conditions.house_id = this.house_id
+    }
+    if (this.store_id) {
+      conditions.store_id = this.store_id
+    }
+    return conditions
   }
 }

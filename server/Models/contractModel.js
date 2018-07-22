@@ -46,8 +46,20 @@ module.exports =  class Contract {
     return result
   }
 
-  async getAllSelection () {
-    let result = await this.knex.select('code').from('contract').orderBy('created_at', 'desc')
+  async getAllSelection (type) {
+    let result = null
+    if (type === 'normal') {
+      result = await this.knex.select('code').from('contract')
+      .orderBy('created_at', 'desc')
+    } else {
+      result = await this.knex.select('contract.*', 'project.name as project_name')
+      .from('contract')
+      .join('project', 'project.id', '=', 'contract.project_id')
+      .where({'contract.status': 'ip'})
+      // .groupBy('project.id')
+      .orderBy('contract.created_at', 'desc')
+    }
+    
     // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
     await this.knex.destroy()
     return result

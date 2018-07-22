@@ -93,7 +93,7 @@
                     <span v-if="item.condition !== null" :class="getDelayClass(item.delay, item.status)">{{item.delay}}</span>
                   </td>
                   <td>
-                    <span v-if="item.condition !== null" :class="getStatusClass(item.status)">{{getWorkingStatus(item.status)}}</span>
+                    <span :class="getStatusClass(item.status)">{{getWorkingStatus(item.status)}}</span>
                   </td>
                 </tr>
               </tbody>

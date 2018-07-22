@@ -175,15 +175,22 @@ const startWorking = async (contractCode, houseId) => {
 
 const getDropDown = async (req, res, next) => {
   let model = new contractModel()
-  let data = {}
-  data = await model.getAllSelection()
-  data = data.map(item => {
-    return {
-      key: item.code,
-      value: `${item.code}`
+  let type = 'normal'
+  if (req.query) {
+    if (req.query.type === 'project-search') {
+      type = req.query.type 
     }
-  })
-  
+  }
+  let data = {}
+  data = await model.getAllSelection(type)
+  if (type == 'normal') {
+    data = data.map(item => {
+      return {
+        key: item.code,
+        value: `${item.code}`
+      }
+    })
+  }
   res.status(200).json(data)
 }
 

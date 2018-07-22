@@ -77,6 +77,9 @@ module.exports.getTableoffset = (limit, currentPage) => {
 }
 
 module.exports.getDateDiff = (date1, date2) => {
+  if (date1 === null || date2 === null) {
+    return 0
+  }
   let dateStart = moment(date1, 'YYYY/MM/DD')
   let dateEnd = moment(date2, 'YYYY/MM/DD')
   return dateEnd.diff(dateStart, 'days')

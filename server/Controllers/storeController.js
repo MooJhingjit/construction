@@ -79,9 +79,27 @@ const getDetailById = async (storeId) => {
   return store[0]
 }
 
+const getDropDown = async (req, res, next) => {
+  let model = new storeModel()
+  if (req.query.type === 'normal') {
+    model.id = 30 // 30 is แผ่นพื้นสำเร็จรูป
+  }
+  let data = {}
+  data = await model.getAllSelection()
+  data = data.map(item => {
+    return {
+      key: item.id,
+      value: `${item.type} (ร้านค้า: ${item.name})`
+    }
+  })
+  
+  res.status(200).json(data)
+}
+
 module.exports.getData = getData
 module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.deleteData = deleteData
 module.exports.getDetailById = getDetailById
+module.exports.getDropDown = getDropDown

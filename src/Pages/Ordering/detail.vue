@@ -126,6 +126,12 @@
               <tr v-if="local.orderSelected.status === 'confirmed'">
                 <td>วันที่อนุมัติ: {{getOrderSelected('date_start')}}</td>
               </tr>
+              <tr v-if="local.orderSelected.status === 'wait'">
+                <td>วันที่สั่งซื้อ: {{getOrderSelected('date_start')}}</td>
+              </tr>
+              <tr v-if="local.orderSelected.order_type === 'extra'">
+                <td>หมายเหตุ: {{getOrderSelected('note')}}</td>
+              </tr>
             </table>
           </div>
           <div class="block function container-block">
@@ -385,6 +391,9 @@ export default {
             date = this.local.orderConfirmDate
           }
           res = this.SET_DATEFORMAT(date)
+          break
+        case 'note':
+          res = this.local.orderSelected.note
           break
       }
       return res

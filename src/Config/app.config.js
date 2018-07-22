@@ -40,7 +40,8 @@ const api = {
     'dropdown': '/plan-selection' // in house
   },
   'store': {
-    'index': '/store'
+    'index': '/store',
+    'dropdown': '/store-selection'
   },
   'material': {
     'index': '/material',

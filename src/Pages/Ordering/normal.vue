@@ -1,20 +1,8 @@
 <template>
   <section class="section-modal ordering-extra">
-    <h4>สั่งซื้อพิเศษ</h4>
+    <h4>สั่งซื้อ (ปกติ)</h4>
     <div class="content">
       <div class="field">
-        <contract-serach @select="contractSelectedHandle"></contract-serach>
-        <!-- <label class="label">ค้นหาสัญญา</label>
-        <div class="control">
-          <my-auto-complete
-          @select="contractSelectedHandle"
-          :arrInputs="local.contract.inputs"
-          placeholder="เลขที่สัญญา"
-          label=""
-          ></my-auto-complete>
-        </div> -->
-      </div>
-      <div class="field"  v-if="this.local.contract.selected != null">
         <label class="label">ค้นหาประเภท</label>
         <div class="control">
            <my-auto-complete
@@ -26,7 +14,7 @@
             ></my-auto-complete>
         </div>
       </div>
-      <div class="field" v-if="this.local.contract.selected != null">
+      <div class="field">
         <label class="label">ค้นหาวัสดุ</label>
         <div class="control">
          <table class="table is-bordered rows-table">
@@ -34,38 +22,32 @@
              <tr>
               <th>ชื่อวัสดุ</th>
               <th width="80">จำนวน</th>
-              <th width="80"></th>
+              <!-- <th width="80"></th> -->
              </tr>
            </thead>
            <tbody>
              <tr :key="index" v-for="(item, index) in local.materialSelected">
                <td>
-                 <my-auto-complete
-                  @select="objVal => {item.obj = objVal || null}"
-                  :arrInputs="local.materialItems"
-                  :validator="$validator"
-                  placeholder="วัสดุ"
-                  label=""
-                  ></my-auto-complete>
+                  {{item.obj.value}}
                </td>
                <td>
-                 <my-input
+                  <my-input
                   :value="item.amount"
                   :inputObj="{type: 'text', isBlur: true, name: 'amount', placeholder: 'จำนวน', validate: 'required'}"
                   :validator="$validator"
                   @input="value => { item.amount = value }"
                   ></my-input>
-                </td>
-               <td><button class="button is-danger" @click="deleteTime(index)"><i class="fa fa-trash"></i></button></td>
+               </td>
+               <!-- <td><button disabled="disabled" class="button is-danger" @click="deleteTime(index)"><i class="fa fa-trash"></i></button></td> -->
              </tr>
            </tbody>
          </table>
-         <div class="options">
+         <!-- <div class="options">
            <button class="button" @click="editRow('add')"><i aria-hidden="true" class="fa fa-plus"></i></button>
-         </div>
+         </div> -->
         </div>
       </div>
-      <div class="field"  v-if="this.local.contract.selected != null && this.local.materialSelected.length">
+      <!-- <div class="field"  v-if="this.local.contract.selected != null && this.local.materialSelected.length">
         <label class="label">หมายเหตุ</label>
         <div class="control">
            <my-input
@@ -74,16 +56,14 @@
             :validator="$validator"
             @input="value => { local.note = value }"
             ></my-input>
-          <!-- <textarea class="textarea" v-model="local.note"  placeholder="หมายเหตุ"></textarea> -->
         </div>
-      </div>
+      </div> -->
     </div>
-    <div class="footer"  v-if="this.local.contract.selected != null">
+    <div class="footer" v-if="this.local.store.selected != null && this.local.materialSelected.length">
       <my-action
-        v-if="this.local.contract.selected != null && this.local.materialSelected.length"
         type="update"
-        :obj="{title: 'บันทึกข้อมูล'}"
-          @clickEvent="submitForm()"
+        :obj="{title: 'ออกใบสั่งซื้อ'}"
+        @clickEvent="submitForm()"
       >
       </my-action>
     </div>
@@ -92,7 +72,7 @@
 
 <script>
 import {bus} from '@/main'
-import contractSerach from '@Components/Form/ContractSearch'
+// import contractSerach from '@Components/Form/ContractSearch'
 import myAction from '@Components/Form/my-action'
 import myAutoComplete from '@Components/Form/my-autocomp'
 import config from '@Config/app.config'
@@ -102,7 +82,7 @@ export default {
   props: {
   },
   components: {
-    contractSerach,
+    // contractSerach,
     myAction,
     myInput,
     myAutoComplete
@@ -111,17 +91,17 @@ export default {
   data () {
     return {
       local: {
-        contract: {
-          inputs: [],
-          selected: null
-        },
+        // contract: {
+        //   inputs: [],
+        //   selected: null
+        // },
         store: {
           inputs: [],
           selected: null
         },
-        materialItems: [],
+        // materialItems: [],
         materialSelected: [],
-        note: ''
+        // note: ''
       }
     }
   },
@@ -130,16 +110,10 @@ export default {
   },
   methods: {
     async fetchData () {
-      let queryString = []
-      let contract = await service.getResource({resourceName: config.api.contract.dropdown, queryString})
-      this.local.contract.inputs = contract.data
-    },
-    contractSelectedHandle (obj) {
-      this.local.contract.selected = obj.code
       this.getStoreItems()
     },
     async getStoreItems () {
-      let queryString = this.BUILDPARAM({})
+      let queryString = this.BUILDPARAM({type: 'normal'})
       let store = await service.getResource({resourceName: config.api.store.dropdown, queryString})
       this.local.store.inputs = store.data
     },
@@ -154,11 +128,20 @@ export default {
     },
     async getMaterialItems () {
       let queryString = this.BUILDPARAM({
-        contractId: this.local.contract.selected,
+        contractId: 'null',
         store: this.local.store.selected
       })
       let material = await service.getResource({resourceName: config.api.material.dropdown, queryString})
-      this.local.materialItems = material.data
+      // this.local.materialItems = material.data
+      this.local.materialSelected = material.data.map((item) => {
+        return {
+          obj: {
+            key: item.key,
+            value: item.value,
+          },
+          amount: 1
+        }
+      })
     },
     editRow (type) {
       if (type === 'add') {
@@ -175,21 +158,21 @@ export default {
       this.cleanData()
       let isValid = await this.$validator.validateAll()
       if (!isValid) return
-      let resourceName = `${config.api.ordering.extra}`
-      let data = {
-        contract: this.local.contract.selected,
-        materials: this.local.materialSelected,
-        note: this.local.note
-      }
-      let res = await service.postResource({data, resourceName})
-      if (res.status === 200) {
-        let obj = res.data.orderingData
-        bus.$emit('setNotification', {type: 'ordering', value: obj})
-        this.NOTIFY('success')
-        this.GOTOPAGE('OrderingDetail', 'all')
-        return
-      }
-      this.NOTIFY('error')
+      // let resourceName = `${config.api.ordering.extra}`
+      // let data = {
+      //   contract: 'pre_order',
+      //   materials: this.local.materialSelected,
+      //   note: 'Pre order'
+      // }
+      // let res = await service.postResource({data, resourceName})
+      // if (res.status === 200) {
+      //   let obj = res.data.orderingData
+      //   bus.$emit('setNotification', {type: 'ordering', value: obj})
+      //   this.NOTIFY('success')
+      //   this.GOTOPAGE('OrderingDetail', 'all')
+      //   return
+      // }
+      // this.NOTIFY('error')
     },
     cleanData () {
       this.local.materialSelected = this.local.materialSelected.filter((item) => {

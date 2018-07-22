@@ -164,11 +164,6 @@ export default {
         text-align: left;
       }
     }
-    .actions{
-      button{
-        // background: #e0e0e0;
-      }
-    }
    @media (min-width: $computerBreakpoint) {
       margin: 15px !important;
     }

@@ -81,18 +81,18 @@
             </div>
           </div>
            <div class="tile function">
-            <div class="tile is-parent is-vertical is-4">
+            <!-- <div class="tile is-parent is-vertical is-4">
               <article class="tile is-child notification container-block">
                 <span class="block title"><i class="fa fa-print" aria-hidden="true"></i> ออกรายงาน</span>
               </article>
-            </div>
-            <div class="tile is-parent is-vertical is-4">
-              <article class="tile is-child notification container-block">
-                <span class="block title"><i class="fa fa-print" aria-hidden="true"></i> ออกรายงาน</span>
+            </div> -->
+            <div class="tile is-parent is-vertical is-6">
+              <article class="tile is-child notification container-block" @click="showOrderingForm('normal')">
+                <span class="block title"><i class="fa fa-plus-circle" aria-hidden="true"></i> สั่งซื้อปกติ</span>
               </article>
             </div>
-            <div class="tile is-parent is-vertical is-4">
-              <article class="tile is-child notification container-block"  @click="orderExtra()">
+            <div class="tile is-parent is-vertical is-6">
+              <article class="tile is-child notification container-block"  @click="showOrderingForm('extra')">
                 <span class="block title"><i class="fa fa-plus-circle" aria-hidden="true"></i> สั่งซื้อพิเศษ</span>
               </article>
             </div>
@@ -101,7 +101,9 @@
       </div>
     </div>
     <model-panel ref="modelPanel">
-      <extra-comp ref="extraModal"></extra-comp>
+      <component ref="ordering" v-bind:is="local.orderingComponent"></component>
+      <!-- <extra-comp ref="extraModal"></extra-comp>
+      <normal-comp ref="normalModal"></normal-comp> -->
     </model-panel>
   </section>
 </template>
@@ -111,6 +113,7 @@ import barChart from '@Components/Chart/line'
 import breadcrumbBar from '@Components/Breadcrumb'
 import ModelPanel from '@Components/Model'
 import extraComp from './extra'
+import normalComp from './normal'
 import config from '@Config/app.config'
 import service from '@Services/app-service'
 
@@ -125,7 +128,8 @@ export default {
     barChart,
     breadcrumbBar,
     ModelPanel,
-    extraComp
+    extraComp,
+    normalComp
   },
   name: 'OrderingPage',
   data () {
@@ -137,7 +141,8 @@ export default {
           ]
         },
         ordering: null,
-        chart: null
+        chart: null,
+        orderingComponent: extraComp
       }
     }
   },
@@ -165,9 +170,15 @@ export default {
         .catch(() => {
         })
     },
-    orderExtra () {
-      this.$refs.extraModal.fetchData()
+    showOrderingForm (orderType) {
       this.$refs.modelPanel.isActive = true
+      if (orderType === 'normal') {
+        this.local.orderingComponent = normalComp
+        // this.$refs.ordering.fetchData()
+      } else {
+        this.local.orderingComponent = extraComp
+        // this.$refs.ordering.fetchData()
+      }
     }
   }
 }

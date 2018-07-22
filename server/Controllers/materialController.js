@@ -177,8 +177,15 @@ async function getDropDown (req, res, next) {
     item.name = req.query.main_search
   }
   if (req.query.contractId) {
-    let contractRes = await contract.getDetailByContractCode(['contract'], req.query.contractId)
-    item.house_id = contractRes.contract.house_id
+    if (req.query.contractId === 'null') {
+      item.house_id = '198PWY' // <--------------------
+    } else {
+      let contractRes = await contract.getDetailByContractCode(['contract'], req.query.contractId)
+      item.house_id = contractRes.contract.house_id
+    }
+  }
+  if (req.query.store) {
+    item.store_id = req.query.store
   }
   let data = await item.getAllSelection()
   data = data.map(item => {

@@ -85,10 +85,10 @@ export default {
     GET_CURRENTDATE (format = 'YYYY-MM-DD') {
       return moment().format(format)
     },
-    SET_DATEFORMAT (dateInput) {
+    SET_DATEFORMAT (dateInput, format = 'YYYY-MM-DD') {
       if (!dateInput) return null
       let date = new Date(dateInput)
-      return moment(date).format('YYYY/MM/DD')
+      return moment(date).format(format)
     },
     GOTOPAGE (pageName, key = '', queryString = []) {
       this.$router.push({
@@ -141,7 +141,7 @@ export default {
           break
       }
     },
-    REDIRECTTOHOME () { // <---------------
+    REDIRECTTOHOME () {
       // GET USER TYPE FRIST
       let userType = this.USERTYPE
       switch (userType) {

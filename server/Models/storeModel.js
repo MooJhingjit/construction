@@ -74,13 +74,24 @@ module.exports =  class Store {
     await this.knex.destroy()
     return result
   }
+
+  async getAllSelection () {
+    let result = await this.knex.select('id', 'name', 'type')
+    .from('store')
+    .where(this.getCondition())
+    .orderBy('created_at', 'desc')
+    await this.knex.destroy()
+    return result
+  }
   
   getCondition () {
     let conditions = {}
     if (this.status) {
       conditions.status = this.status
     }
-    
+    if (this.id) {
+      conditions.id = this.id
+    }
     return conditions
   }
 }
