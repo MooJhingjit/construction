@@ -122,9 +122,10 @@ export default {
 </script>
 
 <style lang="scss">
-$fa-font-path: "~font-awesome/fonts";
-@import '~font-awesome/scss/font-awesome.scss';
+// $fa-font-path: "~font-awesome/fonts";
+// @import '~font-awesome/scss/font-awesome.scss';
 @import './Assets/Style/var.scss';
+@import 'buefy/lib/buefy.css';
 @import './Assets/Style/mystyles.scss';
 @import './Assets/Style/app.scss';
 // @import './Assets/Style/mystyles.scss';

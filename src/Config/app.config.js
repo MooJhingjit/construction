@@ -1,6 +1,11 @@
+// let url = `${window.location.protocol}//${window.location.hostname}:3000/api`
+// console.log(window.location)
+// if (process.env.NODE_ENV === 'production') {
+//   url = `${window.location.origin}/dashboard-api`
+// }
 const api = {
   'apiEndPoint': 'http://localhost:3000/api',
-  // 'apiEndPoint': window.location.origin + '/api',
+  // 'apiEndPoint': `${window.location.protocol}//${window.location.hostname}:3000/api`, // for production
   'app': {
     'resource': '/app/resource'
   },

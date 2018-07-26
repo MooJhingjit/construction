@@ -31,12 +31,13 @@
                   {{item.obj.value}}
                </td>
                <td>
-                  <my-input
+                 {{item.amount}}
+                  <!-- <my-input
                   :value="item.amount"
                   :inputObj="{type: 'text', isBlur: true, name: 'amount', placeholder: 'จำนวน', validate: 'required'}"
                   :validator="$validator"
                   @input="value => { item.amount = value }"
-                  ></my-input>
+                  ></my-input> -->
                </td>
                <!-- <td><button disabled="disabled" class="button is-danger" @click="deleteTime(index)"><i class="fa fa-trash"></i></button></td> -->
              </tr>
@@ -71,7 +72,7 @@
 </template>
 
 <script>
-import {bus} from '@/main'
+// import {bus} from '@/main'
 // import contractSerach from '@Components/Form/ContractSearch'
 import myAction from '@Components/Form/my-action'
 import myAutoComplete from '@Components/Form/my-autocomp'
@@ -100,7 +101,7 @@ export default {
           selected: null
         },
         // materialItems: [],
-        materialSelected: [],
+        materialSelected: []
         // note: ''
       }
     }
@@ -137,7 +138,7 @@ export default {
         return {
           obj: {
             key: item.key,
-            value: item.value,
+            value: item.value
           },
           amount: 1
         }
@@ -155,9 +156,9 @@ export default {
       this.local.materialSelected.splice(index, 1)
     },
     async submitForm () {
-      this.cleanData()
-      let isValid = await this.$validator.validateAll()
-      if (!isValid) return
+      // this.cleanData()
+      // let isValid = await this.$validator.validateAll()
+      // if (!isValid) return
       // let resourceName = `${config.api.ordering.extra}`
       // let data = {
       //   contract: 'pre_order',

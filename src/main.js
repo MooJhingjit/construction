@@ -5,7 +5,7 @@ import router from './router'
 import helper from '@Libraries/vue.helpers'
 import Buefy from 'buefy'
 import VeeValidate from 'vee-validate'
-import 'buefy/lib/buefy.css'
+// import 'buefy/lib/buefy.css'
 import moment from 'moment'
 Vue.use(moment)
 Vue.use(Buefy, {

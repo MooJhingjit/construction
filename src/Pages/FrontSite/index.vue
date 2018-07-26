@@ -2,7 +2,15 @@
   <section class="section front-site-page">
     <breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar>
     <div class="container-block">
-       <article class="tile is-child notification" :key="index" v-for="(item, index) in local.contracts">
+      <div class="search">
+        <my-auto-complete
+        @select="contractSelectedHandle"
+        :arrInputs="local.contractSelection.inputs"
+        placeholder="ค้นหาแปลง"
+        label=""
+        ></my-auto-complete>
+      </div>
+      <article class="tile is-child notification" :key="index" v-for="(item, index) in local.contracts">
         <div class="project-name">{{item.project.name}}</div>
         <div class="project-detail container-block">
           <div class="block">เลขที่สัญญา: {{item.code}}</div>
@@ -75,6 +83,7 @@ import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
+import myAutoComplete from '@Components/Form/my-autocomp'
 export default {
   props: {
     // templateName: {
@@ -84,7 +93,8 @@ export default {
   },
   components: {
     breadcrumbBar,
-    optionDetailTemplate
+    optionDetailTemplate,
+    myAutoComplete
   },
   name: 'FrontSitePage',
   data () {
@@ -95,7 +105,12 @@ export default {
             {name: 'ไชต์งานหลัก', route: 'FrontSite', key: '', active: true, icon: 'fa fa-home'}
           ]
         },
-        contracts: []
+        contracts: [],
+        contractsTemp: [],
+        contractSelection: {
+          inputs: [],
+          selected: null
+        }
       }
     }
   },
@@ -111,12 +126,28 @@ export default {
       service.getResource({resourceName, queryString})
         .then((res) => {
           if (res.status === 200) {
-            this.local.contracts = res.data
+            this.local.contractsTemp = res.data
+            this.local.contractSelection.inputs = res.data.map((item) => {
+              return {
+                key: item.code,
+                value: `${item.project.name} >> ${item.plan}`
+              }
+            })
           }
         })
         .catch((err) => {
           console.log(err)
         })
+    },
+    contractSelectedHandle (objVal) {
+      if (objVal === null) {
+        this.local.contracts = []
+      } else {
+        this.local.contractSelection.selected = objVal.key
+        this.local.contracts = this.local.contractsTemp.filter((item) => {
+          return item.code === objVal.key
+        })
+      }
     },
     getStatusClass (status) {
       return [
@@ -133,6 +164,11 @@ export default {
 <style lang="scss" scoped>
 @import '~@Styles/var.scss';
 .front-site-page{
+  .search{
+    margin: 10px 0;
+    background: #fff;
+    padding: 10px 5px;
+  }
   article{
     margin-bottom: 15px !important;
     text-align: center;
