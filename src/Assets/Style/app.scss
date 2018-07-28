@@ -1040,15 +1040,6 @@ html {
                       &>.container-block{
                         // data-table
                       }
-                      .expand{
-                        cursor: pointer;
-                        text-align: center;
-                        background: $white;
-                        display: none;
-                        i{
-                          font-size: 1.1em;
-                        }
-                      }
                       .function{
                         padding-top: 15px;
                         button{
@@ -1066,7 +1057,7 @@ html {
                       .expand{
                         display: block !important;
                         i{
-                          color: $black;
+                          color: #fff;
                         }
                       }
                       

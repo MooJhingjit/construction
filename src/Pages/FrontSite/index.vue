@@ -3,12 +3,13 @@
     <breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar>
     <div class="container-block">
       <div class="search">
-        <my-auto-complete
+        <contract-serach :dataObj="local.contractSelection.inputs" @select="contractSelectedHandle"></contract-serach>
+        <!-- <my-auto-complete
         @select="contractSelectedHandle"
         :arrInputs="local.contractSelection.inputs"
         placeholder="ค้นหาแปลง"
         label=""
-        ></my-auto-complete>
+        ></my-auto-complete> -->
       </div>
       <article class="tile is-child notification" :key="index" v-for="(item, index) in local.contracts">
         <div class="project-name">{{item.project.name}}</div>
@@ -84,6 +85,7 @@ import optionDetailTemplate from '@Components/Template/option-detail'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
 import myAutoComplete from '@Components/Form/my-autocomp'
+import contractSerach from '@Components/Form/AutoSearch/contract'
 export default {
   props: {
     // templateName: {
@@ -94,7 +96,8 @@ export default {
   components: {
     breadcrumbBar,
     optionDetailTemplate,
-    myAutoComplete
+    myAutoComplete,
+    contractSerach
   },
   name: 'FrontSitePage',
   data () {
@@ -127,25 +130,39 @@ export default {
         .then((res) => {
           if (res.status === 200) {
             this.local.contractsTemp = res.data
-            this.local.contractSelection.inputs = res.data.map((item) => {
-              return {
-                key: item.code,
-                value: `${item.project.name} >> ${item.plan}`
-              }
-            })
+            this.prepareSearch()
+            // console.log(this.local.contractsTemp)
+            // this.local.contractSelection.inputs = res.data.map((item) => {
+            //   return {
+            //     key: item.code,
+            //     value: `${item.project.name} >> ${item.plan}`
+            //   }
+            // })
           }
         })
         .catch((err) => {
           console.log(err)
         })
     },
+    prepareSearch () {
+      this.local.contractSelection.inputs = this.local.contractsTemp.map((item) => {
+        return {
+          code: item.code,
+          project_id: item.project_id,
+          project_name: item.project.name,
+          plan: item.plan,
+          house_id: item.house_id
+        }
+      })
+      // console.log(this.local.contractSelection.inputs)
+    },
     contractSelectedHandle (objVal) {
       if (objVal === null) {
         this.local.contracts = []
       } else {
-        this.local.contractSelection.selected = objVal.key
+        this.local.contractSelection.selected = objVal.code
         this.local.contracts = this.local.contractsTemp.filter((item) => {
-          return item.code === objVal.key
+          return item.code === objVal.code
         })
       }
     },
@@ -165,6 +182,7 @@ export default {
 @import '~@Styles/var.scss';
 .front-site-page{
   .search{
+    min-width: 300px;
     margin: 10px 0;
     background: #fff;
     padding: 10px 5px;

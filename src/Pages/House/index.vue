@@ -3,6 +3,7 @@
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="data-table">
       <data-table ref="dataTable"
+      tableType="normal"
       :resourceName="resourceName"
       :statusSearch="statusSearch"
       @selectedData="selectedDataHandle"

@@ -6,16 +6,18 @@
   >
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="data-table">
-      <data-table ref="dataTable"
+      <!-- <data-table ref="dataTable"
+      tableType="normal"
       :resourceName="resourceName"
       :statusSearch="local.statusSearch"
-      @selectedData="selectedDataHandle"
-      ></data-table>
+      @selectedData="contractSelectedHandle"
+      ></data-table> -->
+      <contract-serach @select="contractSelectedHandle"></contract-serach>
     </template>
     <template slot="function">
       <!-- <button class="button is-link" @click="submitForm('add')">เพิ่มข้อมูลใหม่</button> -->
     </template>
-    <template v-if="local.idSelected != '' && this.local.inputs != null">
+    <template v-if="local.idSelected != null && this.local.inputs != null">
       <template slot="detail">
         <div class="container-block detail-block">
           <div class="block c-header">
@@ -185,11 +187,12 @@ import optionDetailTemplate from '@Components/Template/option-detail'
 import noResultTemplate from '@Components/Template/no-result'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
-import dataTable from '@Components/DataTable'
+// import dataTable from '@Components/DataTable'
 import myInput from '@Components/Form/my-input'
 import myAction from '@Components/Form/my-action'
 // import myPdf from '@Libraries/pdf'
 import receiptTemplate from './receipt-template'
+import contractSerach from '@Components/Form/AutoSearch/contract'
 export default {
   props: {
   },
@@ -197,10 +200,11 @@ export default {
     breadcrumbBar,
     optionDetailTemplate,
     noResultTemplate,
-    dataTable,
+    // dataTable,
     myInput,
     myAction,
-    receiptTemplate
+    receiptTemplate,
+    contractSerach
   },
   name: 'OrderingDetail',
   data () {
@@ -224,14 +228,7 @@ export default {
           {title: 'รอสินค้า', key: 'confirmed'},
           {title: 'รับสินค้า', key: 'received'}
         ],
-        // mainInputSearch: [
-        //   {key: 'project'},
-        //   {key: 'house'},
-        //   {key: 'plan'},
-        //   {key: 'contract'}
-        // ],
-        idSelected: '',
-        // items: {},
+        idSelected: null,
         inputs: null,
         orderingForShowing: [],
         filterKey: 'all',
@@ -258,17 +255,29 @@ export default {
   },
   mounted () {
     if (this.$route.params.key && this.$route.params.key !== 'all') {
-      this.$refs.dataTable.setSearch('ordering', this.$route.params.key)
+      // this.$refs.dataTable.setSearch('ordering', this.$route.params.key)
     }
   },
   methods: {
-    async selectedDataHandle (item) {
-      this.local.idSelected = item.contract_code
+    async contractSelectedHandle (item) {
+      if (item === null) {
+        this.cleanInput()
+      }
+      this.local.idSelected = item.code
       let order = await this.getFullOrdering(item)
       this.local.inputs = {}
       this.local.inputs = Object.assign(this.local.inputs, order)
       this.filterItems('all')
       this.errors.clear()
+    },
+    cleanInput () {
+      this.local.idSelected = null
+      this.local.inputs = null
+      this.local.orderingForShowing = []
+      this.local.orderSelected = null
+      this.local.orderIdSelected = null
+      this.local.orderConfirmDate = null
+      this.local.receiptObj = {}
     },
     async submitForm (type) {
       let isValid = await this.$validator.validateAll()
@@ -332,7 +341,7 @@ export default {
       win.print()
     },
     async getFullOrdering (item) {
-      let resourceName = `${config.api.ordering.index}/${item.contract_code}`
+      let resourceName = `${config.api.ordering.index}/${item.code}`
       let queryString = this.BUILDPARAM([])
       let res = await service.getResource({resourceName, queryString})
       return res.data

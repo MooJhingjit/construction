@@ -1,13 +1,14 @@
 <template>
   <section :class="['section', this.templateObj.class]">
     <slot name="title"></slot>
-    <div class="container-block">
-      <div :class="{'options-panel':true, 'small': isSmallOptions}">
+    <div class="container-block search-options">
+      <div :class="{'options-panel':true, 'small': isHideMenu}">
+        <div class="container-block hide-menu"><i class="fa fa-chevron-circle-left" aria-hidden="true" @click="hideMenu()"></i></div>
         <div class="container-block">
           <slot name="data-table"></slot>
         </div>
         <div class="expand">
-          <i class="fa fa-expand" aria-hidden="true" @click="expandOptionsPanel()"></i>
+          <i class="fa fa-chevron-circle-right" aria-hidden="true" @click="showMenu()"></i>
         </div>
         <div class="container-block function">
           <slot name="function"></slot>
@@ -31,10 +32,10 @@ export default {
       type: Object,
       required: true
     },
-    optionMinimize: {
-      type: Boolean,
-      required: false
-    },
+    // optionMinimize: {
+    //   type: Boolean,
+    //   required: false
+    // },
     isSelected: {
       type: [Number, String],
       required: false
@@ -45,7 +46,7 @@ export default {
   name: 'optionsDetailTemplate',
   data () {
     return {
-      isSmallOptions: false,
+      isHideMenu: false,
       isShowPanel: false
     }
   },
@@ -63,8 +64,11 @@ export default {
     // this.setPanel()
   },
   methods: {
-    expandOptionsPanel () {
-      this.isSmallOptions = false
+    hideMenu () {
+      this.isHideMenu = true
+    },
+    showMenu () {
+      this.isHideMenu = false
     },
     cancleForm () {
       this.$emit('cancleForm')
@@ -79,9 +83,6 @@ export default {
     }
   },
   watch: {
-    optionMinimize: function () {
-      this.isSmallOptions = this.optionMinimize
-    },
     isSelected: function () {
       this.setPanel()
     }
@@ -89,5 +90,20 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.hide-menu{
+  color: #fff;
+  font-size: 1.5em;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+.expand{
+  cursor: pointer;
+  text-align: center;
+  color: #fff;
+  display: none;
+  i{
+    font-size: 1.5em;
+  }
+}
 </style>

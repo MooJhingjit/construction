@@ -2,11 +2,7 @@
   <option-detail-template :templateObj="local.pageObj.template" :isSelected="local.idSelected"  @cancleForm="submitForm('cancel')">
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="data-table">
-      <data-table ref="dataTable"
-      :resourceName="resourceName"
-      :statusSearch="local.statusSearch"
-      @selectedData="selectedDataHandle"
-      ></data-table>
+      <contract-serach @select="contractSelectedHandle"></contract-serach>
     </template>
     <template v-if="local.idSelected">
       <template slot="detail">
@@ -148,6 +144,7 @@ import dataTable from '@Components/DataTable'
 import myAction from '@Components/Form/my-action'
 import myInput from '@Components/Form/my-input'
 import myAutoComplete from '@Components/Form/my-autocomp'
+import contractSerach from '@Components/Form/AutoSearch/contract'
 export default {
   props: {
   },
@@ -157,7 +154,8 @@ export default {
     dataTable,
     myAction,
     myInput,
-    myAutoComplete
+    myAutoComplete,
+    contractSerach
   },
   name: 'ContractPage',
   data () {
@@ -214,7 +212,10 @@ export default {
     // technicianSelectedHandle (objVal) {
     //   this.local.technician.selected = objVal.key
     // },
-    async selectedDataHandle (item) {
+    async contractSelectedHandle (item) {
+      if (item === null) {
+        this.cleanInput()
+      }
       this.local.idSelected = item.code
       let queryString = this.BUILDPARAM({type: 'full'})
       let contractItem = await service.getResource({
@@ -230,6 +231,13 @@ export default {
       } else {
         this.local.technician.selected = ''
       }
+    },
+    cleanInput () {
+      this.local.idSelected = null
+      this.local.inputs.project = {}
+      this.local.inputs.contractTime = {}
+      this.local.inputs.contract = {}
+      this.local.inputs.progress = null
     },
     async updateContractTime (id, time) {
       let ele = `time_${time}`
@@ -287,7 +295,7 @@ export default {
           break
       }
       if (res.status === 200) {
-        this.local.idSelected = null
+        // this.local.idSelected = null
         this.NOTIFY('success')
         return
       }
@@ -342,6 +350,9 @@ export default {
       })[0]
       return obj.name
     }
+    // contractSelectedHandle (val) {
+    //   console.log(val)
+    // }
   }
 }
 </script>

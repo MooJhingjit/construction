@@ -92,7 +92,7 @@
 
 <script>
 import {bus} from '@/main'
-import contractSerach from '@Components/Form/ContractSearch'
+import contractSerach from '@Components/Form/AutoSearch/contract'
 import myAction from '@Components/Form/my-action'
 import myAutoComplete from '@Components/Form/my-autocomp'
 import config from '@Config/app.config'
@@ -135,6 +135,10 @@ export default {
       this.local.contract.inputs = contract.data
     },
     contractSelectedHandle (obj) {
+      if (obj === null) {
+        this.local.contract.selected = null
+        return
+      }
       this.local.contract.selected = obj.code
       this.getStoreItems()
     },
