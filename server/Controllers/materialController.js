@@ -177,12 +177,14 @@ async function getDropDown (req, res, next) {
     item.name = req.query.main_search
   }
   if (req.query.contractId) {
-    if (req.query.contractId === 'null') {
-      item.house_id = '198PWY' // <--------------------
-    } else {
-      let contractRes = await contract.getDetailByContractCode(['contract'], req.query.contractId)
-      item.house_id = contractRes.contract.house_id
-    }
+    let contractRes = await contract.getDetailByContractCode(['contract'], req.query.contractId)
+    item.house_id = contractRes.contract.house_id
+    // if (req.query.contractId === 'null') {
+    //   item.house_id = '198PWY'
+    // } else {
+    //   let contractRes = await contract.getDetailByContractCode(['contract'], req.query.contractId)
+    //   item.house_id = contractRes.contract.house_id
+    // }
   }
   if (req.query.store) {
     item.store_id = req.query.store
@@ -202,10 +204,18 @@ async function getMaterialDetail (idArr) {
   let data = await item.getMaterialById(idArr)
   return data
 }
+async function getDetailById (store, house) {
+  let item = new materialModel()
+  item.house_id = house
+  item.store_id = store
+  let data = await item.getData()
+  return data
+}
 
 module.exports.getFullMaterial = getFullMaterial
 module.exports.createData = createData
 module.exports.deleteData = deleteMaterail
 module.exports.getDropDown = getDropDown
 module.exports.getMaterialDetail = getMaterialDetail
+module.exports.getDetailById = getDetailById
 

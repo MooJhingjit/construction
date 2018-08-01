@@ -171,6 +171,24 @@ export default {
   methods: {
     getHtm () {
       return this.$refs.receipt
+    },
+    printReceipt () {
+      let html = this.getHtm()
+      var win = window.open('', 'Title', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500,top=0,left=0')
+      let style = document.createElement('style')
+      style.type = 'text/css'
+      let css = '@media print {@page { margin: 0; }body { margin: 1.5cm 1cm; }}'
+      // let css = ''
+      if (style.styleSheet) {
+        // This is required for IE8 and below.
+        style.styleSheet.cssText = css
+      } else {
+        style.appendChild(document.createTextNode(css))
+      }
+      win.document.getElementsByTagName('head')[0].appendChild(style)
+      win.document.body.innerHTML = html.innerHTML
+      win.focus()
+      win.print()
     }
   },
   watch: {

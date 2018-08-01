@@ -3,6 +3,30 @@
     <h4>สั่งซื้อ (ปกติ)</h4>
     <div class="content">
       <div class="field">
+        <label class="label">ระบุโครงการ</label>
+        <div class="control">
+           <my-auto-complete
+            @select="projectSelectedHandle"
+            :arrInputs="local.project.inputs"
+            :validator="$validator"
+            placeholder="โครงการ"
+            label=""
+            ></my-auto-complete>
+        </div>
+      </div>
+      <div class="field" v-if="local.project.selected != null">
+        <label class="label">ระบุแบบบ้าน</label>
+        <div class="control">
+           <my-auto-complete
+            @select="houseSelectedHandle"
+            :arrInputs="local.house.inputs"
+            :validator="$validator"
+            placeholder="แบบบ้าน"
+            label=""
+            ></my-auto-complete>
+        </div>
+      </div>
+      <div class="field" v-if="local.project.selected != null && local.house.selected != null">
         <label class="label">ค้นหาประเภท</label>
         <div class="control">
            <my-auto-complete
@@ -14,7 +38,7 @@
             ></my-auto-complete>
         </div>
       </div>
-      <div class="field">
+      <div class="field" v-if="local.store.selected != null">
         <label class="label">ค้นหาวัสดุ</label>
         <div class="control">
          <table class="table is-bordered rows-table">
@@ -22,52 +46,33 @@
              <tr>
               <th>ชื่อวัสดุ</th>
               <th width="80">จำนวน</th>
-              <!-- <th width="80"></th> -->
+              <th width="80">ราคาต่อหน่วย</th>
              </tr>
            </thead>
            <tbody>
              <tr :key="index" v-for="(item, index) in local.materialSelected">
                <td>
-                  {{item.obj.value}}
+                  {{item.name}}
                </td>
                <td>
-                 {{item.amount}}
-                  <!-- <my-input
-                  :value="item.amount"
-                  :inputObj="{type: 'text', isBlur: true, name: 'amount', placeholder: 'จำนวน', validate: 'required'}"
-                  :validator="$validator"
-                  @input="value => { item.amount = value }"
-                  ></my-input> -->
+                 {{item.amount}} {{item.unit}}
                </td>
-               <!-- <td><button disabled="disabled" class="button is-danger" @click="deleteTime(index)"><i class="fa fa-trash"></i></button></td> -->
-             </tr>
+               <td>{{item.price}}</td>
+            </tr>
            </tbody>
          </table>
-         <!-- <div class="options">
-           <button class="button" @click="editRow('add')"><i aria-hidden="true" class="fa fa-plus"></i></button>
-         </div> -->
         </div>
       </div>
-      <!-- <div class="field"  v-if="this.local.contract.selected != null && this.local.materialSelected.length">
-        <label class="label">หมายเหตุ</label>
-        <div class="control">
-           <my-input
-            :value="local.note"
-            :inputObj="{type: 'textarea', isBlur: false, name: 'note', placeholder: 'หมายเหตุ', validate: 'required'}"
-            :validator="$validator"
-            @input="value => { local.note = value }"
-            ></my-input>
-        </div>
-      </div> -->
     </div>
     <div class="footer" v-if="this.local.store.selected != null && this.local.materialSelected.length">
       <my-action
         type="update"
         :obj="{title: 'ออกใบสั่งซื้อ'}"
-        @clickEvent="submitForm()"
+        @clickEvent="doReceipt()"
       >
       </my-action>
     </div>
+    <receipt-template v-if="local.receiptObj !== null" class="receipt-template" ref="receiptTemplate" :dataObj="local.receiptObj" ></receipt-template>
   </section>
 </template>
 
@@ -79,6 +84,7 @@ import myAutoComplete from '@Components/Form/my-autocomp'
 import config from '@Config/app.config'
 import service from '@Services/app-service'
 import myInput from '@Components/Form/my-input'
+import receiptTemplate from './receipt-template'
 export default {
   props: {
   },
@@ -86,23 +92,28 @@ export default {
     // contractSerach,
     myAction,
     myInput,
-    myAutoComplete
+    myAutoComplete,
+    receiptTemplate
   },
   name: 'OrderingExtra',
   data () {
     return {
       local: {
-        // contract: {
-        //   inputs: [],
-        //   selected: null
-        // },
         store: {
           inputs: [],
           selected: null
         },
-        // materialItems: [],
-        materialSelected: []
-        // note: ''
+        project: {
+          inputs: [],
+          selected: null,
+          nameSelected: null
+        },
+        house: {
+          inputs: [],
+          selected: null
+        },
+        materialSelected: [],
+        receiptObj: null
       }
     }
   },
@@ -111,12 +122,41 @@ export default {
   },
   methods: {
     async fetchData () {
-      this.getStoreItems()
+      await this.getProjectData()
+      await this.getHouseData()
+      await this.getStoreItems()
+    },
+    async getProjectData () {
+      let queryString = this.BUILDPARAM({})
+      let project = await service.getResource({resourceName: config.api.project.dropdown, queryString})
+      this.local.project.inputs = project.data
+    },
+    async getHouseData () {
+      let queryString = this.BUILDPARAM({})
+      let house = await service.getResource({resourceName: config.api.house.dropdown, queryString})
+      this.local.house.inputs = house.data
     },
     async getStoreItems () {
       let queryString = this.BUILDPARAM({type: 'normal'})
       let store = await service.getResource({resourceName: config.api.store.dropdown, queryString})
       this.local.store.inputs = store.data
+    },
+    projectSelectedHandle (obj) {
+      if (obj === null) {
+        this.local.project.selected = null
+        this.local.house.selected = null
+        return
+      }
+      this.local.project.selected = obj.key
+      this.local.project.nameSelected = obj.value
+    },
+    houseSelectedHandle (obj) {
+      if (obj === null) {
+        this.local.house.selected = null
+        this.local.store.selected = null
+        return
+      }
+      this.local.house.selected = obj.key
     },
     storeSelectedHandle (obj) {
       this.local.materialSelected = []
@@ -125,24 +165,39 @@ export default {
         return
       }
       this.local.store.selected = obj.key
-      this.getMaterialItems()
+      this.orderMaterials()
     },
-    async getMaterialItems () {
+    async orderMaterials () {
       let queryString = this.BUILDPARAM({
-        contractId: 'null',
-        store: this.local.store.selected
+        houseId: this.local.house.selected,
+        store: this.local.store.selected,
+        project: this.local.project.selected
       })
-      let material = await service.getResource({resourceName: config.api.material.dropdown, queryString})
-      // this.local.materialItems = material.data
-      this.local.materialSelected = material.data.map((item) => {
+      let result = await service.getResource({resourceName: config.api.ordering.forward, queryString})
+      this.local.materialSelected = result.data.orderDetail
+      let ordering = {}
+      let totalPrice = 0
+      let itemPrice = 0
+      ordering.orderDetail = this.local.materialSelected.map((item) => {
+        let price = parseFloat(item.price)
+        let amount = parseFloat(item.amount)
+        itemPrice = price * amount
+        totalPrice = itemPrice + totalPrice
         return {
-          obj: {
-            key: item.key,
-            value: item.value
-          },
-          amount: 1
+          name: item.name,
+          amount: item.amount,
+          unit_text: item.unit,
+          unit_price: item.price,
+          price: itemPrice
         }
       })
+      ordering.total_price = totalPrice
+      this.local.receiptObj = {
+        project: result.data.project,
+        store: result.data.store,
+        ordering
+      }
+      // console.log(this.local.receiptObj)
     },
     editRow (type) {
       if (type === 'add') {
@@ -155,30 +210,13 @@ export default {
     deleteTime (index) {
       this.local.materialSelected.splice(index, 1)
     },
-    async submitForm () {
-      // this.cleanData()
-      // let isValid = await this.$validator.validateAll()
-      // if (!isValid) return
-      // let resourceName = `${config.api.ordering.extra}`
-      // let data = {
-      //   contract: 'pre_order',
-      //   materials: this.local.materialSelected,
-      //   note: 'Pre order'
-      // }
-      // let res = await service.postResource({data, resourceName})
-      // if (res.status === 200) {
-      //   let obj = res.data.orderingData
-      //   bus.$emit('setNotification', {type: 'ordering', value: obj})
-      //   this.NOTIFY('success')
-      //   this.GOTOPAGE('OrderingDetail', 'all')
-      //   return
-      // }
-      // this.NOTIFY('error')
-    },
     cleanData () {
       this.local.materialSelected = this.local.materialSelected.filter((item) => {
         return item.obj != null
       })
+    },
+    doReceipt () {
+      this.$refs.receiptTemplate.printReceipt()
     }
   }
 }
@@ -187,5 +225,8 @@ export default {
 <style lang="scss" scoped>
 .ordering-extra{
   min-height: 200px;
+}
+.receipt-template{
+  display: none;
 }
 </style>

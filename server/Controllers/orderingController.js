@@ -1,8 +1,10 @@
 const helpers = require('../Libraries/helpers')
 const contract = require('./contractController.js')
+const projectController = require('./projectController.js')
+const storeController = require('./storeController.js')
+const materialController = require('./materialController.js')
 const orderingModel = require('../Models/orderingModel')
 const materialGroup = require('./materialGroupController.js')
-const materialController = require('./materialController.js')
 const orderingDetailModel = require('../Models/orderingDetailModel')
 const workOrderDetailModel = require('../Models/workOrderDetailModel.js')
 
@@ -322,6 +324,18 @@ const getOrderingDetailByOrderingId = async (orderId) => {
   let result = await items.getData()
   return result
 }
+const orderForward = async (req, res, next) => { // for some materials which have to order before know contract id
+  let project = await projectController.getDetailById(req.query.project)
+  let store = await storeController.getDetailById(req.query.store)
+  let materials = await materialController.getDetailById(req.query.store, req.query.houseId)
+  let result = {
+    project,
+    store,
+    orderDetail: materials,
+  }
+  res.status(200).json(result)
+  // console.log(req.query)
+}
 
 module.exports.getResource = getResource
 module.exports.getAllData = getAllData
@@ -339,6 +353,7 @@ module.exports.getDetailByContractCode = getDetailByContractCode
 module.exports.reset = reset
 module.exports.getOrderingByContract = getOrderingByContract
 module.exports.getOrderingDetailByOrderingId = getOrderingDetailByOrderingId
+module.exports.orderForward = orderForward
 
 
 

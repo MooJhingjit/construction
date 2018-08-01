@@ -16,6 +16,7 @@ module.exports =  class Material {
   }
   async getData () {
     let result = await this.knex('material')
+    .where(this.getCondition())
     // .join('material_price', 'material.id', '=', 'material_price.material_id').select()
     await this.knex.destroy()
     return result

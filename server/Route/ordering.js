@@ -6,6 +6,7 @@ router.get('/ordering-home', orderingController.getResource);
 router.get('/ordering', orderingController.getAllData);
 router.get('/ordering/:contractCode', orderingController.getData);
 router.post('/ordering-extra', orderingController.createExtraData);
+router.get('/ordering-forward/', orderingController.orderForward);
 router.put('/ordering/:id', orderingController.updateData);
 router.delete('/ordering/:id', orderingController.deleteData);
 module.exports = router;

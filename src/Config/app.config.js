@@ -56,7 +56,8 @@ const api = {
     'home': '/ordering-home',
     'index': '/ordering',
     'fullOrder': '/full-ordering',
-    'extra': '/ordering-extra'
+    'extra': '/ordering-extra',
+    'forward': '/ordering-forward'
   },
   'frontSite': {
     'index': '/front-site'
