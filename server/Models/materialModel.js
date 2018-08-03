@@ -45,7 +45,7 @@ module.exports =  class Material {
       conditions.house_id = this.house_id
     }
     let result = await this.knex.select().from('material').where(conditions)
-    await this.knex.destroy()
+    // await this.knex.destroy()
     return result
   }
 
@@ -120,7 +120,7 @@ module.exports =  class Material {
     .where(conditions)
     .whereNotIn('id', idArr)
     .del()
-    await this.knex.destroy()
+    // await this.knex.destroy()
     return result
   }
 
@@ -128,7 +128,7 @@ module.exports =  class Material {
     let result = await this.knex('material_price')
     .whereIn('material_id', idArr)
     .del()
-    await this.knex.destroy()
+    // await this.knex.destroy()
     return result
   }
 

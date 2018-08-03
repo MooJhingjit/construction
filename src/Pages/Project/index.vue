@@ -86,13 +86,13 @@
             v-if="local.idSelected != 'new'"
           >
           </my-action>
-          <my-action
+          <!-- <my-action
             type="link"
             :obj="{title: 'สัญญาในโครงการนี้ทั้งหมด'}"
             @clickEvent="GOTOPAGE('Contract', 'project-id')"
             v-if="local.idSelected != 'new'"
           >
-          </my-action>
+          </my-action> -->
           <my-action
             type="delete"
             :obj="{title: 'ลบข้อมูล'}"
