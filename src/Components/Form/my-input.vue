@@ -103,6 +103,9 @@ export default {
     }
   },
   watch: {
+    inputObj () {
+      this.local = this.inputObj
+    },
     inputVal (val) {
       this.$emit('input', val)
       this.$emit('change', val)

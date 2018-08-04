@@ -2,7 +2,7 @@
   <option-detail-template :templateObj="local.pageObj.template" :isSelected="local.idSelected"  @cancleForm="submitForm('cancel')">
     <template slot="title"><breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar></template>
     <template slot="data-table">
-      <contract-serach @select="contractSelectedHandle"></contract-serach>
+      <contract-serach ref="contractSerach" @select="contractSelectedHandle"></contract-serach>
     </template>
     <template v-if="local.idSelected">
       <template slot="detail">
@@ -198,21 +198,22 @@ export default {
     this.getTechnicianData()
   },
   mounted () {
-    if (this.$route.params.key !== undefined && this.$route.params.key !== 'all') {
-      this.$refs.dataTable.searchByText({value: this.$route.params.key})
-    }
-    // this.$refs.dataTable[0].searchByText({value: this.$route.params.key})
+    // if (this.$route.params.key !== undefined && this.$route.params.key !== 'all') {
+    //   this.$refs.dataTable.searchByText({value: this.$route.params.key})
+    // }
   },
   methods: {
     async getTechnicianData () {
       let queryString = this.BUILDPARAM({type: 'technician'})
       let obj = await service.getResource({resourceName: config.api.users.dropdown, queryString})
       this.local.technician.inputs = obj.data
+      // console.log(this.local.technician.inputs)
     },
     // technicianSelectedHandle (objVal) {
     //   this.local.technician.selected = objVal.key
     // },
     async contractSelectedHandle (item) {
+      // console.log(item)
       if (item === null) {
         this.cleanInput()
       }
@@ -229,7 +230,7 @@ export default {
       if (this.local.inputs.contract.assign) {
         this.local.technician.selected = this.local.inputs.contract.assign
       } else {
-        this.local.technician.selected = ''
+        this.local.technician.selected = null
       }
     },
     cleanInput () {
@@ -295,6 +296,8 @@ export default {
           break
       }
       if (res.status === 200) {
+        // console.log(this.$refs.contractSerach)
+        this.$refs.contractSerach.selectedContract()
         // this.local.idSelected = null
         this.NOTIFY('success')
         return
@@ -348,6 +351,7 @@ export default {
       let obj = this.local.technician.inputs.filter((item) => {
         return item.key === this.local.technician.selected
       })[0]
+      // console.log(obj)
       return obj.name
     }
     // contractSelectedHandle (val) {

@@ -47,7 +47,7 @@
                     <td>{{item.houseId}}</td>
                     <td>{{item.materialName}}</td>
                     <td><input type="number" size="2" v-model="item.amount" class="input"></td>
-                    <td><i class="fa fa-times" aria-hidden="true" @click="deleteListsItem(index)"></i></td>
+                    <!-- <td><i class="fa fa-times" aria-hidden="true" @click="deleteListsItem(index)"></i></td> -->
                   </tr>
                 </tbody>
               </table>

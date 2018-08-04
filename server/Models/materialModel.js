@@ -26,7 +26,7 @@ module.exports =  class Material {
     let result = await this.knex.select().from('material').where({
       id: this.id
     })
-    await this.knex.destroy()
+    // await this.knex.destroy()
     return result
   }
 
@@ -60,7 +60,7 @@ module.exports =  class Material {
       price: this.price,
       created_at: helpers.getCurrentTime('sql')
     })
-    await this.knex.destroy()
+    // await this.knex.destroy()
     return result
   }
 
@@ -77,7 +77,7 @@ module.exports =  class Material {
       price: this.price,
       created_at: helpers.getCurrentTime('sql')
     })
-    await this.knex.destroy()
+    // await this.knex.destroy()
     return result
   }
   

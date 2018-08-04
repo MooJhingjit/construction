@@ -67,12 +67,16 @@ export default {
     this.fetchData()
   },
   mounted () {
-    if (this.$route.params.key && this.$route.params.key !== 'all') {
-      this.$emit('select', {code: this.$route.params.key})
-      // this.$refs.dataTable.setSearch('ordering', this.$route.params.key)
-    }
+    this.selectedContract()
   },
   methods: {
+    selectedContract () {
+      if (this.$route.params.key && this.$route.params.key !== 'all') {
+        this.$emit('select', {code: this.$route.params.key})
+      } else if (this.local.contract.selected !== null) {
+        this.$emit('select', this.local.contract.selected)
+      }
+    },
     async fetchData () {
       let queryString = this.BUILDPARAM({type: 'project-search'})
       let project = await service.getResource({resourceName: config.api.contract.dropdown, queryString})

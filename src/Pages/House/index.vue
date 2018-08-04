@@ -119,7 +119,7 @@
           <my-action
             type="delete"
             :obj="{title: 'ลบข้อมูล'}"
-             @clickEvent="submitForm('ลบข้อมูล')"
+             @clickEvent="submitForm('delete')"
              v-if="this.local.idSelected != 'new'"
           >
           </my-action>
