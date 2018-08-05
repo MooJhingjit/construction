@@ -28,10 +28,12 @@
                 <div class="value">
                   <!-- required|numeric -->
                   <my-input
+                  ref="project_code"
                   :value="local.inputs.code"
-                  :inputObj="{type: 'text', name: 'project_code', placeholder: 'รหัสโครงการ', validate: 'required'}"
+                  :inputObj="{type: 'text', isBlur: true, name: 'project_code', placeholder: 'รหัสโครงการ', validate: 'required'}"
                   :validator="$validator"
                   @input="value => { local.inputs.code = value }"
+                  @onBlur="checkDuplicate(local.inputs.code, 'code')"
                   ></my-input>
                 </div>
               </div>
@@ -39,6 +41,7 @@
                 <div class="text-title">ชื่อโครงการ</div>
                 <div class="value">
                   <my-input
+                  ref="project_name"
                   :value="local.inputs.name"
                   :inputObj="{type: 'text', name: 'project_name', placeholder: 'ชื่อโครงการ', validate: 'required'}"
                   :validator="$validator"
@@ -86,13 +89,6 @@
             v-if="local.idSelected != 'new'"
           >
           </my-action>
-          <!-- <my-action
-            type="link"
-            :obj="{title: 'สัญญาในโครงการนี้ทั้งหมด'}"
-            @clickEvent="GOTOPAGE('Contract', 'project-id')"
-            v-if="local.idSelected != 'new'"
-          >
-          </my-action> -->
           <my-action
             type="delete"
             :obj="{title: 'ลบข้อมูล'}"
@@ -100,10 +96,6 @@
             v-if="local.idSelected != 'new'"
           >
           </my-action>
-          <!-- <button class="button" @click="submitForm('edit')">บันทึกข้อมูล</button>
-          <button v-if="this.local.idSelected != 'new'" class="button" @click="GOTOPAGE('CreateContract', local.idSelected)">สร้างสัญญาใหม่</button>
-          <button v-if="this.local.idSelected != 'new'" class="button" @click="GOTOPAGE('Contract', 'project-id')">สัญญาในโครงการนี้ทั้งหมด</button>
-          <button v-if="this.local.idSelected != 'new'" class="button is-danger" @click="submitForm('delete')">ลบข้อมูล</button> -->
         </div>
       </template>
     </template>
@@ -151,8 +143,12 @@ export default {
           {title: 'เสร็จสิ้น', key: 'done'}
         ],
         idSelected: '',
-        // items: {},
-        inputs: {}
+        inputs: {},
+        duplicate: {
+          value: '',
+          field: ''
+        },
+        isDuplicate: false
       }
     }
   },
@@ -193,7 +189,7 @@ export default {
           this.local.idSelected = null
           return
         case 'update':
-          if (!isValid) return
+          if (!isValid || this.local.isDuplicate) return
           data = this.local.inputs
           resourceName = `${resourceName}/${this.local.idSelected}`
           res = await service.putResource({data, resourceName})
@@ -204,7 +200,7 @@ export default {
           res = await service.deleteResource({resourceName, queryString})
           break
         case 'save':
-          if (!isValid) return
+          if (!isValid || this.local.isDuplicate) return
           data = this.local.inputs
           res = await service.postResource({data, resourceName})
           break
@@ -226,6 +222,17 @@ export default {
       this.local.inputs.name = ''
       this.local.inputs.address = ''
       this.local.inputs.type = ''
+    },
+    async checkDuplicate (value, field) {
+      if (!value) return
+      let queryString = this.BUILDPARAM({value, field, id: this.local.idSelected})
+      let res = await service.getResource({resourceName: config.api.project.checkDuplicate, queryString})
+      if (res.data.length) {
+        this.$refs[`project_${field}`].setDuplicate()
+        this.local.isDuplicate = true
+        return
+      }
+      this.local.isDuplicate = false
     }
   }
 }

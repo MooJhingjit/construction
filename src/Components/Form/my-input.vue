@@ -1,9 +1,10 @@
 <template>
   <div>
     <template v-if="local.type == 'text' || local.type == 'textarea'">
+      <!-- {{errors}} -->
       <b-field
         :type="errors.has(local.name) ? 'is-danger': ''"
-        :message="errors.has(local.name) ? 'โปรดตรวจสอบข้อมมูลข้างต้น' : ''">
+        :message="errors.has(local.name) ? errorMsg : ''">
         <b-input
             @blur="blurEvent()"
             :type="local.type"
@@ -18,7 +19,7 @@
     <template v-else-if="local.type == 'select'">
       <b-field
         :type="errors.has(local.name) ? 'is-danger': ''"
-        :message="errors.has(local.name) ? 'โปรดตรวจสอบข้อมมูลข้างต้น' : ''">
+        :message="errors.has(local.name) ? errorMsg : ''">
         <b-select
           v-validate="local.validate"
           :name="local.name"
@@ -32,7 +33,7 @@
     <template v-else-if="local.type == 'datepicker'">
       <b-field
       :type="errors.has(local.name) ? 'is-danger': ''"
-        :message="errors.has(local.name) ? 'โปรดตรวจสอบข้อมมูลข้างต้น' : ''">
+        :message="errors.has(local.name) ? errorMsg : ''">
         <b-datepicker
             :placeholder="local.placeholder"
             :name="local.name"
@@ -80,14 +81,18 @@ export default {
   data () {
     return {
       inputVal: this.value,
-      local: {}
+      local: {},
+      msgKey: 'default',
+      msg: {
+        default: 'โปรดตรวจสอบข้อมูลข้างต้น',
+        duplicate: 'มีข้อมูลนี้ในระบบแล้ว'
+      }
     }
   },
   computed: {
-    // propertyComputed() {
-    //   console.log('I change when this.property changes.')
-    //   return this.property
-    // }
+    errorMsg () {
+      return this.msg[this.msgKey]
+    }
   },
   created () {
     if (this.validator) {
@@ -100,6 +105,20 @@ export default {
       if (this.local.isBlur) {
         this.$emit('onBlur', this.inputVal)
       }
+    },
+    setDuplicate () {
+      this.msgKey = 'duplicate'
+      this.errors.add(this.local.name, this.msg[this.msgKey])
+      // this.errors.add({
+      //   field: this.local.name,
+      //   msg: this.msg[this.msgKey],
+      //   scope: null,
+      //   rule: 'required'
+      // })
+    },
+    resetChecking () {
+      this.msgKey = 'default'
+      this.errors.remove(this.local.name)
     }
   },
   watch: {
@@ -107,6 +126,7 @@ export default {
       this.local = this.inputObj
     },
     inputVal (val) {
+      this.resetChecking()
       this.$emit('input', val)
       this.$emit('change', val)
     },

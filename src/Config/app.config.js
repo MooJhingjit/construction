@@ -15,7 +15,8 @@ const api = {
   },
   'project': {
     'index': '/project',
-    'dropdown': '/project-selection'
+    'dropdown': '/project-selection',
+    'checkDuplicate': '/project-duplicate'
   },
   'contract': {
     'index': '/contract',
@@ -24,7 +25,8 @@ const api = {
     'period': '/contract-period',
     'progress': '/contract-progress',
     'dropdown': '/contract-selection',
-    'reset': '/contract-reset'
+    'reset': '/contract-reset',
+    'checkDuplicate': '/contract-duplicate'
   },
   'workOrder': {
     'index': '/work-order'
@@ -101,6 +103,10 @@ const variable = {
     {key: 'B3PW2', name: 'B3PW-2'},
     {key: 'B3PW3', name: 'B3PW-3'},
     {key: 'B3PW4', name: 'B3PW-4'},
+    {key: 'B4PW1', name: 'B4PW-1'},
+    {key: 'B4PW2', name: 'B4PW-2'},
+    {key: 'B4PW3', name: 'B4PW-3'},
+    {key: 'B4PW4', name: 'B4PW-4'},
     {key: 'B21', name: 'B2-1'},
     {key: 'B22', name: 'B2-2'},
     {key: 'B23', name: 'B2-2'}

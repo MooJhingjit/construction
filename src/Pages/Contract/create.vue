@@ -16,10 +16,12 @@
                     <td>เลขที่สัญญา:</td>
                     <td>
                       <my-input
+                      ref="contract_code"
                       :value="local.inputs.code"
-                      :inputObj="{type: 'text', name: 'contract_code', placeholder: 'เลขที่สัญญา', validate: 'required'}"
+                      :inputObj="{type: 'text', isBlur: true, name: 'contract_code', placeholder: 'เลขที่สัญญา', validate: 'required'}"
                       :validator="$validator"
                       @input="value => { local.inputs.code = value }"
+                      @onBlur="checkDuplicate(local.inputs.code)"
                       ></my-input>
                     </td>
                     <td>ที่ตั้ง:</td>
@@ -65,7 +67,7 @@
                     <td>
                       <my-auto-complete
                       ref="planAutoComplete"
-                      @select="objVal => {local.inputs.plan = objVal.key}"
+                      @select="planSelectedHandle"
                       :arrInputs="local.planTemplate.inputs"
                       placeholder="แปลง"
                       label=""
@@ -144,18 +146,25 @@
             </div>
           </div>
           <div class="container-block footer-panel" v-if="this.local.isTimeStart">
-            <my-action
-              type="update"
-              :obj="{title: 'รออนุมัติ', color: 'is-warning'}"
-              @clickEvent="submitForm('save', 'wait')"
-            >
-            </my-action>
-            <my-action
-              type="update"
-              :obj="{title: 'เริ่มดำเนินงาน', color: 'is-success'}"
-              @clickEvent="submitForm('save', 'ip')"
-            >
-            </my-action>
+            <template v-if="!local.inputs.plan || !local.inputs.houseId">
+              <div class="alert">
+                <p>แบบบ้านหรือแปลง ไม่สามารถป็นค่าว่างได้</p>
+              </div>
+            </template>
+            <template v-else>
+              <my-action
+                type="update"
+                :obj="{title: 'รออนุมัติ', color: 'is-warning'}"
+                @clickEvent="submitForm('save', 'wait')"
+              >
+              </my-action>
+              <my-action
+                type="update"
+                :obj="{title: 'เริ่มดำเนินงาน', color: 'is-success'}"
+                @clickEvent="submitForm('save', 'ip')"
+              >
+              </my-action>
+            </template>
           </div>
         </template>
         <template v-else>
@@ -249,7 +258,8 @@ export default {
           inputs: [],
           selected: null
         },
-        contractPreiod: []
+        contractPreiod: [],
+        isDuplicate: false
       }
     }
   },
@@ -301,7 +311,7 @@ export default {
       let res = null
       switch (type) {
         case 'save':
-          if (!isValid) return
+          if (!isValid || this.local.isDuplicate) return
           this.local.inputs.status = status
           data = this.local.inputs
           res = await service.postResource({data, resourceName})
@@ -339,10 +349,18 @@ export default {
       this.$refs.planAutoComplete.setValue({key: '', value: ''})
       if (objVal === null) {
         this.local.planTemplate.inputs = []
+        this.local.inputs.houseId = ''
       } else {
         this.local.inputs.houseId = objVal.key
         this.getPlan()
         this.getContractPreiod()
+      }
+    },
+    planSelectedHandle (objVal) {
+      if (objVal === null) {
+        this.local.inputs.plan = ''
+      } else {
+        this.local.inputs.plan = objVal.key
       }
     },
     async getContractPreiod () {
@@ -403,10 +421,26 @@ export default {
     },
     setDateVal (date) {
       this.local.inputs.dateStart = date
+    },
+    async checkDuplicate (value) {
+      if (!value) return
+      let queryString = this.BUILDPARAM({value})
+      let res = await service.getResource({resourceName: config.api.contract.checkDuplicate, queryString})
+      if (res.data.length) {
+        this.$refs.contract_code.setDuplicate()
+        this.local.isDuplicate = true
+        return
+      }
+      this.local.isDuplicate = false
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.alert{
+  p{
+    color: red;
+  }
+}
 </style>
