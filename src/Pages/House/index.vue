@@ -24,7 +24,7 @@
                 <div class="value">
                    <my-input
                     :value="local.inputs.plan"
-                    :inputObj="{type: 'text', name: 'house_plan', placeholder: 'แปลง', validate: ''}"
+                    :inputObj="{type: 'text', name: 'house_plan', placeholder: 'แปลง', validate: 'required'}"
                     :validator="$validator"
                     @input="value => { local.inputs.plan = value }"
                     ></my-input>
