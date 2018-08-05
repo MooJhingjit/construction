@@ -17,7 +17,6 @@ module.exports =  class Material {
   async getData () {
     let result = await this.knex('material')
     .where(this.getCondition())
-    // .join('material_price', 'material.id', '=', 'material_price.material_id').select()
     await this.knex.destroy()
     return result
   }
@@ -30,10 +29,10 @@ module.exports =  class Material {
     return result
   }
 
-  async getDataPrice (id) {
-    let result = await this.knex('material_price')
+  async getDataQuantity (id) {
+    let result = await this.knex('material_quantity')
     .where({'material_id': id})
-    await this.knex.destroy()
+    // await this.knex.destroy()
     return result
   }
 
@@ -81,15 +80,15 @@ module.exports =  class Material {
     return result
   }
   
-  async savePrice (obj) {
-    let result = await this.knex('material_price').insert({
+  async saveQuantity (obj) {
+    let result = await this.knex('material_quantity').insert({
       material_id: obj.id,
       side: obj.side,
       color: obj.color,
       price: obj.price,
       created_at: helpers.getCurrentTime('sql')
     })
-    await this.knex.destroy()
+    // await this.knex.destroy()
     return result
   }
 
@@ -125,7 +124,7 @@ module.exports =  class Material {
   }
 
   async clearMaterialDetail (idArr) {
-    let result = await this.knex('material_price')
+    let result = await this.knex('material_quantity')
     .whereIn('material_id', idArr)
     .del()
     // await this.knex.destroy()

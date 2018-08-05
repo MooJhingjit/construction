@@ -100,6 +100,13 @@ const deleteData = async (req, res, next) => {
   res.status(200).json({})
 }
 
+const checkDuplicate = async (req, res, next) => {
+  let contract = new contractModel()
+  contract.code = req.query.value
+  let data = await contract.checkDuplicate()
+  res.status(200).json(data)
+}
+
 const getStat = async () => {
   let contract = new contractModel()
   let contractRes = await contract.getStat()
@@ -497,5 +504,7 @@ module.exports.checkContractPermission = checkContractPermission
 module.exports.countItemByProject = countItemByProject
 module.exports.getAllDataFromLosing = getAllDataFromLosing
 module.exports.getContractByProject = getContractByProject
+module.exports.checkDuplicate = checkDuplicate
+
 
 

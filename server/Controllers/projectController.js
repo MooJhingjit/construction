@@ -127,11 +127,24 @@ const getDropDown = async (req, res, next) => {
   res.status(200).json(data)
 }
 
+const checkDuplicate = async (req, res, next) => {
+  let project = new projectModel()
+  if (req.query.field === 'code') {
+    project.code = req.query.value
+  } else if (req.query.field === 'name') {
+    project.name = req.query.value
+  }
+  project.id = req.query.id
+  let data = await project.checkDuplicate()
+  res.status(200).json(data)
+}
+
 const getDetailById = async (projectId) => {
   let projectItem = new projectModel(projectId)
   project = await projectItem.getData()
   return project[0]
 }
+
 module.exports.getStat = getStat
 module.exports.getData = getData
 module.exports.getDropDown = getDropDown
@@ -141,3 +154,4 @@ module.exports.updateData = updateData
 module.exports.deleteData = deleteData
 module.exports.getDetailById = getDetailById
 module.exports.getAllDataFromLosing = getAllDataFromLosing
+module.exports.checkDuplicate = checkDuplicate

@@ -8,4 +8,5 @@ router.post('/project', projectController.createData);
 router.put('/project/:id', projectController.updateData);
 router.delete('/project/:id', projectController.deleteData);
 router.get('/project-selection', projectController.getDropDown);
+router.get('/project-duplicate', projectController.checkDuplicate);
 module.exports = router;

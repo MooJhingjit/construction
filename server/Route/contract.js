@@ -12,4 +12,5 @@ router.put('/contract-progress/:id', contractController.updateContractProgress);
 router.delete('/contract/:id', contractController.deleteData);
 router.get('/contract-selection', contractController.getDropDown);
 router.get('/contract-reset/:key', contractController.resetData);
+router.get('/contract-duplicate', contractController.checkDuplicate);
 module.exports = router;

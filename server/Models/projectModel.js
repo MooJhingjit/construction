@@ -80,10 +80,26 @@ module.exports =  class project {
     return result
   }
 
+  async checkDuplicate () {
+    let result = await this.knex.select('id')
+    .from('project')
+    .where(this.getCondition())
+    .where('id', '<>', this.id)
+    
+    await this.knex.destroy()
+    return result
+  }
+
   getCondition () {
     let conditions = {}
     if (this.status) {
       conditions.status = this.status
+    }
+    if (this.code) {
+      conditions.code = this.code
+    }
+    if (this.name) {
+      conditions.name = this.name
     }
     return conditions
   }

@@ -137,10 +137,22 @@ module.exports =  class Contract {
     return result
   }
 
+  async checkDuplicate () {
+    let result = await this.knex.select('id')
+    .from('contract')
+    .where(this.getCondition())
+    
+    await this.knex.destroy()
+    return result
+  }
+
   getCondition () {
     let conditions = {}
     if (this.status) {
       conditions.status = this.status
+    }
+    if (this.code) {
+      conditions.code = this.code
     }
     if (this.project_id) {
       conditions.project_id = this.project_id

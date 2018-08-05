@@ -13,18 +13,23 @@ async function getFullMaterial (req, res, next) {
     items = await material.getDataByAttr()
     result = await Promise.all(
       items.map(async item => {
-        let dataPrice = await material.getDataPrice(item.id)
+        // don't do as below, the connection will be promise rejections
+        // let material = new materialModel()
+        // material.house_id = req.query.house
+        // material.store_id = req.params.key
+        let dataQuantity = await material.getDataQuantity(item.id)
         let priceObj = {
           l_default: {},
           r_default: {}
         }
+        // console.log(dataQuantity)
         let side = []
         side['left'] = 'l_default'
         side['right'] = 'r_default'
-        for (let index in dataPrice) {
-          let leftRight = dataPrice[index].side
-          let key = dataPrice[index].color
-          let value = dataPrice[index].price
+        for (let index in dataQuantity) {
+          let leftRight = dataQuantity[index].side
+          let key = dataQuantity[index].color
+          let value = dataQuantity[index].price
           priceObj[side[leftRight]][key] = value
         }
         let materialGroupDetail = new materialGroupDetailModel()
@@ -34,7 +39,6 @@ async function getFullMaterial (req, res, next) {
         materialGroupDetailRes.map(item => {
           materialGroupArr.push(item.id)
         })
-        // console.log(materialGroup)
         let result = {
           id: item.id,
           house_id: item.house_id,
@@ -48,15 +52,6 @@ async function getFullMaterial (req, res, next) {
           r_default: priceObj.r_default,
           materialGroup: materialGroupArr
         }
-        // return Object.assign({}, {
-        //   id: item.id,
-        //   house_id: item.house_id,
-        //   store_id: item.store_id,
-        //   name: item.name,
-        //   unit: item.unit,
-        //   amount: item.amount,
-        //   price: item.price,
-        // }, priceObj)
         return result
       })
     )
@@ -125,7 +120,7 @@ async function createData (req, res, next) {
 }
 
 async function createPriceDetail (instant, obj, isUpdate) {
-  let result = await instant.savePrice(obj)
+  let result = await instant.saveQuantity(obj)
   return result
 }
 
@@ -158,7 +153,7 @@ async function cleanData (inputs) {
   })
   item.clearMaterialDetail(id)
   item.clearMaterial(inputId) // not in
-  await materialGroup.clearMaterialGroup(id)
+  await materialGroup.clearMaterialGroup(id)  
 }
 
 async function deleteMaterail (req, res, next) {
