@@ -114,7 +114,7 @@ const variable = {
   userPermission: [
     {key: 'admin', name: 'ผู้ดูแลระบบ', allow: '*'},
     {key: 'purchasing', name: 'จัดซื้อ', allow: '*'},
-    {key: 'technician', name: 'หัวหน้างาน', allow: ['FrontSite', 'FrontSiteUpdate', 'Profile']}
+    {key: 'technician', name: 'หัวหน้างาน', allow: ['FrontSite', 'FrontSiteUpdate', 'Profile', 'FrontSiteVerify']}
   ]
 
 }

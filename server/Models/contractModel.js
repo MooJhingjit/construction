@@ -56,7 +56,9 @@ module.exports =  class Contract {
       .from('contract')
       .join('project', 'project.id', '=', 'contract.project_id')
       .where({'contract.status': 'ip'}).orWhere({'contract.status': 'wait'})
-      // .groupBy('project.id')
+      // .where(function() {
+      //   this.where({'contract.status': 'ip'}).orWhere({'contract.status': 'wait'})
+      // }).where({'contract.assign': this.assign})
       .orderBy('contract.created_at', 'desc')
     }
     

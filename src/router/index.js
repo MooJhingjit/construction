@@ -13,6 +13,7 @@ const Contract = () => import('@Pages/Contract')
 const CreateContract = () => import('@Pages/Contract/create')
 const FrontSite = () => import('@Pages/FrontSite')
 const FrontSiteUpdate = () => import('@Pages/FrontSite/update')
+const FrontSiteVerify = () => import('@Pages/FrontSite/verify')
 const Losing = () => import('@Pages/Losing')
 const LosingDetail = () => import('@Pages/Losing/detail')
 const Material = () => import('@Pages/Material')
@@ -22,7 +23,8 @@ const House = () => import('@Pages/House')
 const Workorder = () => import('@Pages/Workorder')
 const EditWorkorder = () => import('@Pages/Workorder/edit')
 const Profile = () => import('@Pages/Profile')
-
+const PayingPeriod = () => import('@Pages/PayingPeriod')
+const Worksheet = () => import('@Pages/PayingPeriod/worksheet')
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -94,6 +96,11 @@ export default new VueRouter({
       component: FrontSiteUpdate
     },
     {
+      path: '/front-site/verify/:key',
+      name: 'FrontSiteVerify',
+      component: FrontSiteVerify
+    },
+    {
       path: '/losing',
       name: 'Losing',
       component: Losing
@@ -137,6 +144,16 @@ export default new VueRouter({
       path: '/profile',
       name: 'Profile',
       component: Profile
+    },
+    {
+      path: '/paying-period',
+      name: 'PayingPeriod',
+      component: PayingPeriod
+    },
+    {
+      path: '/paying-period/worksheet',
+      name: 'Worksheet',
+      component: Worksheet
     }
   ]
 })

@@ -185,7 +185,9 @@ const getDropDown = async (req, res, next) => {
   let type = 'normal'
   if (req.query) {
     if (req.query.type === 'project-search') {
-      type = req.query.type 
+      type = req.query.type
+      let userAuth = helpers.getUserAuth(req.headers['authorization'])
+      model.assign = userAuth.id
     }
   }
   let data = {}

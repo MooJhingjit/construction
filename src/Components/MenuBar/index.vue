@@ -26,7 +26,7 @@
     </div>
     <div class="level-item has-text-centered" v-if="IS_ADMIN() || IS_PURCHASING()">
       <div>
-        <p class="heading">
+        <p class="heading" @click="GOTOPAGE('PayingPeriod', '')">
           <!-- <router-link to="./foo">จ่ายค่างวด</router-link> -->
           จ่ายค่างวด
         </p>

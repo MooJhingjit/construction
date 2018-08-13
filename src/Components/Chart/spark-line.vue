@@ -33,6 +33,7 @@ export default {
     // }
   },
   created () {
+    this.local.data = this.data
     this.setData()
   },
   methods: {
@@ -54,6 +55,7 @@ export default {
   },
   watch: {
     data () {
+      console.log(this.data)
       this.local.data = this.data
       this.setData()
       // this.data = this.data
