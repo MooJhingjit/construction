@@ -1,6 +1,9 @@
 html { 
     font-size: 14px !important;
     body{
+        .table {
+          margin-bottom: 0.5rem !important;
+        }
         .container-block{
             display: flex;
         }
@@ -1096,11 +1099,59 @@ html {
                         }
                       }
                       .c-body{
-
+                        .block:not(:last-child){
+                          margin-bottom: 0em;
+                        }
                         padding: 15px 0; 
                         // overflow: auto;
                         &>table{
                           min-width: 550px;
+                        }
+                        .item-header{
+                          padding: 10px;
+                          background: $white;
+                          justify-content: space-around;
+                          .time{
+                            font-size: 1.1em;
+                            font-weight: bold;
+                            min-width: 100px;
+                          }
+                          .order-name{
+                            justify-content: flex-end;
+                            flex-direction: row;
+                            align-items: center;
+                            .name{
+                              font-weight: bold;
+                              width: 140x;
+                              margin-right: 5px;
+                            }
+                            .control{
+                              margin-left: 5px;
+                            }
+                          }
+                          flex-direction: row;
+                        }
+                        .item-body{
+                          padding: 10px;
+                          background: $white;
+                          .inputs{
+                            .control{
+                              flex-direction: row;
+                              input{
+                                margin-right: 5px;
+                              }
+                              button{
+                                flex: 0;
+                                min-width: 40px;
+                              }
+                            }
+                            input{
+                              margin-bottom: 10px;
+                            }
+                          }
+                        }
+                        .item-footer{
+                          background: transparent !important;
                         }
                       }
                       // padding: 0.75rem;
@@ -1175,7 +1226,7 @@ html {
                           }
                         }
                       }
-                      .footer-panel{
+                      .footer-panel, .footer-block{
                         flex-direction: column;
                         flex-wrap: wrap;
                         justify-content: space-around;

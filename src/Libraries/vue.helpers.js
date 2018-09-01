@@ -29,6 +29,16 @@ export default {
       })
       return position
     },
+    TECHNICIANJOBTYPE () {
+      let jobType = config.variable.technicianJobType
+      jobType = jobType.map((item) => {
+        return {
+          key: item.key,
+          name: item.name
+        }
+      })
+      return jobType
+    },
     USERTYPE () {
       if (this.userData !== undefined && this.userData.position !== undefined) {
         return this.userData.position.toLowerCase()

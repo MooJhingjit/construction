@@ -8,40 +8,17 @@
         <div class="todo-lists">
           <table class="table is-bordered">
             <thead>
-              <th>งวด</th>
-              <th>งาน</th>
-              <th>ตรวจสอบ</th>
+              <th>หมวด</th>
+              <th>งวด/รายการ</th>
+              <!-- <th>ตรวจสอบ</th> -->
             </thead>
             <tbody>
               <tr>
-                <td>1</td>
+                <td>xxxxxxxx</td>
                 <td class="list">
-                  <div>งาน XXXXXXXXXXX</div>
-                  <div>งาน XXXXXXXXXXX</div>
-                  <div>งาน XXXXXXXXXXX</div>
-                </td>
-                <td class="status" width="100">
-                  <div>
-                    <my-action
-                    :type="'null'"
-                    :obj="{title: 'ผ่าน', color: 'button is-outlined', isConfirm: true}"
-                    >
-                    </my-action>
-                  </div>
-                  <div>
-                    <my-action
-                    :type="'null'"
-                    :obj="{title: 'ผ่าน', color: 'button is-outlined', isConfirm: true}"
-                    >
-                    </my-action>
-                  </div>
-                  <div>
-                    <my-action
-                    :type="'null'"
-                    :obj="{title: 'ผ่าน', color: 'button is-outlined', isConfirm: true}"
-                    >
-                    </my-action>
-                  </div>
+                  <div>1 งาน XXXXXXXXXXX</div>
+                  <div>2 งาน XXXXXXXXXXX</div>
+                  <div>3 งาน XXXXXXXXXXX</div>
                 </td>
               </tr>
             </tbody>
@@ -114,7 +91,7 @@ export default {
       this.local.project = itemObj.data.project
       this.local.contract = itemObj.data.contract
       this.local.time = itemObj.data.time
-    },
+    }
     // showTaskDetail (task) {
     //   this.$refs.modelPanel.isActive = true
     //   this.local.modelData = task

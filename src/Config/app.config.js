@@ -69,6 +69,12 @@ const api = {
     'home': '/losing-home',
     'index': '/losing',
     'fullObj': '/losing-full'
+  },
+  'technician': {
+    'index': '/technician'
+  },
+  'workGroup': {
+    'index': '/work-group'
   }
 }
 
@@ -115,8 +121,12 @@ const variable = {
     {key: 'admin', name: 'ผู้ดูแลระบบ', allow: '*'},
     {key: 'purchasing', name: 'จัดซื้อ', allow: '*'},
     {key: 'technician', name: 'หัวหน้างาน', allow: ['FrontSite', 'FrontSiteUpdate', 'Profile', 'FrontSiteVerify']}
+  ],
+  technicianJobType: [
+    {key: 1, name: 'งานระบบไฟฟ้า'},
+    {key: 2, name: 'งานระบบประปาและสุขาภิบาล'},
+    {key: 3, name: 'งานก่ออิฐฉาบปูน'}
   ]
-
 }
 
 export default {

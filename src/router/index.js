@@ -25,6 +25,11 @@ const EditWorkorder = () => import('@Pages/Workorder/edit')
 const Profile = () => import('@Pages/Profile')
 const PayingPeriod = () => import('@Pages/PayingPeriod')
 const Worksheet = () => import('@Pages/PayingPeriod/worksheet')
+const Approve = () => import('@Pages/PayingPeriod/approve')
+const Technician = () => import('@Pages/PayingPeriod/technician')
+const WorkGroup = () => import('@Pages/WorkGroup')
+const WorkGroupDetails = () => import('@Pages/WorkGroup/detail')
+const ExtraJob = () => import('@Pages/PayingPeriod/extra-job')
 Vue.use(VueRouter)
 
 export default new VueRouter({
@@ -154,6 +159,31 @@ export default new VueRouter({
       path: '/paying-period/worksheet',
       name: 'Worksheet',
       component: Worksheet
+    },
+    {
+      path: '/paying-period/approve',
+      name: 'Approve',
+      component: Approve
+    },
+    {
+      path: '/paying-period/technician',
+      name: 'Technician',
+      component: Technician
+    },
+    {
+      path: '/work-group',
+      name: 'WorkGroup',
+      component: WorkGroup
+    },
+    {
+      path: '/work-group/:key',
+      name: 'WorkGroupDetails',
+      component: WorkGroupDetails
+    },
+    {
+      path: '/paying-period/extra-job',
+      name: 'ExtraJob',
+      component: ExtraJob
     }
   ]
 })

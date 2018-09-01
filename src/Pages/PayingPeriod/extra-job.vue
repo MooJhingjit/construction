@@ -36,14 +36,15 @@
                 <div class="block"></div>
                 <div class="block"></div>
               </div>
-              <table class="table rows-table is-hoverable">
+               <table class="table rows-table is-hoverable">
                 <thead>
                   <tr>
                     <th>หมวด</th>
                     <th>งวด/รายการ</th>
                     <th width="80">หน่วย</th>
-                    <th>ราคา</th>
+                    <th width="80">ราคา</th>
                     <!-- <th width="80">ตรวจสอบ</th> -->
+                    <th width="">หมายเหตุ</th>
                     <th width="80">สถานะ</th>
                   </tr>
                 </thead>
@@ -56,45 +57,30 @@
                       ></my-input>
                     </td>
                     <td>
-                      <p>
-                        abc <input type="checkbox">
-                      </p>
-                       <p>
-                        abc <input type="checkbox">
-                      </p>
-                       <p>
-                        abc <input type="checkbox" disabled>
-                      </p>
-                       <p>
-                        abc <input type="checkbox">
-                      </p>
-                    </td>
-                    <td>
-                      <my-input
-                        :value="''"
-                        :inputObj="{type: 'text', name: 'store_address', placeholder: '', validate: ''}"
-                      ></my-input>
-                      <my-input
-                        :value="''"
-                        :inputObj="{type: 'text', name: 'store_address', placeholder: '', validate: ''}"
-                      ></my-input>
-                      <my-input
-                        :value="''"
-                        :inputObj="{type: 'text', name: 'store_address', placeholder: '', validate: ''}"
-                      ></my-input>
                       <my-input
                         :value="''"
                         :inputObj="{type: 'text', name: 'store_address', placeholder: '', validate: ''}"
                       ></my-input>
                     </td>
                     <td>
-                      <p>100.00</p>
-                      <p>100.00</p>
-                      <p>100.00</p>
-                      <p>100.00</p>
+                      <my-input
+                        :value="''"
+                        :inputObj="{type: 'text', name: 'store_address', placeholder: '', validate: ''}"
+                      ></my-input>
                     </td>
                     <td>
+                      <my-input
+                        :value="''"
+                        :inputObj="{type: 'text', name: 'store_address', placeholder: '', validate: ''}"
+                      ></my-input>
                     </td>
+                    <td>
+                      <my-input
+                        :value="''"
+                        :inputObj="{type: 'text', name: 'store_address', placeholder: '', validate: ''}"
+                      ></my-input>
+                    </td>
+                     <td></td>
                   </tr>
                 </tbody>
               </table>
@@ -103,14 +89,14 @@
               <button class="button" @click="editRow('add')"><i class="fa fa-plus" aria-hidden="true"></i></button>
             </div>
           </div>
-          <!-- <div class="container-block footer-panel" >
+          <div class="container-block footer-panel" >
             <my-action
               type="update"
               :obj="{title: 'บันทึกข้อมูล', color: 'is-info', isConfirm: true}"
               @clickEvent="submitForm('')"
             >
             </my-action>
-          </div> -->
+          </div>
         </div>
       </div>
     </section>
@@ -131,17 +117,17 @@ export default {
     myAction,
     myInput
   },
-  name: 'WorkSheetPage',
+  name: 'ApprovePage',
   data () {
     return {
       local: {
         pageObj: {
           items: [
             {name: 'จ่ายค่างวด', route: 'PayingPeriod', key: '', active: true, icon: 'fa fa-exchange'},
-            {name: 'ใบส่งงาน', route: 'Worksheet', key: '', active: true, icon: ''}
+            {name: 'งานพิเศษ', route: 'ExtraJob', key: '', active: true, icon: ''}
           ],
           template: {
-            class: 'work-sheet-page'
+            class: 'extra-job-page'
           }
         }
       }
@@ -171,11 +157,11 @@ export default {
     padding: 5px;
   }
 }
-.detail-panel .c-body{
-  padding: 0 !important;
-}
 .container-block.result{
   padding: 0 0 0 5px;
+}
+.detail-panel .c-body{
+  padding: 0 !important;
 }
 .block.right{
   justify-content: flex-end;

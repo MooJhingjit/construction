@@ -23,6 +23,8 @@
                   </div>
                 </div>
               </article>
+            </div>
+            <div class="tile is-parent is-vertical is-4">
               <article class="tile is-child notification">
                  <div class="container-block stat">
                   <div class="block chart container-block">
@@ -36,10 +38,12 @@
                     </div>
                   </div>
                   <div class="block detail container-block">
-                    <button class="button" @click="GOTOPAGE('Contract', 'all')"><i class="fa fa-plus-circle" aria-hidden="true"></i> อนุมัติการจ่าย</button>
+                    <button class="button" @click="GOTOPAGE('Approve', '')"><i class="fa fa-plus-circle" aria-hidden="true"></i> อนุมัติการจ่าย</button>
                   </div>
                 </div>
               </article>
+            </div>
+            <div class="tile is-parent is-vertical is-4">
               <article class="tile is-child notification">
                  <div class="container-block stat">
                   <div class="block chart container-block">
@@ -53,7 +57,7 @@
                     </div>
                   </div>
                   <div class="block detail container-block">
-                    <button class="button" @click="GOTOPAGE('Contract', 'all')"><i class="fa fa-plus-circle" aria-hidden="true"></i> งานพิเศษ</button>
+                    <button class="button" @click="GOTOPAGE('ExtraJob', '')"><i class="fa fa-plus-circle" aria-hidden="true"></i> งานพิเศษ</button>
                   </div>
                 </div>
               </article>
@@ -70,6 +74,23 @@
                   </div>
                 </div>
               </article> -->
+            </div>
+          </div>
+          <div class="tile function">
+            <!-- <div class="tile is-parent is-vertical is-4">
+              <article class="tile is-child notification container-block">
+                <span class="block title"><i class="fa fa-th-large" aria-hidden="true"></i> รายการสินค้า</span>
+              </article>
+            </div> -->
+            <div class="tile is-parent is-vertical is-6">
+              <article class="tile is-child notification container-block" @click="GOTOPAGE('Technician', '')">
+                <span class="block title"><i class="fa fa-users" aria-hidden="true"></i> รายชื่อช่าง</span>
+              </article>
+            </div>
+            <div class="tile is-parent is-vertical is-6">
+              <article class="tile is-child notification container-block" @click="GOTOPAGE('WorkGroup', '')">
+                <span class="block title"><i class="fa fa-th" aria-hidden="true"></i> หมวดงาน</span>
+              </article>
             </div>
           </div>
           <!-- <div class="tile is-parent">
@@ -125,7 +146,7 @@ export default {
             barColor: '#4571BB',
             class: 'submit-jobs',
             dataSets: {
-              values: [1, 2, 3, 1, 2, 1, 2,],
+              values: [1, 2, 3, 1, 2, 1, 2],
               label: ['xxxx', 'xxxx', 'xxxx', 'xxxx', 'xxxx', 'xxxx', 'xxxx']
             },
             count: 12
@@ -135,7 +156,7 @@ export default {
             barColor: '#4571BB',
             class: 'approve-payment',
             dataSets: {
-              values: [1, 2, 1, 1, 2, 3, 1,],
+              values: [1, 2, 1, 1, 2, 3, 1],
               label: ['xxxx', 'xxxx', 'xxxx', 'xxxx', 'xxxx', 'xxxx', 'xxxx']
             },
             count: 11
@@ -145,7 +166,7 @@ export default {
             barColor: '#4571BB',
             class: 'extra-jobs',
             dataSets: {
-              values: [3, 2, 3, 1, 2, 2, 2,],
+              values: [3, 2, 3, 1, 2, 2, 2],
               label: ['xxxx', 'xxxx', 'xxxx', 'xxxx', 'xxxx', 'xxxx', 'xxxx']
             },
             count: 15

@@ -17,7 +17,9 @@ app.use('/api',
     require('./ordering'),
     require('./contract'),
     require('./frontSite'),
+    require('./workGroup'),
     require('./workOrder'),
+    require('./technician'),
     require('./materialGroup')
   ]
 );
