@@ -288,13 +288,16 @@ export default {
     setCondition (index, value, type, fullItem) {
       let houseId = this.local.houseTemplate.selected
       let exist = false
-      this.local.itemLists[index].condition.map((item) => {
-        if (item.house_id === houseId) {
-          exist = true
-          item[type] = value
-        }
-      })
+      if (this.local.itemLists[index].condition !== undefined) {
+        this.local.itemLists[index].condition.map((item) => {
+          if (item.house_id === houseId) {
+            exist = true
+            item[type] = value
+          }
+        })
+      }
       if (!exist) {
+        this.local.itemLists[index].condition = []
         let obj = {
           house_id: houseId,
           order: fullItem.order,
@@ -308,7 +311,7 @@ export default {
       }
     },
     getCondition (condition, type) {
-      if (this.local.houseTemplate.selected === null) return ''
+      if (this.local.houseTemplate.selected === null || condition === undefined) return ''
       let obj = condition.filter((item) => {
         return item.house_id === this.local.houseTemplate.selected
       })[0]
