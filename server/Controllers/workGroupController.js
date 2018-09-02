@@ -1,13 +1,20 @@
 const helpers = require('../Libraries/helpers')
 const workGroupModel = require('../Models/workGroupModel')
+const workGroupDetail = require('./workGroupDetailController')
 
-const getData = (req, res, next) => {
+const getData = async (req, res, next) => {
   let id = req.params.key
   let items = new workGroupModel(id)
-  items.getData()
-  .then((result) => {
-    res.status(200).json(result[0])
-  })
+  let result = await items.getData()
+  if (req.query.type === 'with-detail') {
+    let houseId = req.query.houseId
+    let groupId = result[0].id
+    let detail = await workGroupDetail.getData(groupId, houseId)
+    result[0].details = detail
+  } else {
+    result = result[0]
+  }
+  res.status(200).json(result)
 }
 
 async function getAllData (req, res, next) {
@@ -45,6 +52,7 @@ async function updateData (req, res, next) {
 async function deleteData (req, res, next) {
   let item = new workGroupModel(req.params.id)
   let result = await item.delete()
+  await workGroupDetail.deleteData(req.params.id)
   res.status(200).json({})
 }
 

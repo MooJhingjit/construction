@@ -7,32 +7,34 @@
             <div class="container-block block c-header">
               <div class="block">
                 <my-auto-complete
-                @select="projectSelectedHandle"
-                :arrInputs="[]"
+                @select="val => {local.technicians.selected = val}"
+                :arrInputs="local.technicians.inputs"
                 placeholder="ค้นหาช่าง"
                 label=""
                 ></my-auto-complete>
               </div>
               <div class="block">
                 <my-auto-complete
+                v-if="local.technicians.selected !== null"
                 @select="projectSelectedHandle"
-                :arrInputs="[]"
+                :arrInputs="'project'"
                 placeholder="ค้นหาโครงการ"
                 label=""
                 ></my-auto-complete>
               </div>
               <div class="block">
                 <my-auto-complete
-                @select="projectSelectedHandle"
-                :arrInputs="[]"
+                v-if="local.technicians.selected !== null && local.project.selected !== null"
+                :arrInputs="local.plan.inputs"
+                @select="planSelectedHandle"
                 placeholder="ค้นหาแปลง"
                 label=""
                 ></my-auto-complete>
               </div>
             </div>
-            <div class="block c-body">
+            <div class="block c-body" v-if="local.project.selected !== null && local.plan.selected !== null">
               <div class="container-block result">
-                <div class="block">แบบบ้าน 198PWY32T</div>
+                <div class="block">แบบบ้าน {{houseId}}</div>
                 <div class="block"></div>
                 <div class="block"></div>
               </div>
@@ -99,18 +101,10 @@
                 </tbody>
               </table>
             </div>
-            <div class="container-block block right">
+            <div class="container-block block right" v-if="local.project.selected !== null && local.plan.selected !== null">
               <button class="button" @click="editRow('add')"><i class="fa fa-plus" aria-hidden="true"></i></button>
             </div>
           </div>
-          <!-- <div class="container-block footer-panel" >
-            <my-action
-              type="update"
-              :obj="{title: 'บันทึกข้อมูล', color: 'is-info', isConfirm: true}"
-              @clickEvent="submitForm('')"
-            >
-            </my-action>
-          </div> -->
         </div>
       </div>
     </section>
@@ -118,7 +112,8 @@
 
 <script>
 import breadcrumbBar from '@Components/Breadcrumb'
-// import service from '@Services/app-service'
+import service from '@Services/app-service'
+import config from '@Config/app.config'
 import myAutoComplete from '@Components/Form/my-autocomp'
 import myAction from '@Components/Form/my-action'
 import myInput from '@Components/Form/my-input'
@@ -143,22 +138,82 @@ export default {
           template: {
             class: 'work-sheet-page'
           }
+        },
+        technicians: {
+          inputs: [],
+          selected: null
+        },
+        project: {
+          selected: null
+        },
+        plan: {
+          inputs: [],
+          selected: null,
+          temp: []
+        },
+        contract: {
+          temp: [],
+          selected: []
         }
       }
     }
   },
   computed: {
-    // resourceName () {
-    //   return config.api.workOrder.index
-    // },
+    houseId () {
+      return this.local.contract.selected.house_id
+    }
     // materialGroupResource () {
     //   return config.api.materialGroup.index
     // }
   },
-  created () {
+  async created () {
+    await this.getTechnician()
+    await this.getAllPlans()
   },
   methods: {
-    projectSelectedHandle () {
+    async getAllPlans () {
+      let queryString = this.BUILDPARAM({type: 'project-search'})
+      let obj = await service.getResource({resourceName: config.api.contract.dropdown, queryString})
+      this.local.contract.temp = obj.data
+    },
+    async getTechnician () {
+      let queryString = {}
+      let technicians = await service.getResource({resourceName: config.api.technician.dropdown, queryString})
+      this.local.technicians.inputs = technicians.data
+    },
+    technicianSelectedHandle (obj) {
+      this.local.technicians.selected = obj.key
+    },
+    projectSelectedHandle (obj) {
+      if (obj === null) {
+        this.local.plan.inputs = []
+        return
+      }
+      this.local.project.selected = obj.key
+      this.local.plan.selected = null
+      this.setPlanData()
+    },
+    setPlanData () {
+      let planObj = this.local.contract.temp.filter((item) => {
+        return item.project_id === this.local.project.selected
+      })
+      this.local.plan.inputs = planObj.map(item => {
+        return {
+          key: item.plan,
+          value: item.plan
+        }
+      })
+    },
+    planSelectedHandle (obj) {
+      this.local.plan.selected = obj.key
+      this.setContract()
+    },
+    setContract () {
+      let contract = this.local.contract.temp.filter((item) => {
+        return item.project_id === this.local.project.selected
+        && item.plan === this.local.plan.selected
+      })
+      this.local.contract.selected = contract[0]
     }
   }
 }

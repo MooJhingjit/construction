@@ -26,7 +26,7 @@ const Profile = () => import('@Pages/Profile')
 const PayingPeriod = () => import('@Pages/PayingPeriod')
 const Worksheet = () => import('@Pages/PayingPeriod/worksheet')
 const Approve = () => import('@Pages/PayingPeriod/approve')
-const Technician = () => import('@Pages/PayingPeriod/technician')
+const Technician = () => import('@Pages/Technician')
 const WorkGroup = () => import('@Pages/WorkGroup')
 const WorkGroupDetails = () => import('@Pages/WorkGroup/detail')
 const ExtraJob = () => import('@Pages/PayingPeriod/extra-job')
@@ -166,7 +166,7 @@ export default new VueRouter({
       component: Approve
     },
     {
-      path: '/paying-period/technician',
+      path: '/technician',
       name: 'Technician',
       component: Technician
     },

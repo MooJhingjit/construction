@@ -17,10 +17,12 @@
 </template>
 
 <script>
+import service from '@Services/app-service'
+import config from '@Config/app.config'
 export default {
   props: {
     arrInputs: {
-      type: Array,
+      type: [Array, String],
       required: true
     },
     placeholder: {
@@ -34,7 +36,7 @@ export default {
   },
   data () {
     return {
-      data: this.arrInputs,
+      data: [],
       keepFirst: false,
       openOnFocus: true,
       name: '',
@@ -51,17 +53,42 @@ export default {
       })
     }
   },
+  async created () {
+    if (typeof this.arrInputs === 'string') {
+      await this.getInputs()
+    } else {
+      this.data = this.arrInputs
+    }
+  },
   methods: {
     searchValue (val) {
       this.$emit('searchValue', val)
     },
     selectedValue (val) {
       // console.log(val)
+      if (val === null) {
+        return
+      }
       this.$emit('select', val)
     },
     setValue (obj) {
       this.name = obj.key
       this.selected = obj
+    },
+    async getInputs () {
+      let inputsType = this.arrInputs
+      let queryString = {}
+      let obj = []
+      switch(inputsType) {
+        case 'project':
+          obj = await service.getResource({resourceName: config.api.project.dropdown, queryString})
+          this.data = obj.data
+          break;
+        case 'technician':
+          data = await service.getResource({resourceName: config.api.technician.dropdown, queryString}).data
+          this.data = obj.data
+          break;
+      }
     }
   },
   watch: {

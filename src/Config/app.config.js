@@ -71,10 +71,12 @@ const api = {
     'fullObj': '/losing-full'
   },
   'technician': {
-    'index': '/technician'
+    'index': '/technician',
+    'dropdown': '/technician-selection'
   },
   'workGroup': {
-    'index': '/work-group'
+    'index': '/work-group',
+    'detail': '/work-group-detail'
   }
 }
 
