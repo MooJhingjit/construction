@@ -79,15 +79,19 @@ export default {
       let inputsType = this.arrInputs
       let queryString = {}
       let obj = []
-      switch(inputsType) {
+      switch (inputsType) {
         case 'project':
           obj = await service.getResource({resourceName: config.api.project.dropdown, queryString})
           this.data = obj.data
-          break;
+          break
         case 'technician':
-          data = await service.getResource({resourceName: config.api.technician.dropdown, queryString}).data
+          obj = await service.getResource({resourceName: config.api.technician.dropdown, queryString})
           this.data = obj.data
-          break;
+          break
+        case 'workGroup':
+          obj = await service.getResource({resourceName: config.api.workGroup.dropdown, queryString})
+          this.data = obj.data
+          break
       }
     }
   },

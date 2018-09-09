@@ -164,7 +164,7 @@ export default {
       this.NOTIFY('error')
     },
     cleanInput () {
-      for(let key in this.local.inputs) {
+      for (let key in this.local.inputs) {
         this.local.inputs[key] = ''
       }
     }

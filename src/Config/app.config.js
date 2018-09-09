@@ -76,7 +76,11 @@ const api = {
   },
   'workGroup': {
     'index': '/work-group',
-    'detail': '/work-group-detail'
+    'detail': '/work-group-detail',
+    'dropdown': '/work-group-selection'
+  },
+  'workSheet': {
+    'index': '/work-sheet'
   }
 }
 
