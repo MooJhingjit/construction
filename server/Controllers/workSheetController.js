@@ -5,7 +5,9 @@ const workSheetDetail = require('./workSheetDetailController')
 const getData = async (req, res, next) => {
   // let technicianId = req.params.technicianId
   let item = new workSheetModel()
-  item.technician_id = req.params.key
+  if (req.params.key !== 'all') {
+    item.technician_id = req.params.key
+  }
   item.project_id = req.query.project
   item.plan = req.query.plan
   let group = await item.getData()
@@ -52,10 +54,9 @@ async function createData (req, res, next) {
 }
 
 async function updateData (req, res, next) {
-  // let item = new workSheetModel(req.params.id)
-  // item.name = req.body.data.name
-  // let result = await item.update()
-  // res.status(200).json(result)
+  // let obj = req.body.data
+  // await workSheetDetail.updateOleOne(obj.itemId)
+  // res.status(200).json()
 }
 
 async function deleteData (req, res, next) {

@@ -37,8 +37,8 @@
           </table>
         </div>
         <div class="actions container-block">
-          <button class="button is-info block" @click="GOTOPAGE('FrontSiteUpdate', item.code)">สถานะงาน</button>
-          <button class="button is-warning block" @click="GOTOPAGE('FrontSiteVerify', item.code)">ตรวจสอบงวดงาน</button>
+          <button class="button is-info block" @click="GOTOPAGE('FrontSiteUpdate', item.id)">สถานะงาน</button>
+          <button class="button is-warning block" @click="GOTOPAGE('FrontSiteVerify', item.id)">ตรวจสอบงวดงาน</button>
         </div>
        </article>
        <!-- <article class="tile is-child notification">

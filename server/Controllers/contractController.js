@@ -462,10 +462,16 @@ async function getAllDataFromLosing (projectId) {
   return result
 }
 
-const getDetailByContractCode = async (typeSelect, code) => {
+const getDetailByContractCode = async (typeSelect, code, byCode = true) => {
   let contractItem = new contractModel()
-  contractItem.code = code
-  let contract = await contractItem.getData()
+  if (byCode) {
+    condition = 'code'
+    contractItem.code = code
+  } else {
+    condition = 'id'
+    contractItem.id = code
+  }
+  let contract = await contractItem.getData(condition)
   let project = [null]
   if (typeSelect.indexOf('project') >= 0) {
     let projectItem = new projectModel(contract[0].project_id)

@@ -7,7 +7,9 @@ module.exports =  class WorkSheetDetail {
     this.knex = knex(db.config);
     this.id = id;
     this.work_sheet_id
+    this.time
     this.name
+    this.amount
     this.unit
     this.price
     this.total_price
@@ -38,7 +40,9 @@ module.exports =  class WorkSheetDetail {
   async save () {
     let result = await this.knex('work_sheet_detail').insert({
       work_sheet_id: this.work_sheet_id,
+      time: this.time,
       name: this.name,
+      amount: this.amount,
       unit: this.unit,
       price: this.price,
       total_price: this.total_price,
@@ -49,13 +53,14 @@ module.exports =  class WorkSheetDetail {
   }
 
   async update () {
-    // let result = await this.knex('work_group')
-    // .where({id: this.id})
-    // .update({
-    //   name: this.name
-    // })
-    // await this.knex.destroy()
-    // return result
+    let result = await this.knex('work_sheet_detail')
+    .where({id: this.id})
+    .update({
+      amount: this.amount,
+      status: this.status
+    })
+    await this.knex.destroy()
+    return result
   }
 
   async delete () {

@@ -81,6 +81,9 @@ const api = {
   },
   'workSheet': {
     'index': '/work-sheet'
+  },
+  'workSheetDetail': {
+    'index': '/work-sheet-detail'
   }
 }
 
@@ -132,6 +135,14 @@ const variable = {
     {key: 1, name: 'งานระบบไฟฟ้า'},
     {key: 2, name: 'งานระบบประปาและสุขาภิบาล'},
     {key: 3, name: 'งานก่ออิฐฉาบปูน'}
+  ],
+  workSheetStatus: [
+    {key: '0', name: 'รอการบันทึก', class: 'is-white'},
+    {key: '1', name: 'รอการตรวจสอบ', class: 'is-light'},
+    {key: '2', name: 'ไม่ผ่านการตรวจสอบ', class: 'is-warning'},
+    {key: '3', name: 'รออนุมัติ', class: 'is-link'},
+    {key: '4', name: 'ไม่ผ่านการอนุมัติ', class: 'is-danger'},
+    {key: '5', name: 'จ่ายเงินแล้ว', class: 'is-success'}
   ]
 }
 

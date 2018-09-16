@@ -242,6 +242,11 @@ export default {
         newArray.push(lookupObject[i])
       }
       return newArray
+    },
+    GETWORKSHEETSTATUS (status) {
+      return config.variable.workSheetStatus.filter((item) => {
+        return item.key === status.toString()
+      })
     }
   }
 }

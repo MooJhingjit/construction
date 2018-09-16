@@ -36,12 +36,11 @@ async function createData (req, res, next) {
 }
 
 async function updateData (req, res, next) {
-  // let groupId = req.params.id
-  // let houseId = req.body.data.houseId
-  // await clearOldOne(groupId, houseId)
-  // let itemLists = req.body.data.itemLists
-  // let result = await saveNewOne(groupId, houseId, itemLists)
-  // res.status(200).json(result)
+  let id = req.params.id
+  let amount = req.body.data.amount
+  let status = req.body.data.status
+  let result = await updateOldOne(id, {amount, status})
+  res.status(200).json(result)
 }
 
 
@@ -71,9 +70,11 @@ const saveNewOne = async (workSheetId, obj) => {
   let totalPrice = 0
   let res = await Promise.all(
     obj.map( async (item) => {
-      totalPrice = parseFloat(item.price) * parseInt(item.unit)
+      totalPrice = parseFloat(item.price) * parseInt(item.amount)
       model.work_sheet_id = workSheetId
+      model.time = item.time
       model.name = item.name
+      model.amount = item.amount
       model.unit = item.unit
       model.price = item.price
       model.total_price = totalPrice
@@ -83,6 +84,20 @@ const saveNewOne = async (workSheetId, obj) => {
   )
   return res
 }
+
+const updateOldOne = async (itemId, obj) => {
+  let model = new workSheetDetailModel(itemId)
+  model.status = obj.status
+  if (obj.amount) {
+    model.amount = obj.amount
+  }
+  // if (obj.price) {
+  //   model.price = obj.price
+  // }
+  let res = await model.update()
+  return res
+}
+
 
 const deleteData = async (groupId) => {
   // let item = new workSheetDetailModel()
@@ -98,5 +113,6 @@ module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.deleteData = deleteData
 module.exports.saveNewOne = saveNewOne
+module.exports.updateOldOne = updateOldOne
 
 

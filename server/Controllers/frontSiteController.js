@@ -8,7 +8,7 @@ async function getAllData (req, res, next) {
 }
 
 async function getData (req, res, next) {
-  let data = await contract.getDetailByContractCode(['project'], req.params.key)
+  let data = await contract.getDetailByContractCode(['project'], req.params.key, false) // false === by id
   data.time = await contract.getContractTime(req.params.key) // false = get all task
   res.status(200).json(data)
 }

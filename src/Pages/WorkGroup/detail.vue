@@ -166,7 +166,7 @@ export default {
         inputTemplate: {
           time: 1,
           name: '',
-          unit: 1,
+          unit: '',
           price: 0,
           note: ''
         }

@@ -22,7 +22,8 @@ app.use('/api',
     require('./workOrder'),
     require('./technician'),
     require('./materialGroup'),
-    require('./workGroupDetail')
+    require('./workGroupDetail'),
+    require('./workSheetDetail')
   ]
 );
 

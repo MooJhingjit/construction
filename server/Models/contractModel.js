@@ -20,14 +20,18 @@ module.exports =  class Contract {
     this.offset = 0
   }
 
-  async getData () {
+  async getData (conditionType = 'code') {
+    let condition = {'contract.code': this.code}
+    if (conditionType === 'id') {
+      condition = {'contract.id': this.id}
+    }
     let result = await this.knex.select('contract.*', 'contract.plan as contractPlan', 'house.*')
     .from('contract')
     .leftJoin('house', function() {
       this.on('contract.house_id', '=', 'house.name')
       .andOn('contract.plan', '=', 'house.plan')
     })
-    .where({'contract.code': this.code})
+    .where(condition)
     await this.knex.destroy()
     return result
   }

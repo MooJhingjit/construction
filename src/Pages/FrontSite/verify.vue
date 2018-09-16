@@ -8,17 +8,23 @@
         <div class="todo-lists">
           <table class="table is-bordered">
             <thead>
-              <th>หมวด</th>
+              <th width="150">หมวด</th>
               <th>งวด/รายการ</th>
               <!-- <th>ตรวจสอบ</th> -->
             </thead>
             <tbody>
-              <tr>
-                <td>xxxxxxxx</td>
-                <td class="list">
-                  <div>1 งาน XXXXXXXXXXX</div>
-                  <div>2 งาน XXXXXXXXXXX</div>
-                  <div>3 งาน XXXXXXXXXXX</div>
+              <tr :key="index" v-for="(workSheet, index) in local.workSheet">
+                <td><p>{{workSheet.work_group_name}}</p></td>
+                <td >
+                  <div class="list"
+                  :key="listIndex"
+                  v-for="(item, listIndex) in workSheet.lists"
+                  @click="showDetail(item, index, listIndex)"
+                  >
+                    {{item.time}} {{item.name}} <span :class="`tag ${getListStatus(item.status, 'class')}`">
+                      {{getListStatus(item.status, 'name')}}
+                    </span>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -28,14 +34,35 @@
     </div>
     <model-panel ref="modelPanel">
       <div class="model" v-if="local.modelData != null">
-        <div>เลขที่สัญญา: <span>{{local.modelData.contract_code}}</span></div>
-        <div>งวด: <span>{{local.modelData.time}}</span></div>
-        <div>งาน: <span></span> {{local.modelData.order_all}} <span>{{local.modelData.name}}</span></div>
-        <div>กำหนดเริ่ม (ตามสัญญา): <span>{{SET_DATEFORMAT(local.modelData.start_date)}}</span></div>
-        <div>กำหนดเสร็จ (ตามสัญญา): <span>{{SET_DATEFORMAT(local.modelData.end_date)}}</span></div>
-        <div>เสร็จจริง: <span>{{SET_DATEFORMAT(local.modelData.real_date)}}</span></div>
-        <div>ล่าช้า: <span>{{local.modelData.delay}} (วัน)</span> </div>
-        <div>สถานะ: <span>{{GET_STATUSNAME(local.modelData.status)}}</span></div>
+        <div>งวด/รายการ: <span>{{local.modelData.time}} / {{local.modelData.name}}</span></div>
+        <div>หน่วย: <span>{{local.modelData.unit}}</span></div>
+        <div>ราคาต่อหน่วย: <span>{{NUMBERWITHCOMMAS(local.modelData.price, 2)}}</span></div>
+        <div>จำนวนเงิน: <span>{{NUMBERWITHCOMMAS(local.modelData.total_price, 2)}}</span></div>
+        <div>สถานะ:
+          <span :class="`tag ${getListStatus(local.modelData.status, 'class')}`">
+            {{getListStatus(local.modelData.status, 'name')}}
+          </span>
+        </div>
+        <br/>
+        <div class="update-status" v-if="local.modelData.status === 1">
+          <label class="radio">
+            <input type="radio" :value="true" v-model="local.workSheetStatus">
+            ผ่านการตรวจสอบ
+          </label>
+          <label class="radio">
+            <input type="radio" :value="false" v-model="local.workSheetStatus">
+            ไม่ผ่านการตรวจสอบ
+          </label>
+        </div>
+        <div class="update-status" v-if="local.modelData.status === 1">
+          <my-action
+            v-if="local.workSheetStatus !== null"
+            @clickEvent="updateStatus()"
+            type="update"
+            :obj="{title: 'บันทึก', color: 'is-success', isConfirm: true}"
+          >
+          </my-action>
+        </div>
       </div>
     </model-panel>
   </section>
@@ -74,7 +101,13 @@ export default {
         project: null,
         contract: null,
         progress: null,
-        modelData: null
+        modelData: null,
+        workSheet: [],
+        workSheetSelected: {
+          index: null,
+          listIndex: null
+        },
+        workSheetStatus: null
       }
     }
   },
@@ -91,22 +124,42 @@ export default {
       this.local.project = itemObj.data.project
       this.local.contract = itemObj.data.contract
       this.local.time = itemObj.data.time
+      await this.getWorkSheet(this.local.contract.project_id, this.local.contract.plan)
+    },
+    async getWorkSheet (project_id, plan) {
+      let queryString = this.BUILDPARAM({project: project_id, plan})
+      let obj = await service.getResource({resourceName: `${config.api.workSheet.index}/all`, queryString})
+      this.local.workSheet = obj.data
+    },
+    showDetail (item, index, listIndex) {
+      this.reset()
+      this.$refs.modelPanel.isActive = true
+      this.local.modelData = item
+      this.local.workSheetSelected.index = index
+      this.local.workSheetSelected.listIndex = listIndex
+    },
+    async updateStatus () {
+      let realStatus = (this.local.workSheetStatus) ? '3' : '2'
+      let resourceName = `${config.api.workSheetDetail.index}/${this.local.modelData.id}`
+      let result = await service.putResource({data: {status: realStatus}, resourceName})
+      if (result.data !== 1) return
+      // update frontsite frist
+      let index = this.local.workSheetSelected.index
+      let listIndex = this.local.workSheetSelected.listIndex
+      this.local.workSheet[index].lists[listIndex].status = realStatus
+      this.NOTIFY('success')
+      this.reset()
+    },
+    reset () {
+      this.local.workSheetSelected.index = null
+      this.local.workSheetSelected.listIndex = null
+      this.$refs.modelPanel.isActive = false
+      this.local.workSheetStatus = null
+    },
+    getListStatus (status, type) {
+      let res = this.GETWORKSHEETSTATUS(status)[0]
+      return res[type]
     }
-    // showTaskDetail (task) {
-    //   this.$refs.modelPanel.isActive = true
-    //   this.local.modelData = task
-    // },
-    // async updateTask (task) {
-    //   let resourceName = `${config.api.frontSite.index}/${this.$route.params.key}`
-    //   let data = task
-    //   data.houseId = this.local.contract.house_id
-    //   let res = await service.putResource({data, resourceName})
-    //   // console.log(res.status)
-    //   if (res.status === 200) {
-    //     this.NOTIFY('success')
-    //     this.fetchData()
-    //   }
-    // }
   }
 }
 </script>
@@ -206,6 +259,13 @@ section {
           }
         }
       }
+    }
+  }
+  .update-status{
+    text-align: center;
+    padding: 10px;
+    &>div+div{
+      margin-top: 5px;
     }
   }
 }

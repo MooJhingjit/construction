@@ -8,8 +8,8 @@
               <div class="block">
                 <my-auto-complete
                 @select="projectSelectedHandle"
-                :arrInputs="[]"
-                placeholder="เลือกโครงการ"
+                :arrInputs="'project'"
+                placeholder="ค้นหาโครงการ"
                 label=""
                 ></my-auto-complete>
               </div>
@@ -251,7 +251,8 @@ export default {
   created () {
   },
   methods: {
-    projectSelectedHandle () {
+    projectSelectedHandle (obj) {
+      console.log(obj)
     }
   }
 }
