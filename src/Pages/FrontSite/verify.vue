@@ -126,8 +126,8 @@ export default {
       this.local.time = itemObj.data.time
       await this.getWorkSheet(this.local.contract.project_id, this.local.contract.plan)
     },
-    async getWorkSheet (project_id, plan) {
-      let queryString = this.BUILDPARAM({project: project_id, plan})
+    async getWorkSheet (projectId, plan) {
+      let queryString = this.BUILDPARAM({project: projectId, plan})
       let obj = await service.getResource({resourceName: `${config.api.workSheet.index}/all`, queryString})
       this.local.workSheet = obj.data
     },

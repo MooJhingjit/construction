@@ -5,19 +5,26 @@ const workSheetDetail = require('./workSheetDetailController')
 const getData = async (req, res, next) => {
   // let technicianId = req.params.technicianId
   let item = new workSheetModel()
+  let result = null
   if (req.params.key !== 'all') {
     item.technician_id = req.params.key
   }
-  item.project_id = req.query.project
-  item.plan = req.query.plan
-  let group = await item.getData()
+  if (req.params.key === 'approval') {
+    let project = req.query.project
+    result = await getDataForApproval(project)
+  } else {
+    item.project_id = req.query.project
+    item.plan = req.query.plan
+    result = await item.getData()
+    
+    await Promise.all(
+      result.map(async (item) => {
+        item.lists = await workSheetDetail.getData(item.id)
+      })
+    )
+  }
   
-  await Promise.all(
-    group.map(async (item) => {
-      item.lists = await workSheetDetail.getData(item.id)
-    })
-  )
-  res.status(200).json(group)
+  res.status(200).json(result)
 }
 
 async function getAllData (req, res, next) {
@@ -54,9 +61,16 @@ async function createData (req, res, next) {
 }
 
 async function updateData (req, res, next) {
-  // let obj = req.body.data
-  // await workSheetDetail.updateOleOne(obj.itemId)
-  // res.status(200).json()
+  let obj = {
+    status: req.body.data.status
+  }
+  if (req.body.data.updateType === 'update-status') {
+    if (obj.status === '4') {
+      obj.has_rejected = 1
+    }
+    await workSheetDetail.updateOldOne(req.params.id, obj)
+  }
+  res.status(200).json()
 }
 
 async function deleteData (req, res, next) {
@@ -64,6 +78,25 @@ async function deleteData (req, res, next) {
   // let result = await item.delete()
   // await workGroupDetail.deleteData(req.params.id)
   // res.status(200).json({})
+}
+
+async function getDataForApproval (projectId) {
+  let approvalData = new workSheetModel()
+  approvalData.project_id = projectId
+  let obj = await approvalData.getApprovalData()
+  let result = []
+  if (obj) {
+    for (key in obj) {
+      if (!result[obj[key].technician_id]) {
+        result[obj[key].technician_id] = []
+      }
+      result[obj[key].technician_id].push(obj[key])
+    }
+    result = result.filter((item) => {
+      return item !== null
+    })
+  }
+  return result
 }
 
 

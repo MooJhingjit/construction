@@ -37,9 +37,16 @@ async function createData (req, res, next) {
 
 async function updateData (req, res, next) {
   let id = req.params.id
-  let amount = req.body.data.amount
-  let status = req.body.data.status
-  let result = await updateOldOne(id, {amount, status})
+  let obj = {
+    amount: req.body.data.amount,
+    status: req.body.data.status
+  }
+  // let amount = req.body.data.amount
+  // let status = req.body.data.status
+  if (obj.status === '2') {
+    obj.has_rejected = 1
+  }
+  let result = await updateOldOne(id, obj)
   res.status(200).json(result)
 }
 
@@ -91,13 +98,15 @@ const updateOldOne = async (itemId, obj) => {
   if (obj.amount) {
     model.amount = obj.amount
   }
+  if (obj.has_rejected) {
+    model.has_rejected = obj.has_rejected
+  }
   // if (obj.price) {
   //   model.price = obj.price
   // }
   let res = await model.update()
   return res
 }
-
 
 const deleteData = async (groupId) => {
   // let item = new workSheetDetailModel()

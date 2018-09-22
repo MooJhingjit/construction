@@ -84,7 +84,10 @@ const api = {
   },
   'workSheetDetail': {
     'index': '/work-sheet-detail'
-  }
+  },
+  'workSheetApproval': {
+    'index': '/work-sheet/approval'
+  },
 }
 
 const variable = {

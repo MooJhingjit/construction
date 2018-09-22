@@ -163,6 +163,7 @@ export default {
           this.GOTOPAGE('FrontSite', '')
           break
         default:
+          console.log('No userType <------------ have to fix it in vue.helpers.js')
           this.GOTOPAGE('Home', '')
       }
     },

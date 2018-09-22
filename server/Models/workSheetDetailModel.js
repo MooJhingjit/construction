@@ -14,6 +14,7 @@ module.exports =  class WorkSheetDetail {
     this.price
     this.total_price
     this.status
+    this.has_rejected
     this.limit = 5
     this.offset = 0
   }
@@ -55,10 +56,7 @@ module.exports =  class WorkSheetDetail {
   async update () {
     let result = await this.knex('work_sheet_detail')
     .where({id: this.id})
-    .update({
-      amount: this.amount,
-      status: this.status
-    })
+    .update(this.getCondition())
     await this.knex.destroy()
     return result
   }
@@ -73,9 +71,15 @@ module.exports =  class WorkSheetDetail {
 
   getCondition () {
     let conditions = {}
-    // if (this.phone) {
-    //   conditions.phone = this.phone
-    // }
+    if (this.amount) {
+      conditions.amount = this.amount
+    }
+    if (this.status) {
+      conditions.status = this.status
+    }
+    if (this.has_rejected) {
+      conditions.has_rejected = this.has_rejected
+    }
     return conditions
   }
 }

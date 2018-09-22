@@ -68,6 +68,21 @@ module.exports =  class WorkSheet {
     // return result
   }
 
+  async getApprovalData () {
+    let result = await  this.knex.select('ws.technician_id', 'ws.plan', 'ws.work_group_name', 'wsd.*', 'technician.name as technician_name')
+    .from('work_sheet as ws')
+    .leftJoin('work_sheet_detail as wsd', function() {
+      this.on('ws.id', '=', 'wsd.work_sheet_id')
+    })
+    .leftJoin('technician', function() {
+      this.on('ws.technician_id', '=', 'technician.id')
+    })
+    .where('ws.project_id', this.project_id)
+    .where('wsd.status', '!=', '0')
+    
+    return result
+  }
+
   getCondition () {
     let conditions = {}
     if (this.technician_id) {
