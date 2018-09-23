@@ -46,8 +46,12 @@ async function getAllData (req, res, next) {
 }
 
 async function createData (req, res, next) {
-  // console.log(req.body)
+  // console.log(req.body.data.workGroup)
+  // console.log('---------------------')
+  // console.log(req.body.data.itemLists)
+  // res.status(200).json({})
   let obj = req.body.data
+  let isExtra = 0
   let newItem = new workSheetModel()
   newItem.technician_id = obj.technician.key
   newItem.plan = obj.contract.plan
@@ -55,15 +59,20 @@ async function createData (req, res, next) {
   newItem.work_group_name = obj.workGroup.value
   newItem.project_id = obj.contract.project_id
   newItem.house_id = obj.contract.house_id
+  newItem.is_extra = 0
+  if (obj.workGroup.isExtra) {
+    newItem.is_extra = 1
+  }
   let result = await newItem.save()
-  await workSheetDetail.saveNewOne(result[0], obj.itemLists)
+  await workSheetDetail.saveNewOne(result[0], obj.itemLists, newItem.is_extra)
   res.status(200).json(result)
 }
 
 async function updateData (req, res, next) {
-  let obj = {
-    status: req.body.data.status
-  }
+  // let obj = {
+  //   status: req.body.data.status
+  // }
+  let obj = req.body.data.item
   if (req.body.data.updateType === 'update-status') {
     if (obj.status === '4') {
       obj.has_rejected = 1

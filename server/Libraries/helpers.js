@@ -10,11 +10,12 @@
 //   }
 // }
 const jwtDecode = require('jwt-decode')
-const moment = require('moment')
+const moment = require('moment-timezone')
+// moment.tz.setDefault('Asia/Bangkok')
 
 module.exports.getDate = (date, format = 'YYYY/MM/DD') => {
   if (!date) return null
-  return moment(date).format(format)
+  return moment(date).tz('Asia/Bangkok').format(format)
 }
 
 module.exports.addDate = (date, day, format = 'YYYY/MM/DD') => {

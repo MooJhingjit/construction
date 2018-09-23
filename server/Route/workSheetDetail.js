@@ -6,6 +6,6 @@ router.get('/work-sheet-detail', workSheetDetailController.getAllData);
 router.get('/work-sheet-detail/:key', workSheetDetailController.getData);
 router.post('/work-sheet-detail', workSheetDetailController.createData);
 router.put('/work-sheet-detail/:id', workSheetDetailController.updateData);
-router.delete('/work-sheet-detail/:id', workSheetDetailController.deleteData);
+// router.delete('/work-sheet-detail/:id', workSheetDetailController.deleteData);
 // router.get('/workSheet-duplicate', workSheetDetailController.checkDuplicate);
 module.exports = router;

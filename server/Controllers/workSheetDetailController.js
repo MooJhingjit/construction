@@ -72,11 +72,15 @@ const getData = async (groupId) => {
 //   return res
 // }
 
-const saveNewOne = async (workSheetId, obj) => {
+const saveNewOne = async (workSheetId, obj, isExtra) => {
   let model = new workSheetDetailModel()
   let totalPrice = 0
   let res = await Promise.all(
     obj.map( async (item) => {
+      if (isExtra) {
+        item.status = 1
+        model.is_extra = 1
+      }
       totalPrice = parseFloat(item.price) * parseInt(item.amount)
       model.work_sheet_id = workSheetId
       model.time = item.time
@@ -101,6 +105,11 @@ const updateOldOne = async (itemId, obj) => {
   if (obj.has_rejected) {
     model.has_rejected = obj.has_rejected
   }
+  if (obj.is_extra) {
+    model.price = obj.price
+    model.total_price = obj.total_price
+  }
+  model.updated_at = helpers.getCurrentTime('sql')
   // if (obj.price) {
   //   model.price = obj.price
   // }
@@ -108,11 +117,62 @@ const updateOldOne = async (itemId, obj) => {
   return res
 }
 
-const deleteData = async (groupId) => {
-  // let item = new workSheetDetailModel()
-  // item.group_id = groupId
-  // let res = await item.delete()
-  // return res
+const getStat = async (statType) => {
+
+  let obj = {
+    config: {
+      type: 'bar',
+      height: '60',
+      barWidth: 6,
+      barSpacing: 5,
+      tooltipFormat: '<span style="color: {{color}}">&#9679;</span>{{offset:offset}} <br/>{{value:value}} รายการ'
+    }
+  }
+  let model = new workSheetDetailModel()
+  let statObj = await model.getStat(statType)
+  let stat = []
+  
+  statObj.map((item) => {
+    console.log(item.date)
+    let date = helpers.getDate(item.date, 'YYYY-MM-DD')
+    console.log(date)
+    console.log('------')
+    if (stat[date]) {
+      stat[date] +=  1
+    } else {
+      stat[date] = 1
+    }
+  })
+  let dataSets = {
+    label: [],
+    values: []
+  }
+  let count = 0
+  for (key in stat) {
+    dataSets.label.push(key)
+    dataSets.values.push(stat[key])
+    count += stat[key]
+  } 
+  // console.log(dataSets)
+  if (statType === 'submit') {
+    obj.data = {
+      name: 'submitJobs',
+      barColor: '#4571BB',
+      class: 'submit-jobs',
+      dataSets,
+      count
+    }
+  }
+  if (statType === 'approved') {
+    obj.data = {
+      name: 'approvePayment',
+      barColor: '#4aa000',
+      class: 'approve-payment',
+      dataSets,
+      count
+    }
+  }
+  return obj
 }
 
 module.exports.getData = getData
@@ -120,7 +180,7 @@ module.exports.getData = getData
 module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData
-module.exports.deleteData = deleteData
+module.exports.getStat = getStat
 module.exports.saveNewOne = saveNewOne
 module.exports.updateOldOne = updateOldOne
 

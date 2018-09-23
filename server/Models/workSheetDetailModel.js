@@ -14,7 +14,9 @@ module.exports =  class WorkSheetDetail {
     this.price
     this.total_price
     this.status
+    this.is_extra
     this.has_rejected
+    this.updated_at
     this.limit = 5
     this.offset = 0
   }
@@ -47,7 +49,8 @@ module.exports =  class WorkSheetDetail {
       unit: this.unit,
       price: this.price,
       total_price: this.total_price,
-      status: this.status.toString()
+      status: this.status.toString(),
+      is_extra: this.is_extra
     })
     await this.knex.destroy()
     return result
@@ -69,6 +72,19 @@ module.exports =  class WorkSheetDetail {
     // return result
   }
 
+  async getStat (type) {
+    let result = null
+    if (type === 'approved') {
+      result = await this.knex.select('updated_at as date').from('work_sheet_detail')
+      .where({status: '5'})
+    } else {
+      result = await this.knex.select('created_at as date').from('work_sheet_detail')
+      .where({status: '1'})
+    }
+    await this.knex.destroy()
+    return result
+  }
+
   getCondition () {
     let conditions = {}
     if (this.amount) {
@@ -79,6 +95,15 @@ module.exports =  class WorkSheetDetail {
     }
     if (this.has_rejected) {
       conditions.has_rejected = this.has_rejected
+    }
+    if (this.price) {
+      conditions.price = this.price
+    }
+    if (this.total_price) {
+      conditions.total_price = this.total_price
+    }
+    if (this.updated_at) {
+      conditions.updated_at = this.updated_at
     }
     return conditions
   }

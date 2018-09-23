@@ -14,9 +14,9 @@
             </thead>
             <tbody>
               <tr :key="index" v-for="(workSheet, index) in local.workSheet">
-                <td><p>{{workSheet.work_group_name}}</p></td>
+                <td><p :class="[{'extra-item': workSheet.is_extra}]">{{workSheet.work_group_name}}</p></td>
                 <td >
-                  <div class="list"
+                  <div :class="[{'list': true, 'extra-item': item.is_extra}]"
                   :key="listIndex"
                   v-for="(item, listIndex) in workSheet.lists"
                   @click="showDetail(item, index, listIndex)"
@@ -34,13 +34,45 @@
     </div>
     <model-panel ref="modelPanel">
       <div class="model" v-if="local.modelData != null">
-        <div>งวด/รายการ: <span>{{local.modelData.time}} / {{local.modelData.name}}</span></div>
+        <div :class="[{'extra-item': local.modelData.is_extra}]">งวด/รายการ:
+          <span>{{local.modelData.time}} / {{local.modelData.name}}</span>
+          <span v-if="local.modelData.is_extra">(พิเศษ)</span>
+          </div>
         <div>หน่วย: <span>{{local.modelData.unit}}</span></div>
-        <div>ราคาต่อหน่วย: <span>{{NUMBERWITHCOMMAS(local.modelData.price, 2)}}</span></div>
-        <div>จำนวนเงิน: <span>{{NUMBERWITHCOMMAS(local.modelData.total_price, 2)}}</span></div>
+        <div>จำนวน:
+          <my-input
+            v-if="local.modelData.status === 1"
+            :value="local.modelData.amount"
+            :validator="$validator"
+            :inputObj="{type: 'text', name: `amount${local.modelData.listIndex}`, placeholder: '', validate: 'required'}"
+            @input="value => updateData(value, 'amount', local.modelData.index, local.modelData.listIndex)"
+          ></my-input>
+          <span v-else>{{local.modelData.amount}}</span>
+        </div>
+        <div>ราคาต่อหน่วย:
+          <my-input
+            v-if="local.modelData.status === 1"
+            :value="local.modelData.price"
+            :validator="$validator"
+            :inputObj="{type: 'text', name: `price${local.modelData.listIndex}`, placeholder: '', validate: 'required'}"
+            @input="value => updateData(value, 'price', local.modelData.index, local.modelData.listIndex)"
+            ></my-input>
+          <span v-else>{{NUMBERWITHCOMMAS(local.modelData.price, 2)}}</span>
+        </div>
+        <div>จำนวนเงิน:
+          <my-input
+            v-if="local.modelData.status === 1"
+            :value="local.modelData.total_price"
+            :validator="$validator"
+            :inputObj="{type: 'text', name: `total_price${local.modelData.listIndex}`, placeholder: '', validate: 'required'}"
+            @input="value => updateData(value, 'total_price', local.modelData.index, local.modelData.listIndex)"
+            ></my-input>
+          <span v-else>{{NUMBERWITHCOMMAS(local.modelData.total_price, 2)}}</span>
+        </div>
         <div>สถานะ:
           <span :class="`tag ${getListStatus(local.modelData.status, 'class')}`">
             {{getListStatus(local.modelData.status, 'name')}}
+            <template v-if="local.modelData.updated_at">( {{SET_DATEFORMAT(local.modelData.updated_at)}} )</template>
           </span>
         </div>
         <br/>
@@ -57,7 +89,7 @@
         <div class="update-status" v-if="local.modelData.status === 1">
           <my-action
             v-if="local.workSheetStatus !== null"
-            @clickEvent="updateStatus()"
+            @clickEvent="submit(local.modelData)"
             type="update"
             :obj="{title: 'บันทึก', color: 'is-success', isConfirm: true}"
           >
@@ -75,6 +107,7 @@ import service from '@Services/app-service'
 import config from '@Config/app.config'
 import ModelPanel from '@Components/Model'
 import myAction from '@Components/Form/my-action'
+import myInput from '@Components/Form/my-input'
 export default {
   props: {
     // templateName: {
@@ -86,7 +119,8 @@ export default {
     myAction,
     ModelPanel,
     breadcrumbBar,
-    optionDetailTemplate
+    optionDetailTemplate,
+    myInput
   },
   name: 'FrontSiteUpdatePage',
   data () {
@@ -115,6 +149,7 @@ export default {
   },
   created () {
     this.fetchData()
+    console.log('created verify')
   },
   methods: {
     async fetchData () {
@@ -135,20 +170,41 @@ export default {
       this.reset()
       this.$refs.modelPanel.isActive = true
       this.local.modelData = item
+      this.local.modelData.index = index
+      this.local.modelData.listIndex = listIndex
       this.local.workSheetSelected.index = index
       this.local.workSheetSelected.listIndex = listIndex
     },
-    async updateStatus () {
-      let realStatus = (this.local.workSheetStatus) ? '3' : '2'
-      let resourceName = `${config.api.workSheetDetail.index}/${this.local.modelData.id}`
-      let result = await service.putResource({data: {status: realStatus}, resourceName})
-      if (result.data !== 1) return
-      // update frontsite frist
+    // async updateStatus () {
+    //   let realStatus = (this.local.workSheetStatus) ? '3' : '2'
+    //   let resourceName = `${config.api.workSheetDetail.index}/${this.local.modelData.id}`
+    //   let result = await service.putResource({data: {status: realStatus}, resourceName})
+    //   if (result.data !== 1) return
+    //   // update frontsite frist
+    //   let index = this.local.workSheetSelected.index
+    //   let listIndex = this.local.workSheetSelected.listIndex
+    //   this.local.workSheet[index].lists[listIndex].status = realStatus
+    //   this.NOTIFY('success')
+    //   this.reset()
+    // },
+    async submit (item) {
+      item.status = (this.local.workSheetStatus) ? '3' : '2'
+      let data = {
+        item,
+        updateType: 'update-status'
+      }
+      let resourceName = `${config.api.workSheet.index}/${this.local.modelData.id}`
+      await service.putResource({data, resourceName})
+      // if (result.data !== 1) return
       let index = this.local.workSheetSelected.index
       let listIndex = this.local.workSheetSelected.listIndex
-      this.local.workSheet[index].lists[listIndex].status = realStatus
-      this.NOTIFY('success')
+      this.setItemAfterUpdated(index, listIndex, item.status)
       this.reset()
+      this.NOTIFY('success')
+    },
+    setItemAfterUpdated (index, listIndex, status) {
+      this.local.workSheet[index].lists[listIndex].status = status // loop data updated
+      this.local.modelData.status = status // modelData updated
     },
     reset () {
       this.local.workSheetSelected.index = null
@@ -159,6 +215,24 @@ export default {
     getListStatus (status, type) {
       let res = this.GETWORKSHEETSTATUS(status)[0]
       return res[type]
+    },
+    updateData (value, inputType, index, listIndex) {
+      let totalPrice = 0
+      let obj = this.local.workSheet[index].lists[listIndex]
+      switch (inputType) {
+        case 'amount':
+          totalPrice = obj.price * value
+          this.local.workSheet[index].lists[listIndex].total_price = totalPrice
+          break
+        case 'price':
+          totalPrice = value * obj.amount
+          this.local.workSheet[index].lists[listIndex].total_price = totalPrice
+          break
+        case 'total_price':
+          break
+      }
+      this.local.workSheet[index].lists[listIndex][inputType] = value
+      // console.log(this.local.workSheet[index].lists[listIndex])
     }
   }
 }
@@ -267,6 +341,9 @@ section {
     &>div+div{
       margin-top: 5px;
     }
+  }
+  .extra-item{
+    color: #fb8606;
   }
 }
 </style>

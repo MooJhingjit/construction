@@ -6,6 +6,7 @@ const contractController = require('./contractController')
 const orderingController = require('./orderingController')
 
 async function getData (req, res, next) {
+  // console.log('do getData from home')
   let projectStat = await projectController.getStat()
   let contractStat = await contractController.getStat()
   let workingProgress = await contractController.getLastProgress()
@@ -17,13 +18,11 @@ async function getData (req, res, next) {
     },
     workingProgress,
     extraOrdering : {
-      // labels: ['มกราคม', 'กุมภาพันธ์', 'March', 'เมษายน', 'พฤษภาคม', 'June', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
       labels: orderingExtra.date,
       datasets: [
         {
           label: 'สั่งซื้อพิเศษ',
           backgroundColor: 'rgba(255,146,146,.7)',
-          // data: [20, 50, 12, 26, 13, 20, 54, 24, 42, 45, 23, 31]
           data: orderingExtra.data
         }
       ]

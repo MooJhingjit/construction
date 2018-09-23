@@ -21,6 +21,7 @@ app.use('/api',
     require('./workSheet'),
     require('./workOrder'),
     require('./technician'),
+    require('./payingPeriod'),
     require('./materialGroup'),
     require('./workGroupDetail'),
     require('./workSheetDetail')

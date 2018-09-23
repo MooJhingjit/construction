@@ -1,17 +1,17 @@
 <template>
-  <section class="section home-page">
+  <section class="section home-page" v-if="server !== null">
     <breadcrumb-bar :dataObj="local.pageObj"></breadcrumb-bar>
     <div class="container-block">
       <div class="tile is-ancestor">
         <div class="tile is-vertical is-12">
           <div class="tile">
-            <div class="tile is-parent is-vertical is-4">
+            <div class="tile is-parent is-vertical is-6">
               <article class="tile is-child notification">
                 <div class="container-block stat">
                   <div class="block chart container-block">
                     <spark-line
-                    :config="local.sparkLineObj.config"
-                    :data="local.sparkLineObj.submitJobs"
+                    :config="server.stat.submitStat.config"
+                    :data="server.stat.submitStat.data"
                     ></spark-line>
                     <div class="value">
                       <span class="num">{{local.sparkLineObj.submitJobs.count}}</span>
@@ -24,13 +24,13 @@
                 </div>
               </article>
             </div>
-            <div class="tile is-parent is-vertical is-4">
+            <div class="tile is-parent is-vertical is-6">
               <article class="tile is-child notification">
                  <div class="container-block stat">
                   <div class="block chart container-block">
                      <spark-line
-                    :config="local.sparkLineObj.config"
-                    :data="local.sparkLineObj.approvePayment"
+                    :config="server.stat.approvedStat.config"
+                    :data="server.stat.approvedStat.data"
                     ></spark-line>
                     <div class="value">
                       <span class="num">{{local.sparkLineObj.approvePayment.count}}</span>
@@ -43,7 +43,7 @@
                 </div>
               </article>
             </div>
-            <div class="tile is-parent is-vertical is-4">
+            <!-- <div class="tile is-parent is-vertical is-4">
               <article class="tile is-child notification">
                  <div class="container-block stat">
                   <div class="block chart container-block">
@@ -61,27 +61,11 @@
                   </div>
                 </div>
               </article>
-            </div>
+            </div> -->
             <div class="tile is-parent">
-              <!-- <article class="tile is-child notification">
-                <p class="title">ข้อมูลสูญเสีย</p>
-                <div class="content data-loss container-block">
-                  <div class="order block">
-                    <bar-chart v-if="local.extraOrdering != null" :data="local.extraOrdering"  :height="150" ></bar-chart>
-                  </div>
-                  <div class="stipend block">
-                    <bar-chart :data="local.item5" :height="150"></bar-chart>
-                  </div>
-                </div>
-              </article> -->
             </div>
           </div>
           <div class="tile function">
-            <!-- <div class="tile is-parent is-vertical is-4">
-              <article class="tile is-child notification container-block">
-                <span class="block title"><i class="fa fa-th-large" aria-hidden="true"></i> รายการสินค้า</span>
-              </article>
-            </div> -->
             <div class="tile is-parent is-vertical is-6">
               <article class="tile is-child notification container-block" @click="GOTOPAGE('Technician', '')">
                 <span class="block title"><i class="fa fa-users" aria-hidden="true"></i> รายชื่อช่าง</span>
@@ -93,13 +77,6 @@
               </article>
             </div>
           </div>
-          <!-- <div class="tile is-parent">
-            <article class="tile is-child notification">
-              <p class="title">สถานะงานล่าสุด</p>
-              <div class="content">
-              </div>
-            </article>
-          </div> -->
         </div>
       </div>
     </div>
@@ -114,10 +91,6 @@ import service from '@Services/app-service'
 import config from '@Config/app.config'
 export default {
   props: {
-    // templateName: {
-    //   type: String,
-    //   required: true
-    // }
   },
   components: {
     barChart,
@@ -174,25 +147,23 @@ export default {
         },
         workingProgress: [],
         extraOrdering: null
-      }
+      },
+      server: null
     }
   },
   computed: {
   },
   created () {
-    // this.fetchData()
+    this.fetchData()
   },
   methods: {
     fetchData () {
-      let resourceName = config.api.home.index
+      let resourceName = config.api.payingPeriod.home
       let queryString = []
       service.getResource({resourceName, queryString})
         .then((res) => {
           if (res.status === 200) {
-            // this.local.sparkLineObj.project = res.data.stat.projectStat
-            // this.local.sparkLineObj.contract = res.data.stat.contractStat
-            // this.local.workingProgress = res.data.workingProgress
-            // this.local.extraOrdering = res.data.extraOrdering
+            this.server = res.data
           }
         })
         .catch(() => {

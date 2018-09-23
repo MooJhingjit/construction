@@ -53,7 +53,7 @@
                 </thead>
                 <tbody>
                   <!-- {{local.inputs}} -->
-                  <tr :key="index" v-for="(group, index) in local.inputs">
+                  <tr :class="getClassGroup(index)" :key="index" v-for="(group, index) in local.inputs">
                     <td>{{index + 1}}</td>
                     <td>
                       <p v-if="isSaved(index)">{{group.workGroup.obj.value}}</p>
@@ -64,16 +64,31 @@
                       placeholder="เลือกหมวดงาน"
                       label=""
                       ></my-auto-complete>
+                      <div class="list-btn" v-if="group.isExtra">
+                        <button v-if="group.workGroup.lists.length > 0" class="button" @click="editExtraRow('add', index)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button v-if="group.workGroup.lists.length > 0" class="button" @click="editExtraRow('minus', index)"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                      </div>
                     </td>
-                    <td> <!-- CHECKBOX BTN -->
-                        <p :key="indexList" v-for="(item, indexList) in currentGroup(index)">
-                          <template v-if="parseInt(item.status) && isSaved(index)">{{item.name}}</template>
-                          <label v-else  class="checkbox">
-                            <input v-if="isSaved(index)" type="checkbox" @change="setListsSelected(item.status, index, indexList)" v-model="item.status">
-                            <input v-else type="checkbox" @change="setListsSelected(item.id, index, indexList)" v-model="item.id">
-                            {{item.name}}
-                          </label>
-                        </p>
+                    <td class="list-name"> <!-- CHECKBOX BTN -->
+                        <template v-if="group.isExtra">
+                          <my-input
+                            :key="indexList" v-for="(item, indexList) in currentGroup(index)"
+                            :value="item.name"
+                             :validator="$validator"
+                            :inputObj="{type: 'text', name: `name${indexList}`, placeholder: '', validate: 'required'}"
+                            @input="value => { item.name = value }"
+                          ></my-input>
+                        </template>
+                        <template v-else>
+                          <p :key="indexList" v-for="(item, indexList) in currentGroup(index)">
+                            <template v-if="parseInt(item.status) && isSaved(index)">{{item.name}}</template>
+                            <label v-else  class="checkbox">
+                              <input v-if="isSaved(index)" type="checkbox" @change="setListsSelected(item.status, index, indexList)" v-model="item.status">
+                              <input v-else type="checkbox" @change="setListsSelected(item.id, index, indexList)" v-model="item.id">
+                              {{item.name}}
+                            </label>
+                          </p>
+                        </template>
                     </td>
                     <td>
                         <p v-if="parseInt(item.status) && isSaved(index)" :key="indexList" v-for="(item, indexList) in currentGroup(index)">
@@ -82,15 +97,38 @@
                          <my-input
                           v-else
                           :value="item.amount"
-                          :inputObj="{type: 'text', name: `amount${indexList}`, placeholder: '', validate: ''}"
+                           :validator="$validator"
+                          :inputObj="{type: 'text', name: `amount${indexList}`, placeholder: '', validate: 'required'}"
                           @input="value => { item.amount = value }"
                         ></my-input>
                     </td>
                     <td>
+                      <template v-if="group.isExtra">
+                        <my-input
+                          :key="indexList" v-for="(item, indexList) in currentGroup(index)"
+                          :value="item.unit"
+                           :validator="$validator"
+                          :inputObj="{type: 'text', name: `unit${indexList}`, placeholder: '', validate: 'required'}"
+                          @input="value => { item.unit = value }"
+                        ></my-input>
+                      </template>
+                      <template v-else>
                         <p :key="indexList" v-for="(item, indexList) in currentGroup(index)">{{item.unit}}</p>
+                      </template>
                     </td>
                     <td>
-                      <p :key="indexList" v-for="(item, indexList) in currentGroup(index)">{{NUMBERWITHCOMMAS(item.price, 2)}}</p>
+                      <template v-if="group.isExtra">
+                        <my-input
+                          :key="indexList" v-for="(item, indexList) in currentGroup(index)"
+                          :value="item.price"
+                           :validator="$validator"
+                          :inputObj="{type: 'text', name: `price${indexList}`, placeholder: '', validate: 'required'}"
+                          @input="value => { item.price = value }"
+                        ></my-input>
+                      </template>
+                      <template v-else>
+                        <p :key="indexList" v-for="(item, indexList) in currentGroup(index)">{{NUMBERWITHCOMMAS(item.price, 2)}}</p>
+                      </template>
                     </td>
                     <td> <!-- ACTION -->
                         <my-action
@@ -114,6 +152,7 @@
             </div>
             <div class="container-block block right" v-if="local.project.selected !== null && local.plan.selected !== null">
               <button v-if="local.count == 1" class="button" @click="editRow('minus')"><i class="fa fa-minus" aria-hidden="true"></i></button>
+              <button v-if="local.count == 0" class="button" @click="editRow('add', true)"><i class="fa fa-plus" aria-hidden="true"></i> <span>(พิเศษ)</span></button>
               <button v-if="local.count == 0" class="button" @click="editRow('add')"><i class="fa fa-plus" aria-hidden="true"></i></button>
             </div>
           </div>
@@ -168,12 +207,16 @@ export default {
           selected: []
         },
         inputsTemplate: {
+          isExtra: false,
           workGroup: {
             obj: {},
             lists: []
             // listSelected: [],
             // isSaved: false
           }
+        },
+        extraTemplate: {
+          //
         },
         inputs: [],
         count: 0
@@ -214,7 +257,8 @@ export default {
               obj: {
                 key: item.work_group_id,
                 value: item.work_group_name,
-                status: item.status
+                status: item.status,
+                isExtra: item.is_extra
               },
               lists: item.lists
             }
@@ -237,11 +281,16 @@ export default {
       }
       this.local.project.selected = obj.key
       this.local.plan.selected = null
+      this.local.count = 0
       this.setPlanData()
     },
-    async workGroupSelectedHandle (obj, index) { // <-----
+    async workGroupSelectedHandle (obj, index) { // <----------------------------
       obj.status = null
       this.local.inputs[index].workGroup.obj = obj
+      if (this.local.inputs[index].isExtra) {
+        this.local.inputs[index].workGroup.lists.push({})
+        return
+      }
       let detailLists = await this.getWorkGroupDetails(obj.key)
       if (detailLists.length) {
         this.local.inputs[index].workGroup.lists = detailLists[0].details
@@ -267,6 +316,7 @@ export default {
       })
     },
     planSelectedHandle (obj) {
+      this.local.count = 0
       this.local.plan.selected = obj.key
       this.setContract()
       this.fetchData()
@@ -278,22 +328,37 @@ export default {
       })
       this.local.contract.selected = contract[0]
     },
-    editRow (type) {
+    editRow (type, isExtra = false) {
       if (type === 'add') {
         this.local.count += 1
         let newObj = JSON.parse(JSON.stringify(this.local.inputsTemplate))
+        if (isExtra) {
+          newObj.isExtra = true
+        }
         this.local.inputs.push(newObj)
       } else {
         this.local.count -= 1
         this.local.inputs.pop()
       }
     },
+    editExtraRow (type, index) {
+      if (type === 'add') {
+        this.local.inputs[index].workGroup.lists.push({})
+      } else {
+        this.local.inputs[index].workGroup.lists.pop()
+      }
+    },
     async submitForm (index) {
+      let isValid = await this.$validator.validateAll()
+      if (!isValid) return
       let data = {
         technician: this.local.technicians.selected,
         contract: this.local.contract.selected,
         workGroup: this.local.inputs[index].workGroup.obj,
         itemLists: this.local.inputs[index].workGroup.lists
+      }
+      if (this.local.inputs[index].isExtra) {
+        data.workGroup.isExtra = true
       }
       let resourceName = config.api.workSheet.index
       let res = await service.postResource({data, resourceName})
@@ -343,7 +408,12 @@ export default {
         this.NOTIFY('success')
       }
       this.local.inputs[index].workGroup.lists[indexList].status = (tf) ? '1' : '0'
-      console.log(typeof this.local.inputs[index].workGroup.lists[indexList].status)
+      // console.log(typeof this.local.inputs[index].workGroup.lists[indexList].status)
+    },
+    getClassGroup (index) {
+      return [
+        {'extra-row': this.local.inputs[index].workGroup.obj.isExtra}
+      ]
     }
   }
 }
@@ -367,5 +437,21 @@ export default {
 }
 .tag:not(.is-rounded) {
   display: block;
+}
+.container-block.block.right {
+  button{
+    span{
+      margin-left: 3px;
+    }
+  }
+  button+button {
+    margin-left: 5px;
+  }
+}
+.list-btn {
+  margin-top: 3px;
+}
+.extra-row{
+  background: #fff0d9;
 }
 </style>

@@ -22,38 +22,84 @@
                     <th class="td order-6">แปลง</th>
                     <th class="td order-5">หมวดงาน</th>
                     <th class="td order-4">งวด/รายการ</th>
-                    <th class="td order-3">หน่วย</th>
-                    <th class="td order-2">ราคาต่อหน่วย</th>
-                    <th class="td order-1">จำนวนเงินรวม</th>
+                    <th class="td order-3" width="50">หน่วย</th>
+                    <th class="td order-2" width="100">ราคาต่อหน่วย</th>
+                    <th class="td order-1" width="100">จำนวนเงินรวม</th>
                     <th class="td order-7" width=""></th>
                     <th class="td order-9" width=""></th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr :key="index" v-for="(lists, index) in local.dataObj"> 
+                  <tr :key="index" v-for="(lists, index) in local.dataObj">
                     <td class="td order-8">
                       <p>{{lists[0].technician_name}}</p>
                     </td>
                     <td class="td order-6">
-                      <p :key="`plan_${listIndex}`" v-for="(list, listIndex) in lists">{{list.plan}}</p>
+                      <div :class="[{'item-list': true, 'has-input': list.is_extra}]" :key="`plan_${listIndex}`" v-for="(list, listIndex) in lists">
+                        <p :class="getClass(list)">{{list.plan}}</p>
+                      </div>
                     </td>
                     <td class="td order-5">
-                      <p :key="`group_name_${listIndex}`" v-for="(list, listIndex) in lists">{{list.work_group_name}}</p>
+                      <div :class="[{'item-list': true, 'has-input': list.is_extra}]" :key="`group_name_${listIndex}`" v-for="(list, listIndex) in lists">
+                        <p :class="getClass(list)">{{list.work_group_name}}</p>
+                      </div>
                     </td>
                     <td class="td order-4">
-                      <p :key="`name_${listIndex}`" v-for="(list, listIndex) in lists">{{list.time}} / {{list.name}}</p>
+                      <div :class="[{'item-list': true, 'has-input': list.is_extra}]" :key="`name_${listIndex}`" v-for="(list, listIndex) in lists">
+                        <p :class="getClass(list)" >{{list.time}} / {{list.name}}</p>
+                      </div>
                     </td>
                     <td class="td order-3">
-                      <p :key="`amount_${listIndex}`" v-for="(list, listIndex) in lists">{{list.amount}} {{list.unit}}</p>
+                      <div :class="[{'item-list': true, 'has-input': list.is_extra}]" :key="`amount_${listIndex}`" v-for="(list, listIndex) in lists">
+                        <template  v-if="list.is_extra && list.status === '3'">
+                          <my-input
+                            :value="list.amount"
+                            :validator="$validator"
+                            :inputObj="{type: 'text', name: `amount${listIndex}`, placeholder: '', validate: 'required'}"
+                            @input="value =>  updateData(value, 'amount', index, listIndex)"
+                          ></my-input>
+                        </template>
+                        <p
+                        :class="getClass(list)"
+                        v-else>{{list.amount}} {{list.unit}}</p>
+                      </div>
                     </td>
                     <td class="td order-2">
-                      <p :key="`price_${listIndex}`" v-for="(list, listIndex) in lists">{{NUMBERWITHCOMMAS(list.price, 2)}} บาท</p>
+                      <div :class="[{'item-list': true, 'has-input': list.is_extra}]" :key="`price_${listIndex}`" v-for="(list, listIndex) in lists">
+                        <template  v-if="list.is_extra && list.status === '3'">
+                          <my-input
+                            :value="list.price"
+                            :validator="$validator"
+                            :inputObj="{type: 'text', name: `price${listIndex}`, placeholder: '', validate: 'required'}"
+                            @input="value => updateData(value, 'price', index, listIndex)"
+                          ></my-input>
+                        </template>
+                        <p
+                        v-else
+                        :class="getClass(list)"
+                        >{{NUMBERWITHCOMMAS(list.price, 2)}} บาท</p>
+                      </div>
                     </td>
                     <td class="td order-1">
-                      <p :key="`total_price_${listIndex}`" v-for="(list, listIndex) in lists">{{NUMBERWITHCOMMAS(list.total_price, 2)}} บาท</p>
+                      <div :class="[{'item-list': true, 'has-input': list.is_extra}]" :key="`total_price_${listIndex}`" v-for="(list, listIndex) in lists">
+                        <template  v-if="list.is_extra && list.status === '3'">
+                          <my-input
+                            :value="list.total_price"
+                            :validator="$validator"
+                            :inputObj="{type: 'text', name: `total_price${listIndex}`, placeholder: '', validate: 'required'}"
+                            @input="value => updateData(value, 'total_price', index, listIndex)"
+                          ></my-input>
+                        </template>
+                        <p
+                        v-else
+                        :class="getClass(list)"
+                        :key="`total_price_${listIndex}`"
+                       >{{NUMBERWITHCOMMAS(list.total_price, 2)}} บาท</p>
+                      </div>
+
                     </td>
                     <td class="td order-7">
-                      <div :key="`action_${listIndex}`" v-for="(list, listIndex) in lists">
+                      <div :class="[{'item-list': true, 'has-input': list.is_extra}]" :key="`action_${listIndex}`" v-for="(list, listIndex) in lists">
                         <template v-if="list.status === '4' || list.status === '5'">
                           <p  v-if="list.status === '4'" class="tag is-danger">ไม่ผ่าน</p>
                           <p  v-if="list.status === '5'" class="tag is-success">จ่ายแล้ว</p>
@@ -75,8 +121,7 @@
                       </div>
                     </td>
                     <td class="td order-9">
-                      <p class="tag is-gray" :key="`detail_${listIndex}`" v-for="(list, listIndex) in lists" @click="showDetail(list, index)" >รายละเอียด</p>
-
+                      <p class="tag is-gray" :key="`detail_${listIndex}`" v-for="(list, listIndex) in lists" @click="showDetail(list, index, listIndex)" >รายละเอียด</p>
                     </td>
                   </tr>
                 </tbody>
@@ -91,23 +136,56 @@
           <div>แปลง: <span>{{local.modelData.plan}}</span></div>
           <div>หมวดงาน: <span>{{local.modelData.work_group_name}}</span></div>
           <div>งวด: <span>{{local.modelData.time}} / {{local.modelData.name}}</span></div>
-          <div>หน่วย: <span>{{local.modelData.amount}} {{local.modelData.unit}}</span></div>
-          <div>ราคาต่อหน่วย: <span>{{NUMBERWITHCOMMAS(local.modelData.price, 2)}}</span></div>
-          <div>จำนวนเงินรวม: <span>{{NUMBERWITHCOMMAS(local.modelData.total_price, 2)}}</span></div>
+          <div>หน่วย:
+            <my-input
+              v-if="local.modelData.is_extra && local.modelData.status === '3'"
+              :value="local.modelData.amount"
+              :validator="$validator"
+              :inputObj="{type: 'text', name: `amount${local.modelData.listIndex}`, placeholder: '', validate: 'required'}"
+              @input="value => updateData(value, 'amount', local.modelData.index, local.modelData.listIndex)"
+            ></my-input>
+            <span v-else>{{local.modelData.amount}} {{local.modelData.unit}}</span>
+          </div>
+          <div>ราคาต่อหน่วย:
+            <my-input
+              v-if="local.modelData.is_extra && local.modelData.status === '3'"
+              :value="local.modelData.price"
+              :validator="$validator"
+              :inputObj="{type: 'text', name: `price${local.modelData.listIndex}`, placeholder: '', validate: 'required'}"
+              @input="value => updateData(value, 'price', local.modelData.index, local.modelData.listIndex)"
+            ></my-input>
+            <span v-else>{{NUMBERWITHCOMMAS(local.modelData.price, 2)}}</span>
+          </div>
+          <div>จำนวนเงินรวม:
+            <my-input
+              v-if="local.modelData.is_extra && local.modelData.status === '3'"
+              :value="local.modelData.total_price"
+              :validator="$validator"
+              :inputObj="{type: 'text', name: `total_price${local.modelData.listIndex}`, placeholder: '', validate: 'required'}"
+              @input="value => updateData(value, 'total_price', local.modelData.index, local.modelData.listIndex)"
+            ></my-input>
+            <span v-else>{{NUMBERWITHCOMMAS(local.modelData.total_price, 2)}}</span>
+          </div>
           <br/>
           <div class="update-status">
-            <my-action
-              type="null"
-              :obj="{title: 'จ่ายเงิน', color: 'is-warning', isConfirm: true}"
-              @clickEvent="submit('approve', local.modelData, local.modelData.index)"
-            >
-            </my-action>
-            <my-action
-              type="null"
-              :obj="{title: 'ไม่ผ่าน', color: 'is-danger', isConfirm: true}"
-              @clickEvent="submit('reject', local.modelData, local.modelData.index)"
-            >
-            </my-action>
+            <template v-if="local.modelData.status === '3'">
+              <my-action
+                type="null"
+                :obj="{title: 'จ่ายเงิน', color: 'is-warning', isConfirm: true}"
+                @clickEvent="submit('approve', local.modelData, local.modelData.index, true)"
+              >
+              </my-action>
+              <my-action
+                type="null"
+                :obj="{title: 'ไม่ผ่าน', color: 'is-danger', isConfirm: true}"
+                @clickEvent="submit('reject', local.modelData, local.modelData.index, true)"
+              >
+              </my-action>
+            </template>
+            <template v-if="local.modelData.status === '4' || local.modelData.status === '5'">
+              <p  v-if="local.modelData.status === '4'" class="tag is-danger">ไม่ผ่าน ( {{SET_DATEFORMAT(local.modelData.updated_at)}} )</p>
+              <p  v-if="local.modelData.status === '5'" class="tag is-success">จ่ายแล้ว ( {{SET_DATEFORMAT(local.modelData.updated_at)}} )</p>
+            </template>
           </div>
         </div>
       </model-panel>
@@ -175,28 +253,60 @@ export default {
       this.local.project.selected = obj.key
       this.fetchData()
     },
-    showDetail (obj, index) {
+    showDetail (obj, index, listIndex) {
       this.$refs.modelPanel.isActive = true
       this.local.modelData = obj
       this.local.modelData.index = index
+      this.local.modelData.listIndex = listIndex
     },
-    async submit (res, item, index) {
-      let status = '5'
+    async submit (res, item, index, isFromModel = false) {
+      item.status = '5'
       if (res === 'reject') {
-        status = '4'
+        item.status = '4'
       }
-      let resourceName = `${config.api.workSheetApproval.index}/${item.id}`
-      let result = await service.putResource({data: {status, updateType: 'update-status'}, resourceName})
+      let data = {
+        item,
+        updateType: 'update-status'
+      }
+      let resourceName = `${config.api.workSheet.index}/${item.id}`
+      await service.putResource({data, resourceName})
       // if (result.data !== 1) return
-      this.setItemAfterUpdated(item, index, status)
+      this.setItemAfterUpdated(item, index, item.status, isFromModel)
       this.NOTIFY('success')
     },
-    setItemAfterUpdated (obj, index, status) {
+    setItemAfterUpdated (obj, index, status, isFromModel) {
       this.local.dataObj[index].map((item) => {
         if (obj.id === item.id) {
           item.status = status
         }
       })
+      if (isFromModel) {
+        this.local.modelData.status = status
+      }
+    },
+    getClass (item) {
+      let isExtra = item.is_extra
+      return [
+        {'extra': isExtra}
+      ]
+    },
+    updateData (value, inputType, index, listIndex) {
+      let totalPrice = 0
+      let obj = this.local.dataObj[index][listIndex]
+      switch (inputType) {
+        case 'amount':
+          totalPrice = obj.price * value
+          this.local.dataObj[index][listIndex].total_price = totalPrice
+          break
+        case 'price':
+          totalPrice = value * obj.amount
+          this.local.dataObj[index][listIndex].total_price = totalPrice
+          break
+        case 'total_price':
+          break
+      }
+      this.local.dataObj[index][listIndex][inputType] = value
+      // console.log(this.local.dataObj[index][listIndex])
     }
   }
 }
@@ -239,7 +349,6 @@ table{
           margin: 0px 3px;
         }
       }
-      
     }
     @media (min-width: $tabletBreakpoint) {
       .order-4{
@@ -254,8 +363,10 @@ table{
         display: none;
       }
     }
-    
   }
+}
+.extra{
+  color: #fb8606;
 }
 .model{
   padding: 10px;
@@ -271,6 +382,15 @@ table{
       font-size: 0.9em;
       margin: 0 4px;
     }
+  }
+}
+.item-list:not(:last-child){
+  margin-bottom: 1em;
+}
+.has-input{
+  height: 25px;
+  p{
+    line-height: 25px;
   }
 }
 </style>

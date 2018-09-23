@@ -151,9 +151,11 @@ export default {
           break
       }
     },
-    REDIRECTTOHOME () {
+    REDIRECTTOHOME (userType = null) {
       // GET USER TYPE FRIST
-      let userType = this.USERTYPE
+      if (userType === null) {
+        userType = this.USERTYPE
+      }
       switch (userType) {
         case 'admin':
         case 'purchasing':
@@ -163,8 +165,8 @@ export default {
           this.GOTOPAGE('FrontSite', '')
           break
         default:
-          console.log('No userType <------------ have to fix it in vue.helpers.js')
-          this.GOTOPAGE('Home', '')
+          console.log('No userType when redirect')
+          this.GOTOPAGE('Login', '')
       }
     },
     IS_ADMIN () {
@@ -195,6 +197,7 @@ export default {
       let userData = JSON.parse(Helper.GET_STORAGEITEM('userData'))
       let userType = this.USERTYPE !== null ? this.USERTYPE : userData.position.toLowerCase()
       if (userType !== undefined && userType !== null) {
+        // console.log(userType, routeName)
         let permission = config.variable.userPermission.filter((item) => {
           return item.key === userType
         })
@@ -204,7 +207,7 @@ export default {
         } else if (allow.indexOf(routeName) >= 0 || isLogin) {
           return true
         } else {
-          this.REDIRECTTOHOME()
+          this.REDIRECTTOHOME(userType)
           return false
         }
       }

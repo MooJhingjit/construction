@@ -13,6 +13,7 @@ module.exports =  class WorkSheet {
     this.project_id
     this.house_id
     this.status
+    this.is_extra
     this.limit = 5
     this.offset = 0
   }
@@ -44,6 +45,7 @@ module.exports =  class WorkSheet {
       work_group_name: this.work_group_name,
       project_id: this.project_id,
       house_id: this.house_id,
+      is_extra: this.is_extra,
       status: 'IP'
     })
     await this.knex.destroy()
@@ -79,7 +81,8 @@ module.exports =  class WorkSheet {
     })
     .where('ws.project_id', this.project_id)
     .where('wsd.status', '!=', '0')
-    
+    .where('wsd.status', '!=', '1')
+    .where('wsd.status', '!=', '2')
     return result
   }
 

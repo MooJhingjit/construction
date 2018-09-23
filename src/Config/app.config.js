@@ -88,6 +88,9 @@ const api = {
   'workSheetApproval': {
     'index': '/work-sheet/approval'
   },
+  'payingPeriod': {
+    'home': '/paying-period'
+  }
 }
 
 const variable = {
@@ -143,7 +146,7 @@ const variable = {
     {key: '0', name: 'รอการบันทึก', class: 'is-white'},
     {key: '1', name: 'รอการตรวจสอบ', class: 'is-light'},
     {key: '2', name: 'ไม่ผ่านการตรวจสอบ', class: 'is-warning'},
-    {key: '3', name: 'รออนุมัติ', class: 'is-link'},
+    {key: '3', name: 'รออนุมัติจ่าย', class: 'is-link'},
     {key: '4', name: 'ไม่ผ่านการอนุมัติ', class: 'is-danger'},
     {key: '5', name: 'จ่ายเงินแล้ว', class: 'is-success'}
   ]

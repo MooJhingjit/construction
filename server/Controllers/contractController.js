@@ -463,7 +463,7 @@ async function getAllDataFromLosing (projectId) {
 }
 
 const getDetailByContractCode = async (typeSelect, code, byCode = true) => {
-  console.log('do getDetailByContractCode')
+  // console.log('do getDetailByContractCode')
   let contractItem = new contractModel()
   if (byCode) {
     condition = 'code'
