@@ -93,7 +93,7 @@ module.exports =  class WorkSheetDetail {
     if (this.status) {
       conditions.status = this.status
     }
-    if (this.has_rejected) {
+    if (this.has_rejected === 0 || this.has_rejected === 1) {
       conditions.has_rejected = this.has_rejected
     }
     if (this.price) {

@@ -46,7 +46,7 @@
                     <th>งวด/รายการ</th>
                     <th width="80">จำนวน</th>
                     <th width="80">หน่วย</th>
-                    <th>ราคา</th>
+                    <th width="150">ราคา</th>
                     <!-- <th width="80">ตรวจสอบ</th> -->
                     <th width="80">สถานะ</th>
                   </tr>
@@ -402,8 +402,9 @@ export default {
       if (this.isSaved(index)) {
         let itemListId = this.local.inputs[index].workGroup.lists[indexList].id
         let amount = this.local.inputs[index].workGroup.lists[indexList].amount
+        let price = this.local.inputs[index].workGroup.lists[indexList].price
         let resourceName = `${config.api.workSheetDetail.index}/${itemListId}`
-        let result = await service.putResource({data: {amount, status: '1'}, resourceName})
+        let result = await service.putResource({data: {price, amount, status: '1'}, resourceName})
         if (result.data !== 1) return
         this.NOTIFY('success')
       }

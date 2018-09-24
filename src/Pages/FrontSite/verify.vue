@@ -41,7 +41,7 @@
         <div>หน่วย: <span>{{local.modelData.unit}}</span></div>
         <div>จำนวน:
           <my-input
-            v-if="local.modelData.status === 1"
+            v-if="local.modelData.status === 1 && local.modelData.is_extra"
             :value="local.modelData.amount"
             :validator="$validator"
             :inputObj="{type: 'text', name: `amount${local.modelData.listIndex}`, placeholder: '', validate: 'required'}"
@@ -51,7 +51,7 @@
         </div>
         <div>ราคาต่อหน่วย:
           <my-input
-            v-if="local.modelData.status === 1"
+            v-if="local.modelData.status === 1 && local.modelData.is_extra"
             :value="local.modelData.price"
             :validator="$validator"
             :inputObj="{type: 'text', name: `price${local.modelData.listIndex}`, placeholder: '', validate: 'required'}"
@@ -61,7 +61,7 @@
         </div>
         <div>จำนวนเงิน:
           <my-input
-            v-if="local.modelData.status === 1"
+            v-if="local.modelData.status === 1 && local.modelData.is_extra"
             :value="local.modelData.total_price"
             :validator="$validator"
             :inputObj="{type: 'text', name: `total_price${local.modelData.listIndex}`, placeholder: '', validate: 'required'}"

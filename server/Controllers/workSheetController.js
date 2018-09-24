@@ -69,14 +69,17 @@ async function createData (req, res, next) {
 }
 
 async function updateData (req, res, next) {
-  // let obj = {
-  //   status: req.body.data.status
-  // }
+  // console.log('do updateData at worksheet status is => ' + req.body.data.item.status)
   let obj = req.body.data.item
-  if (req.body.data.updateType === 'update-status') {
-    if (obj.status === '4') {
+  if (req.body.data.updateType === 'update-status') { // from approve and verify page
+    if (obj.status === '4' || obj.status === '2') {
+      obj.status = '0'
       obj.has_rejected = 1
     }
+    if (obj.status === '3') {
+      obj.has_rejected = 0
+    }
+    // console.log(obj.status)
     await workSheetDetail.updateOldOne(req.params.id, obj)
   }
   res.status(200).json()

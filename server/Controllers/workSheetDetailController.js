@@ -35,17 +35,13 @@ async function createData (req, res, next) {
   // res.status(200).json(result)
 }
 
-async function updateData (req, res, next) {
+async function updateData (req, res, next) { // from worksheet page (checkbox update one)
   let id = req.params.id
   let obj = {
     amount: req.body.data.amount,
-    status: req.body.data.status
+    status: req.body.data.status,
   }
-  // let amount = req.body.data.amount
-  // let status = req.body.data.status
-  if (obj.status === '2') {
-    obj.has_rejected = 1
-  }
+  obj.total_price = parseFloat(obj.amount) * parseFloat(req.body.data.price)
   let result = await updateOldOne(id, obj)
   res.status(200).json(result)
 }
@@ -102,11 +98,14 @@ const updateOldOne = async (itemId, obj) => {
   if (obj.amount) {
     model.amount = obj.amount
   }
-  if (obj.has_rejected) {
+  if (obj.has_rejected === 0 || obj.has_rejected === 1) {
     model.has_rejected = obj.has_rejected
   }
   if (obj.is_extra) {
     model.price = obj.price
+    model.total_price = obj.total_price
+  }
+  if (obj.total_price) {
     model.total_price = obj.total_price
   }
   model.updated_at = helpers.getCurrentTime('sql')
@@ -133,10 +132,10 @@ const getStat = async (statType) => {
   let stat = []
   
   statObj.map((item) => {
-    console.log(item.date)
+    // console.log(item.date)
     let date = helpers.getDate(item.date, 'YYYY-MM-DD')
-    console.log(date)
-    console.log('------')
+    // console.log(date)
+    // console.log('------')
     if (stat[date]) {
       stat[date] +=  1
     } else {
