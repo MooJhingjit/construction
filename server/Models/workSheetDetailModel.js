@@ -13,6 +13,7 @@ module.exports =  class WorkSheetDetail {
     this.unit
     this.price
     this.total_price
+    this.note
     this.status
     this.is_extra
     this.has_rejected
@@ -49,6 +50,7 @@ module.exports =  class WorkSheetDetail {
       unit: this.unit,
       price: this.price,
       total_price: this.total_price,
+      note: this.note,
       status: this.status.toString(),
       is_extra: this.is_extra
     })
@@ -79,7 +81,7 @@ module.exports =  class WorkSheetDetail {
       .where({status: '5'})
     } else {
       result = await this.knex.select('created_at as date').from('work_sheet_detail')
-      .where({status: '1'})
+      .where(this.getCondition())
     }
     await this.knex.destroy()
     return result
@@ -104,6 +106,9 @@ module.exports =  class WorkSheetDetail {
     }
     if (this.updated_at) {
       conditions.updated_at = this.updated_at
+    }
+    if (this.is_extra) {
+      conditions.is_extra = this.is_extra
     }
     return conditions
   }

@@ -416,7 +416,7 @@ export default {
       })
     },
     reloadTable () {
-      this.$refs.dataTable.fetchData()
+      // this.$refs.dataTable.fetchData()
     },
     updateValue (orderingIndex, valueIndex, value, type) {
       switch (type) {
@@ -429,6 +429,10 @@ export default {
           this.ordering[orderingIndex].orderDetail[valueIndex].price = value
           break
       }
+      // console.log('orderingIndex => ' + orderingIndex)
+      // console.log('valueIndex => ' + valueIndex)
+      // console.log('value => ' + value)
+      // console.log('type => ' + type)
       let totalPrice = 0
       this.ordering[orderingIndex].orderDetail.map((item) => {
         totalPrice += parseFloat(item.price)

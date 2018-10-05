@@ -8,7 +8,7 @@
         <div class="todo-lists">
           <table class="table is-bordered">
             <thead>
-              <th width="150">หมวด</th>
+              <th width="10 0">หมวด</th>
               <th>งวด/รายการ</th>
               <!-- <th>ตรวจสอบ</th> -->
             </thead>
@@ -69,6 +69,7 @@
             ></my-input>
           <span v-else>{{NUMBERWITHCOMMAS(local.modelData.total_price, 2)}}</span>
         </div>
+        <div>หมายเหตุ: <span>{{local.modelData.note}}</span></div>
         <div>สถานะ:
           <span :class="`tag ${getListStatus(local.modelData.status, 'class')}`">
             {{getListStatus(local.modelData.status, 'name')}}
@@ -289,6 +290,9 @@ section {
   padding: 10px;
   span{
     font-weight: bold;
+  }
+  &>div{
+    margin-top: 10px;
   }
 }
 .front-site-update-page{

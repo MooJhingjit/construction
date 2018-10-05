@@ -25,6 +25,7 @@
                     <th class="td order-3" width="50">หน่วย</th>
                     <th class="td order-2" width="100">ราคาต่อหน่วย</th>
                     <th class="td order-1" width="100">จำนวนเงินรวม</th>
+                    <th class="td order-7" width="">อัพเดทล่าสุด</th>
                     <th class="td order-7" width=""></th>
                     <th class="td order-9" width=""></th>
                   </tr>
@@ -33,6 +34,7 @@
                   <tr :key="index" v-for="(lists, index) in local.dataObj">
                     <td class="td order-8">
                       <p>{{lists[0].technician_name}}</p>
+                      <i class="fa fa-print" @click="printWorkSheet(lists)" aria-hidden="true"></i>
                     </td>
                     <td class="td order-6">
                       <div :class="[{'item-list': true, 'has-input': list.is_extra}]" :key="`plan_${listIndex}`" v-for="(list, listIndex) in lists">
@@ -97,6 +99,11 @@
                        >{{NUMBERWITHCOMMAS(list.total_price, 2)}} บาท</p>
                       </div>
 
+                    </td>
+                    <td class="td order-7">
+                      <div :class="[{'item-list': true, 'has-input': list.is_extra}]" :key="`created_at_${listIndex}`" v-for="(list, listIndex) in lists">
+                        <p  :class="getClass(list)">{{SET_DATEFORMAT(list.updated_at)}}</p>
+                      </div>
                     </td>
                     <td class="td order-7">
                       <div :class="[{'item-list': true, 'has-input': list.is_extra}]" :key="`action_${listIndex}`" v-for="(list, listIndex) in lists">
@@ -166,6 +173,10 @@
             ></my-input>
             <span v-else>{{NUMBERWITHCOMMAS(local.modelData.total_price, 2)}}</span>
           </div>
+          <div>
+            อัพเดทล่าสุด:
+            {{SET_DATEFORMAT(local.modelData.updated_at)}}
+          </div>
           <br/>
           <div class="update-status">
             <template v-if="local.modelData.status === '3'">
@@ -189,6 +200,12 @@
           </div>
         </div>
       </model-panel>
+      <worksheet-template
+      class="worksheet-template"
+      ref="worksheetTemplate"
+      :headerObj="local.worksheet.header"
+      :dataObj="local.worksheet.data"
+      ></worksheet-template>
     </section>
 </template>
 
@@ -201,6 +218,7 @@ import myInput from '@Components/Form/my-input'
 import ModelPanel from '@Components/Model'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
+import worksheetTemplate from './worksheet-template'
 export default {
   props: {
   },
@@ -209,7 +227,8 @@ export default {
     myAutoComplete,
     myAction,
     myInput,
-    ModelPanel
+    ModelPanel,
+    worksheetTemplate
   },
   name: 'ApprovePage',
   data () {
@@ -226,9 +245,14 @@ export default {
         },
         modelData: null,
         project: {
-          selected: null
+          selected: null,
+          value: null
         },
-        dataObj: []
+        dataObj: [],
+        worksheet: {
+          header: {},
+          data: []
+        }
       }
     }
   },
@@ -251,6 +275,7 @@ export default {
     },
     projectSelectedHandle (obj) {
       this.local.project.selected = obj.key
+      this.local.project.value = obj.value
       this.fetchData()
     },
     showDetail (obj, index, listIndex) {
@@ -307,6 +332,13 @@ export default {
       }
       this.local.dataObj[index][listIndex][inputType] = value
       // console.log(this.local.dataObj[index][listIndex])
+    },
+    printWorkSheet (items) {
+      this.local.worksheet.header = {
+        project: this.local.project.value
+      }
+      this.local.worksheet.data = items
+      this.$refs.worksheetTemplate.printWorkSheet()
     }
   }
 }
@@ -347,6 +379,9 @@ table{
         button{
           font-size: 0.9em;
           margin: 0px 3px;
+        }
+        p{
+          white-space: nowrap;
         }
       }
     }
@@ -392,5 +427,16 @@ table{
   p{
     line-height: 25px;
   }
+}
+.fa-print{
+  font-size: 1.1em;
+  cursor: pointer;
+  &:hover{
+    font-size: 1.15em;
+    font-weight: bold;
+  }
+}
+.worksheet-template{
+  display: none;
 }
 </style>

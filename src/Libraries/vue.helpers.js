@@ -98,7 +98,7 @@ export default {
     SET_DATEFORMAT (dateInput, format = 'YYYY-MM-DD') {
       if (!dateInput) return null
       let date = new Date(dateInput)
-      return moment(date).format(format)
+      return moment.utc(date).format(format)
     },
     GOTOPAGE (pageName, key = '', queryString = []) {
       this.$router.push({

@@ -2,9 +2,11 @@ const orderingController = require('./orderingController')
 const projectController = require('./projectController')
 const contractController = require('./contractController')
 const helpers = require('../Libraries/helpers')
+const workSheetDetailController = require('./workSheetDetailController')
 
 async function getHomeData (req, res, next) {
   let orderingExtra = await orderingController.prepareChartData('extra')
+  let workSheet = await workSheetDetailController.prepareChartData()
   let resObj = {
     extraOrdering : {
       labels: orderingExtra.date,
@@ -13,6 +15,16 @@ async function getHomeData (req, res, next) {
           label: 'สั่งซื้อพิเศษ',
           backgroundColor: 'rgba(255,146,146,.7)',
           data: orderingExtra.data
+        }
+      ]
+    },
+    paying : {
+      labels: workSheet.date,
+      datasets: [
+        {
+          label: 'การจ่ายต่างวด',
+          backgroundColor: 'rgba(250,157,50,.7)',
+          data: workSheet.data
         }
       ]
     }

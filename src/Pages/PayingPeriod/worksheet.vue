@@ -42,19 +42,21 @@
                 <thead>
                   <tr>
                     <th width="5">#</th>
-                    <th width="200">หมวด</th>
-                    <th>งวด/รายการ</th>
-                    <th width="80">จำนวน</th>
-                    <th width="80">หน่วย</th>
-                    <th width="150">ราคา</th>
-                    <!-- <th width="80">ตรวจสอบ</th> -->
-                    <th width="80">สถานะ</th>
+                    <th width="100">หมวด</th>
+                    <th width="120">งวด/รายการ</th>
+                    <th width="50">จำนวน</th>
+                    <th width="50">หน่วย</th>
+                    <th width="80">ราคา</th>
+                    <th width="150">หมายเหตุ</th>
+                    <th width="50">อัพเดทล่าสุด</th>
+                    <th width="50">สถานะ</th>
                   </tr>
                 </thead>
                 <tbody>
                   <!-- {{local.inputs}} -->
                   <tr :class="getClassGroup(index)" :key="index" v-for="(group, index) in local.inputs">
-                    <td>{{index + 1}}</td>
+                    <td><p> {{index + 1}}</p></td>
+                    <!-- <td><p> {{index + 1}} <i class="fa fa-print" @click="printWorkSheet(index)" aria-hidden="true"></i></p></td> -->
                     <td>
                       <p v-if="isSaved(index)">{{group.workGroup.obj.value}}</p>
                       <my-auto-complete
@@ -130,6 +132,21 @@
                         <p :key="indexList" v-for="(item, indexList) in currentGroup(index)">{{NUMBERWITHCOMMAS(item.price, 2)}}</p>
                       </template>
                     </td>
+                    <td>
+                      <p v-if="parseInt(item.status) && isSaved(index)" :key="indexList" v-for="(item, indexList) in currentGroup(index)">
+                          <template >{{item.note}}</template>
+                        </p>
+                         <my-input
+                          v-else
+                          :value="item.note"
+                           :validator="$validator"
+                          :inputObj="{type: 'text', name: `note${indexList}`, placeholder: '', validate: 'required'}"
+                          @input="value => { item.note = value }"
+                        ></my-input>
+                    </td>
+                    <td>
+                      <p :key="indexList" v-for="(item, indexList) in currentGroup(index)">{{SET_DATEFORMAT(item.updated_at)}}</p>
+                    </td>
                     <td> <!-- ACTION -->
                         <my-action
                           v-if="currentGroup(index).length && !isSaved(index)"
@@ -158,6 +175,12 @@
           </div>
         </div>
       </div>
+      <worksheet-template
+      class="worksheet-template"
+      ref="worksheetTemplate"
+      :headerObj="local.headerTemplate"
+      :dataObj="local.worksheetTemplate"
+      ></worksheet-template>
     </section>
 </template>
 
@@ -168,6 +191,7 @@ import config from '@Config/app.config'
 import myAutoComplete from '@Components/Form/my-autocomp'
 import myAction from '@Components/Form/my-action'
 import myInput from '@Components/Form/my-input'
+import worksheetTemplate from './worksheet-template'
 export default {
   props: {
   },
@@ -175,7 +199,8 @@ export default {
     breadcrumbBar,
     myAutoComplete,
     myAction,
-    myInput
+    myInput,
+    worksheetTemplate
   },
   name: 'WorkSheetPage',
   data () {
@@ -195,7 +220,8 @@ export default {
           selected: null
         },
         project: {
-          selected: null
+          selected: null,
+          value: null
         },
         plan: {
           inputs: [],
@@ -215,11 +241,11 @@ export default {
             // isSaved: false
           }
         },
-        extraTemplate: {
-          //
-        },
+        extraTemplate: {},
         inputs: [],
-        count: 0
+        count: 0,
+        worksheetTemplate: [],
+        headerTemplate: {}
       }
     }
   },
@@ -280,6 +306,7 @@ export default {
         return
       }
       this.local.project.selected = obj.key
+      this.local.project.value = obj.value
       this.local.plan.selected = null
       this.local.count = 0
       this.setPlanData()
@@ -318,8 +345,10 @@ export default {
     planSelectedHandle (obj) {
       this.local.count = 0
       this.local.plan.selected = obj.key
+      this.local.plan.value = obj.value
       this.setContract()
       this.fetchData()
+      this.setHeaderTemplate()
     },
     setContract () {
       let contract = this.local.contract.temp.filter((item) => {
@@ -415,6 +444,20 @@ export default {
       return [
         {'extra-row': this.local.inputs[index].workGroup.obj.isExtra}
       ]
+    },
+    setHeaderTemplate () {
+      this.local.headerTemplate = {
+        project: this.local.project.value,
+        plan: this.local.plan.value,
+        house: this.houseId,
+        workGroup: 'xxxx',
+        technicians: this.local.technicians.selected.value
+      }
+      // console.log(this.local.headerTemplate)
+    },
+    printWorkSheet (index) {
+      this.local.worksheetTemplate = this.currentGroup(index)
+      this.$refs.worksheetTemplate.printWorkSheet()
     }
   }
 }
@@ -454,5 +497,19 @@ export default {
 }
 .extra-row{
   background: #fff0d9;
+}
+table tr td p{
+  white-space: nowrap;
+}
+.worksheet-template{
+  display: none;
+}
+.fa-print{
+  font-size: 1.1em;
+  cursor: pointer;
+  &:hover{
+    font-size: 1.15em;
+    font-weight: bold;
+  }
 }
 </style>

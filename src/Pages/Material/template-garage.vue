@@ -339,6 +339,14 @@ export default {
         item.delay = value
       })
     }
+  },
+  watch: {
+    obj: {
+      handler: function(newValue) {
+        this.fetchData()
+      },
+      deep: true
+    }
   }
 }
 </script>

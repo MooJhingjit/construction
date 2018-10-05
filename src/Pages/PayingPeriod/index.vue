@@ -14,7 +14,7 @@
                     :data="server.stat.submitStat.data"
                     ></spark-line>
                     <div class="value">
-                      <span class="num">{{local.sparkLineObj.submitJobs.count}}</span>
+                      <span class="num">{{server.stat.submitStat.count}}</span>
                       <span class="text">รายการ</span>
                     </div>
                   </div>
@@ -33,7 +33,7 @@
                     :data="server.stat.approvedStat.data"
                     ></spark-line>
                     <div class="value">
-                      <span class="num">{{local.sparkLineObj.approvePayment.count}}</span>
+                      <span class="num">{{server.stat.approvedStat.count}}</span>
                       <span class="text">รายการ</span>
                     </div>
                   </div>

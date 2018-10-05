@@ -49,7 +49,7 @@
                     <bar-chart v-if="local.extraOrdering != null" :data="local.extraOrdering"  :height="150" ></bar-chart>
                   </div>
                   <div class="stipend block">
-                    <bar-chart :data="local.item5" :height="150"></bar-chart>
+                    <bar-chart v-if="local.paying != null" :data="local.paying" :height="150"></bar-chart>
                   </div>
                 </div>
               </article>
@@ -174,6 +174,7 @@ export default {
             this.local.sparkLineObj.contract = res.data.stat.contractStat
             this.local.workingProgress = res.data.workingProgress
             this.local.extraOrdering = res.data.extraOrdering
+            this.local.paying = res.data.paying
           }
         })
         .catch(() => {

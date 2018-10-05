@@ -150,8 +150,7 @@ export default {
       local: {
         pageObj: {
           items: [
-            {name: 'หมวดงาน', route: 'WorkGroup', key: '', active: true, icon: 'fa fa-th'},
-            {name: 'ID', route: 'WorkGroupDetails', key: 'ID', active: true, icon: ''}
+            {name: 'หมวดงาน', route: 'WorkGroup', key: '', active: true, icon: 'fa fa-th'}
           ],
           template: {
             class: 'workgroup-details-page'

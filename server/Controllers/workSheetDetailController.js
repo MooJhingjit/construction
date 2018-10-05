@@ -85,6 +85,7 @@ const saveNewOne = async (workSheetId, obj, isExtra) => {
       model.unit = item.unit
       model.price = item.price
       model.total_price = totalPrice
+      model.note = item.note
       model.status = item.status
       await model.save()
     })
@@ -174,8 +175,33 @@ const getStat = async (statType) => {
   return obj
 }
 
+const prepareChartData = async (type) => {
+  let model = new workSheetDetailModel()
+  model.is_extra = 1
+  let res = await model.getStat()
+  let stat = []
+  res.map((item) => {
+    let date = helpers.getDate(item.date, 'YYYY-MM-DD')
+    
+    if (stat[date]) {
+      stat[date] +=  1
+    } else {
+      stat[date] = 1
+    }
+  })
+  let dataSets = {
+    date: [],
+    data: []
+  }
+  for (key in stat) {
+    dataSets.date.push(key)
+    dataSets.data.push(stat[key])
+  }
+  return dataSets
+}
+
 module.exports.getData = getData
-// module.exports.getDropDown = getDropDown
+module.exports.prepareChartData = prepareChartData
 module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData

@@ -71,7 +71,7 @@ module.exports =  class WorkSheet {
   }
 
   async getApprovalData () {
-    let result = await  this.knex.select('ws.technician_id', 'ws.plan', 'ws.work_group_name', 'wsd.*', 'technician.name as technician_name')
+    let result = await  this.knex.select('ws.technician_id', 'ws.house_id', 'ws.plan', 'ws.work_group_name', 'wsd.*', 'technician.name as technician_name')
     .from('work_sheet as ws')
     .leftJoin('work_sheet_detail as wsd', function() {
       this.on('ws.id', '=', 'wsd.work_sheet_id')
