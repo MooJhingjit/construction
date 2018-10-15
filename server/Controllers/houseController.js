@@ -1,6 +1,7 @@
 // const util = require('util')
 const helpers = require('../Libraries/helpers')
 const houseModel = require('../Models/houseModel')
+const houseColorModel = require('../Models/houseColorModel')
 
 const getData = (req, res, next) => {
   // let id = req.params.key
@@ -81,6 +82,26 @@ async function createData (req, res, next) {
   res.status(200).json(result)
 }
 
+async function createColorData (req, res, next) {
+  let newItem = new houseColorModel()
+  newItem.code = req.body.data.colorCode
+  let result = await newItem.save()
+  res.status(200).json(result[0])
+}
+
+const getColorDropDown = async (req, res, next) => {
+  let model = new houseColorModel()
+  let data = {}
+  data = await model.getColorSelection()
+  data = data.map(item => {
+    return {
+      key: item.code,
+      name: `${item.code}`
+    }
+  })
+  res.status(200).json(data)
+}
+
 async function updateData (req, res, next) {
   let item = new houseModel(req.params.id)
   item.plan = req.body.data.plan
@@ -107,3 +128,5 @@ module.exports.getAllData = getAllData
 module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.deleteData = deleteData
+module.exports.createColorData = createColorData
+module.exports.getColorDropDown = getColorDropDown

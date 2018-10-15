@@ -41,7 +41,9 @@ const api = {
   },
   'house': {
     'index': '/house',
-    'dropdown': '/house-selection'
+    'dropdown': '/house-selection',
+    'color': '/house/color',
+    'colorSelection': '/house/color-selection'
   },
   'plan': {
     'dropdown': '/plan-selection' // in house

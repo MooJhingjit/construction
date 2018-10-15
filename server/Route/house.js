@@ -8,4 +8,6 @@ router.get('/plan-selection', houseController.getPlanDropDown);
 router.post('/house', houseController.createData);
 router.put('/house/:id', houseController.updateData);
 router.delete('/house/:id', houseController.deleteData);
+router.get('/house/color-selection', houseController.getColorDropDown);
+router.post('/house/color', houseController.createColorData);
 module.exports = router;

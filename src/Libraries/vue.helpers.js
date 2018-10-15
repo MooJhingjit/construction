@@ -3,6 +3,7 @@ import Helper from '@Libraries/common.helpers'
 // import Config from '@AppConfig/app.config'
 // import moment from 'moment'
 // import swal from 'sweetalert'
+import service from '@Services/app-service'
 import config from '@Config/app.config'
 import moment from 'moment'
 export default {
@@ -15,9 +16,6 @@ export default {
     },
     LEFTRIGHT () {
       return config.variable.leftRight
-    },
-    HOUSECOLOR () {
-      return config.variable.housecolor
     },
     USERPOSITION () {
       let position = config.variable.userPermission
@@ -63,6 +61,11 @@ export default {
     ...mapActions([
       'setAuth'
     ]),
+    async GET_COLORMENU () {
+      let queryString = {}
+      let colorMenu = await service.getResource({resourceName: config.api.house.colorSelection, queryString})
+      return colorMenu.data
+    },
     GET_DATE (date) { // this for buefy
       if (date === undefined || date === null) {
         return null
@@ -250,6 +253,7 @@ export default {
         this.setAuth(false)
         return false
       }
+      this.setAuth(true)
       return true
     },
     REMOVEDUPLICATES (originalArray, prop) {

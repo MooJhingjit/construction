@@ -13,7 +13,7 @@
             <div class="select">
               <my-input
               :value="local.colorSelected.leftColor"
-              :inputObj="{type: 'select', icon: 'home', inputValue: HOUSECOLOR, name: 'house_stair', placeholder: 'เมนูสี', validate: ''}"
+              :inputObj="{type: 'select', icon: 'home', inputValue: local.colorMenu, name: 'house_stair', placeholder: 'เมนูสี', validate: ''}"
               :validator="$validator"
               @input="value => { local.colorSelected.leftColor = value }"
               @change="setLeftColor"
@@ -25,7 +25,7 @@
             <div class="select">
               <my-input
               :value="local.colorSelected.rightColor"
-              :inputObj="{type: 'select', icon: 'home', inputValue: HOUSECOLOR, name: 'house_stair', placeholder: 'เมนูสี', validate: ''}"
+              :inputObj="{type: 'select', icon: 'home', inputValue: local.colorMenu, name: 'house_stair', placeholder: 'เมนูสี', validate: ''}"
               :validator="$validator"
               @input="value => { local.colorSelected.rightColor = value}"
               @change="setRightColor"
@@ -196,14 +196,14 @@ export default {
           r_default: {}
         },
         materialGroupAll: [],
-        materialDelayAll: ''
+        materialDelayAll: '',
+        colorMenu: []
       }
     }
   },
   created () {
     this.fetchData()
-    this.local.colorSelected.leftColor = this.HOUSECOLOR[0].key
-    this.local.colorSelected.rightColor = this.HOUSECOLOR[0].key
+    this.getColorMenu()
   },
   updated () {
   },
@@ -215,6 +215,11 @@ export default {
       this.local.items = items.data
       this.setMaterialGroup()
       this.setMaterialDelay()
+    },
+    async getColorMenu () {
+      this.local.colorMenu = await this.GET_COLORMENU()
+      this.local.colorSelected.leftColor = this.local.colorMenu[0].key
+      this.local.colorSelected.rightColor = this.local.colorMenu[0].key
     },
     editRow (type) {
       if (type === 'add') {

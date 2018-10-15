@@ -72,6 +72,7 @@ export default {
       }
       let res = await service.postResource({resourceName, data})
       if (res.status === 200) {
+        // console.log(res.data.token)
         this.SETAUTH(res.data.token)
         this.getUserData()
       } else {

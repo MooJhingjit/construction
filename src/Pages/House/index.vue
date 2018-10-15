@@ -93,10 +93,27 @@
                 <div class="value">
                   <my-input
                     :value="local.inputs.color"
-                    :inputObj="{type: 'select', icon: 'home', inputValue: HOUSECOLOR, name: 'house_stair', placeholder: 'เมนูสี', validate: 'required'}"
+                    :inputObj="{type: 'select', icon: 'home', inputValue: local.colorMenu, name: 'house_stair', placeholder: 'เมนูสี', validate: 'required'}"
                     :validator="$validator"
                     @input="value => { local.inputs.color = value }"
                     ></my-input>
+                </div>
+                <div class="extra-block container-block">
+                  <div class="block add">
+                    <button class="button" v-if="local.newColorMenu.isNew" @click="addColor(false)"><i aria-hidden="true" class="fa fa-minus"></i></button>
+                    <button class="button" @click="addColor(true)"><i aria-hidden="true" class="fa fa-plus"></i></button>
+                  </div>
+                  <div class="block new-input" v-if="local.newColorMenu.isNew">
+                    <my-input
+                    :value="local.newColorMenu.value"
+                    :inputObj="{type: 'text', name: 'colorMenu', placeholder: 'เมนูสี', validate: 'required'}"
+                    :validator="$validator"
+                    @input="value => { local.newColorMenu.value = value }"
+                    ></my-input>
+                  </div>
+                  <div class="block new-submit" v-if="local.newColorMenu.isNew">
+                    <button class="button" @click="submitNewColor()"><i aria-hidden="true" class="fa fa-check"></i></button>
+                  </div>
                 </div>
                 <!-- <div class="select">
                   <select>
@@ -169,7 +186,12 @@ export default {
         // statusSearch: this.statusSearch,
         idSelected: '',
         items: {},
-        inputs: {}
+        inputs: {},
+        newColorMenu: {
+          value: null,
+          isNew: false
+        },
+        colorMenu: []
       }
     }
   },
@@ -189,8 +211,12 @@ export default {
   },
   created () {
     // console.log(this.statusSearch)
+    this.getColorMenu()
   },
   methods: {
+    async getColorMenu () {
+      this.local.colorMenu = await this.GET_COLORMENU()
+    },
     selectedDataHandle (item) {
       this.errors.clear()
       this.local.idSelected = item.id
@@ -203,79 +229,23 @@ export default {
       this.local.inputs.color = item.color
       this.local.submitMode = 'update'
     },
-    // submitForm (type) {
-    //   if (type === 'cancel') {
-    //     this.local.idSelected = null
-    //     return
-    //   }
-    //   this.$validator.validateAll().then((tf) => {
-    //     if (tf) {
-    //       let data = {}
-    //       let resourceName = config.api.house.index
-    //       if (type === 'update' && this.local.idSelected === 'new') {
-    //         type = 'save'
-    //       }
-    //       switch (type) {
-    //         case 'add':
-    //           this.local.idSelected = 'new'
-    //           this.cleanInput()
-    //           break
-    //         case 'save':
-    //           data = this.local.inputs
-    //           service.postResource({data, resourceName})
-    //             .then((res) => {
-    //               if (res.status === 200) {
-    //                 this.$refs.dataTable.fetchData()
-    //                 this.local.idSelected = ''
-    //                 this.cleanInput()
-    //                 this.NOTIFY('success')
-    //               } else {
-    //                 this.NOTIFY('error')
-    //               }
-    //             })
-    //             .catch((err) => {
-    //               console.log(err)
-    //             })
-    //           break
-    //         case 'delete':
-    //           resourceName = `${resourceName}/${this.local.idSelected}`
-    //           let queryString = []
-    //           service.deleteResource({resourceName, queryString})
-    //             .then((res) => {
-    //               if (res.status === 200) {
-    //                 this.$refs.dataTable.fetchData()
-    //                 this.local.idSelected = ''
-    //                 this.NOTIFY('success')
-    //               } else {
-    //                 this.NOTIFY('error')
-    //               }
-    //             })
-    //             .catch((err) => {
-    //               console.log(err)
-    //             })
-    //           break
-    //         case 'editupdate':
-    //           data = this.local.inputs
-    //           resourceName = `${resourceName}/${this.local.idSelected}`
-    //           service.putResource({data, resourceName})
-    //             .then((res) => {
-    //               if (res.status === 200) {
-    //                 this.$refs.dataTable.fetchData()
-    //                 this.local.idSelected = ''
-    //                 this.cleanInput()
-    //                 this.NOTIFY('success')
-    //               } else {
-    //                 this.NOTIFY('error')
-    //               }
-    //             })
-    //             .catch((err) => {
-    //               console.log(err)
-    //             })
-    //           break
-    //       }
-    //     }
-    //   })
-    // },
+    addColor (tf) {
+      this.local.newColorMenu.isNew = tf
+    },
+    async submitNewColor () {
+      let isValid = await this.$validator.validateAll()
+      if (!isValid) return false
+      let resourceName = config.api.house.color
+      let data = {
+        colorCode: this.local.newColorMenu.value
+      }
+      let res = await service.postResource({data, resourceName})
+      if (res.data) {
+        this.local.colorMenu.push({key: data.colorCode, name: data.colorCode})
+        this.local.newColorMenu.value = null
+        this.local.newColorMenu.isNew = false
+      }
+    },
     async submitForm (type) {
       let isValid = await this.$validator.validateAll()
       let resourceName = this.resourceName
@@ -332,5 +302,13 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.extra-block{
+  flex: 20;
+  .block.add{
+    flex: 0;
+    min-width: 100px;
+    margin: 0 5px;
+  }
+}
 </style>
