@@ -4,32 +4,62 @@
       <div class="container-block">
         <div class="detail-panel">
           <div class="container-block  detail-block">
-            <div class="container-block block c-header">
-              <div class="block">
-                <my-auto-complete
-                @select="technicianSelectedHandle"
-                :arrInputs="local.technicians.inputs"
-                placeholder="ค้นหาช่าง"
-                label=""
-                ></my-auto-complete>
+            <div class="block c-header">
+              <div class="container-block">
+                <div class="block">
+                  <my-auto-complete
+                  @select="technicianSelectedHandle"
+                  :arrInputs="local.technicians.inputs"
+                  :config="{getNullVal: false}"
+                  placeholder="ค้นหาช่าง"
+                  label=""
+                  ></my-auto-complete>
+                </div>
+                <div class="block">
+                  <my-auto-complete
+                  v-if="local.technicians.selected !== null"
+                  @select="projectSelectedHandle"
+                  :arrInputs="'project'"
+                  :config="{getNullVal: false}"
+                  placeholder="ค้นหาโครงการ"
+                  label=""
+                  ></my-auto-complete>
+                </div>
+                <div class="block">
+                  <my-auto-complete
+                  v-if="local.technicians.selected !== null && local.project.selected !== null"
+                  :arrInputs="local.plan.inputs"
+                  @select="planSelectedHandle"
+                  :config="{getNullVal: false}"
+                  placeholder="ค้นหาแปลง"
+                  label=""
+                  ></my-auto-complete>
+                </div>
               </div>
-              <div class="block">
-                <my-auto-complete
-                v-if="local.technicians.selected !== null"
-                @select="projectSelectedHandle"
-                :arrInputs="'project'"
-                placeholder="ค้นหาโครงการ"
-                label=""
-                ></my-auto-complete>
-              </div>
-              <div class="block">
-                <my-auto-complete
-                v-if="local.technicians.selected !== null && local.project.selected !== null"
-                :arrInputs="local.plan.inputs"
-                @select="planSelectedHandle"
-                placeholder="ค้นหาแปลง"
-                label=""
-                ></my-auto-complete>
+              <div class="container-block filter-menu">
+                <div class="block">
+                  <my-auto-complete
+                  v-if="local.plan.selected !== null"
+                  :arrInputs="local.yearSelection.inputs"
+                  @select="filterYear"
+                  :config="{getNullVal: true}"
+                  placeholder="ระบุปี"
+                  label=""
+                  ></my-auto-complete>
+                </div>
+                <div class="block">
+                  <my-auto-complete
+                  v-if="local.yearSelection.selected !== null && local.plan.selected !== null"
+                  :arrInputs="local.monthSelection.inputs"
+                  @select="filterMonth"
+                  :config="{getNullVal: true}"
+                  placeholder="ระบุเดือน"
+                  label=""
+                  ></my-auto-complete>
+                </div>
+                <div class="block"></div>
+                <div class="block"></div>
+                <div class="block"></div>
               </div>
             </div>
             <div class="block c-body" v-if="local.project.selected !== null && local.plan.selected !== null"> <!--  -->
@@ -44,9 +74,10 @@
                     <th width="5">#</th>
                     <th width="100">หมวด</th>
                     <th width="120">งวด/รายการ</th>
+                    <th width="100">ช่าง</th>
                     <th width="50">จำนวน</th>
                     <th width="50">หน่วย</th>
-                    <th width="80">ราคา</th>
+                    <th width="80">ราคา/หน่วย</th>
                     <th width="150">หมายเหตุ</th>
                     <th width="50">อัพเดทล่าสุด</th>
                     <th width="50">สถานะ</th>
@@ -54,27 +85,28 @@
                 </thead>
                 <tbody>
                   <!-- {{local.inputs}} -->
-                  <tr :class="getClassGroup(index)" :key="index" v-for="(group, index) in local.inputs">
+                  <tr :class="getClassGroup(group.workGroup.realOrder)" :key="group.workGroup.realOrder" v-for="(group, index) in itemLists">
                     <td><p> {{index + 1}}</p></td>
                     <!-- <td><p> {{index + 1}} <i class="fa fa-print" @click="printWorkSheet(index)" aria-hidden="true"></i></p></td> -->
                     <td>
-                      <p v-if="isSaved(index)">{{group.workGroup.obj.value}}</p>
+                      <p v-if="isSaved(group.workGroup.realOrder)">{{group.workGroup.obj.value}}</p>
                       <my-auto-complete
                       v-else
-                      @select="val => workGroupSelectedHandle(val, index)"
+                      @select="val => workGroupSelectedHandle(val, group.workGroup.realOrder)"
                       :arrInputs="'workGroup'"
                       placeholder="เลือกหมวดงาน"
+                      :config="{getNullVal: false}"
                       label=""
                       ></my-auto-complete>
                       <div class="list-btn" v-if="group.isExtra">
-                        <button v-if="group.workGroup.lists.length > 0" class="button" @click="editExtraRow('add', index)"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                        <button v-if="group.workGroup.lists.length > 0" class="button" @click="editExtraRow('minus', index)"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                        <button v-if="group.workGroup.lists.length > 0" class="button" @click="editExtraRow('add', group.workGroup.realOrder)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button v-if="group.workGroup.lists.length > 0" class="button" @click="editExtraRow('minus', group.workGroup.realOrder)"><i class="fa fa-minus" aria-hidden="true"></i></button>
                       </div>
                     </td>
                     <td class="list-name"> <!-- CHECKBOX BTN -->
                         <template v-if="group.isExtra">
                           <my-input
-                            :key="indexList" v-for="(item, indexList) in currentGroup(index)"
+                            :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)"
                             :value="item.name"
                              :validator="$validator"
                             :inputObj="{type: 'text', name: `name${indexList}`, placeholder: '', validate: 'required'}"
@@ -82,18 +114,23 @@
                           ></my-input>
                         </template>
                         <template v-else>
-                          <p :key="indexList" v-for="(item, indexList) in currentGroup(index)">
-                            <template v-if="parseInt(item.status) && isSaved(index)">{{item.name}}</template>
+                          <p :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)">
+                            <template v-if="parseInt(item.status) && isSaved(group.workGroup.realOrder)">{{item.name}}</template>
                             <label v-else  class="checkbox">
-                              <input v-if="isSaved(index)" type="checkbox" @change="setListsSelected(item.status, index, indexList)" v-model="item.status">
-                              <input v-else type="checkbox" @change="setListsSelected(item.id, index, indexList)" v-model="item.id">
+                              <input v-if="isSaved(group.workGroup.realOrder)" type="checkbox" @change="setListsSelected(item.status, group.workGroup.realOrder, indexList)" v-model="item.status">
+                              <input v-else type="checkbox" @change="setListsSelected(item.id, group.workGroup.realOrder, indexList)" v-model="item.id">
                               {{item.name}}
                             </label>
                           </p>
                         </template>
                     </td>
                     <td>
-                        <p v-if="parseInt(item.status) && isSaved(index)" :key="indexList" v-for="(item, indexList) in currentGroup(index)">
+                       <p :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)">
+                         <template v-if="parseInt(item.status) && isSaved(group.workGroup.realOrder)">{{item.technicianName}}</template>
+                       </p>
+                    </td>
+                    <td>
+                        <p v-if="parseInt(item.status) && isSaved(group.workGroup.realOrder)" :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)">
                           <template >{{item.amount}}</template>
                         </p>
                          <my-input
@@ -107,7 +144,7 @@
                     <td>
                       <template v-if="group.isExtra">
                         <my-input
-                          :key="indexList" v-for="(item, indexList) in currentGroup(index)"
+                          :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)"
                           :value="item.unit"
                            :validator="$validator"
                           :inputObj="{type: 'text', name: `unit${indexList}`, placeholder: '', validate: 'required'}"
@@ -115,13 +152,13 @@
                         ></my-input>
                       </template>
                       <template v-else>
-                        <p :key="indexList" v-for="(item, indexList) in currentGroup(index)">{{item.unit}}</p>
+                        <p :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)">{{item.unit}}</p>
                       </template>
                     </td>
                     <td>
                       <template v-if="group.isExtra">
                         <my-input
-                          :key="indexList" v-for="(item, indexList) in currentGroup(index)"
+                          :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)"
                           :value="item.price"
                            :validator="$validator"
                           :inputObj="{type: 'text', name: `price${indexList}`, placeholder: '', validate: 'required'}"
@@ -129,38 +166,38 @@
                         ></my-input>
                       </template>
                       <template v-else>
-                        <p :key="indexList" v-for="(item, indexList) in currentGroup(index)">{{NUMBERWITHCOMMAS(item.price, 2)}}</p>
+                        <p :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)">{{NUMBERWITHCOMMAS(item.price, 2)}}</p>
                       </template>
                     </td>
                     <td>
-                      <p v-if="parseInt(item.status) && isSaved(index)" :key="indexList" v-for="(item, indexList) in currentGroup(index)">
+                      <p v-if="parseInt(item.status) && isSaved(group.workGroup.realOrder)" :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)">
                           <template >{{item.note}}</template>
                         </p>
                          <my-input
                           v-else
                           :value="item.note"
                            :validator="$validator"
-                          :inputObj="{type: 'text', name: `note${indexList}`, placeholder: '', validate: 'required'}"
+                          :inputObj="{type: 'text', name: `note${indexList}`, placeholder: '', validate: ''}"
                           @input="value => { item.note = value }"
                         ></my-input>
                     </td>
                     <td>
-                      <p :key="indexList" v-for="(item, indexList) in currentGroup(index)">{{SET_DATEFORMAT(item.updated_at)}}</p>
+                      <p :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)">{{SET_DATEFORMAT(item.updated_at)}}</p>
                     </td>
                     <td> <!-- ACTION -->
                         <my-action
-                          v-if="currentGroup(index).length && !isSaved(index)"
+                          v-if="currentGroup(group.workGroup.realOrder).length && !isSaved(group.workGroup.realOrder)"
                           type=""
                           :obj="{title: 'บันทึก', color: 'is-light', isConfirm: true}"
-                          @clickEvent="submitForm(index)"
+                          @clickEvent="submitForm(group.workGroup.realOrder)"
                         >
                         </my-action>
                         <p
-                          v-else-if="isSaved(index)"
-                          :class="`tag ${getListStatus(index, list, 'class')}`"
-                          :key="listIndex" v-for="(list, listIndex) in currentGroup(index)"
+                          v-else-if="isSaved(group.workGroup.realOrder)"
+                          :class="`tag ${getListStatus(group.workGroup.realOrder, list, 'class')}`"
+                          :key="listIndex" v-for="(list, listIndex) in currentGroup(group.workGroup.realOrder)"
                           >
-                          {{getListStatus(index, list, 'name')}}
+                          {{getListStatus(group.workGroup.realOrder, list, 'name')}}
                         </p>
                     </td>
                   </tr>
@@ -235,23 +272,51 @@ export default {
         inputsTemplate: {
           isExtra: false,
           workGroup: {
-            obj: {},
+            obj: {
+              status: null
+            },
             lists: []
-            // listSelected: [],
-            // isSaved: false
           }
+        },
+        yearSelection: {
+          inputs: [],
+          selected: null
+        },
+        monthSelection: {
+          inputs: [],
+          selected: null
         },
         extraTemplate: {},
         inputs: [],
         count: 0,
         worksheetTemplate: [],
-        headerTemplate: {}
+        headerTemplate: {},
+        dateSelectionDefault: {
+          year: this.EXTRACT_DATE('now', 'Y'),
+          month: this.EXTRACT_DATE('now', 'M')
+        }
       }
     }
   },
   computed: {
     houseId () {
       return this.local.contract.selected.house_id
+    },
+    itemLists () {
+      let inputs = this.local.inputs
+      if (this.local.yearSelection.selected !== null) {
+        inputs = inputs.filter((obj) => {
+          return obj.workGroup.obj.dateSelection.year === this.local.yearSelection.selected || obj.workGroup.obj.status === 'new'
+        })
+        // console.log(inputs)
+      }
+      if (this.local.monthSelection.selected !== null) {
+        inputs = inputs.filter((obj) => {
+          return obj.workGroup.obj.dateSelection.month === this.local.monthSelection.selected || obj.workGroup.obj.status === 'new'
+        })
+        // console.log(inputs)
+      }
+      return inputs
     }
   },
   async created () {
@@ -276,20 +341,39 @@ export default {
       let technician = this.local.technicians.selected.key
       let queryString = this.BUILDPARAM({project: this.local.project.selected, plan: this.local.plan.selected})
       let obj = await service.getResource({resourceName: `${config.api.workSheet.index}/${technician}`, queryString})
+      let yearSelection = []
+      let monthSelection = []
       if (obj.data.length > 0) {
-        obj.data.map((item) => {
+        obj.data.map((item, index) => {
           this.local.inputs.push({
             workGroup: {
+              realOrder: index,
               obj: {
                 key: item.work_group_id,
                 value: item.work_group_name,
                 status: item.status,
-                isExtra: item.is_extra
+                isExtra: item.is_extra,
+                dateSelection: {
+                  year: this.EXTRACT_DATE(item.created_at, 'Y'),
+                  month: this.EXTRACT_DATE(item.created_at, 'M')
+                }
               },
               lists: item.lists
             }
           })
-          // console.log(this.local.inputs)
+          // start setting filter
+          let year = this.EXTRACT_DATE(item.created_at, 'Y')
+          let month = this.EXTRACT_DATE(item.created_at, 'M')
+          yearSelection.push({
+            key: year,
+            value: year
+          })
+          monthSelection.push({
+            key: month,
+            value: month
+          })
+          this.local.yearSelection.inputs = this.REMOVEDUPLICATES(yearSelection, 'key')
+          this.local.monthSelection.inputs = this.REMOVEDUPLICATES(monthSelection, 'key')
         })
       } else {
         this.editRow('add')
@@ -311,9 +395,9 @@ export default {
       this.local.count = 0
       this.setPlanData()
     },
-    async workGroupSelectedHandle (obj, index) { // <----------------------------
-      obj.status = null
-      this.local.inputs[index].workGroup.obj = obj
+    async workGroupSelectedHandle (obj, index) {
+      this.local.inputs[index].workGroup.obj.key = obj.key
+      this.local.inputs[index].workGroup.obj.value = obj.value
       if (this.local.inputs[index].isExtra) {
         this.local.inputs[index].workGroup.lists.push({})
         return
@@ -358,11 +442,17 @@ export default {
       this.local.contract.selected = contract[0]
     },
     editRow (type, isExtra = false) {
+      // this.resetFilter()
       if (type === 'add') {
         this.local.count += 1
         let newObj = JSON.parse(JSON.stringify(this.local.inputsTemplate))
         if (isExtra) {
           newObj.isExtra = true
+        }
+        newObj.workGroup.realOrder = this.local.inputs.length
+        newObj.workGroup.obj = {
+          dateSelection: this.local.dateSelectionDefault,
+          status: 'new'
         }
         this.local.inputs.push(newObj)
       } else {
@@ -402,6 +492,9 @@ export default {
       this.NOTIFY('error')
     },
     getListStatus (index, item, type) {
+      if (item.status === true) {
+        item.status = 1
+      }
       // console.log(typeof item.status)
       let obj = this.GETWORKSHEETSTATUS(item.status)[0]
       // console.log(obj)
@@ -428,16 +521,18 @@ export default {
       return this.local.inputs[index].workGroup.lists
     },
     async setListsSelected (tf, index, indexList) {
-      if (this.isSaved(index)) {
+      if (this.isSaved(index)) { // update after submit btn
         let itemListId = this.local.inputs[index].workGroup.lists[indexList].id
         let amount = this.local.inputs[index].workGroup.lists[indexList].amount
         let price = this.local.inputs[index].workGroup.lists[indexList].price
+        let technician = this.local.technicians.selected.key
         let resourceName = `${config.api.workSheetDetail.index}/${itemListId}`
-        let result = await service.putResource({data: {price, amount, status: '1'}, resourceName})
+        let result = await service.putResource({data: {price, amount, technician, status: '1'}, resourceName})
         if (result.data !== 1) return
         this.NOTIFY('success')
       }
       this.local.inputs[index].workGroup.lists[indexList].status = (tf) ? '1' : '0'
+      this.local.inputs[index].workGroup.lists[indexList].technicianName = this.local.technicians.selected.value
       // console.log(typeof this.local.inputs[index].workGroup.lists[indexList].status)
     },
     getClassGroup (index) {
@@ -458,6 +553,22 @@ export default {
     printWorkSheet (index) {
       this.local.worksheetTemplate = this.currentGroup(index)
       this.$refs.worksheetTemplate.printWorkSheet()
+    },
+    filterYear (obj) {
+      this.local.yearSelection.selected = obj.key
+    },
+    filterMonth (obj) {
+      this.local.monthSelection.selected = obj.key
+    },
+    resetFilter () {
+      this.yearSelection = {
+        inputs: [],
+        selected: null
+      }
+      this.monthSelection = {
+        inputs: [],
+        selected: null
+      }
     }
   }
 }
@@ -468,6 +579,10 @@ export default {
   flex-direction: row !important;
   .block{
     padding: 5px;
+    margin-bottom: 0;
+  }
+  .filter-menu{
+
   }
 }
 .detail-panel .c-body{
@@ -500,6 +615,9 @@ export default {
 }
 table tr td p{
   white-space: nowrap;
+  min-height: 20px;
+  // height: 30px;
+  // margin-bottom: 0;
 }
 .worksheet-template{
   display: none;

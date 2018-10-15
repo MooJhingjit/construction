@@ -8,6 +8,7 @@
            <my-auto-complete
             @select="projectSelectedHandle"
             :arrInputs="local.project.inputs"
+            :config="{getNullVal: false}"
             :validator="$validator"
             placeholder="โครงการ"
             label=""
@@ -20,6 +21,7 @@
            <my-auto-complete
             @select="houseSelectedHandle"
             :arrInputs="local.house.inputs"
+            :config="{getNullVal: false}"
             :validator="$validator"
             placeholder="แบบบ้าน"
             label=""
@@ -32,6 +34,7 @@
            <my-auto-complete
             @select="storeSelectedHandle"
             :arrInputs="local.store.inputs"
+            :config="{getNullVal: false}"
             :validator="$validator"
             placeholder="ประเภทวัสดุ"
             label=""

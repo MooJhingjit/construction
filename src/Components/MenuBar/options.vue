@@ -34,10 +34,10 @@
               <div class="icon"><i class="fa fa-th-large" aria-hidden="true"></i></div>
               <div class="desc">กลุ่มวัสดุ</div>
             </div>
-            <div class="block container-block" @click="goToPage('Authority', 'all')">
+            <!-- <div class="block container-block" @click="goToPage('Authority', 'all')">
               <div class="icon"><i class="fa fa-check-square-o" aria-hidden="true"></i></div>
               <div class="desc">สิทธิ์การใช้งาน</div>
-            </div>
+            </div> -->
             <div class="block container-block" @click="goToPage('Users', '')">
               <div class="icon"><i class="fa fa-address-book-o" aria-hidden="true"></i></div>
               <div class="desc">ผู้ใช้งาน</div>

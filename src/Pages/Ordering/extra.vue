@@ -9,6 +9,7 @@
           <my-auto-complete
           @select="contractSelectedHandle"
           :arrInputs="local.contract.inputs"
+          :config="{getNullVal: false}"
           placeholder="เลขที่สัญญา"
           label=""
           ></my-auto-complete>
@@ -20,6 +21,7 @@
            <my-auto-complete
             @select="storeSelectedHandle"
             :arrInputs="local.store.inputs"
+            :config="{getNullVal: false}"
             :validator="$validator"
             placeholder="ประเภทวัสดุ"
             label=""
@@ -43,6 +45,7 @@
                  <my-auto-complete
                   @select="objVal => {item.obj = objVal || null}"
                   :arrInputs="local.materialItems"
+                  :config="{getNullVal: false}"
                   :validator="$validator"
                   placeholder="วัสดุ"
                   label=""

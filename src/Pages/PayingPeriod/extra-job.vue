@@ -9,6 +9,7 @@
                 <my-auto-complete
                 @select="projectSelectedHandle"
                 :arrInputs="[]"
+                :config="{getNullVal: false}"
                 placeholder="ค้นหาช่าง"
                 label=""
                 ></my-auto-complete>
@@ -17,6 +18,7 @@
                 <my-auto-complete
                 @select="projectSelectedHandle"
                 :arrInputs="[]"
+                :config="{getNullVal: false}"
                 placeholder="ค้นหาโครงการ"
                 label=""
                 ></my-auto-complete>
@@ -25,6 +27,7 @@
                 <my-auto-complete
                 @select="projectSelectedHandle"
                 :arrInputs="[]"
+                :config="{getNullVal: false}"
                 placeholder="ค้นหาแปลง"
                 label=""
                 ></my-auto-complete>

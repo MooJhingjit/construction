@@ -14,6 +14,7 @@
                         <span class="name">แบบบ้าน</span>
                         <my-auto-complete
                         @select="houseSelectedHandle"
+                        :config="{getNullVal: false}"
                         :arrInputs="local.houseTemplate.inputs"
                         placeholder="ค้นหาแบบบ้าน"
                         label=""

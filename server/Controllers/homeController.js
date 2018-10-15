@@ -32,7 +32,7 @@ async function getData (req, res, next) {
       labels: workSheet.date,
       datasets: [
         {
-          label: 'การจ่ายต่างวด',
+          label: 'การจ่ายค่างวด',
           backgroundColor: 'rgba(250,157,50,.7)',
           data: workSheet.data
         }

@@ -38,6 +38,7 @@ async function createData (req, res, next) {
 async function updateData (req, res, next) { // from worksheet page (checkbox update one)
   let id = req.params.id
   let obj = {
+    technicianId: req.body.data.technician,
     amount: req.body.data.amount,
     status: req.body.data.status,
   }
@@ -50,9 +51,10 @@ async function updateData (req, res, next) { // from worksheet page (checkbox up
 
 // function -------------------------------------------
 
-const getData = async (groupId) => {
+const getData = async (groupId, technicianId) => {
   let item = new workSheetDetailModel()
   item.work_sheet_id = groupId
+  // item.technician_id = technicianId
   let res = await item.getData()
   res.map((item) => {
     item.status = parseInt(item.status)
@@ -68,7 +70,7 @@ const getData = async (groupId) => {
 //   return res
 // }
 
-const saveNewOne = async (workSheetId, obj, isExtra) => {
+const saveNewOne = async (workSheetId, obj, isExtra, technicianId) => {
   let model = new workSheetDetailModel()
   let totalPrice = 0
   let res = await Promise.all(
@@ -79,6 +81,7 @@ const saveNewOne = async (workSheetId, obj, isExtra) => {
       }
       totalPrice = parseFloat(item.price) * parseInt(item.amount)
       model.work_sheet_id = workSheetId
+      model.technician_id = (item.status === 1) ? technicianId : null
       model.time = item.time
       model.name = item.name
       model.amount = item.amount
@@ -96,11 +99,16 @@ const saveNewOne = async (workSheetId, obj, isExtra) => {
 const updateOldOne = async (itemId, obj) => {
   let model = new workSheetDetailModel(itemId)
   model.status = obj.status
-  if (obj.amount) {
-    model.amount = obj.amount
-  }
   if (obj.has_rejected === 0 || obj.has_rejected === 1) {
     model.has_rejected = obj.has_rejected
+  }
+  if (obj.has_rejected === 1) {
+    model.technician_id = null
+  } else {
+    model.technician_id = obj.technicianId
+  }
+  if (obj.amount) {
+    model.amount = obj.amount
   }
   if (obj.is_extra) {
     model.price = obj.price

@@ -3,18 +3,17 @@
     <slot name="title"></slot>
     <div class="container-block search-options">
       <div :class="{'options-panel':true, 'small': isHideMenu}">
-        <div class="container-block hide-menu"><i class="fa fa-chevron-circle-left" aria-hidden="true" @click="hideMenu()"></i></div>
         <div class="container-block">
           <slot name="data-table"></slot>
+          <span class="container-block hide-menu">
+            <i class="block fa fa-chevron-circle-left" aria-hidden="true" @click="hideMenu()"></i>
+          </span>
         </div>
         <div class="expand">
           <i class="fa fa-chevron-circle-right" aria-hidden="true" @click="showMenu()"></i>
         </div>
         <div class="container-block function">
           <slot name="function"></slot>
-          <!-- <button class="button is-link">เพิ่มข้อมูล</button> -->
-          <!-- <button class="button is-info">เพิ่มรายการสั่งซื้อใหม่</button> -->
-          <!-- <button class="button is-danger">เพิ่มข้อมูล</button> -->
         </div>
       </div>
       <div class="detail-panel">
@@ -92,10 +91,19 @@ export default {
 
 <style lang="scss" scoped>
 .hide-menu{
+  justify-content: center;
+  // align-items: center;
   color: #fff;
-  font-size: 1.5em;
-  margin-bottom: 5px;
+  font-size: 1.6em;
+  // margin-bottom: 5px;
+  margin-left: 5px;
   cursor: pointer;
+  i{
+    // margin-top: 5px;
+  }
+}
+.function {
+  margin-right: 22px;
 }
 .expand{
   cursor: pointer;

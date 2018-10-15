@@ -13,7 +13,8 @@
           :ref="`${item.key}_autoComplete`"
           :key="index"
           @select="objVal => autoCompleteSelected(objVal, item.key) "
-          :arrInputs="local.autoCompleteSearch[item.key].inputs "
+          :arrInputs="local.autoCompleteSearch[item.key].inputs"
+          :config="{getNullVal: false}"
           :placeholder="item.placeholder"
           label=""
           ></my-auto-complete>

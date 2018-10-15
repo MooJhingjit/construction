@@ -100,6 +100,22 @@ export default {
       let date = new Date(dateInput)
       return moment.utc(date).format(format)
     },
+    EXTRACT_DATE (date = null, selection = 'all') {
+      if (date === 'now') {
+        date = new Date()
+      }
+      date = moment(date, 'YYYY/MM/DD')
+      if (selection === 'all') {
+        return `${date.format('YYYY')}/${date.format('M')}/${date.format('D')}`
+      } else if (selection === 'Y') {
+        return date.format('YYYY')
+      } else if (selection === 'M') {
+        return date.format('M')
+      } else if (selection === 'D') {
+        return date.format('D')
+      }
+      return null
+    },
     GOTOPAGE (pageName, key = '', queryString = []) {
       this.$router.push({
         name: pageName,

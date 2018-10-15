@@ -6,7 +6,6 @@ module.exports =  class WorkSheet {
   constructor(id){
     this.knex = knex(db.config);
     this.id = id;
-    this.technician_id
     this.plan
     this.work_group_id
     this.work_group_name
@@ -39,7 +38,6 @@ module.exports =  class WorkSheet {
 
   async save () {
     let result = await this.knex('work_sheet').insert({
-      technician_id: this.technician_id,
       plan: this.plan,
       work_group_id: this.work_group_id,
       work_group_name: this.work_group_name,
@@ -71,13 +69,13 @@ module.exports =  class WorkSheet {
   }
 
   async getApprovalData () {
-    let result = await  this.knex.select('ws.technician_id', 'ws.house_id', 'ws.plan', 'ws.work_group_name', 'wsd.*', 'technician.name as technician_name')
+    let result = await  this.knex.select('wsd.technician_id', 'ws.house_id', 'ws.plan', 'ws.work_group_name', 'wsd.*', 'technician.name as technician_name')
     .from('work_sheet as ws')
     .leftJoin('work_sheet_detail as wsd', function() {
       this.on('ws.id', '=', 'wsd.work_sheet_id')
     })
     .leftJoin('technician', function() {
-      this.on('ws.technician_id', '=', 'technician.id')
+      this.on('wsd.technician_id', '=', 'technician.id')
     })
     .where('ws.project_id', this.project_id)
     .where('wsd.status', '!=', '0')
@@ -88,9 +86,9 @@ module.exports =  class WorkSheet {
 
   getCondition () {
     let conditions = {}
-    if (this.technician_id) {
-      conditions.technician_id = this.technician_id
-    }
+    // if (this.technician_id) {
+    //   conditions.technician_id = this.technician_id
+    // }
     if (this.plan) {
       conditions.plan = this.plan
     }

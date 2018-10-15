@@ -59,6 +59,7 @@
                       <my-auto-complete
                       @select="houseSelectedHandle"
                       :arrInputs="local.houseTemplate.inputs"
+                      :config="{getNullVal: false}"
                       placeholder="แบบบ้าน"
                       label=""
                       ></my-auto-complete>
@@ -69,6 +70,7 @@
                       ref="planAutoComplete"
                       @select="planSelectedHandle"
                       :arrInputs="local.planTemplate.inputs"
+                      :config="{getNullVal: false}"
                       placeholder="แปลง"
                       label=""
                       ></my-auto-complete>

@@ -1,6 +1,6 @@
 const state = {
   app: {
-    auth: true,
+    auth: false,
     user: {},
     notification: {
       ordering: null

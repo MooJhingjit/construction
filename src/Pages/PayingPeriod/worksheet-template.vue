@@ -1,6 +1,6 @@
 <template>
   <div ref="worksheet" class="worksheet">
-    <table width="100%" style="border: none;">
+    <table width="100%" style="border: none;" v-if="local.dataObj.length > 0">
       <thead style="font-size: 13px;">
         <tr>
           <td class="text-center" style="position: relative;font-weight: bold;text-align: center;">
@@ -125,7 +125,7 @@
                 <td style="border: none !important;padding: 5px;text-align: center;">
                     <p>......................................................</p>
                     <p>ผู้อนุมัติจ่าย</p>
-                    <p>วันที่...................................................</p>
+                    <p>วันที่ {{approvedData}}</p>
                 </td>
               </tr>
             </table>
@@ -156,7 +156,7 @@ export default {
     return {
       local: {
         headerObj: {},
-        dataObj: {}
+        dataObj: null
       }
     }
   },
@@ -166,6 +166,10 @@ export default {
     },
     technician () {
       return (this.local.dataObj.length) ? this.local.dataObj[0].technician_name : ''
+    },
+    approvedData () {
+      // console.log(this.local.dataObj[0].updated_at)
+      return Helper.GET_DATETHAI(this.local.dataObj[0].updated_at)
     }
   },
   created () {
@@ -211,7 +215,6 @@ export default {
   watch: {
     dataObj () {
       this.local.dataObj = this.dataObj
-      console.log(this.local.dataObj)
     }
   }
 }

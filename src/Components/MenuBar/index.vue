@@ -58,7 +58,8 @@
       </div>
       <div class="block">
         <figure class="image icon-menu" @click="openSubMenu('profile', 'options')">
-          <img src="../../../static/img/avatar2.png">
+          <i class="fa fa-user" aria-hidden="true"></i>
+          <!-- <img src="../../../static/img/avatar2.png"> -->
         </figure>
       </div>
       <template><!--  submenu    -->

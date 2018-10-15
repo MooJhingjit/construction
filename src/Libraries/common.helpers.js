@@ -30,17 +30,16 @@ const GET_DATETHAI = (date) => {
   let dd = ''
   let mm = ''
   let yyyy = ''
+  let dateVal = new Date()
   // let now = new Date()
   // let thday = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์']
   let thmonth = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
-  if (date === 'now') {
-    let today = new Date()
-    dd = today.getDate()
-    mm = thmonth[today.getMonth() + 1]
-    yyyy = today.getFullYear() + 543
-  } else {
-    // split date
+  if (date !== 'now') {
+    dateVal = new Date(date)
   }
+  dd = dateVal.getDate()
+  mm = thmonth[dateVal.getMonth() + 1]
+  yyyy = dateVal.getFullYear() + 543
   return `${dd} ${mm} ${yyyy}`
 }
 

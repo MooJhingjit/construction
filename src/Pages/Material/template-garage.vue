@@ -342,7 +342,7 @@ export default {
   },
   watch: {
     obj: {
-      handler: function(newValue) {
+      handler: function (newValue) {
         this.fetchData()
       },
       deep: true

@@ -46,7 +46,7 @@
                         <td class="text-right" style="width:50%;text-align:right !important;padding:5px;">ประเภทวัสดุ {{local.store.type}}</td>
                         </tr>
                         <tr>
-                        <td style="width:50%;padding:5px;">FAX {{local.store.tel}}</td>
+                        <td style="width:50%;padding:5px;">TEL {{local.store.tel}}</td>
                         <td class="text-right" style="width:50%;text-align:right !important;padding:5px;"></td>
                         </tr>
                     </tbody>

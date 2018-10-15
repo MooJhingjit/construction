@@ -9,10 +9,31 @@
                 <my-auto-complete
                 @select="projectSelectedHandle"
                 :arrInputs="'project'"
+                :config="{getNullVal: false}"
                 placeholder="ค้นหาโครงการ"
                 label=""
                 ></my-auto-complete>
               </div>
+              <div class="block">
+                  <my-auto-complete
+                  v-if="local.project.selected !== null"
+                  :arrInputs="local.yearSelection.inputs"
+                  @select="filterYear"
+                  :config="{getNullVal: true}"
+                  placeholder="ระบุปี"
+                  label=""
+                  ></my-auto-complete>
+                </div>
+                <div class="block">
+                  <my-auto-complete
+                  v-if="local.yearSelection.selected !== null && local.project.selected !== null"
+                  :arrInputs="local.monthSelection.inputs"
+                  @select="filterMonth"
+                  :config="{getNullVal: true}"
+                  placeholder="ระบุเดือน"
+                  label=""
+                  ></my-auto-complete>
+                </div>
             </div>
             <div class="block c-body">
               <table class="table rows-table is-hoverable">
@@ -31,7 +52,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr :key="index" v-for="(lists, index) in local.dataObj">
+                  <tr :key="index" v-for="(lists, index) in itemLists">
                     <td class="td order-8">
                       <p>{{lists[0].technician_name}}</p>
                       <i class="fa fa-print" @click="printWorkSheet(lists)" aria-hidden="true"></i>
@@ -58,7 +79,7 @@
                             :value="list.amount"
                             :validator="$validator"
                             :inputObj="{type: 'text', name: `amount${listIndex}`, placeholder: '', validate: 'required'}"
-                            @input="value =>  updateData(value, 'amount', index, listIndex)"
+                            @input="value =>  updateData(value, 'amount', lists.realOrder, listIndex)"
                           ></my-input>
                         </template>
                         <p
@@ -73,7 +94,7 @@
                             :value="list.price"
                             :validator="$validator"
                             :inputObj="{type: 'text', name: `price${listIndex}`, placeholder: '', validate: 'required'}"
-                            @input="value => updateData(value, 'price', index, listIndex)"
+                            @input="value => updateData(value, 'price', lists.realOrder, listIndex)"
                           ></my-input>
                         </template>
                         <p
@@ -89,7 +110,7 @@
                             :value="list.total_price"
                             :validator="$validator"
                             :inputObj="{type: 'text', name: `total_price${listIndex}`, placeholder: '', validate: 'required'}"
-                            @input="value => updateData(value, 'total_price', index, listIndex)"
+                            @input="value => updateData(value, 'total_price', lists.realOrder, listIndex)"
                           ></my-input>
                         </template>
                         <p
@@ -115,20 +136,20 @@
                           <my-action
                             type="null"
                             :obj="{title: 'จ่ายเงิน', color: 'is-warning', isConfirm: true}"
-                            @clickEvent="submit('approve', list, index)"
+                            @clickEvent="submit('approve', list, lists.realOrder)"
                           >
                           </my-action>
                           <my-action
                             type="null"
                             :obj="{title: 'ไม่ผ่าน', color: 'is-danger', isConfirm: true}"
-                            @clickEvent="submit('reject', list, index)"
+                            @clickEvent="submit('reject', list, lists.realOrder)"
                           >
                           </my-action>
                         </template>
                       </div>
                     </td>
                     <td class="td order-9">
-                      <p class="tag is-gray" :key="`detail_${listIndex}`" v-for="(list, listIndex) in lists" @click="showDetail(list, index, listIndex)" >รายละเอียด</p>
+                      <p class="tag is-gray" :key="`detail_${listIndex}`" v-for="(list, listIndex) in lists" @click="showDetail(list, lists.realOrder, listIndex)" >รายละเอียด</p>
                     </td>
                   </tr>
                 </tbody>
@@ -252,17 +273,40 @@ export default {
         worksheet: {
           header: {},
           data: []
+        },
+        yearSelection: {
+          inputs: [],
+          selected: null
+        },
+        monthSelection: {
+          inputs: [],
+          selected: null
         }
       }
     }
   },
   computed: {
-    // resourceName () {
-    //   return config.api.workOrder.index
-    // },
-    // materialGroupResource () {
-    //   return config.api.materialGroup.index
-    // }
+    itemLists () {
+      let group = this.local.dataObj
+      if (this.local.yearSelection.selected !== null) {
+        group = group.map((lists) => {
+          return lists.filter((item) => {
+            return item.dateSelection.year === this.local.yearSelection.selected
+          })
+        })
+      }
+      if (this.local.monthSelection.selected !== null) {
+        group = group.map((lists) => {
+          return lists.filter((item) => {
+            return item.dateSelection.month === this.local.monthSelection.selected
+          })
+        })
+      }
+      group = group.filter((itemArr) => {
+        return itemArr.length
+      })
+      return group
+    }
   },
   created () {
   },
@@ -271,6 +315,28 @@ export default {
       let queryString = this.BUILDPARAM({project: this.local.project.selected})
       let obj = await service.getResource({resourceName: `${config.api.workSheet.index}/approval`, queryString})
       this.local.dataObj = obj.data
+      let yearSelection = []
+      let monthSelection = []
+      // start setting filter
+      this.local.dataObj.map((group) => {
+        group.map((list, index) => {
+          list.realOrder = index
+          let year = this.EXTRACT_DATE(list.updated_at, 'Y')
+          let month = this.EXTRACT_DATE(list.updated_at, 'M')
+          list.dateSelection = {year, month}
+          yearSelection.push({
+            key: year,
+            value: year
+          })
+          monthSelection.push({
+            key: month,
+            value: month
+          })
+          this.local.yearSelection.inputs = this.REMOVEDUPLICATES(yearSelection, 'key')
+          this.local.monthSelection.inputs = this.REMOVEDUPLICATES(monthSelection, 'key')
+        })
+      })
+      // console.log(this.local.dataObj)
       // console.log(obj)
     },
     projectSelectedHandle (obj) {
@@ -338,7 +404,15 @@ export default {
         project: this.local.project.value
       }
       this.local.worksheet.data = items
-      this.$refs.worksheetTemplate.printWorkSheet()
+      if (this.$refs.worksheetTemplate.local.dataObj.length > 0) {
+        this.$refs.worksheetTemplate.printWorkSheet()
+      }
+    },
+    filterYear (obj) {
+      this.local.yearSelection.selected = obj.key
+    },
+    filterMonth (obj) {
+      this.local.monthSelection.selected = obj.key
     }
   }
 }

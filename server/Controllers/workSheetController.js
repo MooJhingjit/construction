@@ -6,8 +6,8 @@ const getData = async (req, res, next) => {
   // let technicianId = req.params.technicianId
   let item = new workSheetModel()
   let result = null
-  if (req.params.key !== 'all') {
-    item.technician_id = req.params.key
+  if (req.params.key !== 'all') { // from worksheet page
+    // item.technician_id = req.params.key
   }
   if (req.params.key === 'approval') {
     let project = req.query.project
@@ -19,7 +19,7 @@ const getData = async (req, res, next) => {
     
     await Promise.all(
       result.map(async (item) => {
-        item.lists = await workSheetDetail.getData(item.id)
+        item.lists = await workSheetDetail.getData(item.id, req.params.key) // key = technician_id
       })
     )
   }
@@ -53,7 +53,7 @@ async function createData (req, res, next) {
   let obj = req.body.data
   let isExtra = 0
   let newItem = new workSheetModel()
-  newItem.technician_id = obj.technician.key
+  // newItem.technician_id = obj.technician.key
   newItem.plan = obj.contract.plan
   newItem.work_group_id = obj.workGroup.key
   newItem.work_group_name = obj.workGroup.value
@@ -64,7 +64,7 @@ async function createData (req, res, next) {
     newItem.is_extra = 1
   }
   let result = await newItem.save()
-  await workSheetDetail.saveNewOne(result[0], obj.itemLists, newItem.is_extra)
+  await workSheetDetail.saveNewOne(result[0], obj.itemLists, newItem.is_extra, obj.technician.key)
   res.status(200).json(result)
 }
 

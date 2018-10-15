@@ -14,7 +14,7 @@
                     :data="server.stat.submitStat.data"
                     ></spark-line>
                     <div class="value">
-                      <span class="num">{{server.stat.submitStat.count}}</span>
+                      <span class="num">{{server.stat.submitStat.data.count}}</span>
                       <span class="text">รายการ</span>
                     </div>
                   </div>
@@ -33,7 +33,7 @@
                     :data="server.stat.approvedStat.data"
                     ></spark-line>
                     <div class="value">
-                      <span class="num">{{server.stat.approvedStat.count}}</span>
+                      <span class="num">{{server.stat.approvedStat.data.count}}</span>
                       <span class="text">รายการ</span>
                     </div>
                   </div>
@@ -66,14 +66,19 @@
             </div>
           </div>
           <div class="tile function">
-            <div class="tile is-parent is-vertical is-6">
+            <div class="tile is-parent is-vertical is-4">
               <article class="tile is-child notification container-block" @click="GOTOPAGE('Technician', '')">
                 <span class="block title"><i class="fa fa-users" aria-hidden="true"></i> รายชื่อช่าง</span>
               </article>
             </div>
-            <div class="tile is-parent is-vertical is-6">
+            <div class="tile is-parent is-vertical is-4">
               <article class="tile is-child notification container-block" @click="GOTOPAGE('WorkGroup', '')">
                 <span class="block title"><i class="fa fa-th" aria-hidden="true"></i> หมวดงาน</span>
+              </article>
+            </div>
+            <div class="tile is-parent is-vertical is-4">
+              <article class="tile is-child notification container-block" @click="GOTOPAGE('Technician', '')">
+                <span class="block title"><i class="fa fa-users" aria-hidden="true"></i> สรุปรายการจ่าย</span>
               </article>
             </div>
           </div>

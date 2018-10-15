@@ -4,6 +4,7 @@
       <my-auto-complete
       @select="projectSelectedHandle"
       :arrInputs="local.project.inputs"
+      :config="{getNullVal: false}"
       placeholder="โครงการ"
       label=""
       ></my-auto-complete>
@@ -12,6 +13,7 @@
       <my-auto-complete
       @select="planSelectedHandle"
       :arrInputs="local.plan.inputs"
+      :config="{getNullVal: false}"
       placeholder="แปลง"
       label=""
       ></my-auto-complete>

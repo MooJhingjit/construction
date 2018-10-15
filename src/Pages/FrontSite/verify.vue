@@ -8,7 +8,7 @@
         <div class="todo-lists">
           <table class="table is-bordered">
             <thead>
-              <th width="10 0">หมวด</th>
+              <th width="100">หมวด</th>
               <th>งวด/รายการ</th>
               <!-- <th>ตรวจสอบ</th> -->
             </thead>
@@ -75,6 +75,9 @@
             {{getListStatus(local.modelData.status, 'name')}}
             <template v-if="local.modelData.updated_at">( {{SET_DATEFORMAT(local.modelData.updated_at)}} )</template>
           </span>
+        </div>
+        <div v-if="local.modelData.technicianName">
+          ช่าง: <span>{{local.modelData.technicianName}}</span>
         </div>
         <br/>
         <div class="update-status" v-if="local.modelData.status === 1">

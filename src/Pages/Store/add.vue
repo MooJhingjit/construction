@@ -15,6 +15,7 @@
                   <my-auto-complete
                   @select="houseSelectedHandle"
                   :arrInputs="local.houseTemplate.inputs"
+                  :config="{getNullVal: false}"
                   placeholder="ชื่อแบบ หรือ แปลง"
                   label="ค้นหาแบบบ้าน"
                   ></my-auto-complete>

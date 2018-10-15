@@ -32,6 +32,10 @@ export default {
     label: {
       type: String,
       required: false
+    },
+    config: {
+      type: Object,
+      required: true
     }
   },
   data () {
@@ -65,9 +69,11 @@ export default {
       this.$emit('searchValue', val)
     },
     selectedValue (val) {
-      // console.log(val)
       if (val === null) {
-        return
+        if (!this.config.getNullVal) {
+          return
+        }
+        val = {key: null, value: null}
       }
       this.$emit('select', val)
     },

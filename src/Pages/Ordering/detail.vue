@@ -54,7 +54,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr :class="{'active': local.orderIdSelected == item.id}" :key="index" v-for="(item, index) in ordering" @click="selectOrdering(item)">
+                <tr :class="{'active': local.orderIdSelected == item.id, 'extra': item.order_type == 'extra'}" :key="index" v-for="(item, index) in ordering" @click="selectOrdering(item)">
                   <td width="100">{{item.storeName}}</td>
                   <td>
                     <template v-if="item.status === 'wait' ">
@@ -469,6 +469,9 @@ table tbody tr td p.material-name {
 }
 .receipt-template{
   display: none;
+}
+table tr.extra {
+  background: #fff0d9;
 }
 .filter{
   margin-bottom: 5px;

@@ -7,6 +7,7 @@ module.exports =  class WorkSheetDetail {
     this.knex = knex(db.config);
     this.id = id;
     this.work_sheet_id
+    this.technician_id
     this.time
     this.name
     this.amount
@@ -23,7 +24,13 @@ module.exports =  class WorkSheetDetail {
   }
 
   async getData () {
-    let result = await this.knex('work_sheet_detail').where({work_sheet_id: this.work_sheet_id})
+    // let result = await this.knex('work_sheet_detail').where(this.getCondition())
+    let result = await  this.knex.select('wsd.*', 'technician.name as technicianName')
+    .from('work_sheet_detail as wsd')
+    .leftJoin('technician', function() {
+      this.on('wsd.technician_id', '=', 'technician.id')
+    })
+    .where('wsd.work_sheet_id',  this.work_sheet_id)
     await this.knex.destroy()
     return result
   }
@@ -44,6 +51,7 @@ module.exports =  class WorkSheetDetail {
   async save () {
     let result = await this.knex('work_sheet_detail').insert({
       work_sheet_id: this.work_sheet_id,
+      technician_id: this.technician_id,
       time: this.time,
       name: this.name,
       amount: this.amount,
@@ -78,10 +86,10 @@ module.exports =  class WorkSheetDetail {
     let result = null
     if (type === 'approved') {
       result = await this.knex.select('updated_at as date').from('work_sheet_detail')
-      .where({status: '5'})
+      .where({status: '5'}).orderBy('date', 'asc')
     } else {
       result = await this.knex.select('created_at as date').from('work_sheet_detail')
-      .where(this.getCondition())
+      .where(this.getCondition()).orderBy('date', 'asc')
     }
     await this.knex.destroy()
     return result
@@ -91,6 +99,9 @@ module.exports =  class WorkSheetDetail {
     let conditions = {}
     if (this.amount) {
       conditions.amount = this.amount
+    }
+    if (this.technician_id || this.technician_id === null) {
+      conditions.technician_id = this.technician_id
     }
     if (this.status) {
       conditions.status = this.status

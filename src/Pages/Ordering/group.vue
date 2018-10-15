@@ -33,6 +33,7 @@
                       <my-auto-complete
                       @select="houseSelectedHandle"
                       :arrInputs="local.houseTemplate.inputs"
+                      :config="{getNullVal: false}"
                       placeholder="ค้นหาแบบบ้าน"
                       label=""
                       ></my-auto-complete>
