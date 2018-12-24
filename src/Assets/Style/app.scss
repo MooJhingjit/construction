@@ -34,6 +34,14 @@ html {
               background-color: transparent !important;
           }
         }
+        .flex-center{
+          justify-content: center;
+          align-items: center;
+          align-content: center;
+          display: flex;
+          align-items: center;
+          justify-items: center;
+        }
         .wrapper{
           position: fixed;
             .opa{
@@ -49,7 +57,7 @@ html {
             position: relative;
             font-size: 1rem;
             .menu-bar{
-                padding-top: 15px;
+                padding-top: 30px;
                 z-index: 9999;
                 position: relative;
                 nav{
@@ -126,7 +134,7 @@ html {
                         .icon-menu{
                             cursor: pointer;
                             i{
-                              font-size: 2em;
+                              font-size: 1.5em;
                             }
                         }
                         figure{
@@ -144,7 +152,7 @@ html {
                         display: none;
                         position: absolute;
                         width: 240px;
-                        // min-height: px;
+                        padding: 5px;
                         height: auto;
                         background: white;
                         color: black;
@@ -172,7 +180,7 @@ html {
                             color: $second-text-black-color;
                             cursor: pointer;
                             .icon{
-                                font-size: 2em;
+                                font-size: 1.5em;
                             }
                             .desc{
                                 font-size: 0.85em;
@@ -299,7 +307,7 @@ html {
                         font-size: 1.2em;
                     }
                     .subtitle{
-                        color: #f3f3f3 !important;
+                        // color: #f3f3f3 !important;
                         margin-top: 0;
                         font-size: 1em;
                     }

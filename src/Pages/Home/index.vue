@@ -6,7 +6,7 @@
         <div class="tile is-vertical is-12">
           <div class="tile">
             <div class="tile is-parent is-vertical is-4">
-              <article class="tile is-child notification">
+              <article class="tile is-child notification flex-center">
                 <div class="container-block stat">
                   <div class="block chart container-block">
                     <spark-line
@@ -23,7 +23,7 @@
                   </div>
                 </div>
               </article>
-              <article class="tile is-child notification">
+              <article class="tile is-child notification flex-center">
                  <div class="container-block stat">
                   <div class="block chart container-block">
                      <spark-line
@@ -42,14 +42,22 @@
               </article>
             </div>
             <div class="tile is-parent">
-              <article class="tile is-child notification">
-                <p class="title">ข้อมูลสูญเสีย</p>
-                <div class="content data-loss container-block">
-                  <div class="order block">
-                    <bar-chart v-if="local.extraOrdering != null" :data="local.extraOrdering"  :height="150" ></bar-chart>
+              <article class="tile is-parent notification">
+                <!-- <p class="title">ข้อมูลสูญเสีย</p> -->
+                <div class="tile is-parent is-vertical">
+                  <div class="tile is-child flex-center">
+                    <bar-chart v-if="local.extraOrdering != null && local.extraOrdering.labels.length" :data="local.extraOrdering"  :height="150" ></bar-chart>
+                    <template v-else>
+                      <!-- <p class="title"></p> -->
+                      <p class="subtitle">ข้อมูลสั่งซื้อพิเศษ ไม่เพียงพอสำหรับการแสดงผล</p>
+                    </template>
                   </div>
-                  <div class="stipend block">
-                    <bar-chart v-if="local.paying != null" :data="local.paying" :height="150"></bar-chart>
+                  <div class="tile is-child flex-center">
+                    <bar-chart v-if="local.paying != null  && local.paying.labels.length" :data="local.paying" :height="150"></bar-chart>
+                    <template v-else>
+                      <!-- <p class="title">จ่ายค่างวด</p> -->
+                      <p class="subtitle">ข้อมูลจ่ายค่างวด ไม่เพียงพอสำหรับการแสดงผล</p>
+                    </template>
                   </div>
                 </div>
               </article>
@@ -186,4 +194,9 @@ export default {
 </script>
 
 <style lang="scss">
+.tile.is-child.flex-center{
+  div{
+    width: 100%;
+  }
+}
 </style>
