@@ -70,12 +70,11 @@ export default {
         username: this.local.username,
         password: this.local.password
       }
-      let res = await service.postResource({resourceName, data})
-      if (res.status === 200) {
-        // console.log(res.data.token)
+      try {
+        let res = await service.postResource({resourceName, data})
         this.SETAUTH(res.data.token)
         this.getUserData()
-      } else {
+      } catch (error) {
         this.local.inValid = true
       }
     },

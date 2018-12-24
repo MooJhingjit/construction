@@ -1,18 +1,16 @@
 <template>
-  <nav class="level is-mobile">
+  <nav class="level is-mobile nav-menu">
     <div class="level-item has-text-centered">
-      <div>
+      <router-link :to="{ name: 'Home'}">หน้าหลัก</router-link>
+      <!-- <div>
         <p class="heading" @click="GOTOPAGE('Home', '')">
-          <!-- <router-link to="./">หน้าหลัก</router-link> -->
           หน้าหลัก
         </p>
-      <!-- <p class="title">3,456</p> -->
-      </div>
+      </div> -->
     </div>
     <div class="level-item has-text-centered" v-if="IS_ADMIN() || IS_PURCHASING()">
-      <div>
+      <!-- <div>
         <p class="heading" @click="GOTOPAGE('Ordering', '')">
-          <!-- <router-link to="./ordering">การสั่งซื้อ</router-link> -->
           การสั่งซื้อ
           <span class="tag is-warning is-rounded"
             v-if="normalOrdering"
@@ -21,33 +19,39 @@
             v-if="extraOrdering"
           >{{extraOrdering}}</span>
         </p>
-      <!-- <p class="title">123</p> -->
-      </div>
+      </div> -->
+      <router-link :to="{ name: 'Ordering'}">การสั่งซื้อ
+        <span class="tag is-warning is-rounded"
+            v-if="normalOrdering"
+          >{{normalOrdering}}</span>
+          <span class="tag is-danger is-rounded"
+            v-if="extraOrdering"
+          >{{extraOrdering}}</span>
+      </router-link>
     </div>
     <div class="level-item has-text-centered" v-if="IS_ADMIN() || IS_PURCHASING()">
-      <div>
+      <!-- <div>
         <p class="heading" @click="GOTOPAGE('PayingPeriod', '')">
-          <!-- <router-link to="./foo">จ่ายค่างวด</router-link> -->
           จ่ายค่างวด
         </p>
-      <!-- <p class="title">456K</p> -->
-      </div>
+      </div> -->
+      <router-link :to="{ name: 'PayingPeriod'}">จ่ายค่างวด</router-link>
     </div>
     <div class="level-item has-text-centered" v-if="IS_ADMIN() || IS_PURCHASING()">
-      <div>
+      <!-- <div>
         <p class="heading" @click="GOTOPAGE('Losing', '')">
-          <!-- <router-link to="./losing">ข้อมูลสูญเสีย</router-link> -->
           ข้อมูลสูญเสีย
         </p>
-      <!-- <p class="title">789</p> -->
-      </div>
+      </div> -->
+      <router-link :to="{ name: 'Losing'}">ข้อมูลสูญเสีย</router-link>
     </div>
     <div class="level-item has-text-centered project-name on-mobile">
-      <div>
+      <!-- <div>
         <p class="heading"  @click="GOTOPAGE('Home', '')">
           โชคชนายุทธ
         </p>
-      </div>
+      </div> -->
+      <router-link :to="{ name: 'Home'}">โชคชนายุทธ</router-link>
     </div>
     <div class="level-item has-text-centered options-panel on-mobile">
       <div class="block alert" v-if="IS_ADMIN() || IS_PURCHASING()">
@@ -59,10 +63,9 @@
       <div class="block">
         <figure class="image icon-menu" @click="openSubMenu('profile', 'options')">
           <i class="fa fa-user" aria-hidden="true"></i>
-          <!-- <img src="../../../static/img/avatar2.png"> -->
         </figure>
       </div>
-      <template><!--  submenu    -->
+      <template>
         <options-menu :isDisableMenu="isDisableMenu" :isActive="local.options.isActive"></options-menu>
         <profile-menu :isDisableMenu="isDisableMenu" :isActive="local.profile.isActive"></profile-menu>
       </template>
@@ -130,6 +133,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.nav-menu{
+  font-size: 1.3em;
+  a {
+    color: rgba(255, 255, 255, 0.6);
+    &:hover{
+      color: #fff;
+    }
+  }
+  a.router-link-exact-active {
+    color: #fff;
+  }
+}
 .tag.is-warning{
   background-color: #f7894e !important;
   color: #fff;

@@ -37,6 +37,11 @@ export default {
       })
       return jobType
     },
+    USER () {
+      if (this.userData) {
+        return this.userData
+      }
+    },
     USERTYPE () {
       if (this.userData !== undefined && this.userData.position !== undefined) {
         return this.userData.position.toLowerCase()

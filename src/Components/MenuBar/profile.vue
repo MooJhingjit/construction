@@ -7,7 +7,7 @@
                 </div>
             </div> -->
             <div class="profile-body container-block block">
-                <div class="name">Pokkron Jhingjit</div>
+                <div class="name">{{USER.name}}</div>
                 <div class="options container-block">
                     <div class="block" @click="GOTOPAGE('Profile', 'my-profile')"><i class="fa fa-user-circle-o" aria-hidden="true"></i> ข้อมูลผู้ใช้</div>
                     <div class="block" @click="doLogout()"><i class="fa fa-power-off" aria-hidden="true"></i> ออกจากระบบ</div>
