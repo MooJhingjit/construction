@@ -3,7 +3,7 @@ module.exports.config = {
   connection: {
     host: '127.0.0.1',
     user: 'root',
-    password: '1234',
+    password: 'construction',
     database : 'construction',
     timezone: 'UTC',
   },
