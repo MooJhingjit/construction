@@ -79,7 +79,7 @@
                             :value="list.amount"
                             :validator="$validator"
                             :inputObj="{type: 'text', name: `amount${listIndex}`, placeholder: '', validate: 'required'}"
-                            @input="value =>  updateData(value, 'amount', lists.realOrder, listIndex)"
+                            @input="value =>  updateData(value, 'amount', index, listIndex)"
                           ></my-input>
                         </template>
                         <p
@@ -94,7 +94,7 @@
                             :value="list.price"
                             :validator="$validator"
                             :inputObj="{type: 'text', name: `price${listIndex}`, placeholder: '', validate: 'required'}"
-                            @input="value => updateData(value, 'price', lists.realOrder, listIndex)"
+                            @input="value => updateData(value, 'price', index, listIndex)"
                           ></my-input>
                         </template>
                         <p
@@ -110,7 +110,7 @@
                             :value="list.total_price"
                             :validator="$validator"
                             :inputObj="{type: 'text', name: `total_price${listIndex}`, placeholder: '', validate: 'required'}"
-                            @input="value => updateData(value, 'total_price', lists.realOrder, listIndex)"
+                            @input="value => updateData(value, 'total_price', index, listIndex)"
                           ></my-input>
                         </template>
                         <p
@@ -136,20 +136,20 @@
                           <my-action
                             type="null"
                             :obj="{title: 'จ่ายเงิน', color: 'is-warning', isConfirm: true}"
-                            @clickEvent="submit('approve', list, lists.realOrder)"
+                            @clickEvent="submit('approve', list, index)"
                           >
                           </my-action>
                           <my-action
                             type="null"
                             :obj="{title: 'ไม่ผ่าน', color: 'is-danger', isConfirm: true}"
-                            @clickEvent="submit('reject', list, lists.realOrder)"
+                            @clickEvent="submit('reject', list, index)"
                           >
                           </my-action>
                         </template>
                       </div>
                     </td>
                     <td class="td order-9">
-                      <p class="tag is-gray" :key="`detail_${listIndex}`" v-for="(list, listIndex) in lists" @click="showDetail(list, lists.realOrder, listIndex)" >รายละเอียด</p>
+                      <p class="tag is-gray" :key="`detail_${listIndex}`" v-for="(list, listIndex) in lists" @click="showDetail(list, index, listIndex)" >รายละเอียด</p>
                     </td>
                   </tr>
                 </tbody>
@@ -287,18 +287,18 @@ export default {
   },
   computed: {
     itemLists () {
-      let group = this.local.dataObj
-      if (this.local.yearSelection.selected !== null) {
+      let group = JSON.parse(JSON.stringify(this.local.dataObj))
+      if (this.yearSelected !== null) {
         group = group.map((lists) => {
           return lists.filter((item) => {
-            return item.dateSelection.year === this.local.yearSelection.selected
+            return item.dateSelection.year === this.yearSelected
           })
         })
       }
-      if (this.local.monthSelection.selected !== null) {
+      if (this.monthSelection !== null) {
         group = group.map((lists) => {
           return lists.filter((item) => {
-            return item.dateSelection.month === this.local.monthSelection.selected
+            return item.dateSelection.month === this.monthSelection
           })
         })
       }
@@ -306,6 +306,12 @@ export default {
         return itemArr.length
       })
       return group
+    },
+    yearSelected () {
+      return this.local.yearSelection.selected
+    },
+    monthSelection () {
+      return this.local.monthSelection.selected
     }
   },
   created () {
@@ -366,6 +372,8 @@ export default {
       this.NOTIFY('success')
     },
     setItemAfterUpdated (obj, index, status, isFromModel) {
+      // console.log(index)
+      // console.log(this.local.dataObj)
       this.local.dataObj[index].map((item) => {
         if (obj.id === item.id) {
           item.status = status
@@ -413,6 +421,11 @@ export default {
     },
     filterMonth (obj) {
       this.local.monthSelection.selected = obj.key
+    }
+  },
+  watch: {
+    yearSelected: function () {
+      this.local.monthSelection.selected = null
     }
   }
 }

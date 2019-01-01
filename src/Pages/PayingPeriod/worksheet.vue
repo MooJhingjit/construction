@@ -304,19 +304,25 @@ export default {
     },
     itemLists () {
       let inputs = this.local.inputs
-      if (this.local.yearSelection.selected !== null) {
+      if (this.yearSelected !== null) {
         inputs = inputs.filter((obj) => {
-          return obj.workGroup.obj.dateSelection.year === this.local.yearSelection.selected || obj.workGroup.obj.status === 'new'
+          return obj.workGroup.obj.dateSelection.year === this.yearSelected || obj.workGroup.obj.status === 'new'
         })
         // console.log(inputs)
       }
-      if (this.local.monthSelection.selected !== null) {
+      if (this.monthSelection !== null) {
         inputs = inputs.filter((obj) => {
-          return obj.workGroup.obj.dateSelection.month === this.local.monthSelection.selected || obj.workGroup.obj.status === 'new'
+          return obj.workGroup.obj.dateSelection.month === this.monthSelection || obj.workGroup.obj.status === 'new'
         })
         // console.log(inputs)
       }
       return inputs
+    },
+    yearSelected () {
+      return this.local.yearSelection.selected
+    },
+    monthSelection () {
+      return this.local.monthSelection.selected
     }
   },
   async created () {
@@ -419,12 +425,13 @@ export default {
       let planObj = this.local.contract.temp.filter((item) => {
         return item.project_id === this.local.project.selected
       })
-      this.local.plan.inputs = planObj.map(item => {
+      let planArr = planObj.map(item => {
         return {
           key: item.plan,
           value: item.plan
         }
       })
+      this.local.plan.inputs = this.REMOVEDUPLICATES(planArr, 'key')
     },
     planSelectedHandle (obj) {
       this.local.count = 0
@@ -522,18 +529,29 @@ export default {
     },
     async setListsSelected (tf, index, indexList) {
       if (this.isSaved(index)) { // update after submit btn
-        let itemListId = this.local.inputs[index].workGroup.lists[indexList].id
-        let amount = this.local.inputs[index].workGroup.lists[indexList].amount
-        let price = this.local.inputs[index].workGroup.lists[indexList].price
-        let technician = this.local.technicians.selected.key
-        let resourceName = `${config.api.workSheetDetail.index}/${itemListId}`
-        let result = await service.putResource({data: {price, amount, technician, status: '1'}, resourceName})
-        if (result.data !== 1) return
-        this.NOTIFY('success')
+        this.$dialog.confirm({
+          message: 'ยืนยันการทำรายการ',
+          cancelText: 'ยกเลิก',
+          confirmText: 'ยืนยัน',
+          type: 'is-success',
+          onConfirm: async () => {
+            let itemListId = this.local.inputs[index].workGroup.lists[indexList].id
+            let amount = this.local.inputs[index].workGroup.lists[indexList].amount
+            let price = this.local.inputs[index].workGroup.lists[indexList].price
+            let technician = this.local.technicians.selected.key
+            let resourceName = `${config.api.workSheetDetail.index}/${itemListId}`
+            let result = await service.putResource({data: {price, amount, technician, status: '1'}, resourceName})
+            if (result.data !== 1) return
+            this.NOTIFY('success')
+          },
+          onCancel: () => {
+            this.local.inputs[index].workGroup.lists[indexList].status = 0
+          }
+        })
+      } else {
+        this.local.inputs[index].workGroup.lists[indexList].status = (tf) ? '1' : '0'
+        this.local.inputs[index].workGroup.lists[indexList].technicianName = this.local.technicians.selected.value
       }
-      this.local.inputs[index].workGroup.lists[indexList].status = (tf) ? '1' : '0'
-      this.local.inputs[index].workGroup.lists[indexList].technicianName = this.local.technicians.selected.value
-      // console.log(typeof this.local.inputs[index].workGroup.lists[indexList].status)
     },
     getClassGroup (index) {
       return [
@@ -569,6 +587,11 @@ export default {
         inputs: [],
         selected: null
       }
+    }
+  },
+  watch: {
+    yearSelected: function () {
+      this.local.monthSelection.selected = null
     }
   }
 }

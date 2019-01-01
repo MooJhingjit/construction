@@ -46,7 +46,8 @@ export default {
         'fa',
         {'fa-trash': this.type === 'delete'},
         {'fa-external-link ': this.type === 'link'},
-        {'fa-check': this.type === 'update'}
+        {'fa-check': this.type === 'update'},
+        {'fa-print': this.type === 'print'}
       ]
     }
   },
