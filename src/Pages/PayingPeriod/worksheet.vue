@@ -304,19 +304,25 @@ export default {
     },
     itemLists () {
       let inputs = this.local.inputs
-      if (this.local.yearSelection.selected !== null) {
+      if (this.yearSelected !== null) {
         inputs = inputs.filter((obj) => {
-          return obj.workGroup.obj.dateSelection.year === this.local.yearSelection.selected || obj.workGroup.obj.status === 'new'
+          return obj.workGroup.obj.dateSelection.year === this.yearSelected || obj.workGroup.obj.status === 'new'
         })
         // console.log(inputs)
       }
-      if (this.local.monthSelection.selected !== null) {
+      if (this.monthSelection !== null) {
         inputs = inputs.filter((obj) => {
-          return obj.workGroup.obj.dateSelection.month === this.local.monthSelection.selected || obj.workGroup.obj.status === 'new'
+          return obj.workGroup.obj.dateSelection.month === this.monthSelection || obj.workGroup.obj.status === 'new'
         })
         // console.log(inputs)
       }
       return inputs
+    },
+    yearSelected () {
+      return this.local.yearSelection.selected
+    },
+    monthSelection () {
+      return this.local.monthSelection.selected
     }
   },
   async created () {
@@ -419,12 +425,13 @@ export default {
       let planObj = this.local.contract.temp.filter((item) => {
         return item.project_id === this.local.project.selected
       })
-      this.local.plan.inputs = planObj.map(item => {
+      let planArr = planObj.map(item => {
         return {
           key: item.plan,
           value: item.plan
         }
       })
+      this.local.plan.inputs = this.REMOVEDUPLICATES(planArr, 'key')
     },
     planSelectedHandle (obj) {
       this.local.count = 0
@@ -527,7 +534,7 @@ export default {
           cancelText: 'ยกเลิก',
           confirmText: 'ยืนยัน',
           type: 'is-success',
-          onConfirm: async() => {
+          onConfirm: async () => {
             let itemListId = this.local.inputs[index].workGroup.lists[indexList].id
             let amount = this.local.inputs[index].workGroup.lists[indexList].amount
             let price = this.local.inputs[index].workGroup.lists[indexList].price
@@ -580,6 +587,11 @@ export default {
         inputs: [],
         selected: null
       }
+    }
+  },
+  watch: {
+    yearSelected: function () {
+      this.local.monthSelection.selected = null
     }
   }
 }

@@ -109,12 +109,13 @@ export default {
       let planObj = this.local.contract.temp.filter((item) => {
         return item.project_id === this.local.project.selected
       })
-      this.local.plan.inputs = planObj.map(item => {
+      let planArr = planObj.map(item => {
         return {
           key: item.plan,
           value: `แปลง: ${item.plan}`
         }
       })
+      this.local.plan.inputs = this.REMOVEDUPLICATES(planArr, 'key')
     },
     planSelectedHandle (obj) {
       if (obj === null) {
