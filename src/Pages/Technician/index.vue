@@ -58,6 +58,18 @@
           </div>
         </div>
         <div class="container-block footer-panel">
+          <!-- <my-action
+            type="print"
+            :obj="{title: 'ใบปะหน้า', isComfirm: false}"
+            @clickEvent="printWorkSheet('print')"
+          >
+          </my-action>
+          <my-action
+            type="print"
+            :obj="{title: 'รายการจ่าย', isComfirm: false}"
+            @clickEvent="printWorkSheet('print')"
+          >
+          </my-action> -->
           <my-action
             type="update"
             :obj="{title: 'บันทึกข้อมูล'}"
@@ -185,6 +197,15 @@ export default {
       // this.local.inputs.name = ''
       // this.local.inputs.jobId = ''
       // this.local.inputs.phone = ''
+    },
+    printWorkSheet (items) {
+      // this.local.worksheet.header = {
+      //   project: this.local.project.value
+      // }
+      // this.local.worksheet.data = items
+      // if (this.$refs.worksheetTemplate.local.dataObj.length > 0) {
+      //   this.$refs.worksheetTemplate.printWorkSheet()
+      // }
     }
   }
 }

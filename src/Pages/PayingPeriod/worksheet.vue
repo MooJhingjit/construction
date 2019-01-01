@@ -522,18 +522,29 @@ export default {
     },
     async setListsSelected (tf, index, indexList) {
       if (this.isSaved(index)) { // update after submit btn
-        let itemListId = this.local.inputs[index].workGroup.lists[indexList].id
-        let amount = this.local.inputs[index].workGroup.lists[indexList].amount
-        let price = this.local.inputs[index].workGroup.lists[indexList].price
-        let technician = this.local.technicians.selected.key
-        let resourceName = `${config.api.workSheetDetail.index}/${itemListId}`
-        let result = await service.putResource({data: {price, amount, technician, status: '1'}, resourceName})
-        if (result.data !== 1) return
-        this.NOTIFY('success')
+        this.$dialog.confirm({
+          message: 'ยืนยันการทำรายการ',
+          cancelText: 'ยกเลิก',
+          confirmText: 'ยืนยัน',
+          type: 'is-success',
+          onConfirm: async() => {
+            let itemListId = this.local.inputs[index].workGroup.lists[indexList].id
+            let amount = this.local.inputs[index].workGroup.lists[indexList].amount
+            let price = this.local.inputs[index].workGroup.lists[indexList].price
+            let technician = this.local.technicians.selected.key
+            let resourceName = `${config.api.workSheetDetail.index}/${itemListId}`
+            let result = await service.putResource({data: {price, amount, technician, status: '1'}, resourceName})
+            if (result.data !== 1) return
+            this.NOTIFY('success')
+          },
+          onCancel: () => {
+            this.local.inputs[index].workGroup.lists[indexList].status = 0
+          }
+        })
+      } else {
+        this.local.inputs[index].workGroup.lists[indexList].status = (tf) ? '1' : '0'
+        this.local.inputs[index].workGroup.lists[indexList].technicianName = this.local.technicians.selected.value
       }
-      this.local.inputs[index].workGroup.lists[indexList].status = (tf) ? '1' : '0'
-      this.local.inputs[index].workGroup.lists[indexList].technicianName = this.local.technicians.selected.value
-      // console.log(typeof this.local.inputs[index].workGroup.lists[indexList].status)
     },
     getClassGroup (index) {
       return [

@@ -38,7 +38,7 @@ const GET_DATETHAI = (date) => {
     dateVal = new Date(date)
   }
   dd = dateVal.getDate()
-  mm = thmonth[dateVal.getMonth() + 1]
+  mm = thmonth[dateVal.getMonth()]
   yyyy = dateVal.getFullYear() + 543
   return `${dd} ${mm} ${yyyy}`
 }
