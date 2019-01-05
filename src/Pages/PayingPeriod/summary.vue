@@ -44,7 +44,7 @@
                 <table class="table is-narrow">
                   <thead>
                     <tr>
-                      <th>วันที่</th>
+                      <th>เดือน/ปี</th>
                       <th>โครงการ</th>
                       <th>ช่าง</th>
                       <th>เงินรวม</th>
@@ -53,7 +53,7 @@
                   </thead>
                   <tbody>
                     <tr :key="index" v-for="(item, index) in server.result">
-                      <td>{{SET_DATEFORMAT(item[0].date, 'YYYY/MM')}}</td>
+                      <td>{{SET_DATEFORMAT(item[0].date, 'MM/YYYY')}}</td>
                       <td>{{item[0].projectName}}</td>
                       <td>{{item[0].technicianName}}</td>
                       <td>{{NUMBERWITHCOMMAS(item[0].total)}}</td>
