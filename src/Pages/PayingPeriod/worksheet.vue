@@ -100,7 +100,7 @@
                       ></my-auto-complete>
                       <div class="list-btn" v-if="group.isExtra">
                         <button v-if="group.workGroup.lists.length > 0" class="button" @click="editExtraRow('add', group.workGroup.realOrder)"><i class="fa fa-plus" aria-hidden="true"></i></button>
-                        <button v-if="group.workGroup.lists.length > 0" class="button" @click="editExtraRow('minus', group.workGroup.realOrder)"><i class="fa fa-minus" aria-hidden="true"></i></button>
+                        <button v-if="group.workGroup.lists.length > 1" class="button" @click="editExtraRow('minus', group.workGroup.realOrder)"><i class="fa fa-minus" aria-hidden="true"></i></button>
                       </div>
                     </td>
                     <td class="list-name"> <!-- CHECKBOX BTN -->
@@ -126,7 +126,7 @@
                     </td>
                     <td>
                        <p :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)">
-                         <template v-if="parseInt(item.status) && isSaved(group.workGroup.realOrder)">{{item.technicianName}}</template>
+                         <template v-if="parseInt(item.status) && isSaved(group.workGroup.realOrder)">{{item.technicianName || local.technicians.selected.value}}</template>
                        </p>
                     </td>
                     <td>
