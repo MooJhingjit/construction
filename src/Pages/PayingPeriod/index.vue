@@ -77,7 +77,7 @@
               </article>
             </div>
             <div class="tile is-parent is-vertical is-4">
-              <article class="tile is-child notification container-block" @click="GOTOPAGE('Technician', '')">
+              <article class="tile is-child notification container-block" @click="GOTOPAGE('PayingSummary', '')">
                 <span class="block title"><i class="fa fa-list" aria-hidden="true"></i> สรุปรายการจ่าย</span>
               </article>
             </div>

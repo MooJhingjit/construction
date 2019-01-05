@@ -25,6 +25,7 @@ const EditWorkorder = () => import('@Pages/Workorder/edit')
 const Profile = () => import('@Pages/Profile')
 const PayingPeriod = () => import('@Pages/PayingPeriod')
 const Worksheet = () => import('@Pages/PayingPeriod/worksheet')
+const PayingSummary = () => import('@Pages/PayingPeriod/summary')
 const Approve = () => import('@Pages/PayingPeriod/approve')
 const Technician = () => import('@Pages/Technician')
 const WorkGroup = () => import('@Pages/WorkGroup')
@@ -159,6 +160,11 @@ export default new VueRouter({
       path: '/paying-period/worksheet',
       name: 'Worksheet',
       component: Worksheet
+    },
+    {
+      path: '/paying-period/summary',
+      name: 'PayingSummary',
+      component: PayingSummary
     },
     {
       path: '/paying-period/approve',

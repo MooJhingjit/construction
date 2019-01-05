@@ -91,7 +91,8 @@ const api = {
     'index': '/work-sheet/approval'
   },
   'payingPeriod': {
-    'home': '/paying-period'
+    'home': '/paying-period',
+    'summary': '/paying-period/summary'
   }
 }
 

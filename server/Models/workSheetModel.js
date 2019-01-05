@@ -84,6 +84,43 @@ module.exports =  class WorkSheet {
     return result
   }
 
+  async getSummary (technicianId, type) {
+    let query = this.knex.select('ws.id as wsId',
+    'ws.project_id',
+    'ws.is_extra',
+    'wsd.total_price',
+    'wsd.updated_at',
+    'wsd.technician_id',
+    'project.name as projectName',
+    'technician.name as technicianName')
+    .from('work_sheet as ws')
+    .leftJoin('work_sheet_detail as wsd', function() {
+      this.on('ws.id', '=', 'wsd.work_sheet_id')
+    })
+    .leftJoin('project as project', function() {
+      this.on('ws.project_id', '=', 'project.id')
+    })
+    .leftJoin('technician as technician', function() {
+      this.on('wsd.technician_id', '=', 'technician.id')
+    })
+    query.where('wsd.status', '5')
+    if (this.project_id !== 'null') {
+      query.where('ws.project_id', this.project_id)
+    }
+    if (technicianId !== 'null') {
+      query.where('wsd.technician_id', technicianId)
+    }
+    query.where(function() {
+      let con  = this
+      if (type !== null) {
+        if (type.indexOf('extra') >= 0) con.where('wsd.is_extra', 1)
+        if (type.indexOf('normal') >= 0) con.orWhere('wsd.is_extra', 0)
+      }
+    })
+    // console.log(query.toSQL())
+    return await query.orderBy('wsd.updated_at', 'desc')
+  }
+
   getCondition () {
     let conditions = {}
     // if (this.technician_id) {
