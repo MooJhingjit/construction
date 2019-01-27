@@ -53,7 +53,7 @@
             </div>
           </div>
         </div>
-      </div> 
+      </div>
     </template>
   </option-detail-template>
 </template>
@@ -66,7 +66,6 @@ import doughnutChart from '@Components/Chart/doughnut'
 import barChart from '@Components/Chart/bar'
 import config from '@Config/app.config'
 import dataTable from '@Components/DataTable'
-import service from '@Services/app-service'
 import myAutoComplete from '@Components/Form/my-autocomp'
 export default {
   props: {
@@ -96,7 +95,7 @@ export default {
           template: {
             class: 'losing-detail-page'
           }
-        },
+        }
       }
     }
   },
