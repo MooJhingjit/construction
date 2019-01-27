@@ -189,22 +189,25 @@ const prepareChartData = async (type) => {
   let res = await model.getStat()
   let stat = []
   res.map((item) => {
+    // console.log(item)
     let date = helpers.getDate(item.date, 'YYYY-MM-DD')
     
     if (stat[date]) {
-      stat[date] +=  1
+      stat[date] +=  parseInt(stat[date]) + parseInt(item.total_price)
     } else {
-      stat[date] = 1
+      stat[date] = item.total_price
     }
   })
   let dataSets = {
     date: [],
-    data: []
+    data: [],
+    info: []
   }
   for (key in stat) {
     dataSets.date.push(key)
     dataSets.data.push(stat[key])
   }
+  dataSets.info = stat
   return dataSets
 }
 

@@ -85,3 +85,7 @@ module.exports.getDateDiff = (date1, date2) => {
   let dateEnd = moment(date2, 'YYYY/MM/DD')
   return dateEnd.diff(dateStart, 'days')
 }
+
+module.exports.addCommas = (number, digit = 0) => {
+  return parseFloat(number).toFixed(digit).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}

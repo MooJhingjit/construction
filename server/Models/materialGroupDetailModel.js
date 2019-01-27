@@ -13,8 +13,9 @@ module.exports =  class MaterialGroupDetail {
   }
 
   async getData () {
-    let result = await this.knex.select('material_group_detail.*', 'material.name as name').from('material_group_detail')
+    let result = await this.knex.select('material_group_detail.*', 'material.name as name', 'material.store_id', 'store.name as store_name').from('material_group_detail')
     .leftJoin('material', 'material.id', 'material_group_detail.material_id')
+    .leftJoin('store', 'material.store_id', 'store.id')
     .where({
       material_group_id: this.material_group_id
     })

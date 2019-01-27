@@ -6,9 +6,42 @@ const workSheetDetailController = require('./workSheetDetailController')
 
 async function getHomeData (req, res, next) {
   let orderingExtra = await orderingController.prepareChartData('extra')
-  let workSheet = await workSheetDetailController.prepareChartData()
+  let workSheet = await workSheetDetailController.prepareChartData('extra')
+  let allData = {
+    date: [],
+    data: []
+  }
+  let stat = []
+  for (key in orderingExtra.info) {
+    if (stat[key]) {
+      stat[key] +=  parseInt(stat[key]) + parseInt( orderingExtra.info[key])
+    } else {
+      stat[key] = orderingExtra.info[key]
+    }
+  }
+  for (key in workSheet.info) {
+    if (stat[key]) {
+      stat[key] +=  parseInt(stat[key]) + parseInt( workSheet.info[key])
+    } else {
+      stat[key] = workSheet.info[key]
+    }
+  }
+  for (key in stat) {
+    allData.date.push(key)
+    allData.data.push(`${stat[key]}`)
+  }
   let resObj = {
-    extraOrdering : {
+    all : {
+      labels: allData.date,
+      datasets: [
+        {
+          label: 'ความสูญเสียรวม',
+          backgroundColor: 'rgba(169,169,169,.7)',
+          data: allData.data
+        }
+      ]
+    },
+    ordering : {
       labels: orderingExtra.date,
       datasets: [
         {
@@ -22,7 +55,7 @@ async function getHomeData (req, res, next) {
       labels: workSheet.date,
       datasets: [
         {
-          label: 'การจ่ายค่างวด',
+          label: 'การจ่ายค่างวด (พิเศษ)',
           backgroundColor: 'rgba(250,157,50,.7)',
           data: workSheet.data
         }
@@ -57,47 +90,45 @@ async function getAllData (req, res, next) {
 }
 
 async function getData (req, res, next) {
-  let projectId = req.params.key
-  let contract = await contractController.getAllDataFromLosing(projectId)
-  res.status(200).json(contract)
+  // let projectId = req.params.key
+  // let contract = await contractController.getAllDataFromLosing(projectId)
+  // res.status(200).json(contract)
 }
 
 async function getFullLosing (req, res, next) {
-  let contractCode = req.params.key
-  // let allContract = await contractController.getContractByProject(projectId)
-  let data = {
-    losingTotal: 0,
-    ordering: [],
-    chart: {
-      materialItem: {
-        // labels: ['กุญแจเขาควาย K-7/B0312/SN ห้องน้ำ (เปิดซ้าย )', 'หินแกรนิตดำซานซีขนาด 60 X 91 cm.', 'หินแกรนิตดำซานซี ขนาด 20x 180 cm', 'กระเบื้องพื้น GRAND VIVA 60x60 cm'],
-        labels: [],
-        datasets: [
-          {
-            backgroundColor: '#40A5EF',
-            // data: [620.8, 1595, 1044, 716]
-            data: []
-          }
-        ]
-      }
-    }
-  }
-  let orderingItems = await orderingController.getOrderingByContract(contractCode, 'extra')
-  await Promise.all(
-    orderingItems.map( async (orderingItem) => {
-      data.losingTotal += orderingItem.total_price
-      let orderingDetails = await orderingController.getOrderingDetailByOrderingId(orderingItem.id)
-      orderingDetails.map((orderingDetail) => {
-        orderingDetail.note = orderingItem.note
-        data.ordering.push(orderingDetail)
-        data.chart.materialItem.labels.push(orderingDetail.name)
-        let price = orderingDetail.unit_price * orderingDetail.amount
-        data.chart.materialItem.datasets[0].data.push(price)
-      })
-    })
-  )
+  // let contractCode = req.params.key
+  // let data = {
+  //   losingTotal: 0,
+  //   ordering: [],
+  //   chart: {
+  //     materialItem: {
+  //       // labels: ['กุญแจเขาควาย K-7/B0312/SN ห้องน้ำ (เปิดซ้าย )', 'หินแกรนิตดำซานซีขนาด 60 X 91 cm.', 'หินแกรนิตดำซานซี ขนาด 20x 180 cm', 'กระเบื้องพื้น GRAND VIVA 60x60 cm'],
+  //       labels: [],
+  //       datasets: [
+  //         {
+  //           backgroundColor: '#40A5EF',
+  //           data: []
+  //         }
+  //       ]
+  //     }
+  //   }
+  // }
+  // let orderingItems = await orderingController.getOrderingByContract(contractCode, 'extra')
+  // await Promise.all(
+  //   orderingItems.map( async (orderingItem) => {
+  //     data.losingTotal += orderingItem.total_price
+  //     let orderingDetails = await orderingController.getOrderingDetailByOrderingId(orderingItem.id)
+  //     orderingDetails.map((orderingDetail) => {
+  //       orderingDetail.note = orderingItem.note
+  //       data.ordering.push(orderingDetail)
+  //       data.chart.materialItem.labels.push(orderingDetail.name)
+  //       let price = orderingDetail.unit_price * orderingDetail.amount
+  //       data.chart.materialItem.datasets[0].data.push(price)
+  //     })
+  //   })
+  // )
   
-  res.status(200).json(data)
+  // res.status(200).json(data)
 }
 
 

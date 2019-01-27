@@ -88,7 +88,7 @@ module.exports =  class WorkSheetDetail {
       result = await this.knex.select('updated_at as date').from('work_sheet_detail')
       .where({status: '5'}).orderBy('date', 'asc')
     } else {
-      result = await this.knex.select('created_at as date').from('work_sheet_detail')
+      result = await this.knex.select('created_at as date', 'total_price').from('work_sheet_detail')
       .where(this.getCondition()).orderBy('date', 'asc')
     }
     await this.knex.destroy()

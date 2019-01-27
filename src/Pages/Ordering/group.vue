@@ -38,14 +38,16 @@
                       label=""
                       ></my-auto-complete>
                     </td>
-                    <td>รายการ</td>
-                    <td width="40">จำนวน</td>
+                    <td style="text-align: center;">ร้านค้า</td>
+                    <td style="text-align: center;">รายการ</td>
+                    <td width="80">จำนวน</td>
                     <td></td>
                   </tr>
                 </thead>
                 <tbody v-if="local.inputs.lists.length">
                   <tr :key="index" v-for="(item, index) in local.inputs.lists">
                     <td>{{item.houseId}}</td>
+                    <td>{{item.storeName}}</td>
                     <td>{{item.materialName}}</td>
                     <td><input type="number" size="2" v-model="item.amount" class="input"></td>
                     <!-- <td><i class="fa fa-times" aria-hidden="true" @click="deleteListsItem(index)"></i></td> -->
@@ -181,7 +183,8 @@ export default {
           materialId: itemDetail.material_id,
           amount: itemDetail.amount,
           houseId: itemDetail.house_id,
-          materialName: itemDetail.name
+          materialName: itemDetail.name,
+          storeName: itemDetail.store_name
         }
       })
       this.local.lists = this.local.inputs.lists
