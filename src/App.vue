@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     ...mapActions([
+      'setAppResource',
       'setUserData',
       'setAuth',
       'setOrderingNotification'
@@ -74,6 +75,7 @@ export default {
           if (res.status === 200) {
             this.server = res.data
             this.setUserData(this.server.userData)
+            this.setAppResource(this.server.appResource)
             this.setNotification({type: 'ordering', value: this.server.orderingData})
           }
         })

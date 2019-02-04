@@ -1,55 +1,54 @@
 <template>
   <div ref="receipt" class="receipt">
-    <table class="main-table" width="100%" style="border-collapse: collapse;
-  font-size: 13px;">
+    <table class="main-table" width="100%" style="border-collapse: collapse;">
         <thead>
             <tr style="height: 94px;">
                 <td style="height: 94px;">
-                    <table width="100%" class="header-table">
-                    <tbody>
-                        <tr>
-                          <td style="width:80%;padding:5px;">
-                            <img src="../../../static/img/logo.png" width="200" height="80" alt="">
-                          </td>
-                          <td class="text-right" style="width:20%;text-align:right !important;padding:5px;">ใบสั่งซื้อ</td>
-                        </tr>
-                        <tr>
-                          <td style="width:80%;padding:5px;">บริษัท โชคชนายุทธ จำกัด</td>
-                          <td class="text-right" style="width:20%;text-align:right !important;padding:5px;"></td>
-                        </tr>
-                        <tr>
-                          <td style="width:80%;padding:5px;">เลขที่ 75/152 ซอยร่มเกล้า 1 แขวงแสนแสบ</td>
-                          <td class="text-right" style="width:20%;text-align:right !important;padding:5px;"></td>
-                        </tr>
-                        <tr>
-                          <td style="width:80%;padding:5px;">เขตมีนบุรี กรุงเทพ๚ โทร 02-0003093 FAX 02-0003093</td>
-                          <td class="text-right" style="width:20%;text-align:right !important;padding:5px;"></td>
-                        </tr>
-                    </tbody>
+                    <table width="100%" style="font-size: 14px;" class="header-table">
+                      <tbody>
+                          <tr>
+                            <td style="width:80%;padding:5px;">
+                              <img :src="appData.logo" width="200" alt="">
+                            </td>
+                            <td class="text-right" style="width:20%;text-align:right !important;padding:5px;">ใบสั่งซื้อ</td>
+                          </tr>
+                          <tr>
+                            <td style="width:80%;padding:5px;">บริษัท โชคชนายุทธ จำกัด</td>
+                            <td class="text-right" style="width:20%;text-align:right !important;padding:5px;"></td>
+                          </tr>
+                          <tr>
+                            <td style="width:80%;padding:5px;">เลขที่ 75/152 ซอยร่มเกล้า 1 แขวงแสนแสบ</td>
+                            <td class="text-right" style="width:20%;text-align:right !important;padding:5px;"></td>
+                          </tr>
+                          <tr>
+                            <td style="width:80%;padding:5px;">เขตมีนบุรี กรุงเทพ๚ โทร 02-0003093 FAX 02-0003093</td>
+                            <td class="text-right" style="width:20%;text-align:right !important;padding:5px;"></td>
+                          </tr>
+                      </tbody>
                     </table>
                 </td>
             </tr>
             <tr>
                 <td class="no-padding border" style="border:1px solid #ccc;padding:0 !important;">
-                    <table width="100%" class="receiver">
-                    <tbody>
-                        <tr>
-                        <td style="width:50%;padding:5px;">เรียน {{local.store.contact}}</td>
-                        <td class="text-right" style="width:50%;text-align:right !important;padding:5px;">วันที่ {{today}}</td>
-                        </tr>
-                        <tr>
-                        <td style="width:50%;padding:5px;">บริษัท {{local.store.name}}</td>
-                        <td class="text-right" style="width:50%;text-align:right !important;padding:5px;">โครงการ {{local.project.name}}</td>
-                        </tr>
-                        <tr>
-                        <td style="width:50%;padding:5px;">FAX {{local.store.fax}}</td>
-                        <td class="text-right" style="width:50%;text-align:right !important;padding:5px;">ประเภทวัสดุ {{local.store.type}}</td>
-                        </tr>
-                        <tr>
-                        <td style="width:50%;padding:5px;">TEL {{local.store.tel}}</td>
-                        <td class="text-right" style="width:50%;text-align:right !important;padding:5px;"></td>
-                        </tr>
-                    </tbody>
+                    <table width="100%" class="receiver" style="font-size: 13px;">
+                      <tbody>
+                          <tr>
+                          <td style="width:50%;padding:5px;">เรียน {{local.store.contact}}</td>
+                          <td class="text-right" style="width:50%;text-align:right !important;padding:5px;">วันที่ {{today}}</td>
+                          </tr>
+                          <tr>
+                          <td style="width:50%;padding:5px;">บริษัท {{local.store.name}}</td>
+                          <td class="text-right" style="width:50%;text-align:right !important;padding:5px;">โครงการ {{local.project.name}}</td>
+                          </tr>
+                          <tr>
+                          <td style="width:50%;padding:5px;">FAX {{local.store.fax}}, TEL {{local.store.tel}}</td>
+                          <td class="text-right" style="width:50%;text-align:right !important;padding:5px;">ประเภทวัสดุ {{local.store.type}}</td>
+                          </tr>
+                          <!-- <tr>
+                          <td style="width:50%;padding:5px;"></td>
+                          <td class="text-right" style="width:50%;text-align:right !important;padding:5px;"></td>
+                          </tr> -->
+                      </tbody>
                     </table>
                 </td>
             </tr>
@@ -58,7 +57,7 @@
             <tr>
             <td class="no-padding" style="padding: 0 !important;">
                 <table width="100%" border="1" class="item-lists" style="border-collapse: collapse;">
-                <thead>
+                <thead style="font-size: 13px;">
                     <tr>
                     <td width="5%" style="border:1px solid #ccc;text-align:center;font-weight:500;padding:5px;border-collapse:collapse;">ลำดับ</td>
                     <td width="60%" style="border:1px solid #ccc;text-align:center;font-weight:500;padding:5px;border-collapse:collapse;">รายการ</td>
@@ -69,7 +68,7 @@
                     <td width="10%" style="border:1px solid #ccc;text-align:center;font-weight:500;padding:5px;border-collapse:collapse;">จำนวนเงิน</td>
                     </tr>
                 </thead>
-                <tbody style="font-size: 13.5px;">
+                <tbody style="font-size: 12px;">
                     <tr :key="index" v-for="(item, index) in local.ordering.orderDetail">
                     <td style="border:1px solid #ccc;padding:5px;border-collapse:collapse;">{{index + 1}}</td>
                     <td style="border:1px solid #ccc;padding:5px;border-collapse:collapse;">{{item.name}}</td>
@@ -98,21 +97,21 @@
             </tr>
             <tr>
             <td class="no-padding border" style="border:1px solid #ccc;padding:0 !important;">
-                <table width="100%" class="condition">
-                <tbody>
-                    <tr>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;">เงื่อนไขการชำระเงิน</td>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;">ติดต่อส่งของ</td>
-                    </tr>
-                    <tr>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;">เครดิต 30 วัน</td>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;">โครงการ {{local.project.name}}</td>
-                    </tr>
-                    <tr>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;">ประมาณการกำหนดส่งของ</td>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;">ติดต่อ</td>
-                    </tr>
-                </tbody>
+                <table width="100%" class="condition" style="font-size: 12px;">
+                  <tbody>
+                      <tr>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;">เงื่อนไขการชำระเงิน</td>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;">ติดต่อส่งของ</td>
+                      </tr>
+                      <tr>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;">เครดิต 30 วัน</td>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;">โครงการ {{local.project.name}}</td>
+                      </tr>
+                      <tr>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;">ประมาณการกำหนดส่งของ</td>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;">ติดต่อ</td>
+                      </tr>
+                  </tbody>
                 </table>
             </td>
             </tr>
@@ -120,21 +119,21 @@
         <tfoot>
             <tr>
             <td class="no-padding" style="padding: 0 !important;">
-                <table width="100%" class="signature" style="margin: 20px 0;">
-                <tbody>
-                    <tr>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;">ผู้สั่งซื้อ..........................................</td>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;">อนุมัติ.....................................</td>
-                    </tr>
-                    <tr>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;">(กุลจิตร ทองเมืองน้อย)</td>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;">(ทรงวุฒิ ทองทวี)</td>
-                    </tr>
-                    <tr>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;">087-5070161 (นิ่ม)</td>
-                    <td class="text-center" style="width:50%;text-align:center;padding:5px;"></td>
-                    </tr>
-                </tbody>
+                <table width="100%" class="signature" style="margin: 20px 0;font-size: 12px;">
+                  <tbody>
+                      <tr>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;">ผู้สั่งซื้อ..........................................</td>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;">อนุมัติ.....................................</td>
+                      </tr>
+                      <tr>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;">(กุลจิตร ทองเมืองน้อย)</td>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;">(ทรงวุฒิ ทองทวี)</td>
+                      </tr>
+                      <tr>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;">087-5070161 (นิ่ม)</td>
+                      <td class="text-center" style="width:50%;text-align:center;padding:5px;"></td>
+                      </tr>
+                  </tbody>
                 </table>
             </td>
             </tr>
@@ -145,6 +144,7 @@
 
 <script>
 import Helper from '@Libraries/common.helpers'
+import { mapGetters } from 'vuex'
 export default {
   props: {
     dataObj: {
@@ -163,7 +163,10 @@ export default {
   computed: {
     today () {
       return Helper.GET_DATETHAI('now')
-    }
+    },
+    ...mapGetters([
+      'appData'
+    ])
   },
   created () {
     this.local = this.dataObj
@@ -177,7 +180,7 @@ export default {
       var win = window.open('', 'Title', 'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,width=850,height=500,top=0,left=0')
       let style = document.createElement('style')
       style.type = 'text/css'
-      let css = '@media print {@page { margin: 0; }body { margin: 1.5cm 1cm; }}'
+      let css = '@media print {@page { margin: 0; }body { margin: .3cm .8cm; }}'
       // let css = ''
       if (style.styleSheet) {
         // This is required for IE8 and below.

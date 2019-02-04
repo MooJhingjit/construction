@@ -89,3 +89,10 @@ module.exports.getDateDiff = (date1, date2) => {
 module.exports.addCommas = (number, digit = 0) => {
   return parseFloat(number).toFixed(digit).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 }
+
+module.exports.hostName = (req) => {
+  // console.log(req)
+  if (!req.headers) return
+  return `${req.protocol}://${req.headers.host}`
+  // return `${req.headers.host}`
+}

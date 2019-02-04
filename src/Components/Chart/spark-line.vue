@@ -55,7 +55,7 @@ export default {
   },
   watch: {
     data () {
-      console.log(this.data)
+      // console.log(this.data)
       this.local.data = this.data
       this.setData()
       // this.data = this.data

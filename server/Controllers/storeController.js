@@ -82,7 +82,7 @@ const getDetailById = async (storeId) => {
 const getDropDown = async (req, res, next) => {
   let model = new storeModel()
   if (req.query.type === 'normal') {
-    model.id = 3 // 3 is แผ่นพื้นสำเร็จรูป
+    // model.id = 3 // 3 is แผ่นพื้นสำเร็จรูป
   }
   let data = {}
   data = await model.getAllSelection()

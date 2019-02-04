@@ -185,4 +185,7 @@ export default {
 </script>
 
 <style lang="scss">
+.modal-content{
+  min-height: 300px;
+}
 </style>

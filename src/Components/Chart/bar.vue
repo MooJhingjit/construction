@@ -31,7 +31,6 @@ export default {
   },
   watch: {
     data () {
-      console.log('dfdf')
       this.renderChartJs()
     }
   }
