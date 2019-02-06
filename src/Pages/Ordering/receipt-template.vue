@@ -8,7 +8,7 @@
                       <tbody>
                           <tr>
                             <td style="width:80%;padding:5px;">
-                              <img :src="appData.logo" width="200" alt="">
+                              <img :src="appData.logo" width="70" alt="">
                             </td>
                             <td class="text-right" style="width:20%;text-align:right !important;padding:5px;">ใบสั่งซื้อ</td>
                           </tr>

@@ -1,14 +1,9 @@
 
 <template>
   <div class="wrapper">
-    <div class="background" style="
-    background: url('https://www.wallpaperup.com/uploads/wallpapers/2016/11/30/1059029/1d1ae3165389ed9dbbcc03b551a16422-700.jpg');
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-size: cover;"></div>
+    <div
+    class="background darken-pseudo"
+    :style="`background-image: url('${appData.bg}');`"></div>
     <div class="content">
       <div class="menu-bar" v-if="auth">
         <menu-bar :isDisableMenu="local.isDisableMenu" @setMenuStatus="pageClick"></menu-bar>
@@ -46,6 +41,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'appData',
       'userData',
       'auth'
     ])
@@ -140,5 +136,23 @@ export default {
 }
 .fade-enter, .fade-leave-active {
   opacity: 0
+}
+.background{
+  position: fixed;
+  top: 0; bottom: 0;
+  left: 0;
+  right: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.darken-pseudo:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 </style>
