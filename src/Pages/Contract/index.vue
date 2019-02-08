@@ -274,8 +274,13 @@ export default {
           data.houseId = this.local.inputs.contract.house_id
           resourceName = `${config.api.contract.status}/${this.local.idSelected}`
           res = await service.putResource({data, resourceName})
-          let obj = res.data.orderingData
-          bus.$emit('setNotification', {type: 'ordering', value: obj})
+          // let obj = res.data.orderingData
+          // bus.$emit('setNotification', {type: 'ordering', value: obj})
+          let emitObj = {
+            key: 'UPDATE_ORDERING',
+            data: {}
+          }
+          bus.$emit('emitSocket', emitObj)
           break
         // case 'update':
         //   if (!isValid) return

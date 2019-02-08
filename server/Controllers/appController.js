@@ -11,20 +11,19 @@ const getAppResource = async (req, res, next) => {
   if (!userData) {
     res.status(401).json({})
   }
-
-  await runTasks()
-  let orderingData = await ordering.countOrdering() // alert ordering
+  // await runTasks()
+  // let orderingData = await ordering.countOrdering() // alert ordering
   let obj = {
     userData,
     appResource,
-    orderingData
+    // orderingData
   }
   res.status(200).json(obj)
 }
-const runTasks = async () => {
-  // check ordering
-  await ordering.checkOrdering()
-  return
-}
+// const runTasks = async () => {
+//   // check ordering
+//   await ordering.checkOrdering()
+//   return
+// }
 
 module.exports.getAppResource = getAppResource

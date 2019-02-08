@@ -61,7 +61,8 @@ const api = {
     'index': '/ordering',
     'fullOrder': '/full-ordering',
     'extra': '/ordering-extra',
-    'forward': '/ordering-forward'
+    'forward': '/ordering-forward',
+    'count': '/ordering-count'
   },
   'frontSite': {
     'index': '/front-site'

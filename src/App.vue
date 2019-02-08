@@ -22,6 +22,7 @@ import {bus} from '@/main'
 import MenuBar from '@Components/MenuBar'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
+import io from 'socket.io-client'
 // import Helper from '@Libraries/common.helpers'
 import { mapGetters, mapActions } from 'vuex'
 export default {
@@ -48,13 +49,16 @@ export default {
   },
   created () {
     this.ROUTE_PERMISSIONS()
-    bus.$on('setNotification', this.setNotification)
+    // bus.$on('setNotification', this.setNotification)
     bus.$on('logout', this.logout)
+    bus.$on('emitSocket', this.emitSocket)
     // this.checkAuth()
     this.fetchData()
   },
-  updated () {
-    // this.checkAuth()
+  mounted () {
+    this.socket.on('UPDATE_ORDERING', (data) => {
+      this.setNotification()
+    })
   },
   methods: {
     ...mapActions([
@@ -72,7 +76,7 @@ export default {
             this.server = res.data
             this.setUserData(this.server.userData)
             this.setAppResource(this.server.appResource)
-            this.setNotification({type: 'ordering', value: this.server.orderingData})
+            // this.setNotification({type: 'ordering', value: this.server.orderingData})
           }
         })
         .catch(() => {
@@ -92,16 +96,17 @@ export default {
     pageClick (tf = true) {
       this.local.isDisableMenu = tf
     },
-    setNotification (obj) {
-      switch (obj.type) {
-        case 'ordering':
-          this.setOrderingNotification(obj.value)
-          break
-      }
+    async setNotification () {
+      let resourceName = config.api.ordering.count
+      let res = await service.getResource({resourceName, queryString: {}})
+      this.setOrderingNotification(res.data.orderingData)
+    },
+    emitSocket (obj) {
+      this.socket.emit(obj.key, obj.data)
     }
   },
   beforeDestroy () {
-    bus.$off('setNotification', this.setNotification)
+    // bus.$off('setNotification', this.setNotification)
     bus.$off('logout', this.logout)
   },
   watch: {

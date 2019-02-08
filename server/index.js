@@ -1,7 +1,11 @@
 const express = require('express');
 const app = express();
 // const helpers = require('./Libraries/helpers')
+const schedule = require('node-schedule');
 const jwt = require('jsonwebtoken');
+const ordering = require('./Controllers/orderingController.js')
+const socket = require('./Libraries/socket.js');
+
 app.use('/static', express.static('public'))
 app.all('*', verifyToken, function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -40,8 +44,18 @@ function verifyToken(req, res, next) {
   
 }
 
+let rule = new schedule.RecurrenceRule();
+rule.hour = 04;
+rule.minute = 30;
+schedule.scheduleJob(rule, async function(){
+  // run task
+  await ordering.checkOrdering();
+});
+
 //listen for requests
 const port = process.env.PORT || 3000
-app.listen(port, function(){
+let server = app.listen(port, function(){
     console.log(`now listenting on port ${port}...`);
 })
+
+socket.socketStartUp(server);

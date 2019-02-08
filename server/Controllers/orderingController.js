@@ -87,8 +87,8 @@ async function createExtraData (req, res, next) {
   let materialIdArr = getMaterialIdArr(materials)
   let fullMaterial = await materialController.getMaterialDetail(materialIdArr)
   await prepareMaterial(req.body.data.contract, fullMaterial, null,  {materials, note: req.body.data.note}) // materials is extra
-  let orderingData = await countOrdering()
-  res.status(200).json({orderingData})
+  // let orderingData = await countOrdering()
+  res.status(200).json({})
 }
 async function deleteData (req, res, next) {
   let item = new orderingModel(req.params.id)
@@ -96,8 +96,8 @@ async function deleteData (req, res, next) {
   let detailItem = new orderingDetailModel()
   detailItem.order_id = req.params.id
   await detailItem.delete()
-  let orderingData = await countOrdering()
-  res.status(200).json({orderingData})
+  // let orderingData = await countOrdering()
+  res.status(200).json({})
 }
 async function updateData (req, res, next) {
   let ordering = req.body.data
@@ -111,9 +111,15 @@ async function updateData (req, res, next) {
       await ordering.update()
     })
   )
-  let orderingData = await countOrdering()
-  res.status(200).json({orderingData})
+  // let orderingData = await countOrdering()
+  res.status(200).json({})
 }
+
+async function countOrderingData (req, res, next) {
+  let orderingData = await countOrdering() // alert ordering
+  res.status(200).json(orderingData)
+}
+
 async function prepareOrdering (contractCode, houseId, taskOrder, time, progressId) {
   let orderGroupId = await getOrderGroup(taskOrder, time)
   let materials = await materialGroup.getMaterialByGroup(orderGroupId, houseId)
@@ -356,6 +362,8 @@ module.exports.reset = reset
 module.exports.getOrderingByContract = getOrderingByContract
 module.exports.getOrderingDetailByOrderingId = getOrderingDetailByOrderingId
 module.exports.orderForward = orderForward
+module.exports.countOrderingData = countOrderingData
+
 
 
 

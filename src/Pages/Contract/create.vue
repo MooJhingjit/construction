@@ -320,8 +320,13 @@ export default {
           break
       }
       if (res.status === 200) {
-        let obj = res.data.orderingData
-        bus.$emit('setNotification', {type: 'ordering', value: obj})
+        // let obj = res.data.orderingData
+        // bus.$emit('setNotification', {type: 'ordering', value: obj})
+        let emitObj = {
+          key: 'UPDATE_ORDERING',
+          data: {}
+        }
+        bus.$emit('emitSocket', emitObj)
         this.NOTIFY('success')
         this.GOTOPAGE('Contract', this.local.inputs.code)
         return

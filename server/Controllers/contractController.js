@@ -70,8 +70,8 @@ const createData = async (req, res, next) => {
   }
   await createContractTime(req.body.data.code, req.body.data.times)
 
-  let orderingData = await ordering.countOrdering()
-  res.status(200).json({status: 'success', orderingData})
+  // let orderingData = await ordering.countOrdering()
+  res.status(200).json({status: 'success'})
 }
 
 const createContractTime = (contractCode, dataArr) => {
@@ -169,8 +169,8 @@ const updateContractStatus = async (req, res, next) => {
         // orderMaterial()
         break
   }
-  let orderingData = await ordering.countOrdering()
-  res.status(200).json({orderingData})
+  // let orderingData = await ordering.countOrdering()
+  res.status(200).json({})
 }
 
 const startWorking = async (contractCode, houseId) => {
