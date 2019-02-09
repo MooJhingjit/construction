@@ -6,9 +6,9 @@ const socketStartUp = function (server) {
         // console.log('UPDATE_PRODUCT')
         io.emit('UPDATE_ORDERING')
       });
-      // socket.on('UPDATE_NOTIFICATION', function(data) {
-      //   io.emit('UPDATE_NOTIFICATION')
-      // });
+      socket.on('UPDATE_ORDERING_STATUS', function(data) {
+        io.emit('UPDATE_ORDERING_STATUS')
+      });
     })
 }
 module.exports = {socketStartUp};

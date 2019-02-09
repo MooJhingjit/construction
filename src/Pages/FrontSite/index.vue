@@ -81,6 +81,8 @@
 </template>
 
 <script>
+
+import {bus} from '@/main'
 import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
 import service from '@Services/app-service'
@@ -121,29 +123,20 @@ export default {
   computed: {
   },
   created () {
+    bus.$on('getOrderingStatus', this.getOrderingStatus)
     this.fetchData()
   },
   methods: {
-    fetchData () {
+    async fetchData () {
       let resourceName = config.api.frontSite.index
       let queryString = []
-      service.getResource({resourceName, queryString})
-        .then((res) => {
-          if (res.status === 200) {
-            this.local.contractsTemp = res.data
-            this.prepareSearch()
-            // console.log(this.local.contractsTemp)
-            // this.local.contractSelection.inputs = res.data.map((item) => {
-            //   return {
-            //     key: item.code,
-            //     value: `${item.project.name} >> ${item.plan}`
-            //   }
-            // })
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      let res = await service.getResource({resourceName, queryString})
+      this.local.contractsTemp = res.data
+      this.prepareSearch()
+    },
+    async getOrderingStatus () {
+      await this.fetchData()
+      this.contractSelectedHandle({code: this.local.contractSelection.selected})
     },
     prepareSearch () {
       this.local.contractSelection.inputs = this.local.contractsTemp.map((item) => {
@@ -175,6 +168,9 @@ export default {
         {'is-success': status === 'received'}
       ]
     }
+  },
+  beforeDestroy () {
+    bus.$off('getOrderingStatus', this.getOrderingStatus)
   }
 }
 </script>

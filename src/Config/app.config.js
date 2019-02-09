@@ -4,6 +4,7 @@
 //   url = `${window.location.origin}/dashboard-api`
 // }
 const api = {
+  'host': `${window.location.protocol}//${window.location.hostname}:3000`,
   // 'apiEndPoint': 'http://localhost:3000/api',
   'apiEndPoint': `${window.location.protocol}//${window.location.hostname}:3000/api`, // for production
   'app': {

@@ -14,7 +14,7 @@
             </thead>
             <tbody>
               <tr :class="{'success' : time.is_success}" :key="timeIndex" v-for="(time, timeIndex) in local.time">
-                <td>{{time.time}}</td>
+                <td>{{time.time}} <span v-if="time.is_success">(เสร็จสิ้น)</span></td>
                 <td class="list">
                   <div :key="taskIndex" v-for="(task, taskIndex) in time.progress">
                     <div class="task">{{task.order}}. {{task.name}} <span @click="showTaskDetail(task)" class="detail">[รายละเอียด]</span> </div>
@@ -58,6 +58,7 @@
 </template>
 
 <script>
+import {bus} from '@/main'
 import breadcrumbBar from '@Components/Breadcrumb'
 import optionDetailTemplate from '@Components/Template/option-detail'
 import service from '@Services/app-service'
@@ -119,6 +120,10 @@ export default {
       let res = await service.putResource({data, resourceName})
       // console.log(res.status)
       if (res.status === 200) {
+        bus.$emit('emitSocket', {
+          key: 'UPDATE_ORDERING',
+          data: {}
+        })
         this.NOTIFY('success')
         this.fetchData()
       }
@@ -175,7 +180,7 @@ section {
     }
   }
   tr.success{
-    background: #fffce1;
+    background: #d9f1c6;
   }
 }
 .model{

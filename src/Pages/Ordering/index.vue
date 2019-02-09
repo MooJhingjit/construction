@@ -109,6 +109,7 @@
 </template>
 
 <script>
+import {bus} from '@/main'
 import barChart from '@Components/Chart/line'
 import breadcrumbBar from '@Components/Breadcrumb'
 import ModelPanel from '@Components/Model'
@@ -153,6 +154,7 @@ export default {
     // }
   },
   created () {
+    bus.$on('updateOrderingPage', this.updateOrderingPage)
     this.fetchData()
   },
   methods: {
@@ -170,6 +172,10 @@ export default {
         .catch(() => {
         })
     },
+    updateOrderingPage () {
+      console.log('updateOrderingPage')
+      this.fetchData()
+    },
     showOrderingForm (orderType) {
       this.$refs.modelPanel.isActive = true
       if (orderType === 'normal') {
@@ -180,6 +186,9 @@ export default {
         // this.$refs.ordering.fetchData()
       }
     }
+  },
+  beforeDestroy () {
+    bus.$off('updateOrderingPage', this.updateOrderingPage)
   }
 }
 </script>

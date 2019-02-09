@@ -37,7 +37,8 @@ export default {
         // isAuth: false,
         // showMenubar: true
       },
-      server: {}
+      server: {},
+      socket: io(config.api.host)
     }
   },
   computed: {
@@ -49,15 +50,20 @@ export default {
   },
   created () {
     this.ROUTE_PERMISSIONS()
-    // bus.$on('setNotification', this.setNotification)
     bus.$on('logout', this.logout)
     bus.$on('emitSocket', this.emitSocket)
+    if (this.HASAUTH()) {
+      this.getOrdering()
+    }
     // this.checkAuth()
     this.fetchData()
   },
   mounted () {
     this.socket.on('UPDATE_ORDERING', (data) => {
-      this.setNotification()
+      this.getOrdering()
+    })
+    this.socket.on('UPDATE_ORDERING_STATUS', (data) => {
+      bus.$emit('getOrderingStatus')
     })
   },
   methods: {
@@ -76,7 +82,6 @@ export default {
             this.server = res.data
             this.setUserData(this.server.userData)
             this.setAppResource(this.server.appResource)
-            // this.setNotification({type: 'ordering', value: this.server.orderingData})
           }
         })
         .catch(() => {
@@ -96,18 +101,19 @@ export default {
     pageClick (tf = true) {
       this.local.isDisableMenu = tf
     },
-    async setNotification () {
+    async getOrdering () {
       let resourceName = config.api.ordering.count
       let res = await service.getResource({resourceName, queryString: {}})
-      this.setOrderingNotification(res.data.orderingData)
+      this.setOrderingNotification(res.data)
+      bus.$emit('updateOrderingPage')
     },
     emitSocket (obj) {
       this.socket.emit(obj.key, obj.data)
     }
   },
   beforeDestroy () {
-    // bus.$off('setNotification', this.setNotification)
     bus.$off('logout', this.logout)
+    bus.$off('emitSocket', this.emitSocket)
   },
   watch: {
     $route (to, from) {

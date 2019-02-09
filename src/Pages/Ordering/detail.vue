@@ -299,11 +299,6 @@ export default {
           })
           res = await service.putResource({data, resourceName})
           // bus.$emit('setNotification', {type: 'ordering', value: res.data.orderingData})
-          let emitObj = {
-            key: 'UPDATE_ORDERING',
-            data: {}
-          }
-          bus.$emit('emitSocket', emitObj)
           break
         case 'cancel':
           this.local.idSelected = null
@@ -315,15 +310,17 @@ export default {
           let queryString = []
           res = await service.deleteResource({resourceName, queryString})
           // bus.$emit('setNotification', {type: 'ordering', value: res.data.orderingData})
-          let emitObj = {
-            key: 'UPDATE_ORDERING',
-            data: {}
-          }
-          bus.$emit('emitSocket', emitObj)
-
           break
       }
       if (res.status === 200) {
+        bus.$emit('emitSocket', {
+          key: 'UPDATE_ORDERING',
+          data: {}
+        })
+        bus.$emit('emitSocket', {
+          key: 'UPDATE_ORDERING_STATUS',
+          data: {}
+        })
         this.reloadTable()
         // this.cleanInput()
         // this.local.idSelected = ''

@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 // const helpers = require('./Libraries/helpers')
-const schedule = require('node-schedule');
+// const schedule = require('node-schedule');
+const CronJob = require('cron').CronJob;
 const jwt = require('jsonwebtoken');
 const ordering = require('./Controllers/orderingController.js')
 const socket = require('./Libraries/socket.js');
@@ -22,7 +23,7 @@ function verifyToken(req, res, next) {
     next();
     return;
   }
-  if (req.url === '/api/login') {
+  if (req.url === '/api/login' || req.url === '/api/app/resource') {
     next();
     return;
   } else {
@@ -44,13 +45,10 @@ function verifyToken(req, res, next) {
   
 }
 
-let rule = new schedule.RecurrenceRule();
-rule.hour = 04;
-rule.minute = 30;
-schedule.scheduleJob(rule, async function(){
-  // run task
+new CronJob('0 30 4 * * *', async function() { // do it everyday at 
   await ordering.checkOrdering();
-});
+}, null, true, 'Asia/Bangkok');
+
 
 //listen for requests
 const port = process.env.PORT || 3000

@@ -43,8 +43,8 @@ async function getResource (req, res, next) {
       }
     }
   }
-  data.ordering.normal = await getLastOrder('normal', 5)
-  data.ordering.extra = await getLastOrder('extra', 5)
+  data.ordering.normal = await getLastOrder('normal', 0)
+  data.ordering.extra = await getLastOrder('extra', 0)
   res.status(200).json(data)
 }
 async function getData (req, res, next) {
@@ -269,7 +269,7 @@ const prepareChartData = async (type) => {
     let date = helpers.getDate(item.date_start, 'YYYY-MM-DD')
     
     if (stat[date]) {
-      stat[date] +=  parseInt(stat[date]) + parseInt(item.total_price)
+      stat[date] =  parseInt(stat[date]) + parseInt(item.total_price)
     } else {
       stat[date] = item.total_price
     }
@@ -283,6 +283,7 @@ const prepareChartData = async (type) => {
     dataSets.date.push(key)
     dataSets.data.push(stat[key])
   }
+  
   dataSets.info = stat
   return dataSets
 }

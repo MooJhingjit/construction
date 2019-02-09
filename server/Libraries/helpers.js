@@ -28,6 +28,7 @@ module.exports.getCurrentDate = (format = 'YYYY/MM/DD') => {
 }
 
 module.exports.getUserAuth = (token) => {
+  if (token === undefined) return false
   let bearer = token.split(' ');
   let decoded = jwtDecode(bearer[1]);
   return decoded.user

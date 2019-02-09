@@ -80,7 +80,7 @@ module.exports =  class Ordering {
     let result = await this.knex('ordering')
     .where('order_type', this.order_type)
     .where('status', 'wait')
-    .orderBy('id', 'desc').limit(this.limit)
+    .orderBy('id', 'desc')
     await this.knex.destroy()
     return result
   }
