@@ -7,6 +7,8 @@ const orderingModel = require('../Models/orderingModel')
 const materialGroup = require('./materialGroupController.js')
 const orderingDetailModel = require('../Models/orderingDetailModel')
 const workOrderDetailModel = require('../Models/workOrderDetailModel.js')
+const scheduleModel = require('../Models/nodeScheduleModel.js')
+
 
 async function getResource (req, res, next) {
   let orderingNormal = await prepareChartData('normal')
@@ -292,6 +294,8 @@ const checkOrdering = async () => {
   let ordering = new orderingModel()
   ordering.date_start = today
   ordering.status = 'wait'
+  let schedule = new scheduleModel() // just testing that check ordering worked
+  await schedule.save();
   return await ordering.checkUpdateOrdering()
 }
 const countOrdering = async () => {

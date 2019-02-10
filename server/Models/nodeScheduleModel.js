@@ -8,6 +8,7 @@ module.exports =  class NodeSchedule {
 
   async save () {
     let result = await this.knex('node_schedule').insert({})
+    console.log('dd')
     await this.knex.destroy()
     return result
   }

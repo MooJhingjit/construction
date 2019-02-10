@@ -45,7 +45,7 @@ function verifyToken(req, res, next) {
   
 }
 
-new CronJob('0 30 4 * * *', async function() { // do it everyday at 
+new CronJob('0 38 17 * * *', async function() { // do it everyday at 
   await ordering.checkOrdering();
 }, null, true, 'Asia/Bangkok');
 
