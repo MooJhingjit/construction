@@ -52,9 +52,6 @@ export default {
     this.ROUTE_PERMISSIONS()
     bus.$on('logout', this.logout)
     bus.$on('emitSocket', this.emitSocket)
-    if (this.HASAUTH()) {
-      this.getOrdering()
-    }
     // this.checkAuth()
     this.fetchData()
   },
@@ -123,6 +120,9 @@ export default {
         }
       } else {
         this.ROUTE_PERMISSIONS()
+        if (this.HASAUTH()) {
+          this.getOrdering()
+        }
       }
       this.pageClick()
     }

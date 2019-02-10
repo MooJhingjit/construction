@@ -11,7 +11,8 @@
 // }
 const jwtDecode = require('jwt-decode')
 const moment = require('moment-timezone')
-moment.tz.setDefault('UTC')
+// moment.tz.setDefault('UTC')
+moment().tz("Asia/Bangkok").format();
 
 module.exports.getDate = (date, format = 'YYYY/MM/DD') => {
   if (!date) return null
