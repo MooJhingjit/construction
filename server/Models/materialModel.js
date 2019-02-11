@@ -1,10 +1,11 @@
 const knex = require('knex');
 const db = require('../Database/config')
 const helpers = require('../Libraries/helpers')
+const conn = knex(db.config);
 
 module.exports =  class Material {
   constructor(id){
-    this.knex = knex(db.config);
+    this.knex = conn
     this.id = id;
     this.house_id
     this.store_id
