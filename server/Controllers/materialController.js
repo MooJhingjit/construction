@@ -62,10 +62,10 @@ async function getFullMaterial (req, res, next) {
 async function createData (req, res, next) {
   let itemInputs = req.body.data
   await cleanData(itemInputs)
+  let newItem = new materialModel()
   result = await Promise.all(
     itemInputs.detail.map(async (item) => {
       let isUpdate = false
-      let newItem = new materialModel()
       newItem.id = item.id || null
       oldItem = await newItem.getDataById()
       newItem.house_id = item.houseId
