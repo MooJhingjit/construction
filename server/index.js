@@ -1,11 +1,11 @@
+require('dotenv').config()
 const express = require('express');
 const app = express();
-// const helpers = require('./Libraries/helpers')
-// const schedule = require('node-schedule');
 const CronJob = require('cron').CronJob;
 const jwt = require('jsonwebtoken');
 const ordering = require('./Controllers/orderingController.js')
 const socket = require('./Libraries/socket.js');
+require('./Libraries/tracking.js');
 
 app.use('/static', express.static('public'))
 app.all('*', verifyToken, function(req, res, next) {

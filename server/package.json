@@ -9,9 +9,12 @@
   "author": "moo",
   "license": "ISC",
   "dependencies": {
+    "@bugsnag/js": "^5.2.0",
+    "@bugsnag/plugin-express": "^5.2.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.2",
     "cron": "^1.6.0",
+    "dotenv": "^6.2.0",
     "express": "^4.16.3",
     "jsonwebtoken": "^8.2.1",
     "jwt-decode": "^2.2.0",

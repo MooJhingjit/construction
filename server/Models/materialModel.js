@@ -1,11 +1,10 @@
 const knex = require('knex');
 const db = require('../Database/config')
 const helpers = require('../Libraries/helpers')
-const conn = knex(db.config);
 
 module.exports =  class Material {
   constructor(id){
-    this.knex = conn
+    this.knex = knex(db.config);
     this.id = id;
     this.house_id
     this.store_id
@@ -14,6 +13,7 @@ module.exports =  class Material {
     this.unit
     this.amount
     this.price
+    
   }
   async getData () {
     let result = await this.knex('material')

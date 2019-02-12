@@ -1,9 +1,9 @@
 module.exports.config = {
   client: 'mysql',
   connection: {
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'construction', // change to 1234 on local
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS, // change to 1234 on local
     database : 'construction',
     timezone: 'UTC',
   },
