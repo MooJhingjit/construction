@@ -1,11 +1,9 @@
 import { mapGetters, mapActions } from 'vuex'
 import Helper from '@Libraries/common.helpers'
-// import Config from '@AppConfig/app.config'
-// import moment from 'moment'
-// import swal from 'sweetalert'
 import service from '@Services/app-service'
 import config from '@Config/app.config'
-import moment from 'moment'
+import moment from 'moment-timezone'
+moment().tz('Asia/Bangkok').format()
 export default {
   computed: {
     ...mapGetters([
@@ -75,16 +73,12 @@ export default {
       if (date === undefined || date === null) {
         return null
       }
-      return new Date(date)
+      return moment(date)
     },
     GET_DATEDIFF (dateStart, dateEnd) { // this for buefy
-      // dateStart = new moment(dateStart)
-      // dateEnd = new moment(dateEnd)
       var startDate = moment(dateStart, 'YYYY/MM/DD')
       var endDate = moment(dateEnd, 'YYYY/MM/DD')
       return endDate.diff(startDate, 'days')
-      // let duration = moment.duration(dateStart.diff(dateEnd))
-      // return duration.asDays()
     },
     NUMBERWITHCOMMAS (number, digit = 0) {
       return parseFloat(number).toFixed(digit).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -105,12 +99,12 @@ export default {
     },
     SET_DATEFORMAT (dateInput, format = 'YYYY-MM-DD') {
       if (!dateInput) return null
-      let date = new Date(dateInput)
-      return moment.utc(date).format(format)
+      let date = moment(dateInput)
+      return moment(date).format(format)
     },
     EXTRACT_DATE (date = null, selection = 'all') {
       if (date === 'now') {
-        date = new Date()
+        date = moment()
       }
       date = moment(date, 'YYYY/MM/DD')
       if (selection === 'all') {

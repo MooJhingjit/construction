@@ -111,7 +111,7 @@ module.exports =  class Contract {
       date_start: this.date_start,
       paid: this.paid,
       status: this.status,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result

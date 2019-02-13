@@ -21,6 +21,7 @@
     "knex": "^0.14.6",
     "mariasql": "^0.2.6",
     "moment": "^2.22.1",
+    "moment-timezone": "^0.5.21",
     "mysql": "^2.15.0",
     "socket.io-client": "^2.2.0",
     "vee-validate": "^2.0.9",

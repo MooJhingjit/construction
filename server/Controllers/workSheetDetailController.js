@@ -117,7 +117,7 @@ const updateOldOne = async (itemId, obj) => {
   if (obj.total_price) {
     model.total_price = obj.total_price
   }
-  model.updated_at = helpers.getCurrentTime('sql')
+  model.updated_at = helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
   // if (obj.price) {
   //   model.price = obj.price
   // }

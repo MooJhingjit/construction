@@ -48,7 +48,7 @@ module.exports =  class WorkOrder {
     let result = await this.knex('work_order').insert({
       time: this.time,
       pre_order: this.pre_order,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result
@@ -60,7 +60,7 @@ module.exports =  class WorkOrder {
     .update({
       time: this.time,
       pre_order: this.pre_order,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result
@@ -115,7 +115,7 @@ module.exports =  class WorkOrder {
 //       null,
 //       this.time,
 //       this.pre_order,
-//       helpers.getCurrentTime('sql')
+//       helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
 //     ])
 //   }
 
@@ -126,7 +126,7 @@ module.exports =  class WorkOrder {
 //     created_at = ?
 //     WHERE time = ?
 //     `;
-//     return db.query(sql, [this.time, this.pre_order, helpers.getCurrentTime('sql'), this.time],);
+//     return db.query(sql, [this.time, this.pre_order, helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss'), this.time],);
 //   }
 
 //   delete () {

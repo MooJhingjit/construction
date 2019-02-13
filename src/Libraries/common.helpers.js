@@ -1,4 +1,6 @@
 import config from '@Config/app.config'
+import moment from 'moment-timezone'
+moment().tz('Asia/Bangkok').format()
 
 const SET_STORAGEITEM = (key, item) => {
   localStorage.setItem(key, JSON.stringify(item))
@@ -30,16 +32,16 @@ const GET_DATETHAI = (date) => {
   let dd = ''
   let mm = ''
   let yyyy = ''
-  let dateVal = new Date()
+  let dateVal = moment()
   // let now = new Date()
   // let thday = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์']
   let thmonth = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม']
   if (date !== 'now') {
-    dateVal = new Date(date)
+    dateVal = moment(date)
   }
-  dd = dateVal.getDate()
-  mm = thmonth[dateVal.getMonth()]
-  yyyy = dateVal.getFullYear() + 543
+  dd = dateVal.date()
+  mm = thmonth[dateVal.month()]
+  yyyy = dateVal.year() + 543
   return `${dd} ${mm} ${yyyy}`
 }
 

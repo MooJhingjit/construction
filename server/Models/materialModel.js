@@ -58,7 +58,7 @@ module.exports =  class Material {
       store_id: this.store_id,
       amount: this.amount,
       price: this.price,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     // await this.knex.destroy()
     return result
@@ -75,7 +75,7 @@ module.exports =  class Material {
       store_id: this.store_id,
       amount: this.amount,
       price: this.price,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     // await this.knex.destroy()
     return result
@@ -87,7 +87,7 @@ module.exports =  class Material {
       side: obj.side,
       color: obj.color,
       price: obj.price,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     // await this.knex.destroy()
     return result

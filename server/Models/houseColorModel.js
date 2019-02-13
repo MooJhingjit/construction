@@ -64,7 +64,7 @@ module.exports =  class HouseColor {
     //   garage: this.garage,
     //   stair: this.stair,
     //   color: this.color,
-    //   created_at: helpers.getCurrentTime('sql')
+    //   created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     // })
     // await this.knex.destroy()
     // return result

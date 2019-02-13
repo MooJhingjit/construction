@@ -101,7 +101,7 @@ async function createData (req, res, next) {
           id: materialId,
           side: 'left',
           color: lKey,
-          price: item.priceDetail.l_default[lKey],
+          price: item.priceDetail.l_default[lKey] || 1,
         }
         createPriceDetail(newItem, priceData, isUpdate)
       }
@@ -110,7 +110,7 @@ async function createData (req, res, next) {
           id: materialId,
           side: 'right',
           color: rKey,
-          price: item.priceDetail.r_default[rKey],
+          price: item.priceDetail.r_default[rKey] || 1,
         }
         createPriceDetail(newItem, priceData, isUpdate)
       }

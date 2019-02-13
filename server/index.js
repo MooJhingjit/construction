@@ -1,4 +1,5 @@
 require('dotenv').config()
+// const helpers = require('./Libraries/helpers')
 const express = require('express');
 const app = express();
 const CronJob = require('cron').CronJob;
@@ -54,6 +55,7 @@ new CronJob('0 30 4 * * *', async function() { // do it everyday at
 const port = process.env.PORT || 3000
 let server = app.listen(port, function(){
     console.log(`now listenting on port ${port}...`);
+    // console.log(helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss'))
 })
 
 socket.socketStartUp(server);

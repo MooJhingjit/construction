@@ -61,7 +61,7 @@ const createData = async (req, res, next) => {
   newItem.plan = req.body.data.plan
   newItem.house_id = req.body.data.houseId
   newItem.price = req.body.data.price
-  newItem.date_start = helpers.getCurrentTime('date', req.body.data.dateStart)
+  newItem.date_start = helpers.getDate(req.body.data.dateStart, 'YYYY-MM-DD')
   newItem.paid = req.body.data.paid || 0
   newItem.status = req.body.data.status
   let result = await newItem.save() // this will return result.insertId

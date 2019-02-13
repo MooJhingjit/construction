@@ -45,7 +45,7 @@ module.exports =  class Store {
       fax: this.fax,
       tel: this.tel,
       address: this.address,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result
@@ -61,7 +61,7 @@ module.exports =  class Store {
       fax: this.fax,
       tel: this.tel,
       address: this.address,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result

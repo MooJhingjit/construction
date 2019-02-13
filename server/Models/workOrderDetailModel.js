@@ -72,7 +72,7 @@ module.exports =  class WorkOrderDetail {
       order: this.order,
       name: this.name,
       post_order: this.post_order,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result
@@ -86,7 +86,7 @@ module.exports =  class WorkOrderDetail {
       order: this.order,
       name: this.name,
       post_order: this.post_order,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result

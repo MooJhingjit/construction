@@ -50,7 +50,7 @@ module.exports =  class MaterialGroup {
   //   [
   //     null,
   //     this.name,
-  //     helpers.getCurrentTime('sql')
+  //     helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
   //   ])
   // }
   async save () {
@@ -68,7 +68,7 @@ module.exports =  class MaterialGroup {
   //   created_at = ?
   //   WHERE id = ?
   //   `;
-  //   return db.query(sql, [this.name, helpers.getCurrentTime('sql'), this.id],);
+  //   return db.query(sql, [this.name, helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss'), this.id],);
   // }
   async update () {
     let result = await this.knex('material_group')

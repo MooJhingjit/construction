@@ -40,7 +40,7 @@ module.exports =  class project {
       name: this.name,
       address: this.address,
       type: this.type,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result
@@ -54,7 +54,7 @@ module.exports =  class project {
       name: this.name,
       address: this.address,
       type: this.type,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result

@@ -64,7 +64,7 @@ module.exports =  class MaterialGroupDetail {
       material_group_id: this.material_group_id,
       material_id: this.material_id,
       amount: this.amount,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result
@@ -78,7 +78,7 @@ module.exports =  class MaterialGroupDetail {
       material_group_id: this.material_group_id,
       material_id: this.material_id,
       amount: this.amount,
-      created_at: helpers.getCurrentTime('sql')
+      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result
