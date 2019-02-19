@@ -66,10 +66,27 @@
                 <div class="value">
                   <my-input
                   :value="local.inputs.type"
-                  :inputObj="{type: 'select', icon: 'home', inputValue: PROJECT_TYPE, name: 'project_type', placeholder: '', validate: 'required'}"
+                  :inputObj="{type: 'select', icon: 'home', inputValue: local.projectType, name: 'project_type', placeholder: '', validate: 'required'}"
                   :validator="$validator"
                   @input="value => { local.inputs.type = value }"
                   ></my-input>
+                </div>
+                <div class="extra-block container-block">
+                  <div class="block add">
+                    <button class="button" v-if="local.newProjectType.isNew" @click="() => {local.newProjectType.isNew = false}"><i aria-hidden="true" class="fa fa-minus"></i></button>
+                    <button class="button" v-if="!local.newProjectType.isNew" @click="() => {local.newProjectType.isNew = true}"><i aria-hidden="true" class="fa fa-plus"></i></button>
+                  </div>
+                  <div class="block new-input" v-if="local.newProjectType.isNew">
+                    <my-input
+                    :value="local.newProjectType.value"
+                    :inputObj="{type: 'text', name: 'newProjectType', placeholder: 'ประเภทโครงการ', validate: 'required'}"
+                    :validator="$validator"
+                    @input="value => { local.newProjectType.value = value }"
+                    ></my-input>
+                  </div>
+                  <div class="block new-submit" v-if="local.newProjectType.isNew">
+                    <button class="button" @click="submitNewProjectType()"><i aria-hidden="true" class="fa fa-check"></i></button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -148,7 +165,12 @@ export default {
           value: '',
           field: ''
         },
-        isDuplicate: false
+        isDuplicate: false,
+        newProjectType: {
+          value: null,
+          isNew: false
+        },
+        projectType: []
       }
     }
   },
@@ -158,6 +180,7 @@ export default {
     }
   },
   created () {
+    this.fetchData()
   },
   mounted () {
     if (this.$route.params.key !== undefined && this.$route.params.key !== 'all') {
@@ -165,6 +188,17 @@ export default {
     }
   },
   methods: {
+    async fetchData () {
+      let resourceName = config.api.project.type
+      let queryString = []
+      let res = await service.getResource({resourceName, queryString})
+      this.local.projectType = res.data.map((item) => {
+        return {
+          key: item.id,
+          name: item.name
+        }
+      })
+    },
     selectedDataHandle (item) {
       this.errors.clear()
       this.local.idSelected = item.id
@@ -233,10 +267,32 @@ export default {
         return
       }
       this.local.isDuplicate = false
+    },
+    async submitNewProjectType () {
+      let isValid = await this.$validator.validateAll()
+      if (!isValid) return false
+      let resourceName = config.api.project.type
+      let data = {
+        name: this.local.newProjectType.value
+      }
+      let res = await service.postResource({data, resourceName})
+      if (res.data) {
+        this.local.projectType.push({key: res.data.id, name: data.name})
+        this.local.newProjectType.value = null
+        this.local.newProjectType.isNew = false
+      }
     }
   }
 }
 </script>
 
 <style lang="scss">
+.extra-block{
+  flex: 20;
+  .block.add{
+    flex: 0;
+    min-width: 100px;
+    margin: 0 5px;
+  }
+}
 </style>

@@ -45,8 +45,7 @@ async function getResource (req, res, next) {
       }
     }
   }
-  data.ordering.normal = await getLastOrder('normal', 0)
-  data.ordering.extra = await getLastOrder('extra', 0)
+  data.ordering = await getLastOrder()
   res.status(200).json(data)
 }
 async function getData (req, res, next) {
@@ -80,6 +79,7 @@ async function getAllData (req, res, next) {
   res.status(200).json(data)
 }
 async function createExtraData (req, res, next) {
+  let project = req.body.data.project
   let materials = req.body.data.materials.map((item) => {
     return {
       material_id: item.obj.key,
@@ -88,7 +88,7 @@ async function createExtraData (req, res, next) {
   })
   let materialIdArr = getMaterialIdArr(materials)
   let fullMaterial = await materialController.getMaterialDetail(materialIdArr)
-  await prepareMaterial(req.body.data.contract, fullMaterial, null,  {materials, note: req.body.data.note}) // materials is extra
+  await prepareMaterial(req.body.data.contract, fullMaterial, null, project.typeId, {materials, note: req.body.data.note}) // materials is extra
   // let orderingData = await countOrdering()
   res.status(200).json({})
 }
@@ -118,27 +118,108 @@ async function updateData (req, res, next) {
 }
 
 async function countOrderingData (req, res, next) {
-  let orderingData = await countOrdering() // alert ordering
-  res.status(200).json(orderingData)
+  let ordering = new orderingModel()
+  ordering.status = 'wait'
+  let orderingObj = await ordering.getOrderRemainingCount('normal')
+  // let extra = await  ordering.getOrderRemainingCount('extra')
+  let contarctObj = {}
+  orderingObj.map((item) => {
+    if (contarctObj[item.project_type_id] !== undefined) {
+      let newNormal = contarctObj[item.project_type_id].normal + parseInt((item.order_type === 'normal') ? item.amount : 0)
+      let newExtra = contarctObj[item.project_type_id].extra + parseInt((item.order_type === 'extra') ? item.amount : 0)
+      contarctObj[item.project_type_id] = {
+        projectTypeName: item.project_type_name,
+        normal: newNormal,
+        extra: newExtra
+      }
+    } else {
+      contarctObj[item.project_type_id] = {
+        projectTypeName: item.project_type_name,
+        normal: (item.order_type === 'normal') ? item.amount : 0,
+        extra: (item.order_type === 'extra') ? item.amount : 0
+      }
+    }
+  })
+  res.status(200).json(contarctObj)
 }
 
-async function prepareOrdering (contractCode, houseId, taskOrder, time, progressId) {
-  let orderGroupId = await getOrderGroup(taskOrder, time)
+const getLastOrder = async () => {
+  let ordering = new orderingModel()
+  let res = await ordering.getOrderRemainingList()
+  let orderingObj = {}
+  res.map((item) => {
+    if (orderingObj[item.order_type] !== undefined && orderingObj[item.order_type][item.contract_code]  !== undefined) {
+      let newAmount = orderingObj[item.order_type][item.contract_code].amount + item.amount
+      let newTotalPrice = orderingObj[item.order_type][item.contract_code].totalPrice + item.total_price
+      orderingObj[item.order_type][item.contract_code] = {
+        projectTypeName: item.project_type_name,
+        contractCode: item.contract_code,
+        amount: newAmount,
+        totalPrice: newTotalPrice,
+      }
+    } else {
+      if (orderingObj[item.order_type] === undefined) {
+        orderingObj[item.order_type] = {
+          [item.contract_code]: {
+            projectTypeName: item.project_type_name,
+            contractCode: item.contract_code,
+            amount: item.amount,
+            totalPrice: item.total_price,
+          }
+        }
+      }
+      if (orderingObj[item.order_type][item.contract_code] === undefined) {
+        orderingObj[item.order_type][item.contract_code] = {
+          projectTypeName: item.project_type_name,
+          contractCode: item.contract_code,
+          amount: item.amount,
+          totalPrice: item.total_price
+        }
+      }
+      
+    }
+  })
+  return {
+    normal: orderingObj.normal || {},
+    extra: orderingObj.extra || {}
+  }
+}
+
+async function prepareOrdering (contractCode, houseId, taskOrder, time, progressId, projectTypeId) {
+  // console.log('------------prepareOrdering-----------------')
+  // console.log(contractCode)
+  // console.log('-----------------------------')
+  // console.log(houseId)
+  // console.log('-----------------------------')
+  // console.log(taskOrder)
+  // console.log('-----------------------------')
+  // console.log(time)
+  // console.log('-----------------------------')
+  // console.log(progressId)
+  // console.log('-----------------------------')
+  // console.log(projectTypeId)
+  // console.log('-----------end--prepareOrdering----------------')
+
+  let orderGroupId = await getOrderGroup(taskOrder, time, projectTypeId)
   let materials = await materialGroup.getMaterialByGroup(orderGroupId, houseId)
+  // console.log('------------getOrderGroup-----------------')
+  // console.log('orderGroupId => *******' + orderGroupId)
+  // console.log('-----------------------------')
+  // console.log(materials)
+  // console.log('-----------end--getOrderGroup----------------')
   let materialIdArr = getMaterialIdArr(materials)
   let fullMaterial = await materialController.getMaterialDetail(materialIdArr)
-  await prepareMaterial(contractCode, fullMaterial, progressId)
+  await prepareMaterial(contractCode, fullMaterial, progressId, projectTypeId)
 }
-async function getOrderGroup (taskOrder, time) {
+async function getOrderGroup (taskOrder, time, projectTypeId) {
   let workOrderDetail = new workOrderDetailModel()
   workOrderDetail.order = taskOrder
-  workOrderDetail.work_order_time = time
-  workOrderDetail = await workOrderDetail.getPostOrder()
+  workOrderDetail = await workOrderDetail.getPostOrder(projectTypeId, time)
   let orderGroupId = null
   orderGroupId = workOrderDetail[0].post_order
   return orderGroupId
 }
-async function prepareMaterial (contractCode, materials, progressId, extraObj = null) {
+async function prepareMaterial (contractCode, materials, progressId, projectTypeId, extraObj = null) {
   // extraObj = {materials, note}
   if (materials.length) {
     let order = []
@@ -193,14 +274,15 @@ async function prepareMaterial (contractCode, materials, progressId, extraObj = 
       order.push(data)
     })
    
-    orderMaterial(order, progressId)
+    orderMaterial(order, progressId, projectTypeId)
   }
 }
-async function orderMaterial (order, progress_id) {
+async function orderMaterial (order, progress_id, projectTypeId) {
   await Promise.all(
     order.map( async (item) => {
       let newItem = new orderingModel()
       newItem.store_id = item.store_id
+      newItem.projectTypeId = projectTypeId
       newItem.progress_id = progress_id
       newItem.total_price = item.total_price
       newItem.amount = item.amount
@@ -298,18 +380,6 @@ const checkOrdering = async () => {
   await schedule.save();
   return await ordering.checkUpdateOrdering()
 }
-const countOrdering = async () => {
-  let extra = await getLastOrder('extra')
-  let normal = await getLastOrder('normal')
-  return {extra: extra.length, normal: normal.length}
-}
-const getLastOrder = async (orderType, limit = '') => {
-  let ordering = new orderingModel()
-  ordering.order_type = orderType
-  ordering.limit = limit
-  let res = await ordering.getLastOrderByType()
-  return res
-}
 const reset = async (contractCode) => {
   let items = new orderingModel()
   items.contract_code = contractCode
@@ -359,7 +429,7 @@ module.exports.prepareOrdering = prepareOrdering
 module.exports.orderMaterial = orderMaterial
 module.exports.prepareChartData = prepareChartData
 module.exports.getLastOrder = getLastOrder
-module.exports.countOrdering = countOrdering
+// module.exports.countOrdering = countOrdering
 module.exports.deleteData = deleteData
 module.exports.checkOrdering = checkOrdering
 module.exports.getDetailByContractCode = getDetailByContractCode

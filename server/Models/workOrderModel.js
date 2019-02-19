@@ -6,8 +6,9 @@ module.exports =  class WorkOrder {
   constructor(id){
     this.knex = knex(db.config);
     this.id = id;
+    this.project_type_id
     this.time
-    this.pre_order
+    // this.pre_order
   }
 
   // async getData () {
@@ -26,14 +27,14 @@ module.exports =  class WorkOrder {
 
   async getData () {
     let result = await this.knex('work_order')
-    .where({'time': this.time})
+    .where(this.getCondition())
     await this.knex.destroy()
     return result
   }
 
 
   async getAllData () {
-    let result = await this.knex('work_order')
+    let result = await this.knex('work_order').where(this.getCondition())
     await this.knex.destroy()
     return result
   }
@@ -47,8 +48,8 @@ module.exports =  class WorkOrder {
   async save () {
     let result = await this.knex('work_order').insert({
       time: this.time,
-      pre_order: this.pre_order,
-      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
+      project_type_id: this.project_type_id,
+      // created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result
@@ -59,8 +60,8 @@ module.exports =  class WorkOrder {
     .where({time: this.time})
     .update({
       time: this.time,
-      pre_order: this.pre_order,
-      created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
+      project_type_id: this.project_type_id,
+      // created_at: helpers.getCurrentDate('YYYY-MM-DD HH:mm:ss')
     })
     await this.knex.destroy()
     return result
@@ -78,6 +79,15 @@ module.exports =  class WorkOrder {
     let conditions = {}
     if (this.status) {
       conditions.status = this.status
+    }
+    if (this.project_type_id) {
+      conditions.project_type_id = this.project_type_id
+    }
+    if (this.time) {
+      conditions.time = this.time
+    }
+    if (this.id) {
+      conditions.id = this.id
     }
     return conditions
   }

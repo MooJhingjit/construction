@@ -56,9 +56,10 @@ module.exports =  class Contract {
       result = await this.knex.select('code').from('contract')
       .orderBy('created_at', 'desc')
     } else {
-      result = await this.knex.select('contract.*', 'project.name as project_name')
+      result = await this.knex.select('contract.*', 'project.name as project_name', 'project_type.id as project_type_id', 'project_type.name as project_type_name', )
       .from('contract')
       .join('project', 'project.id', '=', 'contract.project_id')
+      .join('project_type', 'project.type', '=', 'project_type.id')
       .where({'contract.status': 'ip'}).orWhere({'contract.status': 'wait'})
       // .where(function() {
       //   this.where({'contract.status': 'ip'}).orWhere({'contract.status': 'wait'})

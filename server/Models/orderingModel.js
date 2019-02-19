@@ -6,6 +6,7 @@ const helpers = require('../Libraries/helpers')
 module.exports =  class Ordering {
   constructor(id){
     this.knex = knex(db.config)
+    this.projectTypeId
     this.id = id
     this.progress_id
     this.store_id
@@ -75,10 +76,25 @@ module.exports =  class Ordering {
     await this.knex.destroy()
     return result
   }
+  
+  async getOrderRemainingCount () {
+    let result = await this.knex
+    .select('contract_code', 'order_type', 'amount', 'project_type.name as project_type_name', 'project_type_id')
+    .from('ordering')
+    .leftJoin('project_type', function() {
+      this.on('project_type.id', '=', 'ordering.project_type_id')
+    })
+    .where('status', 'wait')
+    return result
+  }
 
-  async getLastOrderByType () {
-    let result = await this.knex('ordering')
-    .where('order_type', this.order_type)
+  async getOrderRemainingList () {
+    let result = await this.knex
+    .select('ordering.*', 'project_type.name as project_type_name')
+    .from('ordering')
+    .leftJoin('project_type', function() {
+      this.on('project_type.id', '=', 'ordering.project_type_id')
+    })
     .where('status', 'wait')
     .orderBy('id', 'desc')
     await this.knex.destroy()
@@ -93,6 +109,7 @@ module.exports =  class Ordering {
 
   async save () {
     let result = await this.knex('ordering').insert({
+      project_type_id: this.projectTypeId,
       progress_id: this.progress_id,
       store_id: this.store_id,
       contract_code: this.contract_code,

@@ -36,6 +36,7 @@
                       :config="{getNullVal: false}"
                       placeholder="ค้นหาแบบบ้าน"
                       label=""
+                      :key="`houseAutoComplete${local.idSelected}`"
                       ></my-auto-complete>
                     </td>
                     <td style="text-align: center;">ร้านค้า</td>

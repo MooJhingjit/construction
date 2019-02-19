@@ -478,7 +478,7 @@ table tbody tr td p.material-name {
   display: none;
 }
 table tr.extra {
-  background: #fff0d9;
+  color: red;
 }
 .filter{
   margin-bottom: 5px;

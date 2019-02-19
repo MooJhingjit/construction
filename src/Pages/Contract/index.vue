@@ -269,6 +269,7 @@ export default {
           return
         case 'updateStatus':
           if (!isValid) return
+          data.projectTypeId = this.local.inputs.project.type
           data.status = value
           data.assign = this.local.technician.selected
           data.houseId = this.local.inputs.contract.house_id

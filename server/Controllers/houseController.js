@@ -37,6 +37,7 @@ async function getDropDown (req, res, next) {
   if (req.query.house) {
     house.name = req.query.house
     data = await house.getPlanSelection()
+    // console.log(data)
     data = data.map(item => {
       return {
         key: item.plan,

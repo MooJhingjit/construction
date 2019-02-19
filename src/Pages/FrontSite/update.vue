@@ -117,13 +117,17 @@ export default {
       let resourceName = `${config.api.frontSite.index}/${this.$route.params.key}`
       let data = task
       data.houseId = this.local.contract.house_id
+      data.projectTypeId = this.local.project.type
       let res = await service.putResource({data, resourceName})
       // console.log(res.status)
       if (res.status === 200) {
-        bus.$emit('emitSocket', {
-          key: 'UPDATE_ORDERING',
-          data: {}
-        })
+        setTimeout(function () {
+          bus.$emit('emitSocket', {
+            key: 'UPDATE_ORDERING',
+            data: {}
+          })
+          console.log('dobue')
+        }, 2000)
         this.NOTIFY('success')
         this.fetchData()
       }

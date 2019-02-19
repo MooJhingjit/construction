@@ -109,8 +109,11 @@ module.exports =  class contractProgress {
   }
 
   async getLastProgress () {
-    let result = await this.knex('contract_progress')
+    let result = await this.knex
+    .select('contract_code')
+    .from('contract_progress')
     .where({status: 'ip'})
+    .groupBy('contract_code')
     await this.knex.destroy()
     return result
   }

@@ -2,55 +2,27 @@
   <nav class="level is-mobile nav-menu">
     <div class="level-item has-text-centered">
       <router-link :to="{ name: 'Home'}">หน้าหลัก</router-link>
-      <!-- <div>
-        <p class="heading" @click="GOTOPAGE('Home', '')">
-          หน้าหลัก
-        </p>
-      </div> -->
     </div>
     <div class="level-item has-text-centered" v-if="IS_ADMIN() || IS_PURCHASING()">
-      <!-- <div>
-        <p class="heading" @click="GOTOPAGE('Ordering', '')">
-          การสั่งซื้อ
-          <span class="tag is-warning is-rounded"
-            v-if="normalOrdering"
-          >{{normalOrdering}}</span>
-          <span class="tag is-danger is-rounded"
-            v-if="extraOrdering"
-          >{{extraOrdering}}</span>
-        </p>
-      </div> -->
       <router-link :to="{ name: 'Ordering'}">การสั่งซื้อ
-        <span class="tag is-warning is-rounded"
-            v-if="normalOrdering"
-          >{{normalOrdering}}</span>
-          <span class="tag is-danger is-rounded"
-            v-if="extraOrdering"
-          >{{extraOrdering}}</span>
+        <div id="meta" class="field is-grouped is-grouped-multiline">
+          <div class="control" :key="index" v-for="(item, index) in orderingData">
+            <div class="tags has-addons">
+              <span class="tag">{{item.projectTypeName}}</span>
+              <span class="tag is-success" v-if="item.normal" title="ปกติ">{{item.normal}}</span>
+              <span class="tag is-warning" v-if="item.extra" title="พิเศษ">{{item.extra}}</span>
+            </div>
+          </div>
+        </div>
       </router-link>
     </div>
     <div class="level-item has-text-centered" v-if="IS_ADMIN() || IS_PURCHASING()">
-      <!-- <div>
-        <p class="heading" @click="GOTOPAGE('PayingPeriod', '')">
-          จ่ายค่างวด
-        </p>
-      </div> -->
       <router-link :to="{ name: 'PayingPeriod'}">จ่ายค่างวด</router-link>
     </div>
     <div class="level-item has-text-centered" v-if="IS_ADMIN() || IS_PURCHASING()">
-      <!-- <div>
-        <p class="heading" @click="GOTOPAGE('Losing', '')">
-          ข้อมูลสูญเสีย
-        </p>
-      </div> -->
       <router-link :to="{ name: 'Losing'}">ข้อมูลสูญเสีย</router-link>
     </div>
     <div class="level-item has-text-centered project-name on-mobile">
-      <!-- <div>
-        <p class="heading"  @click="GOTOPAGE('Home', '')">
-          โชคชนายุทธ
-        </p>
-      </div> -->
       <router-link :to="{ name: 'Home'}">โชคชนายุทธ</router-link>
     </div>
     <div class="level-item has-text-centered options-panel on-mobile">

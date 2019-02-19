@@ -303,6 +303,7 @@ export default {
       let queryString = this.BUILDPARAM()
       let project = await service.getResource({resourceName, queryString})
       this.local.project = project.data
+      console.log(this.local.project)
       let houseTemplate = await service.getResource({resourceName: config.api.house.dropdown, queryString})
       this.local.houseTemplate.inputs = houseTemplate.data
     },
@@ -316,6 +317,7 @@ export default {
           if (!isValid || this.local.isDuplicate) return
           this.local.inputs.status = status
           data = this.local.inputs
+          data.projectType = this.local.project.type
           res = await service.postResource({data, resourceName})
           break
       }

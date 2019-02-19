@@ -66,7 +66,7 @@ const createData = async (req, res, next) => {
   newItem.status = req.body.data.status
   let result = await newItem.save() // this will return result.insertId
   if (newItem.status === 'ip') {
-    await startWorking(newItem.code, newItem.house_id)
+    await startWorking(newItem.code, newItem.house_id, req.body.data.projectType)
   }
   await createContractTime(req.body.data.code, req.body.data.times)
 
@@ -156,13 +156,14 @@ const getContractPeriod = async (req, res, next) => {
 
 const updateContractStatus = async (req, res, next) => {
   let contractCode = req.params.id
+  let projectTypeId = req.body.data.projectTypeId
   let status = req.body.data.status
   let houseId = req.body.data.houseId
   let assign = req.body.data.assign
   await updateStatus(contractCode, status, assign)
   switch(status) {
     case 'ip':
-      await startWorking(contractCode, houseId)
+      await startWorking(contractCode, houseId, projectTypeId)
         // await reviewContractProgress(item.code, req.body.data.houseId, 1)
         break
     case 'done':
@@ -173,10 +174,10 @@ const updateContractStatus = async (req, res, next) => {
   res.status(200).json({})
 }
 
-const startWorking = async (contractCode, houseId) => {
+const startWorking = async (contractCode, houseId, projectTypeId) => {
   // this from frist created
-  await setContractProgress(contractCode, houseId)
-  await updateContractTask(contractCode, houseId, 1, 1, 'done')
+  await setContractProgress(contractCode, houseId, projectTypeId)
+  await updateContractTask(contractCode, houseId, 1, 1, 'done', projectTypeId)
   // await findTaskAndOrderMaterial(contractCode, houseId, 0)
 }
 
@@ -245,9 +246,9 @@ const getContractTime = async (contractCode) => {
 }
 
 // copy progress
-const setContractProgress = async (contractCode, houseId) => {
+const setContractProgress = async (contractCode, houseId, projectTypeId) => {
   let workOrderPreiod = await workOrder.getWorkOrderPreiod(houseId)
-  let workingTemplate = await workOrder.getWorkingTemplate(contractCode)
+  let workingTemplate = await workOrder.getWorkingTemplate(projectTypeId)
   let startDate = helpers.getCurrentDate('YYYY-MM-DD')
   let endDate = ''
   let orderNumber = 1
@@ -257,7 +258,7 @@ const setContractProgress = async (contractCode, houseId) => {
   tempEndDate[0] = startDate
   await Promise.all(
     workingTemplate.map( async (item) => {
-      let workOrder = await matchWorkOrderPreiod(workOrderPreiod, item.work_order_time, item.order)
+      let workOrder = await matchWorkOrderPreiod(workOrderPreiod, item.id)
       let condition = workOrder.condition !== null ? workOrder.condition : null
       if (tempEndDate.length == 1) { // for frist round
         // console.log(workOrder.preiod_end)
@@ -274,7 +275,7 @@ const setContractProgress = async (contractCode, houseId) => {
         endDate = tempEndDate[orderNumber]
       }
       let newItem = new contractProgressModel(contractCode)
-      newItem.time = item.work_order_time
+      newItem.time = item.time
       newItem.order = item.order
       // newItem.order_condition = 0
       newItem.order_all = orderNumber
@@ -293,13 +294,13 @@ const setContractProgress = async (contractCode, houseId) => {
   )
 }
 
-const matchWorkOrderPreiod = async (workOrderPreiod, time, order) => {
+const matchWorkOrderPreiod = async (workOrderPreiod, workOrderDetailId) => {
   let preiod = 0
   let preiod_end = 0
   let condition = 0
   await Promise.all(
     workOrderPreiod.map(async (item) => {
-      if (item.work_order_time === time && item.order === order) {
+      if (item.work_order_detail_id === workOrderDetailId) {
         preiod = item.preiod
         preiod_end = item.preiod_end
         condition = item.condition
@@ -331,17 +332,18 @@ const updateContractProgress = async (req, res, next) => {
   res.status(200).json({})
 }
 // update task and order material
-const updateContractTask = async (contractCode, houseId, time, order_all, status) => {
+const updateContractTask = async (contractCode, houseId, time, order_all, status, projectTypeId) => {
   // console.log(contractCode, houseId, time, order_all, status)
   let progressId = await updateTask(contractCode, time, order_all, status)
   if (progressId) { //task updated
-    await findTaskAndOrderMaterial(contractCode, houseId, order_all, progressId)
+    await findTaskAndOrderMaterial(contractCode, houseId, order_all, progressId, projectTypeId)
   }
 }
 
 const getLastProgress = async () => {
   let item = new contractProgressModel()
   let progressRes = await item.getLastProgress()
+  // console.log(progressRes)
   let obj = []
   await Promise.all(
     progressRes.map( async (item) => {
@@ -405,8 +407,19 @@ const updateTask = async (contractCode, time, order_all, status) => {
   return currentProgress[0].id
 }
 
-const findTaskAndOrderMaterial = async (contractCode, houseId, orderProcress, progressId) => { // orderProcress is order_all
+const findTaskAndOrderMaterial = async (contractCode, houseId, orderProcress, progressId, projectTypeId) => { // orderProcress is order_all
   // update next task to in process
+  // console.log('------------findTaskAndOrderMaterial-----------------')
+  // console.log(contractCode)
+  // console.log('-----------------------------')
+  // console.log(houseId)
+  // console.log('-----------------------------')
+  // console.log(orderProcress)
+  // console.log('-----------------------------')
+  // console.log(progressId)
+  // console.log('-----------------------------')
+  // console.log(projectTypeId)
+  // console.log('-----------end--findTaskAndOrderMaterial----------------')
   let nextTesk = new contractProgressModel(contractCode)
   nextTesk.condition = orderProcress
   nextTesk.status = 'ip'
@@ -417,7 +430,7 @@ const findTaskAndOrderMaterial = async (contractCode, houseId, orderProcress, pr
   let res = await startWorking.startWorking()
   await Promise.all(
     res.map( async (item) => {
-      await ordering.prepareOrdering(contractCode, houseId, item.order, item.time, progressId)
+      await ordering.prepareOrdering(contractCode, houseId, item.order, item.time, progressId, projectTypeId)
     })
   )
 }

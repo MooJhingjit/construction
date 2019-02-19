@@ -16,6 +16,7 @@ const api = {
   },
   'project': {
     'index': '/project',
+    'type': '/project-type',
     'dropdown': '/project-selection',
     'checkDuplicate': '/project-duplicate'
   },
