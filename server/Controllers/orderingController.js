@@ -1,6 +1,7 @@
 const helpers = require('../Libraries/helpers')
 const contract = require('./contractController.js')
 const projectController = require('./projectController.js')
+const houseController = require('./houseController.js')
 const storeController = require('./storeController.js')
 const materialController = require('./materialController.js')
 const orderingModel = require('../Models/orderingModel')
@@ -88,7 +89,8 @@ async function createExtraData (req, res, next) {
   })
   let materialIdArr = getMaterialIdArr(materials)
   let fullMaterial = await materialController.getMaterialDetail(materialIdArr)
-  await prepareMaterial(req.body.data.contract, fullMaterial, null, project.typeId, {materials, note: req.body.data.note}) // materials is extra
+  let houseDetail = []
+  await prepareMaterial(req.body.data.contract, fullMaterial, null, project.typeId, houseDetail, {materials, note: req.body.data.note}) // materials is extra
   // let orderingData = await countOrdering()
   res.status(200).json({})
 }
@@ -185,7 +187,7 @@ const getLastOrder = async () => {
   }
 }
 
-async function prepareOrdering (contractCode, houseId, taskOrder, time, progressId, projectTypeId) {
+async function prepareOrdering (contractCode, houseId, taskOrder, time, progressId, projectTypeId, plan) {
   // console.log('------------prepareOrdering-----------------')
   // console.log(contractCode)
   // console.log('-----------------------------')
@@ -209,7 +211,8 @@ async function prepareOrdering (contractCode, houseId, taskOrder, time, progress
   // console.log('-----------end--getOrderGroup----------------')
   let materialIdArr = getMaterialIdArr(materials)
   let fullMaterial = await materialController.getMaterialDetail(materialIdArr)
-  await prepareMaterial(contractCode, fullMaterial, progressId, projectTypeId)
+  let houseDetail = await houseController.getDataByName(plan, projectTypeId)
+  await prepareMaterial(contractCode, fullMaterial, progressId, projectTypeId, houseDetail)
 }
 async function getOrderGroup (taskOrder, time, projectTypeId) {
   let workOrderDetail = new workOrderDetailModel()
@@ -219,8 +222,9 @@ async function getOrderGroup (taskOrder, time, projectTypeId) {
   orderGroupId = workOrderDetail[0].post_order
   return orderGroupId
 }
-async function prepareMaterial (contractCode, materials, progressId, projectTypeId, extraObj = null) {
+async function prepareMaterial (contractCode, materials, progressId, projectTypeId, houseDetail, extraObj = null) {
   // extraObj = {materials, note}
+  // console.log(materials)
   if (materials.length) {
     let order = []
     let orderDetail = []
@@ -229,18 +233,41 @@ async function prepareMaterial (contractCode, materials, progressId, projectType
       order = []
     })
     materials.map((item) => {
+      let realAmount = item.amount
+
       if (extraObj != null) {
         extraObj.materials.map((extraItem) => {
           if (extraItem.material_id == item.id) {
-            item.amount = extraItem.amount
+            // item.amount = extraItem.amount
+            realAmount = extraItem.amount
           }
         })
       }
+      // find amount for material
+      // let allQuantity = item.quantity
+      console.log(houseDetail)
+      // console.log('-------------')
+      // console.log(item.quantity)
+      if (item.quantity.length && houseDetail.length && extraObj === null) {
+        // console.log(houseDetail) // <-------------------- have to get plan as well
+        let side = houseDetail[0].garage // can be change to stair
+        let color = houseDetail[0].color
+        // console.log(side)
+        // console.log(color)
+        item.quantity.map((quantityItem) => {
+          // console.log(quantityItem)
+          if (quantityItem.side === side && quantityItem.color === color && quantityItem.price) {
+            realAmount = quantityItem.price // price means amount
+          }
+          // console.log(amountIItem) 
+        })
+      }
       orderDetail[item.store_id].push({ // <--- 1 push something here if want to edit orderDetail
+        
         name: item.name,
         price: item.price,
         unitText: item.unit,
-        amount: item.amount,
+        amount: realAmount,
         delay: item.delay
       })
     })
@@ -293,6 +320,7 @@ async function orderMaterial (order, progress_id, projectTypeId) {
       newItem.note = item.note
       let orderId = await newItem.save()
       item.detail.map( async (itemDetail) => { // <--- 2 push something here if want to edit orderDetail
+        // console.log(itemDetail.amount)
         let detailItem = new orderingDetailModel()
         detailItem.order_id = orderId[0]
         detailItem.name = itemDetail.name

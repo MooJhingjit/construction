@@ -336,7 +336,10 @@ const updateContractTask = async (contractCode, houseId, time, order_all, status
   // console.log(contractCode, houseId, time, order_all, status)
   let progressId = await updateTask(contractCode, time, order_all, status)
   if (progressId) { //task updated
-    await findTaskAndOrderMaterial(contractCode, houseId, order_all, progressId, projectTypeId)
+    let contractItem = new contractModel()
+    contractItem.code = contractCode
+    let contract = await contractItem.getContractDetail()
+    await findTaskAndOrderMaterial(contractCode, houseId, order_all, progressId, projectTypeId, contract[0].plan)
   }
 }
 
@@ -407,7 +410,7 @@ const updateTask = async (contractCode, time, order_all, status) => {
   return currentProgress[0].id
 }
 
-const findTaskAndOrderMaterial = async (contractCode, houseId, orderProcress, progressId, projectTypeId) => { // orderProcress is order_all
+const findTaskAndOrderMaterial = async (contractCode, houseId, orderProcress, progressId, projectTypeId, plan) => { // orderProcress is order_all
   // update next task to in process
   // console.log('------------findTaskAndOrderMaterial-----------------')
   // console.log(contractCode)
@@ -430,7 +433,7 @@ const findTaskAndOrderMaterial = async (contractCode, houseId, orderProcress, pr
   let res = await startWorking.startWorking()
   await Promise.all(
     res.map( async (item) => {
-      await ordering.prepareOrdering(contractCode, houseId, item.order, item.time, progressId, projectTypeId)
+      await ordering.prepareOrdering(contractCode, houseId, item.order, item.time, progressId, projectTypeId, plan)
     })
   )
 }

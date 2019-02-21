@@ -122,6 +122,16 @@ async function deleteData (req, res, next) {
   res.status(200).json({})
 }
 
+async function getDataByName (plan, projectTypeId) {
+  console.log(plan)
+  console.log(projectTypeId)
+  let item = new houseModel()
+  item.plan = plan
+  item.type = projectTypeId
+  let result = await item.getDataByName()
+  return result
+}
+
 module.exports.getData = getData
 module.exports.getDropDown = getDropDown
 module.exports.getPlanDropDown = getPlanDropDown
@@ -130,4 +140,5 @@ module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.deleteData = deleteData
 module.exports.createColorData = createColorData
+module.exports.getDataByName = getDataByName
 module.exports.getColorDropDown = getColorDropDown

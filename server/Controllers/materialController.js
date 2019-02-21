@@ -197,6 +197,13 @@ async function getDropDown (req, res, next) {
 async function getMaterialDetail (idArr) {
   let item = new materialModel()
   let data = await item.getMaterialById(idArr)
+  let itemQuantity = new materialModel()
+  await Promise.all(
+    data.map( async (item) => {
+      let dataQuantity = await itemQuantity.getDataQuantity(item.id)
+      item.quantity = dataQuantity
+    })
+  )  
   return data
 }
 async function getDetailById (store, house) {

@@ -106,6 +106,7 @@ async function updateData (req, res, next) {
     newItem.amount = item.amount
     newItem.house_id = item.houseId
     newItem.save()
+    console.log(item.amount)
   })
   
   res.status(200).json(result)

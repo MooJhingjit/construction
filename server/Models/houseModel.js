@@ -30,6 +30,14 @@ module.exports =  class House {
     await this.knex.destroy()
     return result
   }
+
+  async getDataByName () {
+    let result = await this.knex('house').where({plan: this.plan, type: this.type})
+    // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
+    await this.knex.destroy()
+    return result
+  }
+
   async getAllPlanSelection () {
     let result = await this.knex.select('plan').from('house').orderBy('plan', 'desc')
     // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
