@@ -6,7 +6,7 @@ const CronJob = require('cron').CronJob;
 const jwt = require('jsonwebtoken');
 const ordering = require('./Controllers/orderingController.js')
 const socket = require('./Libraries/socket.js');
-// require('./Libraries/tracking.js');
+require('./Libraries/tracking.js');
 
 app.use('/static', express.static('public'))
 app.all('*', verifyToken, function(req, res, next) {
