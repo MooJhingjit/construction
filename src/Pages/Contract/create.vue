@@ -82,7 +82,7 @@
                       <my-input
                       @onBlur="runContractLists()"
                       :value="local.inputs.price"
-                      :inputObj="{type: 'text', isBlur: true, name: 'contract_price', placeholder: 'ราคา', validate: 'required'}"
+                      :inputObj="{type: 'number', isBlur: true, name: 'contract_price', placeholder: 'ราคา', validate: 'required'}"
                       :validator="$validator"
                       @input="value => { local.inputs.price = value }"
                       ></my-input>
@@ -303,7 +303,7 @@ export default {
       let queryString = this.BUILDPARAM()
       let project = await service.getResource({resourceName, queryString})
       this.local.project = project.data
-      console.log(this.local.project)
+      queryString = this.BUILDPARAM({projectTypeId: this.local.project.type})
       let houseTemplate = await service.getResource({resourceName: config.api.house.dropdown, queryString})
       this.local.houseTemplate.inputs = houseTemplate.data
     },

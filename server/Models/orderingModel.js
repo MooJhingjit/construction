@@ -50,6 +50,14 @@ module.exports =  class Ordering {
     return result
   }
 
+  async getIdbyContractCode () {
+    let result = await this.knex.select('id')
+    .from('ordering')
+    .where({'contract_code': this.contract_code})
+    // await this.knex.destroy()
+    return result
+  }
+
   async getStat () {
     let result = await this.knex.select('*')
     .from('ordering')
@@ -150,6 +158,14 @@ module.exports =  class Ordering {
   async delete () {
     let result = await this.knex('ordering')
     .where({id: this.id})
+    .del()
+    await this.knex.destroy()
+    return result
+  }
+
+  async multipleDelete (idArr) {
+    let result = await this.knex('ordering')
+    .whereIn('id', idArr)
     .del()
     await this.knex.destroy()
     return result

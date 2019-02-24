@@ -45,6 +45,9 @@ async function getDropDown (req, res, next) {
       }
     })
   } else {
+    if (req.query.projectTypeId) {
+      house.type = req.query.projectTypeId
+    }
     data = await house.getAllSelection()
     data = data.map(item => {
       return {
@@ -123,8 +126,8 @@ async function deleteData (req, res, next) {
 }
 
 async function getDataByName (plan, projectTypeId) {
-  console.log(plan)
-  console.log(projectTypeId)
+  // console.log(plan)
+  // console.log(projectTypeId)
   let item = new houseModel()
   item.plan = plan
   item.type = projectTypeId

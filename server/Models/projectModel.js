@@ -75,7 +75,7 @@ module.exports =  class project {
   }
 
   async getAllSelection () {
-    let result = await this.knex.select('id', 'name').from('project').orderBy('created_at', 'desc')
+    let result = await this.knex.select('id', 'name', 'type').from('project').orderBy('created_at', 'desc')
     await this.knex.destroy()
     return result
   }

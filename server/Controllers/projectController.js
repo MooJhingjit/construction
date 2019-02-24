@@ -134,7 +134,8 @@ const getDropDown = async (req, res, next) => {
   data = data.map(item => {
     return {
       key: item.id,
-      value: `${item.name}`
+      value: `${item.name}`,
+      type: `${item.type}`
     }
   })
   

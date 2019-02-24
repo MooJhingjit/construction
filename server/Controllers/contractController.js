@@ -95,9 +95,22 @@ const updateTimeData = async (req, res, next) => {
 }
 
 const deleteData = async (req, res, next) => {
-  let newItem = new contractModel(req.params.id)
-  let result = newItem.delete()
-  res.status(200).json({})
+  try {
+    let contractCode = req.params.id
+    let contract = new contractModel(contractCode)
+    let contractProgress = new contractProgressModel(contractCode)
+    contractProgress.contract_code = contractCode
+    let contractTime = new contractTimeModel(contractCode)
+    contractTime.contract_code = contractCode
+    await contract.delete(contractCode);
+    await contractProgress.delete();
+    await contractTime.delete();
+    await ordering.deleteOrdering(null, contractCode)
+    res.status(200).json({})
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({})
+  }
 }
 
 const checkDuplicate = async (req, res, next) => {
@@ -394,6 +407,9 @@ const updateTask = async (contractCode, time, order_all, status) => {
   currentProgress.time = time
   currentProgress.order_all = order_all
   currentProgress = await currentProgress.getCurrentProgress()
+  if (!currentProgress.length) {
+    return; // in case haven't workordering data
+  } 
   let currentEndDate = currentProgress[0].end_date
   // console.log(currentEndDate)
   // console.log(helpers.getCurrentDate(), currentEndDate)

@@ -126,7 +126,6 @@ export default {
   methods: {
     async fetchData () {
       await this.getProjectData()
-      await this.getHouseData()
       await this.getStoreItems()
     },
     async getProjectData () {
@@ -134,8 +133,8 @@ export default {
       let project = await service.getResource({resourceName: config.api.project.dropdown, queryString})
       this.local.project.inputs = project.data
     },
-    async getHouseData () {
-      let queryString = this.BUILDPARAM({})
+    async getHouseData (projectTypeId) {
+      let queryString = this.BUILDPARAM({projectTypeId})
       let house = await service.getResource({resourceName: config.api.house.dropdown, queryString})
       this.local.house.inputs = house.data
     },
@@ -144,7 +143,7 @@ export default {
       let store = await service.getResource({resourceName: config.api.store.dropdown, queryString})
       this.local.store.inputs = store.data
     },
-    projectSelectedHandle (obj) {
+    async projectSelectedHandle (obj) {
       if (obj === null) {
         this.local.project.selected = null
         this.local.house.selected = null
@@ -152,6 +151,7 @@ export default {
       }
       this.local.project.selected = obj.key
       this.local.project.nameSelected = obj.value
+      await this.getHouseData(obj.type)
     },
     houseSelectedHandle (obj) {
       if (obj === null) {

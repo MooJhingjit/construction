@@ -77,7 +77,7 @@
                       :key="inputIndex"
                       v-for="(itemDetail, inputIndex) in item.orderDetail"
                       :value="itemDetail.amount"
-                      :inputObj="{type: 'text', name: `order_amount_${itemDetail.id}`, placeholder: '', validate: 'required'}"
+                      :inputObj="{type: 'number', name: `order_amount_${itemDetail.id}`, placeholder: '', validate: 'required'}"
                       :validator="$validator"
                       @input="value => updateValue(index, inputIndex, value, 'amount')"
                       ></my-input>
@@ -92,7 +92,7 @@
                       :key="inputIndex"
                       v-for="(itemDetail, inputIndex) in item.orderDetail"
                       :value="itemDetail.price"
-                      :inputObj="{type: 'text', name: `order_price_${itemDetail.id}`, placeholder: '', validate: 'required'}"
+                      :inputObj="{type: 'number', name: `order_price_${itemDetail.id}`, placeholder: '', validate: 'required'}"
                       :validator="$validator"
                        @input="value => updateValue(index, inputIndex, value, 'price')"
                       ></my-input>

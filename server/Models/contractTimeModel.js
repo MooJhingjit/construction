@@ -46,4 +46,12 @@ module.exports =  class Contract {
     return result
   }
 
+  async delete () {
+    let result = await this.knex('contract_times')
+    .where({contract_code: this.contract_code})
+    .del()
+    await this.knex.destroy()
+    return result
+  }
+
 }

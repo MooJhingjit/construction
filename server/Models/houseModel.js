@@ -25,7 +25,9 @@ module.exports =  class House {
   }
 
   async getAllSelection () {
-    let result = await this.knex.select('name').from('house').groupBy('name').orderBy('name', 'desc')
+    let result = await this.knex.select('name').from('house')
+    .where(this.getCondition())
+    .groupBy('name').orderBy('name', 'desc')
     // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
     await this.knex.destroy()
     return result

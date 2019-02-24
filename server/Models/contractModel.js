@@ -129,9 +129,9 @@ module.exports =  class Contract {
     return result
   }
 
-  async delete () {
+  async delete (contractCode) {
     let result = await this.knex('contract')
-    .where({id: this.id})
+    .where({code: contractCode})
     .del()
     await this.knex.destroy()
     return result

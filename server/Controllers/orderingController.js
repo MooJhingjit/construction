@@ -95,14 +95,40 @@ async function createExtraData (req, res, next) {
   res.status(200).json({})
 }
 async function deleteData (req, res, next) {
-  let item = new orderingModel(req.params.id)
-  await item.delete()
-  let detailItem = new orderingDetailModel()
-  detailItem.order_id = req.params.id
-  await detailItem.delete()
+  // let item = new orderingModel(req.params.id)
+  // await item.delete()
+  // let detailItem = new orderingDetailModel()
+  // detailItem.order_id = req.params.id
+  await deleteOrdering(req.params.id)
   // let orderingData = await countOrdering()
   res.status(200).json({})
 }
+
+async function deleteOrdering (orderingId, contractCode = null) {
+  let item = null
+  let detailItem = null
+  if (contractCode !== null) { // multiple deleteing
+    item = new orderingModel()
+    item.contract_code = contractCode
+    let orderingIds = await item.getIdbyContractCode()
+    orderingIds = orderingIds.map((orderingIdItem) => {
+      return orderingIdItem.id
+    })
+    await item.multipleDelete(orderingIds)
+    detailItem = new orderingDetailModel()
+    await detailItem.multipleDelete(orderingIds)
+  } else {
+    item = new orderingModel(orderingId)
+    await item.delete()
+    detailItem = new orderingDetailModel()
+    detailItem.order_id = orderingId
+    await detailItem.delete()
+  }
+  
+  // let orderingData = await countOrdering()
+  return true
+}
+
 async function updateData (req, res, next) {
   let ordering = req.body.data
   await Promise.all(
@@ -245,7 +271,7 @@ async function prepareMaterial (contractCode, materials, progressId, projectType
       }
       // find amount for material
       // let allQuantity = item.quantity
-      console.log(houseDetail)
+      // console.log(houseDetail)
       // console.log('-------------')
       // console.log(item.quantity)
       if (item.quantity.length && houseDetail.length && extraObj === null) {
@@ -466,6 +492,8 @@ module.exports.getOrderingByContract = getOrderingByContract
 module.exports.getOrderingDetailByOrderingId = getOrderingDetailByOrderingId
 module.exports.orderForward = orderForward
 module.exports.countOrderingData = countOrderingData
+module.exports.deleteOrdering = deleteOrdering
+
 
 
 

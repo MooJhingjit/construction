@@ -128,6 +128,13 @@
             v-if="local.inputs.contract.status == 'ip'"
           >
           </my-action>
+          <my-action
+            type="delete"
+            :obj="{title: 'ลบ', color: 'is-danger', isConfirm: true}"
+            @clickEvent="submitForm('delete')"
+            v-if="local.inputs.contract.status == 'ip'  || local.inputs.contract.status == 'wait'"
+          >
+          </my-action>
         </div>
       </template>
     </template>
@@ -300,11 +307,22 @@ export default {
           // data = this.local.inputs
           // res = await service.postResource({data, resourceName})
           break
+        case 'delete':
+          resourceName = `${config.api.contract.index}/${this.local.idSelected}`
+          res = await service.deleteResource({resourceName, queryString: []})
+          break
       }
       if (res.status === 200) {
-        // console.log(this.$refs.contractSerach)
-        this.$refs.contractSerach.selectedContract()
-        // this.local.idSelected = null
+        if (type === 'delete') {
+          let emitObj = {
+            key: 'UPDATE_ORDERING',
+            data: {}
+          }
+          bus.$emit('emitSocket', emitObj)
+          this.GOTOPAGE('Home')
+        } else {
+          this.$refs.contractSerach.selectedContract()
+        }
         this.NOTIFY('success')
         return
       }
