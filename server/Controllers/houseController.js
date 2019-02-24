@@ -37,6 +37,7 @@ async function getDropDown (req, res, next) {
   if (req.query.house) {
     house.name = req.query.house
     data = await house.getPlanSelection()
+    // console.log(data)
     data = data.map(item => {
       return {
         key: item.plan,
@@ -44,6 +45,9 @@ async function getDropDown (req, res, next) {
       }
     })
   } else {
+    if (req.query.projectTypeId) {
+      house.type = req.query.projectTypeId
+    }
     data = await house.getAllSelection()
     data = data.map(item => {
       return {
@@ -121,6 +125,16 @@ async function deleteData (req, res, next) {
   res.status(200).json({})
 }
 
+async function getDataByName (plan, projectTypeId) {
+  // console.log(plan)
+  // console.log(projectTypeId)
+  let item = new houseModel()
+  item.plan = plan
+  item.type = projectTypeId
+  let result = await item.getDataByName()
+  return result
+}
+
 module.exports.getData = getData
 module.exports.getDropDown = getDropDown
 module.exports.getPlanDropDown = getPlanDropDown
@@ -129,4 +143,5 @@ module.exports.createData = createData
 module.exports.updateData = updateData
 module.exports.deleteData = deleteData
 module.exports.createColorData = createColorData
+module.exports.getDataByName = getDataByName
 module.exports.getColorDropDown = getColorDropDown

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="local.type == 'text' || local.type == 'textarea'">
+    <template v-if="local.type == 'text' || local.type == 'textarea' || local.type == 'number'">
       <!-- {{errors}} -->
       <b-field
         :type="errors.has(local.name) ? 'is-danger': ''"

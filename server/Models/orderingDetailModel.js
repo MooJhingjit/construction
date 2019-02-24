@@ -55,4 +55,12 @@ module.exports =  class OrderingDetail {
     await this.knex.destroy()
     return result
   }
+
+  async multipleDelete (idArr) {
+    let result = await this.knex('ordering_detail')
+    .whereIn('order_id', idArr)
+    .del()
+    await this.knex.destroy()
+    return result
+  }
 }

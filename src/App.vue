@@ -56,6 +56,7 @@ export default {
     this.fetchData()
   },
   mounted () {
+    this.getOrdering()
     this.socket.on('UPDATE_ORDERING', (data) => {
       this.getOrdering()
     })
@@ -101,6 +102,7 @@ export default {
     async getOrdering () {
       let resourceName = config.api.ordering.count
       let res = await service.getResource({resourceName, queryString: {}})
+      // console.log(res.data)
       this.setOrderingNotification(res.data)
       bus.$emit('updateOrderingPage')
     },
@@ -121,7 +123,7 @@ export default {
       } else {
         this.ROUTE_PERMISSIONS()
         if (this.HASAUTH()) {
-          this.getOrdering()
+          // this.getOrdering()
         }
       }
       this.pageClick()

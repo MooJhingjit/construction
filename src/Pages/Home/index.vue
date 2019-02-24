@@ -49,14 +49,14 @@
                     <bar-chart v-if="local.extraOrdering != null && local.extraOrdering.labels.length" :data="local.extraOrdering"  :height="150" ></bar-chart>
                     <template v-else>
                       <!-- <p class="title"></p> -->
-                      <p class="subtitle">ข้อมูลสั่งซื้อพิเศษ ไม่เพียงพอสำหรับการแสดงผล</p>
+                      <p class="subtitle">ไม่มีข้อมูลการสั่งซื้อพิเศษ</p>
                     </template>
                   </div>
                   <div class="tile is-child flex-center">
                     <bar-chart v-if="local.paying != null  && local.paying.labels.length" :data="local.paying" :height="150"></bar-chart>
                     <template v-else>
                       <!-- <p class="title">จ่ายค่างวด</p> -->
-                      <p class="subtitle">ข้อมูลจ่ายค่างวด ไม่เพียงพอสำหรับการแสดงผล</p>
+                      <p class="subtitle">ไม่มีข้อมูลการจ่ายค่างวด</p>
                     </template>
                   </div>
                 </div>
@@ -65,7 +65,7 @@
           </div>
           <div class="tile is-parent">
             <article class="tile is-child notification">
-              <p class="title">สถานะงานล่าสุด</p>
+              <p class="title">รายการที่กำลังดำเนินงาน...</p>
               <div class="content">
                 <table class="table is-bordered rows-table">
                   <thead>
@@ -74,7 +74,7 @@
                       <th>เลขที่สัญญา</th>
                       <th>แปลง</th>
                       <th>แบบบ้าน</th>
-                      <th>กำลังเดินงาน</th>
+                      <!-- <th>กำลังเดินงาน</th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -83,7 +83,7 @@
                       <td>{{item.contractCode}}</td>
                       <td>{{item.plan}}</td>
                       <td>{{item.houseId}}</td>
-                      <td>{{item.status}}</td>
+                      <!-- <td>{{item.status}}</td> -->
                     </tr>
                   </tbody>
                 </table>

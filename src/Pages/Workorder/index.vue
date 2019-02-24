@@ -6,6 +6,11 @@
         <template v-if="true">
           <div class="container-block  detail-block">
             <div class="c-header container-block block">
+              <div class="columns">
+                <div class="column" :key="index" v-for="(item, index) in local.projectType">
+                  <button @click="selectProject(item.key)" :class="['button', {'is-active': local.projectTypeSelected === item.key}]"> {{item.name}}</button>
+                </div>
+              </div>
             </div>
             <div class="c-body">
               <div class="items">
@@ -28,41 +33,9 @@
                         <div :key="taskIndex" class="list" v-for="(task, taskIndex) in item.tasks">{{task.material_group_name}}</div>
                       </td>
                       <td>
-                        <button class="button is-outlined" @click="GOTOPAGE('EditWorkorder', item.time)">แก้ไขงวดที่ {{item.time}}</button>
+                        <button class="button is-outlined" @click="GOTOPAGE('EditWorkorder', item.id)">แก้ไขงวดที่ {{item.time}}</button>
                       </td>
                     </tr>
-                    <!-- <tr>
-                      <td>2</td>
-                      <td>
-                        <div class="list">ถังบำบัดน้ำเสียและถังเก็บน้ำใต้ดิน</div>
-                        <div class="list">งานเดินท่อประปาใต้อาคาร</div>
-                        <div class="list">งานเทพื้นชั้นหนึ่ง 100%</div>
-                        <div class="list">งานโครงหลังคารอบบน ล่าง</div>
-                      </td>
-                      <td>
-                        <div class="name">name of product group</div>
-                        <div class="product-list">product xxxx</div>
-                        <div class="product-list">product xxxx</div>
-                        <div class="product-list">product xxxx</div>
-                        <div class="product-list">product xxxx</div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>
-                        <div class="list">ถังบำบัดน้ำเสียและถังเก็บน้ำใต้ดิน</div>
-                        <div class="list">งานเดินท่อประปาใต้อาคาร</div>
-                        <div class="list">งานเทพื้นชั้นหนึ่ง 100%</div>
-                        <div class="list">งานโครงหลังคารอบบน ล่าง</div>
-                      </td>
-                      <td>
-                        <div class="name">name of product group</div>
-                        <div class="product-list">product xxxx</div>
-                        <div class="product-list">product xxxx</div>
-                        <div class="product-list">product xxxx</div>
-                        <div class="product-list">product xxxx</div>
-                      </td>
-                    </tr> -->
                   </tbody>
                 </table>
                 <div class="container-block footer-panel" v-if="local.workOrderObj.length < 10">
@@ -131,19 +104,22 @@ export default {
             class: 'work-order-page'
           }
         },
-        workOrderObj: {}
+        workOrderObj: {},
+        projectType: [],
+        projectTypeSelected: 1
       }
     }
   },
   computed: {
   },
   created () {
+    this.getProjectType()
     this.fetchData()
   },
   methods: {
     fetchData () {
       let resourceName = `${config.api.workOrder.index}`
-      let queryString = this.BUILDPARAM()
+      let queryString = this.BUILDPARAM({projectType: this.local.projectTypeSelected})
       service.getResource({resourceName, queryString})
         .then((res) => {
           if (res.status === 200) {
@@ -153,22 +129,42 @@ export default {
         .catch(() => {
         })
     },
+    async getProjectType () {
+      let resourceName = config.api.project.type
+      let queryString = []
+      let res = await service.getResource({resourceName, queryString})
+      this.local.projectType = res.data.map((item) => {
+        return {
+          key: item.id,
+          name: item.name
+        }
+      })
+    },
     addItem () {
-      let data = {}
+      let data = {
+        projectType: this.local.projectTypeSelected
+      }
       let resourceName = `${config.api.workOrder.index}`
       service.postResource({data, resourceName})
         .then((res) => {
           if (res.status === 200) {
-            this.GOTOPAGE('EditWorkorder', res.data.time)
+            this.GOTOPAGE('EditWorkorder', res.data.id)
           }
         })
         .catch((err) => {
           console.log(err)
         })
+    },
+    selectProject (projectTypeId) {
+      this.local.projectTypeSelected = projectTypeId
+      this.fetchData()
     }
   }
 }
 </script>
 
 <style lang="scss">
+.c-header{
+  margin-bottom: 5px !important;
+}
 </style>

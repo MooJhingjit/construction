@@ -124,7 +124,8 @@ export default {
         },
         materialItems: [],
         materialSelected: [],
-        note: ''
+        note: '',
+        projectSelected: null
       }
     }
   },
@@ -141,6 +142,9 @@ export default {
       if (obj === null) {
         this.local.contract.selected = null
         return
+      }
+      this.local.projectSelected = {
+        typeId: obj.project_type_id
       }
       this.local.contract.selected = obj.code
       this.getStoreItems()
@@ -186,19 +190,18 @@ export default {
       let data = {
         contract: this.local.contract.selected,
         materials: this.local.materialSelected,
+        project: this.local.projectSelected,
         note: this.local.note
       }
       let res = await service.postResource({data, resourceName})
       if (res.status === 200) {
-        // let obj = res.data.orderingData
-        // bus.$emit('setNotification', {type: 'ordering', value: obj})
         let emitObj = {
           key: 'UPDATE_ORDERING',
           data: {}
         }
         bus.$emit('emitSocket', emitObj)
         this.NOTIFY('success')
-        this.GOTOPAGE('OrderingDetail', 'all')
+        this.GOTOPAGE('OrderingDetail', this.local.contract.selected)
         return
       }
       this.NOTIFY('error')

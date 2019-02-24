@@ -18,7 +18,7 @@ async function updateTask (req, res, next) {
   let contractData = req.body.data
   //
   if (await checkTaskPermission(contractData.contract_code, userAuth.id)) {
-    contract.updateContractTask(contractData.contract_code, contractData.houseId, contractData.time, contractData.order_all, 'done')
+    contract.updateContractTask(contractData.contract_code, contractData.houseId, contractData.time, contractData.order_all, 'done', contractData.projectTypeId)
     res.status(200).json({})
   } else {
     res.status(301).json({})

@@ -7,8 +7,9 @@ module.exports =  class WorkOrderPreiod {
   constructor(id){
     this.knex = knex(db.config);
     this.id = id
-    this.work_order_time
-    this.order
+    this.work_order_detail_id
+    // this.work_order_time
+    // this.order
     this.house_id
     this.preiod
     this.preiod_end
@@ -17,8 +18,9 @@ module.exports =  class WorkOrderPreiod {
 
   async getData () {
     let result = await this.knex('work_order_preiod')
-    .where('work_order_time', this.work_order_time)
-    .where('order', this.order)
+    .where('work_order_detail_id', this.work_order_detail_id)
+    // .where('work_order_time', this.work_order_time)
+    // .where('order', this.order)
     // .where('house_id', this.house_id)
     await this.knex.destroy()
     return result
@@ -33,8 +35,9 @@ module.exports =  class WorkOrderPreiod {
 
   async save () {
     let result = await this.knex('work_order_preiod').insert({
-      work_order_time: this.work_order_time,
-      order: this.order,
+      // work_order_time: this.work_order_time,
+      // order: this.order,
+      work_order_detail_id: this.work_order_detail_id,
       house_id: this.house_id,
       preiod: this.preiod,
       preiod_end: this.preiod_end,
@@ -48,8 +51,9 @@ module.exports =  class WorkOrderPreiod {
     let result = await this.knex('work_order_preiod')
     .where({id: this.id})
     .update({
-      work_order_time: this.work_order_time,
-      order: this.order,
+      // work_order_time: this.work_order_time,
+      work_order_detail_id: this.work_order_detail_id,
+      // order: this.order,
       house_id: this.house_id,
       preiod: this.preiod,
       preiod_end: this.preiod_end,

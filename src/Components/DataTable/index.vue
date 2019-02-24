@@ -50,7 +50,7 @@
         </table>
         <nav class="pagination" role="navigation" aria-label="pagination">
           <button class="pagination-previous" @click="changePage('previous')" :disabled="local.currentPage == 1">ก่อนหน้า</button>
-          <button class="pagination-next" @click="changePage('next')" :disabled="local.totalPage == local.currentPage">หน้าถัดไป</button>
+          <button class="pagination-next" @click="changePage('next')" :disabled="(isLastPage)">หน้าถัดไป</button>
         </nav>
       </div>
     </div>
@@ -135,6 +135,9 @@ export default {
           inputs = this.local.inputSearch.all
       }
       return inputs
+    },
+    isLastPage () {
+      return (this.local.items.total <= this.local.limitRequest)
     }
   },
   created () {
@@ -176,6 +179,7 @@ export default {
       this.$emit('selectedData', item)
     },
     searchByText (directSearch = null) {
+      this.local.currentPage = 1
       if (directSearch !== null) {
         let key = 'main'
         this.local.textSearch[key] = directSearch.value

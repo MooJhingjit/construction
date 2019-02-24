@@ -25,11 +25,21 @@ module.exports =  class House {
   }
 
   async getAllSelection () {
-    let result = await this.knex.select('name').from('house').groupBy('name').orderBy('name', 'desc')
+    let result = await this.knex.select('name').from('house')
+    .where(this.getCondition())
+    .groupBy('name').orderBy('name', 'desc')
     // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
     await this.knex.destroy()
     return result
   }
+
+  async getDataByName () {
+    let result = await this.knex('house').where({plan: this.plan, type: this.type})
+    // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)
+    await this.knex.destroy()
+    return result
+  }
+
   async getAllPlanSelection () {
     let result = await this.knex.select('plan').from('house').orderBy('plan', 'desc')
     // return db.query(`SELECT id, name, plan, garage FROM house ORDER BY id`)

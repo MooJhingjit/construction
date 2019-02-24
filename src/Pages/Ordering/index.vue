@@ -23,7 +23,7 @@
               <article class="tile is-child notification">
                 <div class="header-title container-block">
                   <div class="title-left">
-                    <div class="title">คำขอสั่งซื้อใหม่ {{local.ordering.normal.length}} รายการ</div>
+                    <div class="title">คำขอสั่งซื้อใหม่ {{countOrdering('normal')}} รายการ</div>
                   </div>
                   <div class="title-right">
                     <span class="tag is-light" @click="GOTOPAGE('OrderingDetail', 'all')">ดูข้อมูล</span>
@@ -32,18 +32,20 @@
                 <table class="table is-narrow rows-table">
                   <thead>
                     <tr>
+                      <th>ประเภทโครงการ</th>
                       <th>เลขที่สัญญา</th>
                       <th>จำนวนรายการ</th>
                       <th>ราคารวม</th>
-                      <th>วันที่</th>
+                      <!-- <th>วันที่</th> -->
                     </tr>
                   </thead>
                   <tbody>
-                    <tr :key="index" v-for="(item, index) in local.ordering.normal" @dblclick="GOTOPAGE('OrderingDetail', item.contract_code)" >
-                      <td>{{item.contract_code}}</td>
+                    <tr :key="index" v-for="(item, index) in local.ordering.normal" @dblclick="GOTOPAGE('OrderingDetail', item.contractCode)" >
+                      <td>{{item.projectTypeName}}</td>
+                      <td>{{item.contractCode}}</td>
                       <td>{{item.amount}}</td>
-                      <td>{{NUMBERWITHCOMMAS(item.total_price)}}</td>
-                      <td>{{SET_DATEFORMAT(item.created_at)}}</td>
+                      <td>{{NUMBERWITHCOMMAS(item.totalPrice)}}</td>
+                      <!-- <td>{{SET_DATEFORMAT(item.created_at)}}</td> -->
                     </tr>
                   </tbody>
                 </table>
@@ -53,7 +55,7 @@
               <article class="tile is-child notification">
                 <div class="header-title container-block">
                   <div class="title-left">
-                    <div class="title extar">คำขอสั่งซื้อใหม่ (พิเศษ) {{local.ordering.extra.length}} รายการ</div>
+                    <div class="title extar">คำขอสั่งซื้อใหม่ (พิเศษ) {{countOrdering('extra')}} รายการ</div>
                   </div>
                   <div class="title-right">
                     <span class="tag is-light" @click="GOTOPAGE('OrderingDetail', 'all')">ดูข้อมูล</span>
@@ -62,18 +64,18 @@
                 <table class="table is-narrow rows-table">
                   <thead>
                     <tr>
+                      <th>ประเภทโครงการ</th>
                       <th>เลขที่สัญญา</th>
                       <th>จำนวนรายการ</th>
                       <th>ราคารวม</th>
-                      <th>วันที่</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr :key="index" v-for="(item, index) in local.ordering.extra" @dblclick="GOTOPAGE('OrderingDetail', item.contract_code)" >
-                      <td>{{item.contract_code}}</td>
+                    <tr :key="index" v-for="(item, index) in local.ordering.extra" @dblclick="GOTOPAGE('OrderingDetail', item.contractCode)" >
+                      <td>{{item.projectTypeName}}</td>
+                      <td>{{item.contractCode}}</td>
                       <td>{{item.amount}}</td>
-                      <td>{{NUMBERWITHCOMMAS(item.total_price)}}</td>
-                      <td>{{SET_DATEFORMAT(item.created_at)}}</td>
+                      <td>{{NUMBERWITHCOMMAS(item.totalPrice)}}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -173,7 +175,6 @@ export default {
         })
     },
     updateOrderingPage () {
-      console.log('updateOrderingPage')
       this.fetchData()
     },
     showOrderingForm (orderType) {
@@ -185,6 +186,16 @@ export default {
         this.local.orderingComponent = extraComp
         // this.$refs.ordering.fetchData()
       }
+    },
+    countOrdering (orderType) {
+      let values = Object.values(this.local.ordering[orderType])
+      if (values.length) {
+        let sum = values.reduce(function (accumulator, currentValue) {
+          return accumulator + currentValue.amount
+        }, 0)
+        return sum
+      }
+      return 0
     }
   },
   beforeDestroy () {

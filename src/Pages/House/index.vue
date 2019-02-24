@@ -5,7 +5,7 @@
       <data-table ref="dataTable"
       tableType="normal"
       :resourceName="resourceName"
-      :statusSearch="statusSearch"
+      :statusSearch="local.projectType"
       @selectedData="selectedDataHandle"
       ></data-table>
     </template>
@@ -48,7 +48,7 @@
                 <div class="value">
                   <my-input
                   :value="local.inputs.type"
-                  :inputObj="{type: 'select', icon: 'home', inputValue: PROJECT_TYPE, name: 'project_type', placeholder: '', validate: 'required'}"
+                  :inputObj="{type: 'select', icon: 'home', inputValue: projectTypeDropdown, name: 'project_type', placeholder: '', validate: 'required'}"
                   :validator="$validator"
                   @input="value => { local.inputs.type = value }"
                   ></my-input>
@@ -101,7 +101,7 @@
                 <div class="extra-block container-block">
                   <div class="block add">
                     <button class="button" v-if="local.newColorMenu.isNew" @click="addColor(false)"><i aria-hidden="true" class="fa fa-minus"></i></button>
-                    <button class="button" @click="addColor(true)"><i aria-hidden="true" class="fa fa-plus"></i></button>
+                    <button class="button" v-if="!local.newColorMenu.isNew" @click="addColor(true)"><i aria-hidden="true" class="fa fa-plus"></i></button>
                   </div>
                   <div class="block new-input" v-if="local.newColorMenu.isNew">
                     <my-input
@@ -191,7 +191,8 @@ export default {
           value: null,
           isNew: false
         },
-        colorMenu: []
+        colorMenu: [],
+        projectType: []
       }
     }
   },
@@ -199,21 +200,32 @@ export default {
     resourceName () {
       return config.api.house.index
     },
-    statusSearch () {
-      let obj = config.variable.projectType.map(item => {
+    projectTypeDropdown () {
+      return this.local.projectType.map((item) => {
         return {
-          title: item.name,
-          key: item.key
+          key: item.key,
+          name: item.title
         }
       })
-      return obj
     }
   },
   created () {
     // console.log(this.statusSearch)
+    this.fetchData()
     this.getColorMenu()
   },
   methods: {
+    async fetchData () {
+      let resourceName = config.api.project.type
+      let queryString = []
+      let res = await service.getResource({resourceName, queryString})
+      this.local.projectType = res.data.map((item) => {
+        return {
+          key: item.id,
+          title: item.name
+        }
+      })
+    },
     async getColorMenu () {
       this.local.colorMenu = await this.GET_COLORMENU()
     },

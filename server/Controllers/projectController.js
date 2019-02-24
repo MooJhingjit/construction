@@ -1,5 +1,6 @@
 const helpers = require('../Libraries/helpers')
 const projectModel = require('../Models/projectModel')
+const projectTypeModel = require('../Models/projectTypeModel')
 
 const getData = (req, res, next) => {
   // let userData = helpers.getUserAuth(req.headers['authorization'])
@@ -9,6 +10,12 @@ const getData = (req, res, next) => {
   .then((result) => {
     res.status(200).json(result[0])
   })
+}
+
+async function getProjectType (req, res, next) {
+  let projectType = new projectTypeModel()
+  let rsProjectType = await projectType.getData()
+  res.status(200).json(rsProjectType)
 }
 
 async function getAllData (req, res, next) {
@@ -48,6 +55,13 @@ async function createData (req, res, next) {
   newItem.type = req.body.data.type
   let result = await newItem.save()
   res.status(200).json(result)
+}
+
+async function createNewType (req, res, next) {
+  let newItem = new projectTypeModel()
+  newItem.name = req.body.data.name
+  let result = await newItem.save()
+  res.status(200).json({id: result[0]})
 }
 
 async function updateData (req, res, next) {
@@ -120,7 +134,8 @@ const getDropDown = async (req, res, next) => {
   data = data.map(item => {
     return {
       key: item.id,
-      value: `${item.name}`
+      value: `${item.name}`,
+      type: `${item.type}`
     }
   })
   
@@ -145,6 +160,14 @@ const getDetailById = async (projectId) => {
   return project[0]
 }
 
+const getProjectTypeById = async (projectTypeId) => {
+  let projectType = new projectTypeModel(projectTypeId)
+  project = await projectType.getData()
+  return project[0]
+}
+
+
+
 module.exports.getStat = getStat
 module.exports.getData = getData
 module.exports.getDropDown = getDropDown
@@ -155,3 +178,7 @@ module.exports.deleteData = deleteData
 module.exports.getDetailById = getDetailById
 module.exports.getAllDataFromLosing = getAllDataFromLosing
 module.exports.checkDuplicate = checkDuplicate
+
+module.exports.createNewType = createNewType
+module.exports.getProjectType = getProjectType
+module.exports.getProjectTypeById = getProjectTypeById

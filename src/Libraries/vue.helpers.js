@@ -9,9 +9,9 @@ export default {
     ...mapGetters([
       'userData'
     ]),
-    PROJECT_TYPE () {
-      return config.variable.projectType
-    },
+    // PROJECT_TYPE () {
+    //   return config.variable.projectType
+    // },
     LEFTRIGHT () {
       return config.variable.leftRight
     },
@@ -86,11 +86,11 @@ export default {
     GET_WORKSTATUS (statusCode) {
       return config.variable.status[statusCode]
     },
-    GET_PROJECT_TYPE (key) {
-      return config.variable.projectType.filter(item => {
-        return item.key === key
-      })
-    },
+    // GET_PROJECT_TYPE (key) {
+    //   return config.variable.projectType.filter(item => {
+    //     return item.key === key
+    //   })
+    // },
     GET_STATUSNAME (key) {
       return config.variable.status[key]
     },
@@ -139,7 +139,7 @@ export default {
           this.$snackbar.open({
             duration: 5000,
             message: 'ทำรายการเสร็จสิ้น',
-            type: 'is-primary',
+            type: 'is-success',
             position: 'is-bottom-left',
             actionText: '',
             queue: false,

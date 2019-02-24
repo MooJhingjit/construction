@@ -9,7 +9,14 @@
                 <div class="items">
                   <div class="item">
                     <div class="item-header container-block">
-                      <div class="time block">งวดที่ {{local.time}}</div>
+                      <div class="time block">
+                        <div class="control">
+                          <div class="tags has-addons">
+                            <span class="is-medium tag is-info">{{this.local.project.name}}</span>
+                            <span class="is-medium tag">งวดที่ {{local.time}}</span>
+                          </div>
+                        </div>
+                        </div>
                       <div class="order-name container-block block">
                         <span class="name">แบบบ้าน</span>
                         <my-auto-complete
@@ -44,10 +51,10 @@
                         </thead>
                         <tbody>
                           <tr :key="index" v-for="(item, index) in local.itemLists">
-                            <td>
+                            <td :key="`${local.houseTemplate.selected}ItemOrder`">
                               {{item.order}}
                             </td>
-                            <td>
+                            <td :key="`${local.houseTemplate.selected}ItemName`">
                               <my-input
                                 :value="item.taskName"
                                 :inputObj="{type: 'text', name: `order_group_${index}`, placeholder: 'ระบุรายละเอียดงาน', validate: 'required'}"
@@ -55,7 +62,7 @@
                                 @input="value => { item.taskName = value }"
                                 ></my-input>
                             </td>
-                            <td>
+                            <td :key="`${local.houseTemplate.selected}ItemCondition`">
                               <my-input
                                 :value="getCondition(item.condition, 'condition')"
                                 :inputObj="{type: 'text', name: `order_condition_${index}`, placeholder: '', validate: ''}"
@@ -63,7 +70,7 @@
                                 @input="value => setCondition(index, value, 'condition', item)"
                                 ></my-input>
                             </td>
-                            <td>
+                            <td :key="`${local.houseTemplate.selected}ItemPreiod`">
                               <my-input
                                 :value="getCondition(item.condition, 'preiod')"
                                 :inputObj="{type: 'text', name: `order_preiod_${index}`, placeholder: '', validate: 'required'}"
@@ -71,7 +78,7 @@
                                 @input="value => setCondition(index, value, 'preiod', item)"
                                 ></my-input>
                             </td>
-                            <td>
+                            <td :key="`${local.houseTemplate.selected}ItemPreiodEnd`">
                               <my-input
                                 :value="getCondition(item.condition, 'preiod_end')"
                                 :inputObj="{type: 'text', name: `order_preiod_end_${index}`, placeholder: '', validate: 'required'}"
@@ -79,7 +86,7 @@
                                 @input="value => setCondition(index, value, 'preiod_end', item)"
                                 ></my-input>
                             </td>
-                            <td>
+                            <td :key="`${local.houseTemplate.selected}ItemMaterialGroup`">
                               <my-tags-selection
                               :objInputs="{label: 'เลือกกลุ่มวัสดุ', placeholder: 'เพิ่มกลุ่มวัสดุ', maxtags: '1'}"
                               :resourceName="materialGroupResource"
@@ -87,7 +94,7 @@
                               @selected="value => { item.postOrder = value }"
                               ></my-tags-selection>
                             </td>
-                            <td>
+                            <td :key="`${local.houseTemplate.selected}ItemDelete`">
                               <button @click="deleteTime(index)" class="button is-danger">
                                 <i class="fa fa-trash"></i>
                               </button>
@@ -173,7 +180,8 @@ export default {
             class: 'edit-work-order-page'
           }
         },
-        time: this.$route.params.key,
+        time: null,
+        project: {},
         workOrderTemplate: {
           time: this.time,
           preOrder: [],
@@ -185,7 +193,7 @@ export default {
           // material_group: []
         },
         itemPreOrder: null,
-        itemTime: null,
+        // itemTime: null,
         itemLists: [],
         materialGroup: {
           mainSearch: ''
@@ -217,21 +225,20 @@ export default {
       queryString = this.BUILDPARAM({type: 'full'})
       service.getResource({resourceName, queryString})
         .then((res) => {
-          if (res.status === 200) {
-            if (res.data) {
-              this.local.itemTime = res.data.time
-              this.local.itemPreOrder = [res.data.pre_order]
-              this.local.itemLists = res.data.lists.map(item => {
-                return {
-                  order: item.order,
-                  taskName: item.name,
-                  postOrder: [item.post_order],
-                  condition: item.condition
-                }
-              })
-            } else {
-              this.local.item.push(this.local.workOrderTemplate)
-            }
+          if (res.data) {
+            this.local.time = res.data.time
+            this.local.project = res.data.project
+            // this.local.itemPreOrder = [res.data.pre_order]
+            this.local.itemLists = res.data.lists.map(item => {
+              return {
+                order: item.order,
+                taskName: item.name,
+                postOrder: [item.post_order],
+                condition: item.condition
+              }
+            })
+          } else {
+            this.local.item.push(this.local.workOrderTemplate)
           }
         })
         .catch(() => {
@@ -260,8 +267,8 @@ export default {
         case 'update':
           if (!isValid) return
           data = {
-            time: this.local.itemTime,
-            pre_order: this.local.itemPreOrder,
+            // time: this.local.itemTime,
+            // pre_order: this.local.itemPreOrder,
             workOrderLists: this.local.itemLists
           }
           resourceName = `${resourceName}/${this.$route.params.key}`
@@ -302,12 +309,12 @@ export default {
         let obj = {
           house_id: houseId,
           order: fullItem.order,
-          work_order_time: this.local.time,
           preiod: null,
           preiod_end: null,
           condition: null
         }
         obj[type] = value
+        // console.log(obj)
         this.local.itemLists[index].condition.push(obj)
       }
     },
