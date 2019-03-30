@@ -67,7 +67,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr :key="index" v-for="(item, index) in local.inputs.progress">
+                <tr :class="{'text-gray': !isTask(item)}" :key="index" v-for="(item, index) in local.inputs.progress">
                   <td>{{item.time}}/{{item.order}}</td>
                   <td>{{item.name}}</td>
                   <td>
@@ -77,7 +77,7 @@
                   <td>
                     <!-- {{SET_DATEFORMAT(item.real_date)}} -->
                     <my-input
-                    v-if="local.inputs.contract.status == 'ip' && item.condition !== null"
+                    v-if="local.inputs.contract.status == 'ip' && isTask(item)"
                     :value="SET_DATEFORMAT(item.real_date)"
                     :inputObj="{type: 'text', isBlur: true, name: 'contract_datestart', placeholder: 'YYYY/MM/DD', validate: ''}"
                     :validator="$validator"
@@ -86,10 +86,10 @@
                     <p v-else>{{SET_DATEFORMAT(item.real_date)}}</p>
                   </td>
                   <td>
-                    <span v-if="item.condition !== null" :class="getDelayClass(item.delay, item.status)">{{item.delay}}</span>
+                    <span v-if="isTask(item)" :class="getDelayClass(item.delay, item.status)">{{item.delay}}</span>
                   </td>
                   <td>
-                    <span :class="getStatusClass(item.status)">{{getWorkingStatus(item.status)}}</span>
+                    <span v-if="isTask(item)" :class="getStatusClass(item.status)">{{getWorkingStatus(item.status)}}</span>
                   </td>
                 </tr>
               </tbody>
@@ -377,6 +377,9 @@ export default {
       })[0]
       // console.log(obj)
       return obj.name
+    },
+    isTask (item) {
+      return (item.condition !== 0 || (item.condition === 0 && item.time === 1 && item.order === 1))
     }
     // contractSelectedHandle (val) {
     //   console.log(val)
@@ -391,6 +394,11 @@ export default {
     flex: 0;
     min-width: 100px;
     margin-right: 5px;
+  }
+}
+.table{
+  tr.text-gray{
+    color: #ccc
   }
 }
 </style>

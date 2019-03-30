@@ -66,7 +66,7 @@ const createData = async (req, res, next) => {
   newItem.status = req.body.data.status
   let result = await newItem.save() // this will return result.insertId
   if (newItem.status === 'ip') {
-    await startWorking(newItem.code, newItem.house_id, req.body.data.projectType)
+    await startWorking(newItem.code, newItem.house_id, req.body.data.projectType, newItem.date_start)
   }
   await createContractTime(req.body.data.code, req.body.data.times)
 
@@ -156,15 +156,17 @@ const getContractPeriod = async (req, res, next) => {
   let item = new contractModel()
   item.house_id = req.params.house_id
   let result = await item.getPreiod()
-  let obj = null
+  let preiodDate, percentPrice = null
   // console.log(result.length)
   if (result.length) {
-    obj = {}
+    preiodDate = {}
+    percentPrice = {}
     result.map((item) => {
-      obj[item.time] = item.preiod
+      preiodDate[item.time] = item.preiod
+      percentPrice[item.time] = item.percent_price || 0
     })
   }
-  res.status(200).json(obj)
+  res.status(200).json({preiodDate, percentPrice})
 }
 
 const updateContractStatus = async (req, res, next) => {
@@ -173,10 +175,11 @@ const updateContractStatus = async (req, res, next) => {
   let status = req.body.data.status
   let houseId = req.body.data.houseId
   let assign = req.body.data.assign
+  let startDate = helpers.getCurrentDate('YYYY-MM-DD')
   await updateStatus(contractCode, status, assign)
   switch(status) {
     case 'ip':
-      await startWorking(contractCode, houseId, projectTypeId)
+      await startWorking(contractCode, houseId, projectTypeId, startDate)
         // await reviewContractProgress(item.code, req.body.data.houseId, 1)
         break
     case 'done':
@@ -187,9 +190,9 @@ const updateContractStatus = async (req, res, next) => {
   res.status(200).json({})
 }
 
-const startWorking = async (contractCode, houseId, projectTypeId) => {
+const startWorking = async (contractCode, houseId, projectTypeId, startDate) => {
   // this from frist created
-  await setContractProgress(contractCode, houseId, projectTypeId)
+  await setContractProgress(contractCode, houseId, projectTypeId, startDate)
   await updateContractTask(contractCode, houseId, 1, 1, 'done', projectTypeId)
   // await findTaskAndOrderMaterial(contractCode, houseId, 0)
 }
@@ -259,10 +262,10 @@ const getContractTime = async (contractCode) => {
 }
 
 // copy progress
-const setContractProgress = async (contractCode, houseId, projectTypeId) => {
+const setContractProgress = async (contractCode, houseId, projectTypeId, startDate) => {
   let workOrderPreiod = await workOrder.getWorkOrderPreiod(houseId)
   let workingTemplate = await workOrder.getWorkingTemplate(projectTypeId)
-  let startDate = helpers.getCurrentDate('YYYY-MM-DD')
+  // let startDate = helpers.getCurrentDate('YYYY-MM-DD')
   let endDate = ''
   let orderNumber = 1
   let tempEndDate = []
