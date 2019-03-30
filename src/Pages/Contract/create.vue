@@ -100,7 +100,7 @@
                       @input="selectedContractDate"
                       ></my-input>
                     </td>
-                    <td>เงินเบิกล่วงหน้า:</td>
+                    <td>เงินเบิกล่วงหน้า 10%:</td>
                     <td>
                       <my-input
                       :value="local.inputs.paid"
@@ -118,6 +118,7 @@
                 <thead>
                   <tr>
                     <th>งวดที่</th>
+                    <th></th>
                     <th>จำนวนเงิน</th>
                     <th>วันที่เริ่ม</th>
                     <th>วันกำหนดเสร็จ</th>
@@ -126,6 +127,7 @@
                 <tbody>
                   <tr :key="index" v-for="(item, index) in contractTimes">
                     <td width="70"><input type="text" v-model="item.time" class="input"></td>
+                    <td>{{item.percentage}}%</td>
                     <td width=""><input type="text" v-model="item.price"  class="input"></td>
                     <td width=""><input type="text" v-model="item.dateStart"  class="input"></td>
                     <td><input type="text" v-model="item.dateEnd"  class="input"></td>
@@ -141,7 +143,7 @@
                 </tr>
                 <tr>
                   <td>จำนวนเงิน {{NUMBERWITHCOMMAS(local.inputs.price)}} บาท</td>
-                  <td>เบิกเงินล่วงหน้าจำนวน {{NUMBERWITHCOMMAS(local.inputs.paid)}} บาท</td>
+                  <td>เบิกเงินล่วงหน้า 10% จำนวน {{NUMBERWITHCOMMAS(local.inputs.paid)}} บาท</td>
                 </tr>
               </table>
 
@@ -154,12 +156,12 @@
               </div>
             </template>
             <template v-else>
-              <my-action
+              <!-- <my-action
                 type="update"
                 :obj="{title: 'รออนุมัติ', color: 'is-warning'}"
                 @clickEvent="submitForm('save', 'wait')"
               >
-              </my-action>
+              </my-action> -->
               <my-action
                 type="update"
                 :obj="{title: 'เริ่มดำเนินงาน', color: 'is-success'}"
@@ -261,6 +263,7 @@ export default {
           selected: null
         },
         contractPreiod: [],
+        percentPrice: null,
         isDuplicate: false
       }
     }
@@ -376,7 +379,10 @@ export default {
       let queryString = []
       let resourceName = `${config.api.contract.period}/${this.local.inputs.houseId}`
       let contractPreiod = await service.getResource({resourceName, queryString})
-      this.local.contractPreiod = contractPreiod.data || null
+      this.local.contractPreiod = contractPreiod.data.preiodDate || null
+      this.local.percentPrice = contractPreiod.data.percentPrice || null
+      // console.log(this.local.percentPrice)
+      this.runContractLists()
       this.setContractPreiod()
     },
     async getPlan () {
@@ -386,10 +392,18 @@ export default {
       this.local.planTemplate.inputs = planTemplate.data
     },
     runContractLists () {
-      if (this.local.inputs.price !== '') {
-        this.local.inputs.times.map(item => {
-          item.price = this.calculatePrice(item.priceRate)
+      if (this.local.percentPrice !== null) {
+        this.local.inputs.times = this.local.inputs.times.map(item => {
+          // console.log(item.time + ' => ' +this.local.percentPrice[item.time])
+          item.percentage = this.local.percentPrice[item.time]
+          item.price = this.calculatePrice(this.local.percentPrice[item.time])
+          return item
         })
+        // for (var key in this.local.percentPrice) {
+        //   if (this.local.percentPrice.hasOwnProperty(key)) {
+        //     item.price = this.calculatePrice(this.local.percentPrice[key])
+        //     }
+        // }
         this.local.isTimeStart = true
       }
     },
@@ -424,8 +438,8 @@ export default {
     },
     calculatePrice (priceRate) {
       this.local.inputs.paid = (this.local.inputs.price * 10) / 100
-      // let totalPrice = this.local.inputs.price - this.local.inputs.paid
-      let totalPrice = this.local.inputs.price
+      let totalPrice = this.local.inputs.price - this.local.inputs.paid
+      // let totalPrice = this.local.inputs.price
       return priceRate * totalPrice / 100
     },
     setDateVal (date) {

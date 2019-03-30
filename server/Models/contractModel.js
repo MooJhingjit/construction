@@ -140,6 +140,7 @@ module.exports =  class Contract {
   async getPreiod () {
     let result = await this.knex('contract_preiod')
     .where({house_id: this.house_id})
+    .orderBy('time', 'asc')
     await this.knex.destroy()
     return result
   }
