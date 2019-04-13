@@ -412,9 +412,13 @@ export default {
         project: this.local.project.value
       }
       this.local.worksheet.data = items
-      if (this.$refs.worksheetTemplate.local.dataObj.length > 0) {
+      setTimeout(() => {
         this.$refs.worksheetTemplate.printWorkSheet()
-      }
+      }, 500)
+      // console.log(this.$refs.worksheetTemplate.local.dataObj)
+      // if (this.$refs.worksheetTemplate.local.dataObj.length > 0) {
+      //   this.$refs.worksheetTemplate.printWorkSheet()
+      // }
     },
     filterYear (obj) {
       this.local.yearSelection.selected = obj.key
@@ -463,6 +467,7 @@ table{
     td{
       div{
         margin: 5px 0;
+        height: 21px;
         button{
           font-size: 0.9em;
           margin: 0px 3px;

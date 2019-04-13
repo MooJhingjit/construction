@@ -33,6 +33,10 @@
                 <td>แบบบ้าน:<span class="value">{{contract.house_id}}</span></td>
                 <td>ทั้งหมด:<span class="value">{{ordering.length}} รายการ</span></td>
               </tr>
+              <tr>
+                <td>จำนวนเงินที่ชำระแล้ว:<span class="value">{{getPrice('confirmed')}} บาท</span></td>
+                <td>จำนวนเงินที่รอชำระ:<span class="value">{{getPrice('wait')}} บาท</span></td>
+              </tr>
             </table>
           </div>
           <div class="block c-body">
@@ -49,7 +53,7 @@
                   <th>ร้านค้า</th>
                   <th>วัสดุ</th>
                   <th>จำนวน</th>
-                  <th>ราคา</th>
+                  <th>ราคารวม</th>
                   <th>สถานะ</th>
                 </tr>
               </thead>
@@ -71,7 +75,7 @@
                       <p class="material-name" :key="inputIndex" v-for="(itemDetail, inputIndex) in item.orderDetail">{{itemDetail.name}}</p>
                     </template>
                   </td>
-                  <td width="20">
+                  <td width="80">
                     <template v-if="item.status === 'wait'">
                       <my-input
                       :key="inputIndex"
@@ -86,7 +90,7 @@
                       <p :key="inputIndex" v-for="(itemDetail, inputIndex) in item.orderDetail">{{itemDetail.amount}}</p>
                     </template>
                   </td>
-                  <td width="100">
+                  <td width="120">
                     <template v-if="item.status === 'wait' ">
                       <my-input
                       :key="inputIndex"
@@ -221,12 +225,12 @@ export default {
         },
         statusSearch: [],
         filterItem: [
-          {title: 'ทั้งหมด', key: 'all'},
-          {title: 'ปกติ', key: 'normal'},
-          {title: 'พิเศษ', key: 'extra'},
           {title: 'รออนุมัติ', key: 'wait'},
           {title: 'รอสินค้า', key: 'confirmed'},
-          {title: 'รับสินค้า', key: 'received'}
+          {title: 'รับสินค้า', key: 'received'},
+          {title: 'ปกติ', key: 'normal'},
+          {title: 'พิเศษ', key: 'extra'},
+          {title: 'ทั้งหมด', key: 'all'}
         ],
         idSelected: null,
         inputs: null,
@@ -267,7 +271,7 @@ export default {
       let order = await this.getFullOrdering(item)
       this.local.inputs = {}
       this.local.inputs = Object.assign(this.local.inputs, order)
-      this.filterItems('all')
+      this.filterItems('wait')
       this.errors.clear()
     },
     cleanInput () {
@@ -462,6 +466,20 @@ export default {
           return item.status === key
         })
       }
+    },
+    getPrice (type) {
+      let ordering = this.local.inputs.ordering.filter((item) => {
+        return item.status === type
+      }).map((item) => {
+        return item.orderDetail
+      })
+      let totalPrice = 0
+      ordering.forEach(store => {
+        store.map((item) => {
+          totalPrice += parseFloat(item.price)
+        })
+      })
+      return this.NUMBERWITHCOMMAS(totalPrice, 2)
     }
   }
 }

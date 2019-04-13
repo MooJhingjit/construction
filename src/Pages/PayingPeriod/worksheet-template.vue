@@ -7,7 +7,7 @@
             <h2>บริษัท โชคชนายุทธ จำกัด</h2>
             <p>75/152ซอยร่มเกล้า1 ถนนร่มเกล้า แขวงแสนแสบ เขตมีนบุรี กรุงเทพฯ 10510</p>
             <p>โทร.(02)328-7948 แฟ็กซ์(02)919-5298</p>
-            <p class="id" style="position: absolute;top: 0;right: 0;font-size: 10px;">เลขที่ xxxxx</p>
+            <p class="id" style="position: absolute;top: 0;right: 0;font-size: 10px;"></p>
           </td>
         </tr>
       </thead>
@@ -213,8 +213,11 @@ export default {
     }
   },
   watch: {
-    dataObj () {
-      this.local.dataObj = this.dataObj
+    dataObj: {
+      handler: function (newValue) {
+        this.local.dataObj = this.dataObj
+      },
+      deep: true
     }
   }
 }

@@ -81,6 +81,7 @@
                     <th width="150">หมายเหตุ</th>
                     <th width="50">อัพเดทล่าสุด</th>
                     <th width="50">สถานะ</th>
+                    <th width="30">ตรวจสอบแล้ว</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -130,7 +131,7 @@
                        </p>
                     </td>
                     <td>
-                        <p v-if="parseInt(item.status) && isSaved(group.workGroup.realOrder)" :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)">
+                        <p :key="indexList" v-for="(item, indexList) in currentGroup(group.workGroup.realOrder)" v-if="parseInt(item.status) && isSaved(group.workGroup.realOrder)" >
                           <template >{{item.amount}}</template>
                         </p>
                          <my-input
@@ -199,6 +200,16 @@
                           >
                           {{getListStatus(group.workGroup.realOrder, list, 'name')}}
                         </p>
+                    </td>
+                    <td>
+                      <p :key="listIndex" v-for="(list, listIndex) in currentGroup(group.workGroup.realOrder)">
+                        <label class="checkbox">
+                          <input type="checkbox"
+                          :disabled="![1, 3].includes(list.status) || !isSaved(group.workGroup.realOrder)"
+                          @change="updateStatus(list, $event, group.workGroup.realOrder)"
+                          :checked="getStatus(list)">
+                        </label>
+                      </p>
                     </td>
                   </tr>
                 </tbody>
@@ -587,6 +598,25 @@ export default {
         inputs: [],
         selected: null
       }
+    },
+    async updateStatus (item, e, realOrder) {
+      item.status = (e.target.checked) ? '3' : '1'
+      let data = {
+        item,
+        updateType: 'update-status'
+      }
+      let resourceName = `${config.api.workSheet.index}/${item.id}`
+      await service.putResource({data, resourceName})
+      // update local
+      this.local.inputs[realOrder].workGroup.lists.map((list) => {
+        if (list.id === item.id) {
+          list.status = parseInt(item.status)
+        }
+      })
+      this.NOTIFY('success')
+    },
+    getStatus (item) {
+      return [3, 5].includes(item.status)
     }
   },
   watch: {
