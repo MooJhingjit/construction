@@ -447,6 +447,7 @@ export default {
     },
     async checkDuplicate (value) {
       if (!value) return
+      this.local.inputs.code = this.local.inputs.code.replace(/\s/g, '')
       let queryString = this.BUILDPARAM({value})
       let res = await service.getResource({resourceName: config.api.contract.checkDuplicate, queryString})
       if (res.data.length) {
